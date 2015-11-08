@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRL.Main", "SRL.Main\SRL.Main.csproj", "{664BEB89-24FA-47BD-976A-62F246B61B93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "SRL.Main\Main.csproj", "{664BEB89-24FA-47BD-976A-62F246B61B93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRL.MonoGameControl", "SRL.MonoGameControl\SRL.MonoGameControl.csproj", "{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameControl", "SRL.MonoGameControl\MonoGameControl.csproj", "{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
