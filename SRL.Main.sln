@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "SRL.Main\Main.csproj", "{664BEB89-24FA-47BD-976A-62F246B61B93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "src\Main\Main.csproj", "{664BEB89-24FA-47BD-976A-62F246B61B93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameControl", "SRL.MonoGameControl\MonoGameControl.csproj", "{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameControl", "src\MonoGameControl\MonoGameControl.csproj", "{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "src\Models\Models.csproj", "{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
