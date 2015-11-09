@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Models.Model;
 
-namespace ModelsTests
+namespace SRL.ModelsTests
 {
     [TestClass]
     public class MarshallingTests
