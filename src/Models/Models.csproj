@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapTracer.cs" />
+    <Compile Include="Enum\MapEditorMode.cs" />
     <Compile Include="Enum\VehicleEditorMode.cs" />
     <Compile Include="Marshalling\Marshaller.cs" />
     <Compile Include="Model\Map.cs" />

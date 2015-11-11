@@ -37,7 +37,7 @@ namespace SRL.Models
                 // polygon[0] is the contour and polygon[>0] are its holes - we can ignore them.
                 var lines = (Potrace.Curve[])polygon[0];
 
-                var polygonPoints = new Point[lines.Length];
+                var polygonPoints = new List<Point>();
                 for (int j = 0; j < lines.Length; j++)
                     polygonPoints[j] = new Point(lines[j].A.x, lines[j].A.y);
 

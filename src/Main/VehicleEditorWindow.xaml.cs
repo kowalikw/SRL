@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -14,15 +15,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SRL.Models.Enum;
 using Point = SRL.Models.Model.Point;
+using Microsoft.Win32;
+using System.Xml;
+using System.Xml.Serialization;
+using SRL.Models.Model;
+using System.Xml.Linq;
 
 namespace SRL.Main
 {
     /// <summary>
     /// Interaction logic for EditorWindow.xaml
     /// </summary>
-    public partial class EditorWindow : Window
+    public partial class VehicleEditorWindow : Window
     {
-        public EditorWindow()
+        public VehicleEditorWindow()
         {
             InitializeComponent();
         }
@@ -53,7 +59,18 @@ namespace SRL.Main
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "XML file (*.xml)|*.xml";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var serializer = new XmlSerializer(typeof(Vehicle));
+                var output = new XDocument();
 
+                using (XmlWriter writer = output.CreateWriter())
+                    serializer.Serialize(writer, VehicleEditorControl.Vehicle);
+
+                File.WriteAllText(saveFileDialog.FileName, output.ToString());
+            }
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)

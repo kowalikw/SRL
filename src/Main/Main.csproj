@@ -59,9 +59,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MapEditorWindow.xaml.cs">
+      <DependentUpon>MapEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VehicleEditorControl.cs" />
-    <Compile Include="EditorWindow.xaml.cs">
-      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    <Compile Include="VehicleEditorWindow.xaml.cs">
+      <DependentUpon>VehicleEditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GeometryHelper.cs" />
     <Compile Include="MapEditorControl.cs" />
@@ -81,7 +84,11 @@
       <DependentUpon>PL.resx</DependentUpon>
     </Compile>
     <Compile Include="TestControl.cs" />
-    <Page Include="EditorWindow.xaml">
+    <Page Include="MapEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VehicleEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

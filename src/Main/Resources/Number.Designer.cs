@@ -115,33 +115,6 @@ namespace SRL.Main.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3.
-        /// </summary>
-        internal static string AxisStartRadius {
-            get {
-                return ResourceManager.GetString("AxisStartRadius", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 100.
-        /// </summary>
-        internal static string AxisStartSegments {
-            get {
-                return ResourceManager.GetString("AxisStartSegments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 2.
-        /// </summary>
-        internal static string AxisStartThickness {
-            get {
-                return ResourceManager.GetString("AxisStartThickness", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 2.
         /// </summary>
         internal static string AxisThickness {

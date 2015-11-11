@@ -1,0 +1,27 @@
+﻿<Window x:Class="SRL.Main.VehicleEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SRL.Main"
+        mc:Ignorable="d"
+        Title="VehicleEditorWindow" Height="480" Width="640" MouseUp="Window_MouseUp">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <local:VehicleEditorControl x:Name="VehicleEditorControl"
+                         Grid.Row="0"
+                         Grid.Column="0"
+                         Margin="5"
+                         SnapsToDevicePixels="True"
+                         Stretch="Fill" MouseUp="VehicleEditorControl_MouseUp" MouseMove="VehicleEditorControl_MouseMove" />
+        <StackPanel Grid.Column="1">
+            <ToggleButton x:Name="btnDraw" Margin="3" Checked="btnDraw_Checked" Unchecked="btnDraw_Unchecked">Rysuj pojazd</ToggleButton>
+            <Button x:Name="btnSetAxis" Margin="3" Click="btnSetAxis_Click">Wyznacz oś pojazdu</Button>
+            <Button x:Name="btnSave" Margin="3" Click="btnSave_Click">Zapisz pojazd</Button>
+            <Button x:Name="btnExit" Margin="3" Click="btnExit_Click">Zamknij</Button>
+        </StackPanel>
+    </Grid>
+</Window>

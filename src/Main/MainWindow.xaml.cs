@@ -27,13 +27,13 @@ namespace SRL.Main
 
         private void addVehicle_Click(object sender, RoutedEventArgs e)
         {
-            Window editorWindow = new EditorWindow();
+            Window editorWindow = new VehicleEditorWindow();
             editorWindow.Show();
         }
 
         private void addMap_Click(object sender, RoutedEventArgs e)
         {
-            Window editorWindow = new EditorWindow();
+            Window editorWindow = new MapEditorWindow();
             editorWindow.Show();
         }
     }

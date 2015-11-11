@@ -135,15 +135,6 @@
   <data name="ArrowTopY" xml:space="preserve">
     <value>-6</value>
   </data>
-  <data name="AxisStartRadius" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="AxisStartSegments" xml:space="preserve">
-    <value>100</value>
-  </data>
-  <data name="AxisStartThickness" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="AxisThickness" xml:space="preserve">
     <value>2</value>
   </data>

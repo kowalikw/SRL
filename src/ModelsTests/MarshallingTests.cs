@@ -5,6 +5,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Models.Model;
+using System.Collections.Generic;
 
 namespace SRL.ModelsTests
 {
@@ -29,13 +30,13 @@ namespace SRL.ModelsTests
             var output = new XDocument();
 
             Map map = new Map();
-            map.Obstacles.Add(new Polygon(new Point[]
+            map.Obstacles.Add(new Polygon(new List<Point>()
             {
                 new Point(1.1,1.2),
                 new Point(2.1,2.2),
                 new Point(3.1,3.2),
             }));
-            map.Obstacles.Add(new Polygon(new Point[]
+            map.Obstacles.Add(new Polygon(new List<Point>()
             {
                 new Point(1.3,1.4),
                 new Point(2.3,2.4),
@@ -55,7 +56,7 @@ namespace SRL.ModelsTests
             var output = new XDocument();
 
             Vehicle vehicle = new Vehicle(
-                new Polygon(new Point[]
+                new Polygon(new List<Point>()
                 {
                     new Point(0, 0),
                     new Point(2, 0),

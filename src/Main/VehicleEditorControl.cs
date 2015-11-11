@@ -79,16 +79,13 @@ namespace SRL.Main
             switch(Mode)
             {
                 case VehicleEditorMode.DrawPolygon:
-                    Point point;
                     for (int i = 0; i < Vertices.Count; i++)
                     { 
-                        point = new Point(Vertices[i].X, Vertices[i].Y);
-
                         if (i == 0)
-                            spriteBatch.DrawCircle(point, 8, 100, Color.Blue, 3);
+                            spriteBatch.DrawCircle(Vertices[0], 8, 100, Color.Blue, 3);
                         else
                         {
-                            spriteBatch.DrawCircle(point, 3, 100, Color.Blue, 3);
+                            spriteBatch.DrawCircle(Vertices[0], 3, 100, Color.Blue, 3);
                             spriteBatch.DrawLine(new Point(Vertices[i - 1].X, Vertices[i - 1].Y), new Point(Vertices[i].X, Vertices[i].Y), Color.Blue, 2);
                         }
                     }
@@ -135,7 +132,7 @@ namespace SRL.Main
 
                     if (OriginStart != null)
                     {
-                        double axisAngle = Math.Atan((CursorPosition.Y - OriginStart.Y) / (CursorPosition.X - OriginStart.X));
+                        double axisAngle = (Math.Atan((CursorPosition.Y - OriginStart.Y) / (CursorPosition.X - OriginStart.X))) * 180 / Math.PI;
 
                         DrawAxis(OriginStart, CursorPosition, axisAngle);
                     }
@@ -144,7 +141,7 @@ namespace SRL.Main
                     {
                         if(!angle.HasValue)
                         {
-                            angle = (Math.Atan((OriginEnd.Y - OriginStart.Y) / (OriginEnd.X - OriginStart.X)));
+                            angle = (Math.Atan((OriginEnd.Y - OriginStart.Y) / (OriginEnd.X - OriginStart.X))) * 180 / Math.PI;
                             Mode = VehicleEditorMode.Idle;
                         }
                     }
@@ -155,7 +152,7 @@ namespace SRL.Main
                     DrawAxis(OriginStart, OriginEnd, Angle);
 
                     if(Vehicle == null)
-                        Vehicle = new Vehicle(new Polygon(vertices.ToArray()), origin, angle.Value);
+                        Vehicle = new Vehicle(new Polygon(vertices), origin, angle.Value);
 
                     break;
             }
@@ -184,6 +181,7 @@ namespace SRL.Main
             }
 
             // Rotate and translate of arrow
+            axisAngle = axisAngle * Math.PI / 180;
             arrowCenter = new Point(axisEnd.X, axisEnd.Y);
             arrowTop = new Point(((arrowTop.X * Math.Cos(axisAngle) - arrowTop.Y * Math.Sin(axisAngle)) + axisEnd.X),
                 ((arrowTop.X * Math.Sin(axisAngle) + arrowTop.Y * Math.Cos(axisAngle)) + axisEnd.Y));
@@ -191,7 +189,6 @@ namespace SRL.Main
                 ((arrowBottom.X * Math.Sin(axisAngle) + arrowBottom.Y * Math.Cos(axisAngle)) + axisEnd.Y));
 
             // Draw
-            spriteBatch.DrawCircle(axisStart, int.Parse(Number.AxisStartRadius), int.Parse(Number.AxisStartSegments), Color.Purple, int.Parse(Number.AxisStartThickness));
             spriteBatch.DrawLine(arrowTop, arrowCenter, Color.Purple, int.Parse(Number.AxisThickness));
             spriteBatch.DrawLine(arrowBottom, arrowCenter, Color.Purple, int.Parse(Number.AxisThickness));
             spriteBatch.DrawLine(axisStart, axisEnd, Color.Purple, int.Parse(Number.AxisThickness));

@@ -17,31 +17,6 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-
-        <local:TestControl x:Name="Host0"
-                         Grid.Row="0"
-                         Grid.Column="0"
-                         Margin="5"
-                         SnapsToDevicePixels="True"
-                         Stretch="Fill" />
-        <local:TestControl x:Name="Host1"
-                         Grid.Row="0"
-                         Grid.Column="1"
-                         Margin="5"
-                         SnapsToDevicePixels="True"
-                         Stretch="Fill" />
-        <local:TestControl x:Name="Host2"
-                         Grid.Row="1"
-                         Grid.Column="0"
-                         Margin="5"
-                         SnapsToDevicePixels="True"
-                         Stretch="Fill" />
-        <local:TestControl x:Name="Host3"
-                         Grid.Row="1"
-                         Grid.Column="1"
-                         Margin="5"
-                         SnapsToDevicePixels="True"
-                         Stretch="Fill" />
         <Button Grid.Column="0" Grid.Row="2" x:Name="addVehicle" Click="addVehicle_Click">Dodaj pojazd</Button>
         <Button Grid.Column="1" Grid.Row="2" x:Name="addMap" Click="addMap_Click">Dodaj mapę</Button>
     </Grid>
