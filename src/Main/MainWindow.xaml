@@ -42,5 +42,7 @@
                          Margin="5"
                          SnapsToDevicePixels="True"
                          Stretch="Fill" />
+        <Button Grid.Column="0" Grid.Row="2" x:Name="addVehicle" Click="addVehicle_Click">Dodaj pojazd</Button>
+        <Button Grid.Column="1" Grid.Row="2" x:Name="addMap" Click="addMap_Click">Dodaj mapę</Button>
     </Grid>
 </Window>

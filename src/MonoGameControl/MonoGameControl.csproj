@@ -66,7 +66,14 @@
     <Compile Include="D3D11Host.cs" />
     <Compile Include="D3D11Image.cs" />
     <Compile Include="D3D9.cs" />
+    <Compile Include="Primitives2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

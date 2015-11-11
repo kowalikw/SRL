@@ -24,5 +24,17 @@ namespace SRL.Main
         {
             InitializeComponent();
         }
+
+        private void addVehicle_Click(object sender, RoutedEventArgs e)
+        {
+            Window editorWindow = new EditorWindow();
+            editorWindow.Show();
+        }
+
+        private void addMap_Click(object sender, RoutedEventArgs e)
+        {
+            Window editorWindow = new EditorWindow();
+            editorWindow.Show();
+        }
     }
 }
