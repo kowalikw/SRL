@@ -13,20 +13,20 @@ namespace SRL.Main
     class VehicleEditorControl : D3D11Host
     {
         private SpriteBatch spriteBatch;
-        private bool isAngleSet = false;
         private Color normalDrawColor = Color.Black;
         private Color activeDrawColor = Color.Blue;
         private Color correctActiveDrawColor = Color.Green;
         private Color incorrectActiveDrawColor = Color.Red;
         private Color activeStartCircleColor = Color.Orange;
-        private Color axisDrawColor = Color.Purple;
 
         public Vehicle Vehicle { get; private set; }
         public VehicleEditorMode Mode { get; set; }
         public Point OriginStart { get; set; }
         public Point OriginEnd { get; set; }
         public Point CursorPosition { get; set; }
+        public bool IsAngleSet { get; set; }
         public bool IsSegmentIntersection { get; set; }
+        public bool IsSegmentIntersectionUnchecked { get; private set; }
         
         protected override void Initialize()
         {
@@ -35,6 +35,7 @@ namespace SRL.Main
             Vehicle = new Vehicle();
             CursorPosition = new Point(0, 0);
             IsSegmentIntersection = false;
+            IsSegmentIntersectionUnchecked = false;
         }
 
         protected override void Unitialize()
@@ -47,28 +48,32 @@ namespace SRL.Main
             GraphicsDevice.Clear(Color.LightSkyBlue);
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            spriteBatch.Begin();
+            spriteBatch.BeginDraw();
 
             switch(Mode)
             {
+                case VehicleEditorMode.Empty:
+                    Vehicle.Shape = new Polygon();
+                    IsSegmentIntersection = false;
+                    IsSegmentIntersectionUnchecked = false;
+                    break;
                 case VehicleEditorMode.DrawPolygon:
                     for (int i = 0; i < Vehicle.Shape.VertexCount; i++)
                     { 
                         if (i == 0)
-                            spriteBatch.DrawCircle(Vehicle.Shape.Vertices[0], 8, 100, Color.Blue, 3);
+                            spriteBatch.DrawCircle(Vehicle.Shape.Vertices[0], int.Parse(Number.PolygonStartCircleRadius), int.Parse(Number.CircleSegments), activeDrawColor, int.Parse(Number.PolygonStartCircleThickness));
                         else
-                        {
-                            spriteBatch.DrawCircle(Vehicle.Shape.Vertices[0], 3, 100, Color.Blue, 3);
-                            spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[i - 1].X, Vehicle.Shape.Vertices[i - 1].Y), new Point(Vehicle.Shape.Vertices[i].X, Vehicle.Shape.Vertices[i].Y), Color.Blue, 2);
-                        }
+                            spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[i - 1].X, Vehicle.Shape.Vertices[i - 1].Y), new Point(Vehicle.Shape.Vertices[i].X, Vehicle.Shape.Vertices[i].Y), activeDrawColor, int.Parse(Number.PolygonLineThickness));
+
+                        spriteBatch.DrawCircle(Vehicle.Shape.Vertices[0], int.Parse(Number.PolygonPointRadius), int.Parse(Number.CircleSegments), activeDrawColor, int.Parse(Number.PolygonPointThickness));
                     }
 
                     if (Vehicle.Shape.VertexCount > 0)
                     {
-                        if (GeometryHelper.DistanceBetweenPoints(Vehicle.Shape.Vertices[0], CursorPosition) <= 8 && Vehicle.Shape.VertexCount >= 3 && !IsSegmentIntersection)
+                        if (GeometryHelper.DistanceBetweenPoints(Vehicle.Shape.Vertices[0], CursorPosition) <= int.Parse(Number.PolygonStartCircleRadius) && Vehicle.Shape.VertexCount >= int.Parse(Number.MinimumPolygonVertices) && !IsSegmentIntersection)
                         {
                             spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].X, Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].Y), new Point(Vehicle.Shape.Vertices[0].X, Vehicle.Shape.Vertices[0].Y), Color.Blue, 2);
-                            spriteBatch.DrawCircle(new Point(Vehicle.Shape.Vertices[0].X, Vehicle.Shape.Vertices[0].Y), 8, 100, Color.Yellow, 3);
+                            spriteBatch.DrawCircle(new Point(Vehicle.Shape.Vertices[0].X, Vehicle.Shape.Vertices[0].Y), 8, int.Parse(Number.CircleSegments), Color.Yellow, 3);
                         }
                         else
                         {
@@ -87,7 +92,7 @@ namespace SRL.Main
                         }
                     }
 
-                    if(Vehicle.Shape.VertexCount >= 3)
+                    if(Vehicle.Shape.VertexCount > 3)
                     {
                         if(GeometryHelper.DistanceBetweenPoints(Vehicle.Shape.Vertices[0], Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1]) <= 8)
                         {
@@ -96,9 +101,15 @@ namespace SRL.Main
                         }
                     }
 
+                    for (int i = 1; i < Vehicle.Shape.VertexCount - 2; i++)
+                        if (GeometryHelper.SegmentIntersection(Vehicle.Shape.Vertices[i], Vehicle.Shape.Vertices[i + 1], Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1], Vehicle.Shape.Vertices[0]))
+                            IsSegmentIntersectionUnchecked = true;
+
                     break;
                 case VehicleEditorMode.DrawDone:
                     DrawVehicle(Vehicle);
+                    IsSegmentIntersection = false;
+                    IsSegmentIntersectionUnchecked = false;
                     break;
                 case VehicleEditorMode.SetAxis:
                     DrawVehicle(Vehicle);
@@ -107,23 +118,23 @@ namespace SRL.Main
                     {
                         double axisAngle = (Math.Atan((CursorPosition.Y - OriginStart.Y) / (CursorPosition.X - OriginStart.X))) * 180 / Math.PI;
 
-                        DrawAxis(OriginStart, CursorPosition, axisAngle);
+                        DrawAxis(OriginStart, CursorPosition, axisAngle, true);
                     }
                     
                     if(OriginEnd != null)
                     {
-                        if(!isAngleSet)
+                        if(!IsAngleSet)
                         {
                             Vehicle.FrontAngle = (Math.Atan((OriginEnd.Y - OriginStart.Y) / (OriginEnd.X - OriginStart.X))) * 180 / Math.PI;
                             Mode = VehicleEditorMode.Idle;
-                            isAngleSet = true;
+                            IsAngleSet = true;
                         }
                     }
 
                     break;
                 case VehicleEditorMode.Idle:
                     DrawVehicle(Vehicle);
-                    DrawAxis(OriginStart, OriginEnd, Vehicle.FrontAngle);
+                    DrawAxis(OriginStart, OriginEnd, Vehicle.FrontAngle, false);
                     break;
             }
 
@@ -136,7 +147,7 @@ namespace SRL.Main
                 spriteBatch.DrawLine(vehicle.Shape.Vertices[i], vehicle.Shape.Vertices[(i + 1) % Vehicle.Shape.VertexCount], normalDrawColor, int.Parse(Number.PolygonLineThickness));
         }
 
-        private void DrawAxis(Point axisStart, Point axisEnd, double axisAngle)
+        private void DrawAxis(Point axisStart, Point axisEnd, double axisAngle, bool activeDraw)
         {
             Point arrowCenter = new Point(double.Parse(Number.ArrowCenterX), double.Parse(Number.ArrowCenterY));
             Point arrowTop = new Point(double.Parse(Number.ArrowTopX), double.Parse(Number.ArrowTopY));
@@ -159,9 +170,9 @@ namespace SRL.Main
                 ((arrowBottom.X * Math.Sin(axisAngle) + arrowBottom.Y * Math.Cos(axisAngle)) + axisEnd.Y));
 
             // Draw
-            spriteBatch.DrawLine(arrowTop, arrowCenter, Color.Purple, int.Parse(Number.AxisThickness));
-            spriteBatch.DrawLine(arrowBottom, arrowCenter, Color.Purple, int.Parse(Number.AxisThickness));
-            spriteBatch.DrawLine(axisStart, axisEnd, Color.Purple, int.Parse(Number.AxisThickness));
+            spriteBatch.DrawLine(arrowTop, arrowCenter, activeDraw ? activeDrawColor : normalDrawColor, int.Parse(Number.AxisThickness));
+            spriteBatch.DrawLine(arrowBottom, arrowCenter, activeDraw ? activeDrawColor : normalDrawColor, int.Parse(Number.AxisThickness));
+            spriteBatch.DrawLine(axisStart, axisEnd, activeDraw ? activeDrawColor : normalDrawColor, int.Parse(Number.AxisThickness));
         }
 
     }

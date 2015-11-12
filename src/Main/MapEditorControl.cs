@@ -23,7 +23,8 @@ namespace SRL.Main
         public Map Map { get; private set; }
         public MapEditorMode Mode { get; set; }
         public Point CursorPosition { get; set; }
-        public bool IsSegmentIntersection { get; private set; }
+        public bool IsSegmentIntersection { get; set; }
+        public bool IsSegmentIntersectionUnchecked { get; private set; }
 
         protected override void Initialize()
         {
@@ -32,6 +33,8 @@ namespace SRL.Main
             Map = new Map();
             Mode = MapEditorMode.Idle;
             CursorPosition = new Point(0, 0);
+            IsSegmentIntersection = false;
+            IsSegmentIntersectionUnchecked = false;
         }
 
         protected override void Unitialize()
@@ -44,7 +47,7 @@ namespace SRL.Main
             GraphicsDevice.Clear(Color.LightSkyBlue);
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            spriteBatch.Begin();
+            spriteBatch.BeginDraw();
 
             switch (Mode)
             {
@@ -64,7 +67,7 @@ namespace SRL.Main
                     if (ActualPolygon.VertexCount > 0)
                     {
                         if (GeometryHelper.DistanceBetweenPoints(ActualPolygon.Vertices[0], CursorPosition) <= int.Parse(Number.PolygonStartCircleRadius) && 
-                            ActualPolygon.Vertices.Count >= int.Parse(Number.MinimumPolygonVertices) && !IsSegmentIntersection)
+                            ActualPolygon.Vertices.Count > int.Parse(Number.MinimumPolygonVertices) && !IsSegmentIntersection)
                         {
                             spriteBatch.DrawLine(ActualPolygon.Vertices[ActualPolygon.VertexCount - 1], ActualPolygon.Vertices[0], activeDrawColor, int.Parse(Number.PolygonLineThickness));
                             spriteBatch.DrawCircle(ActualPolygon.Vertices[0], int.Parse(Number.PolygonStartCircleRadius), int.Parse(Number.CircleSegments), activeStartCircleColor, int.Parse(Number.PolygonStartCircleThickness));
@@ -84,20 +87,22 @@ namespace SRL.Main
                         }
                     }
 
-                    if (ActualPolygon.Vertices.Count >= int.Parse(Number.MinimumPolygonVertices))
-                    {
-                        if (GeometryHelper.DistanceBetweenPoints(ActualPolygon.Vertices[0], ActualPolygon.Vertices[ActualPolygon.VertexCount - 1]) <= int.Parse(Number.PolygonStartCircleRadius))
-                        {
-                            ActualPolygon.Vertices.RemoveAt(ActualPolygon.VertexCount - 1);
-                            //Mode = MapEditorMode.DrawDone;
-                        }
-                    }
+                    for (int i = 1; i < ActualPolygon.VertexCount - 2; i++)
+                        if (GeometryHelper.SegmentIntersection(ActualPolygon.Vertices[i], ActualPolygon.Vertices[i + 1], ActualPolygon.Vertices[ActualPolygon.VertexCount - 1], ActualPolygon.Vertices[0]))
+                            IsSegmentIntersectionUnchecked = true;
 
                     break;
                 case MapEditorMode.DrawDone:
-                    Map.Obstacles.Add(ActualPolygon);
+                    if (ActualPolygon.Vertices.Count > int.Parse(Number.MinimumPolygonVertices))
+                        if (GeometryHelper.DistanceBetweenPoints(ActualPolygon.Vertices[0], ActualPolygon.Vertices[ActualPolygon.VertexCount - 1]) <= int.Parse(Number.PolygonStartCircleRadius))
+                            ActualPolygon.Vertices.RemoveAt(ActualPolygon.VertexCount - 1);
+
+                    if (!IsSegmentIntersectionUnchecked)
+                        Map.Obstacles.Add(ActualPolygon);
+
                     Mode = MapEditorMode.Idle;
                     IsSegmentIntersection = false;
+                    IsSegmentIntersectionUnchecked = false;
                     ActualPolygon = new Polygon();
                     break;
                 case MapEditorMode.Idle:
@@ -112,7 +117,7 @@ namespace SRL.Main
         {
             foreach (Polygon polygon in Map.Obstacles)
                 for(int i = 0; i < polygon.VertexCount; i++)
-                    spriteBatch.DrawLine(polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.VertexCount], normalDrawColor, 2);
+                    spriteBatch.DrawLine(polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.VertexCount], normalDrawColor, int.Parse(Number.PolygonLineThickness));
         }
     }
 }

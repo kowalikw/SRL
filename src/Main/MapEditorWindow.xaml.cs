@@ -55,11 +55,10 @@ namespace SRL.Main
 
         private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MapEditorControl.ActualPolygon.VertexCount >= int.Parse(Number.MinimumPolygonVertices) && GeometryHelper.DistanceBetweenPoints(MapEditorControl.ActualPolygon.Vertices[0],
+            if (MapEditorControl.ActualPolygon.VertexCount > int.Parse(Number.MinimumPolygonVertices) && GeometryHelper.DistanceBetweenPoints(MapEditorControl.ActualPolygon.Vertices[0],
                 new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= int.Parse(Number.PolygonStartCircleRadius) && !MapEditorControl.IsSegmentIntersection)
             {
                 btnDraw.IsChecked = false;
-                MapEditorControl.Mode = MapEditorMode.DrawDone;
             }
         }
 

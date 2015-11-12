@@ -19,7 +19,7 @@
                          Stretch="Fill" MouseUp="VehicleEditorControl_MouseUp" MouseMove="VehicleEditorControl_MouseMove" />
         <StackPanel Grid.Column="1">
             <ToggleButton x:Name="btnDraw" Margin="3" Height="30" Checked="btnDraw_Checked" Unchecked="btnDraw_Unchecked">Rysuj pojazd</ToggleButton>
-            <Button x:Name="btnSetAxis" Margin="3" Height="30" Click="btnSetAxis_Click">Wyznacz oś pojazdu</Button>
+            <ToggleButton x:Name="btnSetAxis" Margin="3" Height="30" Checked="btnSetAxis_Checked" Unchecked="btnSetAxis_Unchecked">Wyznacz oś pojazdu</ToggleButton>
             <Button x:Name="bntReset" Margin="3" Height="30" Click="bntReset_Click">Resetuj pojazd</Button>
             <Button x:Name="btnSave" Margin="3" Height="30" Click="btnSave_Click">Zapisz pojazd</Button>
             <Button x:Name="btnExit" Margin="3" Height="30" Click="btnExit_Click">Zamknij</Button>

@@ -31,6 +31,9 @@ namespace SRL.Main
         public VehicleEditorWindow()
         {
             InitializeComponent();
+
+            btnSetAxis.IsEnabled = false;
+            btnSave.IsEnabled = false;
         }
 
         private void VehicleEditorControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -41,20 +44,23 @@ namespace SRL.Main
             else if (VehicleEditorControl.Mode == VehicleEditorMode.SetAxis)
             {
                 if (VehicleEditorControl.OriginStart == null)
+                {
                     VehicleEditorControl.OriginStart = new Point(cursorPosition.X, cursorPosition.Y);
+                    VehicleEditorControl.Vehicle.Origin = VehicleEditorControl.OriginStart;
+                }
                 else if (VehicleEditorControl.OriginEnd == null)
+                {
                     VehicleEditorControl.OriginEnd = new Point(cursorPosition.X, cursorPosition.Y);
+                    btnSetAxis.IsChecked = false;
+                    btnSetAxis.IsEnabled = false;
+                    btnSave.IsEnabled = true;
+                }
             }
         }
 
         private void VehicleEditorControl_MouseMove(object sender, MouseEventArgs e)
         {
             VehicleEditorControl.CursorPosition = new Point(e.GetPosition(VehicleEditorControl).X, e.GetPosition(VehicleEditorControl).Y);
-        }
-
-        private void btnSetAxis_Click(object sender, RoutedEventArgs e)
-        {
-            VehicleEditorControl.Mode = VehicleEditorMode.SetAxis;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -85,20 +91,54 @@ namespace SRL.Main
 
         private void btnDraw_Unchecked(object sender, RoutedEventArgs e)
         {
-            VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;
-            btnDraw.IsEnabled = false;
+            if (!VehicleEditorControl.IsSegmentIntersectionUnchecked)
+            {
+                VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;
+                btnDraw.IsEnabled = false;
+                btnSetAxis.IsEnabled = true;
+            }
+            else
+                VehicleEditorControl.Mode = VehicleEditorMode.Empty;
         }
 
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var cursorPosition = e.GetPosition(VehicleEditorControl);
             if (VehicleEditorControl.Vehicle.Shape.VertexCount >= 3 && GeometryHelper.DistanceBetweenPoints(VehicleEditorControl.Vehicle.Shape.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8 && !VehicleEditorControl.IsSegmentIntersection)
+            {
                 btnDraw.IsEnabled = false;
+                btnSetAxis.IsEnabled = true;
+            }
         }
 
         private void bntReset_Click(object sender, RoutedEventArgs e)
         {
+            btnDraw.IsChecked = false;
+            btnDraw.IsEnabled = true;
+            btnSetAxis.IsChecked = false;
+            btnSetAxis.IsEnabled = false;
+            btnSave.IsEnabled = false;
+
             VehicleEditorControl.Vehicle.Shape.Vertices.Clear();
+            VehicleEditorControl.Vehicle.Origin = null;
+            VehicleEditorControl.OriginStart = null;
+            VehicleEditorControl.OriginEnd = null;
+            VehicleEditorControl.IsAngleSet = false;
+            VehicleEditorControl.Mode = VehicleEditorMode.Empty; 
+        }
+
+        private void btnSetAxis_Checked(object sender, RoutedEventArgs e)
+        {
+            VehicleEditorControl.Mode = VehicleEditorMode.SetAxis;
+        }
+
+        private void btnSetAxis_Unchecked(object sender, RoutedEventArgs e)
+        {
+            /*VehicleEditorControl.Vehicle.Origin = null;
+            VehicleEditorControl.OriginStart = null;
+            VehicleEditorControl.OriginEnd = null;
+            VehicleEditorControl.IsAngleSet = false;
+            VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;*/
         }
     }
 }

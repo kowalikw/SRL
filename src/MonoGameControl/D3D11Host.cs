@@ -20,9 +20,9 @@ namespace SRL.MonoGameControl
         #region Fields
 
         // The Direct3D 11 device (shared by all D3D11Host elements):
-        private static GraphicsDevice _graphicsDevice;
-        private static int _referenceCount;
-        private static readonly object _graphicsDeviceLock = new object();
+        private GraphicsDevice _graphicsDevice;
+        private int _referenceCount;
+        private readonly object _graphicsDeviceLock = new object();
 
         // Image source:
         private RenderTarget2D _renderTarget;
@@ -44,7 +44,7 @@ namespace SRL.MonoGameControl
         /// <see langword="true" /> if controls run in design mode; otherwise, 
         /// <see langword="false" />.
         /// </value>
-        public static bool IsInDesignMode
+        public bool IsInDesignMode
         {
             get
             {
@@ -54,7 +54,7 @@ namespace SRL.MonoGameControl
                 return _isInDesignMode.Value;
             }
         }
-        private static bool? _isInDesignMode;
+        private bool? _isInDesignMode;
 
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SRL.MonoGameControl
         }
 
 
-        private static void InitializeGraphicsDevice()
+        private void InitializeGraphicsDevice()
         {
             lock (_graphicsDeviceLock)
             {
@@ -125,7 +125,7 @@ namespace SRL.MonoGameControl
         }
 
 
-        private static void UninitializeGraphicsDevice()
+        private void UninitializeGraphicsDevice()
         {
             lock (_graphicsDeviceLock)
             {

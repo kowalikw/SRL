@@ -11,7 +11,6 @@ namespace SRL.MonoGameControl
         #region Private Members
 
         private static readonly Dictionary<String, List<Point>> circleCache = new Dictionary<string, List<Point>>();
-        //private static readonly Dictionary<String, List<Point>> arcCache = new Dictionary<string, List<Point>>();
         private static Texture2D pixel;
 
         #endregion
@@ -121,6 +120,11 @@ namespace SRL.MonoGameControl
 
         #endregion
 
+        public static void BeginDraw(this SpriteBatch spriteBatch)
+        {
+            pixel = null;
+            spriteBatch.Begin();
+        }
 
         #region FillRectangle
 

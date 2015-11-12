@@ -7,7 +7,7 @@ namespace SRL.Models.Model
     [XmlRoot(ElementName = "vvd", Namespace = "pl.pw.mini.KowMisPie.SRL")]
     public class Vehicle : IXmlSerializable
     {
-        public Polygon Shape { get; }
+        public Polygon Shape { get; set; }
         public Point Origin { get; set; }
         public double FrontAngle { get; set; }
 
