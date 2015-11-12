@@ -8,13 +8,16 @@ namespace SRL.Models.Model
     public class Vehicle : IXmlSerializable
     {
         public Polygon Shape { get; }
-        public Point Origin { get; }
-        public double FrontAngle { get; }
+        public Point Origin { get; set; }
+        public double FrontAngle { get; set; }
 
         /// <remarks>
-        /// Visibility set to private as it's intended for deserialization only.
+        /// Initializes a new instance of the <see cref="Vehicle"/> class.
         /// </remarks>
-        private Vehicle() { }
+        public Vehicle()
+        {
+            Shape = new Polygon();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.

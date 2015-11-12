@@ -7,6 +7,8 @@ using System.Xml;
 using SRL.Models.Model;
 using System.IO;
 using Point = SRL.Models.Model.Point;
+using SRL.Main.Resources;
+using System;
 
 namespace SRL.Main
 {
@@ -27,7 +29,7 @@ namespace SRL.Main
 
         private void btnDraw_Unchecked(object sender, RoutedEventArgs e)
         {
-            MapEditorControl.Mode = MapEditorMode.Idle;
+            MapEditorControl.Mode = MapEditorMode.DrawDone;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -53,18 +55,31 @@ namespace SRL.Main
 
         private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            if (MapEditorControl.ActualPolygon.VertexCount >= int.Parse(Number.MinimumPolygonVertices) && GeometryHelper.DistanceBetweenPoints(MapEditorControl.ActualPolygon.Vertices[0],
+                new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= int.Parse(Number.PolygonStartCircleRadius) && !MapEditorControl.IsSegmentIntersection)
+            {
+                btnDraw.IsChecked = false;
+                MapEditorControl.Mode = MapEditorMode.DrawDone;
+            }
         }
 
         private void MapEditorControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MapEditorControl.Mode == MapEditorMode.DrawPolygon)
+            if (MapEditorControl.Mode == MapEditorMode.DrawPolygon && !MapEditorControl.IsSegmentIntersection)
                 MapEditorControl.ActualPolygon.Vertices.Add(new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y));
         }
 
         private void MapEditorControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             MapEditorControl.CursorPosition = new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y);
+        }
+
+        private void resetMap_Click(object sender, RoutedEventArgs e)
+        {
+            btnDraw.IsChecked = false;
+            MapEditorControl.Map.Obstacles.Clear();
+            MapEditorControl.ActualPolygon.Vertices.Clear();
+            MapEditorControl.Mode = MapEditorMode.Idle;
         }
     }
 }

@@ -138,4 +138,25 @@
   <data name="AxisThickness" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="CircleSegments" xml:space="preserve">
+    <value>100</value>
+  </data>
+  <data name="MinimumPolygonVertices" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="PolygonLineThickness" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="PolygonPointRadius" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="PolygonPointThickness" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="PolygonStartCircleRadius" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="PolygonStartCircleThickness" xml:space="preserve">
+    <value>2</value>
+  </data>
 </root>

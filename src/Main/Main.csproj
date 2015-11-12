@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChooseLanguageWindow.xaml.cs">
+      <DependentUpon>ChooseLanguageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MapEditorWindow.xaml.cs">
       <DependentUpon>MapEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
       <DependentUpon>PL.resx</DependentUpon>
     </Compile>
     <Compile Include="TestControl.cs" />
+    <Page Include="ChooseLanguageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MapEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

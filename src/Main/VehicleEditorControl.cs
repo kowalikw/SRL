@@ -13,61 +13,34 @@ namespace SRL.Main
     class VehicleEditorControl : D3D11Host
     {
         private SpriteBatch spriteBatch;
-        private Polygon shape;
-        private List<Point> vertices;
-        private Point origin;
-        public double? angle = null;
+        private bool isAngleSet = false;
+        private Color normalDrawColor = Color.Black;
+        private Color activeDrawColor = Color.Blue;
+        private Color correctActiveDrawColor = Color.Green;
+        private Color incorrectActiveDrawColor = Color.Red;
+        private Color activeStartCircleColor = Color.Orange;
+        private Color axisDrawColor = Color.Purple;
 
         public Vehicle Vehicle { get; private set; }
         public VehicleEditorMode Mode { get; set; }
-        public List<Point> Vertices
-        {
-            get
-            {
-                return vertices;
-            }
-
-            private set
-            {
-                vertices = value;
-            }
-        }
-        public Point OriginStart
-        {
-            get
-            {
-                return origin;
-            }
-
-            set
-            {
-                origin = value;
-            }
-        }
+        public Point OriginStart { get; set; }
         public Point OriginEnd { get; set; }
-        public double Angle
-        {
-            get
-            {
-                return angle.Value;
-            }
-        }
         public Point CursorPosition { get; set; }
+        public bool IsSegmentIntersection { get; set; }
         
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Mode = VehicleEditorMode.Empty;
-            Vertices = new List<Point>();
+            Vehicle = new Vehicle();
             CursorPosition = new Point(0, 0);
+            IsSegmentIntersection = false;
         }
-
 
         protected override void Unitialize()
         {
             spriteBatch.Dispose();
         }
-
 
         protected override void Render(TimeSpan time)
         {
@@ -79,56 +52,56 @@ namespace SRL.Main
             switch(Mode)
             {
                 case VehicleEditorMode.DrawPolygon:
-                    for (int i = 0; i < Vertices.Count; i++)
+                    for (int i = 0; i < Vehicle.Shape.VertexCount; i++)
                     { 
                         if (i == 0)
-                            spriteBatch.DrawCircle(Vertices[0], 8, 100, Color.Blue, 3);
+                            spriteBatch.DrawCircle(Vehicle.Shape.Vertices[0], 8, 100, Color.Blue, 3);
                         else
                         {
-                            spriteBatch.DrawCircle(Vertices[0], 3, 100, Color.Blue, 3);
-                            spriteBatch.DrawLine(new Point(Vertices[i - 1].X, Vertices[i - 1].Y), new Point(Vertices[i].X, Vertices[i].Y), Color.Blue, 2);
+                            spriteBatch.DrawCircle(Vehicle.Shape.Vertices[0], 3, 100, Color.Blue, 3);
+                            spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[i - 1].X, Vehicle.Shape.Vertices[i - 1].Y), new Point(Vehicle.Shape.Vertices[i].X, Vehicle.Shape.Vertices[i].Y), Color.Blue, 2);
                         }
                     }
 
-                    if (Vertices.Count > 0)
+                    if (Vehicle.Shape.VertexCount > 0)
                     {
-                        if (GeometryHelper.DistanceBetweenPoints(Vertices[0], CursorPosition) <= 8 && Vertices.Count >= 3)
+                        if (GeometryHelper.DistanceBetweenPoints(Vehicle.Shape.Vertices[0], CursorPosition) <= 8 && Vehicle.Shape.VertexCount >= 3 && !IsSegmentIntersection)
                         {
-                            spriteBatch.DrawLine(new Point(Vertices[Vertices.Count - 1].X, Vertices[Vertices.Count - 1].Y), new Point(Vertices[0].X, Vertices[0].Y), Color.Blue, 2);
-                            spriteBatch.DrawCircle(new Point(Vertices[0].X, Vertices[0].Y), 8, 100, Color.Yellow, 3);
+                            spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].X, Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].Y), new Point(Vehicle.Shape.Vertices[0].X, Vehicle.Shape.Vertices[0].Y), Color.Blue, 2);
+                            spriteBatch.DrawCircle(new Point(Vehicle.Shape.Vertices[0].X, Vehicle.Shape.Vertices[0].Y), 8, 100, Color.Yellow, 3);
                         }
                         else
                         {
-                            bool isSegmentIntersection = false;
+                            IsSegmentIntersection = false;
 
-                            for (int i = 0; i < Vertices.Count - 2; i++)
+                            for (int i = 0; i < Vehicle.Shape.VertexCount - 2; i++)
                             {
-                                if (GeometryHelper.SegmentIntersection(Vertices[i], Vertices[i + 1], Vertices[Vertices.Count - 1], CursorPosition))
-                                    isSegmentIntersection = true;
+                                if (GeometryHelper.SegmentIntersection(Vehicle.Shape.Vertices[i], Vehicle.Shape.Vertices[i + 1], Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1], CursorPosition))
+                                    IsSegmentIntersection = true;
                             }
 
-                            if(isSegmentIntersection)
-                                spriteBatch.DrawLine(new Point(Vertices[Vertices.Count - 1].X, Vertices[Vertices.Count - 1].Y), new Point(CursorPosition.X, CursorPosition.Y), Color.Red, 2);
+                            if(IsSegmentIntersection)
+                                spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].X, Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].Y), new Point(CursorPosition.X, CursorPosition.Y), Color.Red, 2);
                             else
-                                spriteBatch.DrawLine(new Point(Vertices[Vertices.Count - 1].X, Vertices[Vertices.Count - 1].Y), new Point(CursorPosition.X, CursorPosition.Y), Color.Green, 2);
+                                spriteBatch.DrawLine(new Point(Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].X, Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1].Y), new Point(CursorPosition.X, CursorPosition.Y), Color.Green, 2);
                         }
                     }
 
-                    if(Vertices.Count >= 3)
+                    if(Vehicle.Shape.VertexCount >= 3)
                     {
-                        if(GeometryHelper.DistanceBetweenPoints(Vertices[0], Vertices[Vertices.Count - 1]) <= 8)
+                        if(GeometryHelper.DistanceBetweenPoints(Vehicle.Shape.Vertices[0], Vehicle.Shape.Vertices[Vehicle.Shape.VertexCount - 1]) <= 8)
                         {
-                            Vertices.RemoveAt(Vertices.Count - 1);
+                            Vehicle.Shape.Vertices.RemoveAt(Vehicle.Shape.VertexCount - 1);
                             Mode = VehicleEditorMode.DrawDone;
                         }
                     }
 
                     break;
                 case VehicleEditorMode.DrawDone:
-                    DrawVehicle(Vertices);
+                    DrawVehicle(Vehicle);
                     break;
                 case VehicleEditorMode.SetAxis:
-                    DrawVehicle(Vertices);
+                    DrawVehicle(Vehicle);
 
                     if (OriginStart != null)
                     {
@@ -139,31 +112,28 @@ namespace SRL.Main
                     
                     if(OriginEnd != null)
                     {
-                        if(!angle.HasValue)
+                        if(!isAngleSet)
                         {
-                            angle = (Math.Atan((OriginEnd.Y - OriginStart.Y) / (OriginEnd.X - OriginStart.X))) * 180 / Math.PI;
+                            Vehicle.FrontAngle = (Math.Atan((OriginEnd.Y - OriginStart.Y) / (OriginEnd.X - OriginStart.X))) * 180 / Math.PI;
                             Mode = VehicleEditorMode.Idle;
+                            isAngleSet = true;
                         }
                     }
 
                     break;
                 case VehicleEditorMode.Idle:
-                    DrawVehicle(Vertices);
-                    DrawAxis(OriginStart, OriginEnd, Angle);
-
-                    if(Vehicle == null)
-                        Vehicle = new Vehicle(new Polygon(vertices), origin, angle.Value);
-
+                    DrawVehicle(Vehicle);
+                    DrawAxis(OriginStart, OriginEnd, Vehicle.FrontAngle);
                     break;
             }
 
             spriteBatch.End();
         }
 
-        private void DrawVehicle(List<Point> vertices)
+        private void DrawVehicle(Vehicle vehicle)
         {
-            for (int i = 0; i < vertices.Count; i++)
-                spriteBatch.DrawLine(vertices[i], vertices[(i + 1) % vertices.Count], Color.Blue, 2);
+            for (int i = 0; i < Vehicle.Shape.VertexCount; i++)
+                spriteBatch.DrawLine(vehicle.Shape.Vertices[i], vehicle.Shape.Vertices[(i + 1) % Vehicle.Shape.VertexCount], normalDrawColor, int.Parse(Number.PolygonLineThickness));
         }
 
         private void DrawAxis(Point axisStart, Point axisEnd, double axisAngle)

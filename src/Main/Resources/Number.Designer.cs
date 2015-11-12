@@ -122,5 +122,68 @@ namespace SRL.Main.Resources {
                 return ResourceManager.GetString("AxisThickness", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100.
+        /// </summary>
+        internal static string CircleSegments {
+            get {
+                return ResourceManager.GetString("CircleSegments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        internal static string MinimumPolygonVertices {
+            get {
+                return ResourceManager.GetString("MinimumPolygonVertices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        internal static string PolygonLineThickness {
+            get {
+                return ResourceManager.GetString("PolygonLineThickness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        internal static string PolygonPointRadius {
+            get {
+                return ResourceManager.GetString("PolygonPointRadius", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        internal static string PolygonPointThickness {
+            get {
+                return ResourceManager.GetString("PolygonPointThickness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 8.
+        /// </summary>
+        internal static string PolygonStartCircleRadius {
+            get {
+                return ResourceManager.GetString("PolygonStartCircleRadius", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        internal static string PolygonStartCircleThickness {
+            get {
+                return ResourceManager.GetString("PolygonStartCircleThickness", resourceCulture);
+            }
+        }
     }
 }

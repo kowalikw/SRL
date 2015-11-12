@@ -20,9 +20,13 @@ namespace SRL.Main
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private string language;
+
+        public MainWindow(string language)
         {
             InitializeComponent();
+
+            this.language = language;
         }
 
         private void addVehicle_Click(object sender, RoutedEventArgs e)

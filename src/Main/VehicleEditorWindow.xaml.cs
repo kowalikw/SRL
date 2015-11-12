@@ -36,8 +36,8 @@ namespace SRL.Main
         private void VehicleEditorControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var cursorPosition = e.GetPosition(VehicleEditorControl);
-            if (VehicleEditorControl.Mode == VehicleEditorMode.DrawPolygon)
-                VehicleEditorControl.Vertices.Add(new Point(cursorPosition.X, (cursorPosition.Y)));
+            if (VehicleEditorControl.Mode == VehicleEditorMode.DrawPolygon && !VehicleEditorControl.IsSegmentIntersection)
+                VehicleEditorControl.Vehicle.Shape.Vertices.Add(new Point(cursorPosition.X, (cursorPosition.Y)));
             else if (VehicleEditorControl.Mode == VehicleEditorMode.SetAxis)
             {
                 if (VehicleEditorControl.OriginStart == null)
@@ -92,8 +92,14 @@ namespace SRL.Main
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var cursorPosition = e.GetPosition(VehicleEditorControl);
-            if (VehicleEditorControl.Vertices.Count >= 3 && GeometryHelper.DistanceBetweenPoints(VehicleEditorControl.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8)
+            if (VehicleEditorControl.Vehicle.Shape.VertexCount >= 3 && GeometryHelper.DistanceBetweenPoints(VehicleEditorControl.Vehicle.Shape.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8 && !VehicleEditorControl.IsSegmentIntersection)
                 btnDraw.IsEnabled = false;
+        }
+
+        private void bntReset_Click(object sender, RoutedEventArgs e)
+        {
+            VehicleEditorControl.Vehicle.Shape.Vertices.Clear();
         }
     }
 }
+
