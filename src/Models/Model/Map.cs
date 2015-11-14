@@ -10,6 +10,7 @@ namespace SRL.Models.Model
     public class Map : IXmlSerializable
     {
         public List<Polygon> Obstacles { get; }
+        public int ObstacleCount => Obstacles.Count;
 
         public Map()
         {
@@ -28,8 +29,23 @@ namespace SRL.Models.Model
 
         public void ReadXml(XmlReader reader)
         {
-            //TODO
-            throw new System.NotImplementedException();
+            reader.MoveToContent();
+
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                reader.LocalName == "vmd")
+            {
+                reader.ReadToDescendant("polygon");
+
+                while (reader.MoveToContent() == XmlNodeType.Element &&
+                    reader.LocalName == "polygon")
+                {
+                    Polygon obstacle = new Polygon();
+                    obstacle.ReadXml(reader);
+                    Obstacles.Add(obstacle);
+                }
+            }
+            else
+                throw new XmlException();
         }
 
         public void WriteXml(XmlWriter writer)
