@@ -28,7 +28,7 @@ namespace SRL.ModelsTests
             var serializer = new XmlSerializer(typeof(Map));
             var output = new XDocument();
 
-            Map map = new Map();
+            Map map = new Map(10, 12);
             map.Obstacles.Add(new Polygon(new Point[]
             {
                 new Point(1.1,1.2),
@@ -87,7 +87,7 @@ namespace SRL.ModelsTests
 
             TextReader reader = new StringReader(Resources.Vehicle1);
             Vehicle output = (Vehicle)serializer.Deserialize(reader);
-            
+
             Assert.AreEqual(expected.DirectionAngle, output.DirectionAngle);
             Assert.AreEqual<Point>(expected.Origin, output.Origin);
             Assert.AreEqual<Polygon>(expected.Shape, output.Shape);
@@ -98,7 +98,7 @@ namespace SRL.ModelsTests
         {
             var serializer = new XmlSerializer(typeof(Map));
 
-            Map expected = new Map();
+            Map expected = new Map(10, 12);
             expected.Obstacles.Add(new Polygon(new Point[]
             {
                 new Point(1.1,1.2),
@@ -116,6 +116,8 @@ namespace SRL.ModelsTests
             Map output = (Map)serializer.Deserialize(reader);
 
             Assert.AreEqual(expected.ObstacleCount, output.ObstacleCount);
+            Assert.AreEqual(expected.Width, output.Width);
+            Assert.AreEqual(expected.Height, output.Height);
             foreach (var expObstacle in expected.Obstacles)
                 Assert.IsTrue(output.Obstacles.Contains(expObstacle));
 

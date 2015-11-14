@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -10,11 +9,20 @@ namespace SRL.Models.Model
     public class Map : IXmlSerializable
     {
         public List<Polygon> Obstacles { get; }
+        public double Width { get; private set; }
+        public double Height { get; private set; }
         public int ObstacleCount => Obstacles.Count;
 
-        public Map()
+        private Map()
         {
             Obstacles = new List<Polygon>();
+        }
+
+        public Map(double width, double height)
+        {
+            Obstacles = new List<Polygon>();
+            Width = width;
+            Height = height;
         }
 
         #region IXmlSerializable members
@@ -34,8 +42,14 @@ namespace SRL.Models.Model
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 reader.LocalName == "vmd")
             {
-                reader.ReadToDescendant("polygon");
+                reader.MoveToAttribute("width");
+                Width = reader.ReadContentAsDouble();
 
+                reader.MoveToAttribute("height");
+                Height = reader.ReadContentAsDouble();
+
+                reader.MoveToContent();
+                reader.ReadToDescendant("polygon");
                 while (reader.MoveToContent() == XmlNodeType.Element &&
                     reader.LocalName == "polygon")
                 {
@@ -51,6 +65,14 @@ namespace SRL.Models.Model
         public void WriteXml(XmlWriter writer)
         {
             // Default encoding is UTF-8.
+
+            writer.WriteStartAttribute("width");
+            writer.WriteValue(Width);
+            writer.WriteEndAttribute();
+
+            writer.WriteStartAttribute("height");
+            writer.WriteValue(Height);
+            writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Obstacles)
             {
