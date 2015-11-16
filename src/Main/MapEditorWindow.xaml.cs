@@ -59,7 +59,7 @@ namespace SRL.Main
         private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (MapEditorControl.ActualPolygon.VertexCount > Polygon.MinVerticesCount && GeometryHelper.DistanceBetweenPoints(MapEditorControl.ActualPolygon.Vertices[0],
-                new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= Polygon.StartPointRadius && !MapEditorControl.IsSegmentIntersection)
+                new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= Polygon.StartPointRadius && MapEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
             {
                 btnDraw.IsChecked = false;
             }
@@ -67,7 +67,7 @@ namespace SRL.Main
 
         private void MapEditorControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MapEditorControl.Mode == MapEditorMode.DrawPolygon && !MapEditorControl.IsSegmentIntersection)
+            if (MapEditorControl.Mode == MapEditorMode.DrawPolygon && MapEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
                 MapEditorControl.ActualPolygon.Vertices.Add(new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y));
         }
 

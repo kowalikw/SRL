@@ -57,6 +57,7 @@
     <Compile Include="MarshallingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PolygonTests.cs" />
+    <Compile Include="GeometryHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj">

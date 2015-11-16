@@ -19,7 +19,7 @@ namespace SRL.Editors
         public Map Map { get; private set; }
         public MapEditorMode Mode { get; set; }
         public Point CursorPosition { get; set; }
-        public bool IsSegmentIntersection { get; set; }
+        public DrawPolygonState ActualPolygonState { get; set; }
 
         /// <summary>
         /// Initialize map editor control.
@@ -31,7 +31,7 @@ namespace SRL.Editors
             Map = new Map();
             Mode = MapEditorMode.Idle;
             CursorPosition = new Point(0, 0);
-            IsSegmentIntersection = false;
+            ActualPolygonState = DrawPolygonState.Empty;
         }
 
         /// <summary>
@@ -51,8 +51,6 @@ namespace SRL.Editors
             GraphicsDevice.Clear(Color.LightSkyBlue);
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            IsSegmentIntersection = false;
-
             spriteBatch.BeginDraw();
 
             DrawMap();
@@ -60,10 +58,11 @@ namespace SRL.Editors
             switch (Mode)
             {
                 case MapEditorMode.DrawPolygon:
-                    if (DrawPolygon(spriteBatch, ActualPolygon, CursorPosition, true) == DrawPolygonState.Incorrect)
-                        IsSegmentIntersection = true;
+                    ActualPolygonState = CheckPolygon(ActualPolygon, CursorPosition, true);
                     break;
                 case MapEditorMode.DrawDone:
+                    ActualPolygonState = CheckPolygon(ActualPolygon, CursorPosition, false);
+
                     if (ActualPolygon.IsFinished())
                         ActualPolygon.Vertices.RemoveAt(ActualPolygon.VertexCount - 1);
                     
@@ -81,12 +80,21 @@ namespace SRL.Editors
         }
 
         /// <summary>
-        /// Draw map.
+        /// Draws current polygon.
+        /// </summary>
+        private void DrawActualPolygon()
+        {
+            spriteBatch.DrawPolygon(ActualPolygon, ActualPolygonState, CursorPosition);
+        }
+
+        /// <summary>
+        /// Draws map.
         /// </summary>
         private void DrawMap()
         {
             foreach (Polygon polygon in Map.Obstacles)
-                DrawPolygon(spriteBatch, polygon);
+                spriteBatch.DrawPolygon(polygon, DrawPolygonState.Done);
+            DrawActualPolygon();
         }
     }
 }

@@ -37,45 +37,21 @@ namespace SRL.Editors
             return DrawLineState.Correct;
         }
 
-        public DrawPolygonState DrawPolygon(SpriteBatch spriteBatch, Polygon polygon, Point cursorPosition = null, bool activeDraw = false)
+        public DrawPolygonState CheckPolygon(Polygon polygon, Point cursorPosition = null, bool activeDraw = false)
         {
             if (!activeDraw)
-            {
-                for (int i = 0; i < polygon.VertexCount; i++)
-                    spriteBatch.DrawLine(polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.VertexCount], normalDrawColor, LineThickness);
-
                 return DrawPolygonState.Done;
-            }
             else
             {
-                for (int i = 0; i < polygon.VertexCount; i++)
-                {
-                    if (i == 0)
-                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegments, activeDrawColor, StartCircleThickness);
-                    else
-                        spriteBatch.DrawLine(polygon.Vertices[i - 1], polygon.Vertices[i], activeDrawColor, LineThickness);
-
-                    spriteBatch.DrawCircle(polygon.Vertices[0], PointRadius, CircleSegments, activeDrawColor, PointThickness);
-                }
-
                 if (!polygon.IsEmpty())
                 {
                     switch (CheckLine(polygon, cursorPosition))
                     {
                         case DrawLineState.Correct:
-                            if (polygon.IsFinished(cursorPosition))
-                            {
-                                spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], polygon.Vertices[0], correctActiveDrawColor, LineThickness);
-                                spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegments, activeStartCircleColor, StartCircleThickness);
-                            }
-                            else
-                                spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, correctActiveDrawColor, LineThickness);
                             return DrawPolygonState.Correct;
                         case DrawLineState.Incorrect:
-                            spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, incorrectActiveDrawColor, LineThickness);
                             return DrawPolygonState.Incorrect;
                         case DrawLineState.Done:
-                            spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, activeDrawColor, LineThickness);
                             return DrawPolygonState.Correct;
                     }
                 }
@@ -83,5 +59,7 @@ namespace SRL.Editors
                 return DrawPolygonState.Empty;
             }
         }
+
+        
     }
 }

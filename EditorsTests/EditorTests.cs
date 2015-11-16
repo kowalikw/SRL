@@ -46,14 +46,14 @@ namespace EditorsTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void DrawPolygonEmpty()
         {
             MapEditor editor = new MapEditor();
             Polygon polygon = new Polygon();
 
             var expected = DrawPolygonState.Empty;
-            var actual = editor.DrawPolygon(null, polygon, new Point(0,0), true);
+            var actual = editor.CheckPolygon(null, polygon, new Point(0,0), true);
 
             Assert.AreEqual(expected, actual);
         }
@@ -65,10 +65,10 @@ namespace EditorsTests
             Polygon polygon = new Polygon();
 
             var expected = DrawPolygonState.Done;
-            var actual = editor.DrawPolygon(null, polygon, new Point(0, 0), false);
+            var actual = editor.CheckPolygon(null, polygon, new Point(0, 0), false);
 
             Assert.AreEqual(expected, actual);
-        }
+        }*/
 
         /*[TestMethod]
         public void DrawPolygonCorrect()

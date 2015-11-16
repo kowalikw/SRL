@@ -42,7 +42,7 @@ namespace SRL.Main
             var cursorPosition = e.GetPosition(VehicleEditorControl);
             if (VehicleEditorControl.Vehicle.Shape.IsFinished(new Point(cursorPosition.X, (cursorPosition.Y))))
                 VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;
-            if (VehicleEditorControl.Mode == VehicleEditorMode.DrawPolygon && !VehicleEditorControl.IsSegmentIntersection)
+            if (VehicleEditorControl.Mode == VehicleEditorMode.DrawPolygon && VehicleEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
                 VehicleEditorControl.Vehicle.Shape.Vertices.Add(new Point(cursorPosition.X, (cursorPosition.Y)));
             else if (VehicleEditorControl.Mode == VehicleEditorMode.SetAxis)
             {
@@ -107,7 +107,7 @@ namespace SRL.Main
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var cursorPosition = e.GetPosition(VehicleEditorControl);
-            if (VehicleEditorControl.Vehicle.Shape.VertexCount >= 3 && GeometryHelper.DistanceBetweenPoints(VehicleEditorControl.Vehicle.Shape.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8 && !VehicleEditorControl.IsSegmentIntersection)
+            if (VehicleEditorControl.Vehicle.Shape.VertexCount >= 3 && GeometryHelper.DistanceBetweenPoints(VehicleEditorControl.Vehicle.Shape.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8 && VehicleEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
             {
                 btnDraw.IsEnabled = false;
                 btnSetAxis.IsEnabled = true;
