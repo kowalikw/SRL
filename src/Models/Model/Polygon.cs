@@ -11,6 +11,7 @@ namespace SRL.Models.Model
 
         public List<Point> Vertices { get; }
         public int VertexCount => Vertices.Count;
+        public bool Finished { get; private set; }
 
         public Polygon()
         {
@@ -50,17 +51,17 @@ namespace SRL.Models.Model
         public bool IsFinished()
         {
             if (GeometryHelper.DistanceBetweenPoints(Vertices[0], Vertices[VertexCount - 1]) <= StartPointRadius && VertexCount >= MinVerticesCount && IsCorrect())
-                return true;
+                Finished = true;
 
-            return false;
+            return Finished;
         }
 
         public bool IsFinished(Point nextVertice)
         {
             if (Vertices.Count >= MinVerticesCount && GeometryHelper.DistanceBetweenPoints(Vertices[0], nextVertice) <= StartPointRadius)
-                return true;
+                Finished = true;
 
-            return false;
+            return Finished;
         }
 
         public bool IsEmpty()

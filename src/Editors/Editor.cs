@@ -26,8 +26,9 @@ namespace SRL.Editors
 
         public DrawLineState CheckLine(Polygon polygon, Point nextVertice)
         {
-            if (polygon.Vertices.Contains(nextVertice))
-                return DrawLineState.Done;
+            foreach(Point p in polygon.Vertices)
+                if (p.X == nextVertice.X && p.Y == nextVertice.Y)
+                    return DrawLineState.Done;
 
             for (int i = 0; i < polygon.VertexCount - 2; i++)
                 if (GeometryHelper.SegmentIntersection(polygon.Vertices[i], polygon.Vertices[i + 1], polygon.Vertices[polygon.VertexCount - 1], nextVertice))
