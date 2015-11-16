@@ -9,6 +9,7 @@ using System.IO;
 using Point = SRL.Models.Model.Point;
 using SRL.Main.Resources;
 using System;
+using SRL.Models;
 
 namespace SRL.Main
 {
@@ -34,6 +35,8 @@ namespace SRL.Main
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            btnDraw.IsChecked = false;
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "XML file (*.xml)|*.xml";
             if (saveFileDialog.ShowDialog() == true)

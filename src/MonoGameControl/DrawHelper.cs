@@ -6,7 +6,7 @@ using Point = SRL.Models.Model.Point;
 
 namespace SRL.MonoGameControl
 {
-    public static class Primitives2D
+    public static class DrawHelper
     {
         #region Private Members
 

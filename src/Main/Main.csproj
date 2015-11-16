@@ -65,12 +65,9 @@
     <Compile Include="MapEditorWindow.xaml.cs">
       <DependentUpon>MapEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VehicleEditorControl.cs" />
     <Compile Include="VehicleEditorWindow.xaml.cs">
       <DependentUpon>VehicleEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GeometryHelper.cs" />
-    <Compile Include="MapEditorControl.cs" />
     <Compile Include="Resources\EN.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -86,7 +83,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PL.resx</DependentUpon>
     </Compile>
-    <Compile Include="TestControl.cs" />
     <Page Include="ChooseLanguageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +148,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Editors\Editors.csproj">
+      <Project>{40831d8a-60a3-4507-9e10-fc7c80985a49}</Project>
+      <Name>Editors</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
       <Name>Models</Name>

@@ -45,13 +45,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapTracer.cs" />
+    <Compile Include="Enum\DrawLineState.cs" />
+    <Compile Include="Enum\DrawPolygonState.cs" />
     <Compile Include="Enum\MapEditorMode.cs" />
     <Compile Include="Enum\VehicleEditorMode.cs" />
+    <Compile Include="GeometryHelper.cs" />
     <Compile Include="Marshalling\Marshaller.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Point.cs" />
     <Compile Include="Model\Polygon.cs" />
-    <Compile Include="Model\Segment.cs" />
     <Compile Include="Model\Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

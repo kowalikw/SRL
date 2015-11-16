@@ -20,6 +20,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SRL.Models.Model;
 using System.Xml.Linq;
+using SRL.Models;
 
 namespace SRL.Main
 {
@@ -39,6 +40,8 @@ namespace SRL.Main
         private void VehicleEditorControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var cursorPosition = e.GetPosition(VehicleEditorControl);
+            if (VehicleEditorControl.Vehicle.Shape.IsFinished(new Point(cursorPosition.X, (cursorPosition.Y))))
+                VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;
             if (VehicleEditorControl.Mode == VehicleEditorMode.DrawPolygon && !VehicleEditorControl.IsSegmentIntersection)
                 VehicleEditorControl.Vehicle.Shape.Vertices.Add(new Point(cursorPosition.X, (cursorPosition.Y)));
             else if (VehicleEditorControl.Mode == VehicleEditorMode.SetAxis)
@@ -91,7 +94,7 @@ namespace SRL.Main
 
         private void btnDraw_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (!VehicleEditorControl.IsSegmentIntersectionUnchecked)
+            if (VehicleEditorControl.Vehicle.Shape.IsCorrect())
             {
                 VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;
                 btnDraw.IsEnabled = false;

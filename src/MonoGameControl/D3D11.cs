@@ -12,9 +12,9 @@ namespace SRL.MonoGameControl
     /// Wraps the <see cref="D3DImage"/> to make it compatible with Direct3D 11.
     /// </summary>
     /// <remarks>
-    /// The <see cref="D3D11Image"/> should be disposed if no longer needed!
+    /// The <see cref="D3D11"/> should be disposed if no longer needed!
     /// </remarks>
-    internal class D3D11Image : D3DImage, IDisposable
+    internal class D3D11 : D3DImage, IDisposable
     {
         #region Fields
         // Use a Direct3D 9 device for interoperability. The device is shared by 
@@ -30,30 +30,30 @@ namespace SRL.MonoGameControl
 
         #region Creation & Cleanup
         /// <summary>
-        /// Initializes a new instance of the <see cref="D3D11Image"/> class.
+        /// Initializes a new instance of the <see cref="D3D11"/> class.
         /// </summary>
-        public D3D11Image()
+        public D3D11()
         {
             InitializeD3D9();
         }
 
 
         /// <summary>
-        /// Releases unmanaged resources before an instance of the <see cref="D3D11Image"/> class is 
+        /// Releases unmanaged resources before an instance of the <see cref="D3D11"/> class is 
         /// reclaimed by garbage collection.
         /// </summary>
         /// <remarks>
         /// This method releases unmanaged resources by calling the virtual <see cref="Dispose(bool)"/> 
         /// method, passing in <see langword="false"/>.
         /// </remarks>
-        ~D3D11Image()
+        ~D3D11()
         {
             Dispose(false);
         }
 
 
         /// <summary>
-        /// Releases all resources used by an instance of the <see cref="D3D11Image"/> class.
+        /// Releases all resources used by an instance of the <see cref="D3D11"/> class.
         /// </summary>
         /// <remarks>
         /// This method calls the virtual <see cref="Dispose(bool)"/> method, passing in 
@@ -67,7 +67,7 @@ namespace SRL.MonoGameControl
 
 
         /// <summary>
-        /// Releases the unmanaged resources used by an instance of the <see cref="D3D11Image"/> class 
+        /// Releases the unmanaged resources used by an instance of the <see cref="D3D11"/> class 
         /// and optionally releases the managed resources.
         /// </summary>
         /// <param name="disposing">
@@ -153,7 +153,7 @@ namespace SRL.MonoGameControl
 
 
         /// <summary>
-        /// Sets the back buffer of the <see cref="D3D11Image"/>.
+        /// Sets the back buffer of the <see cref="D3D11"/>.
         /// </summary>
         /// <param name="texture">The Direct3D 11 texture to be used as the back buffer.</param>
         public void SetBackBuffer(Texture2D texture)

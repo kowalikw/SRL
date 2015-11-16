@@ -4,18 +4,15 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Color = Microsoft.Xna.Framework.Color;
-using Matrix = Microsoft.Xna.Framework.Matrix;
 
 
 namespace SRL.MonoGameControl
 {
     /// <summary>
-    /// Host a Direct3D 11 scene.
+    /// Host a MonoGame control.
     /// </summary>
-    public abstract class D3D11Host : Image
+    public abstract class MonoGameControl : Image
     {
         #region Fields
 
@@ -26,7 +23,7 @@ namespace SRL.MonoGameControl
 
         // Image source:
         private RenderTarget2D _renderTarget;
-        private D3D11Image _d3D11Image;
+        private D3D11 _d3D11Image;
         private bool _resetBackBuffer;
 
         // Render timing:
@@ -70,9 +67,9 @@ namespace SRL.MonoGameControl
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="D3D11Host"/> class.
+        /// Initializes a new instance of the <see cref="MonoGameControl"/> class.
         /// </summary>
-        public D3D11Host()
+        public MonoGameControl()
         {
             _timer = new Stopwatch();
             Loaded += OnLoaded;
@@ -141,7 +138,7 @@ namespace SRL.MonoGameControl
 
         private void InitializeImageSource()
         {
-            _d3D11Image = new D3D11Image();
+            _d3D11Image = new D3D11();
             _d3D11Image.IsFrontBufferAvailableChanged += OnIsFrontBufferAvailableChanged;
             CreateBackBuffer();
             Source = _d3D11Image;
@@ -255,22 +252,11 @@ namespace SRL.MonoGameControl
             }
         }
 
-
-        #region ----- Example Scene -----
-
-        // Source: http://msdn.microsoft.com/en-us/library/bb203926(v=xnagamestudio.40).aspx
-
-        // Note: This is just an example. To improve the D3D11Host make the methods 
-        // Initialize(), Unitialize(), and Render() protected virtual or call an 
-        // external "renderer".
-
         protected abstract void Initialize();
 
         protected abstract void Unitialize();
 
         protected abstract void Render(TimeSpan time);
-
-        #endregion
 
         #endregion
 

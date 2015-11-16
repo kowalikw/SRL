@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SRL.Main"
+        xmlns:editor="clr-namespace:SRL.Editors;assembly=SRL.Editors"
         mc:Ignorable="d"
         Title="MapEditorWindow" Height="480" Width="640" MouseUp="Window_MouseUp">
     <Grid>
@@ -11,7 +11,7 @@
             <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <local:MapEditorControl x:Name="MapEditorControl"
+        <editor:MapEditor x:Name="MapEditorControl"
                          Grid.Row="0"
                          Grid.Column="0"
                          Margin="5"
@@ -19,9 +19,9 @@
                          Stretch="Fill" MouseUp="MapEditorControl_MouseUp" MouseMove="MapEditorControl_MouseMove" />
         <StackPanel Grid.Column="1">
             <ToggleButton x:Name="btnDraw" Margin="3" Height="30" Checked="btnDraw_Checked" Unchecked="btnDraw_Unchecked">Rysuj przeszkodę</ToggleButton>
-            <Button x:Name="resetMap" Margin="3" Height="30" Click="resetMap_Click">Resetuj mapę</Button>
+            <Button x:Name="btnReset" Margin="3" Height="30" Click="resetMap_Click">Resetuj mapę</Button>
             <Button x:Name="btnSave" Margin="3" Height="30" Click="btnSave_Click">Zapisz mapę</Button>
-            <Button x:Name="btnExit" Margin="3" Height="30" Click="btnExit_Click" >Zamknij</Button>
+            <Button x:Name="btnClose" Margin="3" Height="30" Click="btnExit_Click" >Zamknij</Button>
         </StackPanel>
     </Grid>
 </Window>
