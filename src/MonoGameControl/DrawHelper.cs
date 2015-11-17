@@ -17,11 +17,11 @@ namespace SRL.MonoGameControl
         public const int LineThickness = 2;
         public const int CircleSegments = 100;
 
-        private static Color normalDrawColor = Color.Black;
-        private static Color activeDrawColor = Color.Blue;
-        private static Color correctActiveDrawColor = Color.Green;
-        private static Color incorrectActiveDrawColor = Color.Red;
-        private static Color activeStartCircleColor = Color.Orange;
+        private static readonly Color normalDrawColor = Color.Black;
+        private static readonly Color activeDrawColor = Color.Blue;
+        private static readonly Color correctActiveDrawColor = Color.Green;
+        private static readonly Color incorrectActiveDrawColor = Color.Red;
+        private static readonly Color activeStartCircleColor = Color.Orange;
 
         #region Private Members
 

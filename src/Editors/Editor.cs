@@ -1,10 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using SRL.Models;
 using SRL.Models.Enum;
 using SRL.Models.Model;
-using SRL.MonoGameControl;
 using Point = SRL.Models.Model.Point;
 
 namespace SRL.Editors
@@ -31,7 +28,7 @@ namespace SRL.Editors
                     return DrawLineState.Done;
 
             for (int i = 0; i < polygon.VertexCount - 2; i++)
-                if (GeometryHelper.DoSegmentsIntersect(polygon.Vertices[i], polygon.Vertices[i + 1], polygon.Vertices[polygon.VertexCount - 1], nextVertice))
+                if (GeometryHelper.SegmentsIntersect(polygon.Vertices[i], polygon.Vertices[i + 1], polygon.Vertices[polygon.VertexCount - 1], nextVertice))
                     return DrawLineState.Incorrect;
 
             return DrawLineState.Correct;
