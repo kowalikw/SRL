@@ -100,18 +100,16 @@ namespace SRL.ModelsTests
             var serializer = new XmlSerializer(typeof(Map));
 
             Map expected = new Map(10, 12);
-            expected.Obstacles.Add(new Polygon(new Point[]
-            {
+            expected.Obstacles.Add(new Polygon(
                 new Point(1.1,1.2),
                 new Point(2.1,2.2),
-                new Point(3.1,3.2),
-            }));
-            expected.Obstacles.Add(new Polygon(new Point[]
-            {
+                new Point(3.1,3.2)
+            ));
+            expected.Obstacles.Add(new Polygon(
                 new Point(1.3,1.4),
                 new Point(2.3,2.4),
-                new Point(3.3,3.4),
-            }));
+                new Point(3.3,3.4)
+            ));
 
             TextReader reader = new StringReader(Resources.Map1);
             Map output = (Map)serializer.Deserialize(reader);

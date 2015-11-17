@@ -1,6 +1,7 @@
 ﻿using SRL.Models.Enum;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -21,7 +22,7 @@ namespace SRL.Models.Model
 
         public Polygon(params Point[] vertices)
         {
-            Vertices = new List<Point>();
+            Vertices = vertices.ToList();
         }
 
         public Polygon(List<Point> vertices)
