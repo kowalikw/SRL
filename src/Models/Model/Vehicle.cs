@@ -9,7 +9,7 @@ namespace SRL.Models.Model
     {
         public Polygon Shape { get; set; }
         public Point Origin { get; set; }
-        public double DirectionAngle { get; private set; }
+        public double DirectionAngle { get; set; }
 
         /// <remarks>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.

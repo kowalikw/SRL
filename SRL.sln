@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsTests", "src\ModelsTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editors", "src\Editors\Editors.csproj", "{40831D8A-60A3-4507-9E10-FC7C80985A49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorsTests", "EditorsTests\EditorsTests.csproj", "{85C88A37-10D3-4F90-8774-94EE027D0390}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorsTests", "src\EditorsTests\EditorsTests.csproj", "{85C88A37-10D3-4F90-8774-94EE027D0390}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

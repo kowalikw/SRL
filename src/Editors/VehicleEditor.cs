@@ -80,7 +80,7 @@ namespace SRL.Editors
                     {
                         if(!IsAngleSet)
                         {
-                            Vehicle.FrontAngle = CalculateAxisAngle(OriginStart, OriginEnd);
+                            Vehicle.DirectionAngle = CalculateAxisAngle(OriginStart, OriginEnd);
                             Mode = VehicleEditorMode.Idle;
                             IsAngleSet = true;
                         }
@@ -90,7 +90,7 @@ namespace SRL.Editors
                 case VehicleEditorMode.Idle:
                     ActualPolygonState = CheckPolygon(Vehicle.Shape);
                     //DrawVehicle();
-                    DrawAxis(OriginStart, OriginEnd, Vehicle.FrontAngle, false);
+                    DrawAxis(OriginStart, OriginEnd, Vehicle.DirectionAngle, false);
                     break;
             }
 
