@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vvd xmlns="pl.pw.mini.KowMisPie.SRL">
+  <orientation>
+    <angle>45.5</angle>
+    <point x="0.45" y="0.5" />
+  </orientation>
+  <polygon>
+    <point x="0" y="0" />
+    <point x="2" y="0" />
+    <point x="0" y="2" />
+  </polygon>
+</vvd>

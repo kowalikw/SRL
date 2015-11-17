@@ -6,7 +6,8 @@ using System.Xml.Serialization;
 
 namespace SRL.Models.Model
 {
-    public class Point
+    // This class shall remain immutable.
+    public class Point : IXmlSerializable, IEquatable<Point>
     {
         public double X { get; private set; }
         public double Y { get; private set; }

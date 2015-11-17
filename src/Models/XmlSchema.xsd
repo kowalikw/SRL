@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           targetNamespace="pl.pw.mini.KowMisPie.SRL" 
-           xmlns="pl.pw.mini.KowMisPie.SRL" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="pl.pw.mini.KowMisPie.SRL"
+           xmlns="pl.pw.mini.KowMisPie.SRL"
            elementFormDefault="qualified">
 
   <xs:complexType name="mapType">
     <xs:sequence>
       <xs:element name="polygon" type="polygonType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+    <xs:attribute name="height" type="nonNegativeDoubleType" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="vehicleType">
@@ -38,11 +40,11 @@
   </xs:complexType>
 
   <xs:complexType name="pointType">
-    <xs:attribute name="x" type="coordinateType" use="required"/>
-    <xs:attribute name="y" type="coordinateType" use="required"/>
+    <xs:attribute name="x" type="nonNegativeDoubleType" use="required"/>
+    <xs:attribute name="y" type="nonNegativeDoubleType" use="required"/>
   </xs:complexType>
-  
-  <xs:simpleType name="coordinateType">
+
+  <xs:simpleType name="nonNegativeDoubleType">
     <xs:restriction base="xs:double">
       <xs:minInclusive value="0"/>
     </xs:restriction>
@@ -50,5 +52,5 @@
 
   <xs:element name="vvd" type="vehicleType"/>
   <xs:element name="vmd" type="mapType"/>
-  
+
 </xs:schema>

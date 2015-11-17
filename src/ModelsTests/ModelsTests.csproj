@@ -65,7 +65,21 @@
       <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="XMLs\Map1.vmd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="XMLs\Vehicle1.vvd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

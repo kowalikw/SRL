@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -14,7 +13,7 @@ namespace SRL.Models.Model
         public double Height { get; private set; }
         public int ObstacleCount => Obstacles.Count;
 
-        public Map()
+        private Map()
         {
             Obstacles = new List<Polygon>();
         }

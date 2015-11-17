@@ -9,7 +9,7 @@ namespace SRL.Models.Model
     {
         public Polygon Shape { get; set; }
         public Point Origin { get; set; }
-        public double FrontAngle { get; set; }
+        public double DirectionAngle { get; private set; }
 
         /// <remarks>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.
@@ -29,7 +29,9 @@ namespace SRL.Models.Model
         {
             Shape = shape;
             Origin = origin;
-            FrontAngle = angle;
+            DirectionAngle = angle % 360;
+
+            //TODO check if origin lies inside the shape polygon. Throw argument exception otherwise.
         }
 
         #region IXmlSerializable members
@@ -44,8 +46,59 @@ namespace SRL.Models.Model
 
         public void ReadXml(XmlReader reader)
         {
-            //TODO
-            throw new System.NotImplementedException();
+            reader.MoveToContent();
+
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                reader.LocalName == "vvd")
+            {
+                bool orientationDone = false;
+                bool shapeDone = false;
+
+                reader.ReadStartElement();
+
+                while (!orientationDone || !shapeDone)
+                {
+                    if (reader.LocalName == "orientation" && !orientationDone)
+                    {
+                        bool angleDone = false;
+                        bool originDone = false;
+
+                        reader.ReadStartElement();
+
+                        while (!angleDone || !originDone)
+                        {
+                            if (reader.LocalName == "angle" && !angleDone)
+                            {
+                                DirectionAngle = reader.ReadElementContentAsDouble();
+                                angleDone = true;
+                            }
+                            else if (reader.LocalName == "point" && !originDone)
+                            {
+                                Origin = new Point();
+                                Origin.ReadXml(reader);
+                                originDone = true;
+                            }
+                            else
+                                throw new XmlException();
+                        }
+
+                        reader.ReadEndElement();
+                        orientationDone = true;
+                    }
+                    else if (reader.LocalName == "polygon" && !shapeDone)
+                    {
+                        Shape = new Polygon();
+                        Shape.ReadXml(reader);
+                        shapeDone = true;
+        }
+                    else
+                        throw new XmlException();
+                }
+
+                reader.ReadEndElement();
+            }
+            else
+                throw new XmlException();
         }
 
         public void WriteXml(XmlWriter writer)
@@ -55,38 +108,17 @@ namespace SRL.Models.Model
             writer.WriteStartElement("orientation");
             {
                 writer.WriteStartElement("point");
-                {
-                    writer.WriteStartAttribute("x");
-                    writer.WriteValue(Origin.X);
-                    writer.WriteEndAttribute();
-
-                    writer.WriteStartAttribute("y");
-                    writer.WriteValue(Origin.Y);
-                    writer.WriteEndAttribute();
-                }
+                Origin.WriteXml(writer);
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("angle");
-                writer.WriteValue(FrontAngle);
+                writer.WriteValue(DirectionAngle);
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();
 
             writer.WriteStartElement("polygon");
-            for (int i = 0; i < Shape.VertexCount; i++)
-            {
-                writer.WriteStartElement("point");
-                {
-                    writer.WriteStartAttribute("x");
-                    writer.WriteValue(Shape.Vertices[i].X);
-                    writer.WriteEndAttribute();
-
-                    writer.WriteStartAttribute("y");
-                    writer.WriteValue(Shape.Vertices[i].Y);
-                    writer.WriteEndAttribute();
-                }
-                writer.WriteEndElement();
-            }
+            Shape.WriteXml(writer);
             writer.WriteEndElement();
         }
 
