@@ -10,10 +10,20 @@ namespace SRL.Models.Model
     public class Map : IXmlSerializable
     {
         public List<Polygon> Obstacles { get; }
+        public double Width { get; private set; }
+        public double Height { get; private set; }
+        public int ObstacleCount => Obstacles.Count;
 
         public Map()
         {
             Obstacles = new List<Polygon>();
+        }
+
+        public Map(double width, double height)
+        {
+            Obstacles = new List<Polygon>();
+            Width = width;
+            Height = height;
         }
 
         #region IXmlSerializable members
@@ -28,18 +38,47 @@ namespace SRL.Models.Model
 
         public void ReadXml(XmlReader reader)
         {
-            //TODO
-            throw new System.NotImplementedException();
+            reader.MoveToContent();
+
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                reader.LocalName == "vmd")
+            {
+                reader.MoveToAttribute("width");
+                Width = reader.ReadContentAsDouble();
+
+                reader.MoveToAttribute("height");
+                Height = reader.ReadContentAsDouble();
+
+                reader.MoveToContent();
+                reader.ReadToDescendant("polygon");
+                while (reader.MoveToContent() == XmlNodeType.Element &&
+                    reader.LocalName == "polygon")
+                {
+                    Polygon obstacle = new Polygon();
+                    obstacle.ReadXml(reader);
+                    Obstacles.Add(obstacle);
+                }
+            }
+            else
+                throw new XmlException();
         }
 
         public void WriteXml(XmlWriter writer)
         {
             // Default encoding is UTF-8.
 
+            writer.WriteStartAttribute("width");
+            writer.WriteValue(Width);
+            writer.WriteEndAttribute();
+
+            writer.WriteStartAttribute("height");
+            writer.WriteValue(Height);
+            writer.WriteEndAttribute();
+
             foreach (Polygon polygon in Obstacles)
             {
                 writer.WriteStartElement("polygon");
-                
+
                 for (int i = 0; i < polygon.VertexCount; i++)
                 {
                     writer.WriteStartElement("point");

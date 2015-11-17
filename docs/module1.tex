@@ -46,26 +46,12 @@
 \newcommand{\everyone}{\small{\textsf{ALL}}}
 
 \begin{document}
-\title{\textbf{Projekt Zespołowy}\\Moduł tworzenia pojazdów i map}
+\title{\textbf{Projekt Zespołowy}\\Edytor pojazdów i map}
 \author{Wojciech Kowalik, Konrad Miśkiewicz, Mateusz Pielat}
 \maketitle
 
 
-\section{Opis projektu}
-
-Projekt ma na celu stworzenie aplikacji symulującej ruch pojazdu w labiryncie. Pojazd omija przeszkody poruszając się do przodu i wykonując skręty w miejscu. Aplikacja będzie podzielona na kilka podstawowych modułów, które razem umożliwią przygotowanie i przeprowadzenie symulacji.
-
-Pierwszy z modułów będzie umożliwiać wczytywanie i przetwarzanie plików graficznych przedstawiających proste wielokąty. Plik taki będzie odpowiednio konwertowany do postaci wektorowej, dzięki czemu możliwe będzie wykorzystanie go w symulacji jako pojazd lub przeszkoda do ominięcia. W przypadku pojazdu, użytkownik będzie musiał dodatkowo zdefiniować kierunek i zwrot wielokąta.
-
-Kolejny moduł będzie udostępniać narzędzie do tworzenia pojazdów i map kursorem bezpośrednio w interfejsie aplikacji. Będzie się to odbywać poprzez dodawanie kolejnych punktów wielokąta kursorem. Podobnie jak wyżej, w przypadku pojazdu konieczne będzie określenie jego przodu. Tworzenie mapy polegać będzie natomiast na stworzeniu kilku takich wielokątów na określonym obszarze.
-
-Po wczytaniu przygotowanego pojazdu i mapy użytkownik będzie mógł zdefiniować punkt startowy i końcowy dla trasy na której chciałby zasymulować ruch pojazdu. Wykorzystywany tutaj moduł symulowania ruchu obliczy najbardziej optymalną drogę lub stwierdzi, że dla danych ustawień takowa nie istnieje. Już po rozpoczęciu symulacji użytkownik będzie mógł ją pauzować, zmieniać prędkość animacji oraz swobodnie śledzić jej przebieg przy pomocy suwaka. Sam algorytm będzie oparty na przeszukiwaniu grafów, zaś wizualizacją w 2D zajmie się jeden z dostępnych silników graficznych.
-
-Ponadto, użytkownik będzie miał możliwość zapisania tak wygenerowanej symulacji w celu jej szybkiego odtworzenia w przyszłości.
-
-
-
-\section{Słownik pojęć}
+\section{XML - do dodania gdzieś}
 
 \lstset{
   language=XML,
@@ -73,97 +59,111 @@ Ponadto, użytkownik będzie miał możliwość zapisania tak wygenerowanej symu
     }
 }
 \begin{lstlisting}
-<vmd xmlns="pl.pw.mini.KowMisPie.SRL">
+<vmd xmlns="pl.pw.mini.KowMisPie.SRL" width="512" height="512">
   <polygon>
-    <point x="160" y="119" />
-    <point x="58" y="284" />
-    <point x="357" y="275" />
-  </polygon>
-  <polygon>
-    <point x="393" y="32" />
-    <point x="390" y="398" />
-    <point x="457" y="400" />
-    <point x="458" y="33" />
-  </polygon>
-  <polygon>
-    <point x="233" y="327" />
-    <point x="30" y="316" />
-    <point x="27" y="60" />
-    <point x="357" y="60" />
-    <point x="362" y="23" />
-    <point x="466" y="21" />
-    <point x="467" y="7" />
-    <point x="16" y="42" />
-    <point x="15" y="334" />
-    <point x="258" y="406" />
-    <point x="315" y="358" />
-  </polygon>
+        <point x = "160" y="119" />
+        <point x = "58" y="284" />
+        <point x = "357" y="275" />
+    </polygon>
+    <polygon>
+        <point x = "393" y="32" />
+        <point x = "390" y="398" />
+        <point x = "457" y="400" />
+        <point x = "458" y="33" />
+    </polygon>
+    <polygon>
+        <point x="233" y="327" />
+        <point x="30" y="316" />
+        <point x="27" y="60" />
+        <point x="357" y="60" />
+        <point x="362" y="23" />
+        <point x="466" y="21" />
+        <point x="467" y="7" />
+        <point x="16" y="42" />
+        <point x="15" y="334" />
+        <point x="258" y="406" />
+        <point x="315" y="358" />
+    </polygon>
 </vmd>
 \end{lstlisting}
 
 \begin{lstlisting}
 <vvd xmlns="pl.pw.mini.KowMisPie.SRL">
-  <orientation>
-    <point x="264" y="158" />
-    <angle>1.9091524329963763</angle>
-  </orientation>
-  <polygon>
-    <point x="112" y="93" />
-    <point x="359" y="95" />
-    <point x="433" y="165" />
-    <point x="371" y="222" />
-    <point x="111" y="222" />
-  </polygon>
+    <orientation>
+        <point x="0" y="0" />
+        <angle>1.9091524329963763</angle>
+    </orientation>
+    <polygon>
+        <point x="112" y="93" />
+        <point x="359" y="95" />
+        <point x="433" y="165" />
+        <point x="371" y="222" />
+        <point x="111" y="222" />
+    </polygon>
 </vvd>
 \end{lstlisting}
 
-\section{User stories}
+\section{Połączenie technologii WPF i MonoGame}
 
-Poniższe scenariusze opisują możliwe przypadki użycia aplikacji z punktu widzenia użytkownika. Każdy scenariusz dotyczy poprawnego wykorzystania danego modułu.
+Aby interfejs użytkownika był możliwie prosty, a tworzenie map i pojazdów maksymalnie wydajne połączone zostały technologie Windows Presentation Foundation (WPF) i MonoGame. Technologia WPF domyślnie nie umożliwia osadzenia zewnętrznego silnika graficznego, więc aby móc skorzystać z MonoGame w tym środowisku konieczne było napisanie odpowiedniej kontrolki. 
 
-\subsubsection{Scenariusz ręcznego tworzenia pojazdu:}
-\begin{enumerate}
-  \item Użytkownik otwiera okno tworzenia pojazdu.
-  \item Użytkownik wyznacza punkty stanowiące wierzchołki wielokąta opisującego pojazd.
-  \item Użytkownik wyznacza oś i zwrot pojazdu.
-  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
-\end{enumerate}
+~\\W związku z tym stworzona została kontrolka \textit{MonoGameControl}. W rzeczywistości jest ona klasą abstrakcyjną, która zawiera trzy metody abstrakcyjne. Aby z niej skorzystać konieczne jest utworzenie własnej klasy dziedziczącej po \textit{MonoGameControl} i implementującej metody: \textbf{Initialize()}, \textbf{Uninitialize()} oraz \textbf{Render(TimeSpan time)}. Budowę takiej kontrolki oraz jej implementację przedstawiono poniżej.
 
-\subsubsection{Scenariusz ręcznego tworzenia mapy:}
-\begin{enumerate}
-  \item Użytkownik otwiera okno tworzenia mapy.
-  \item Użytkownik wyznacza punkty stanowiące wierzchołki przeszkód mapy.
-  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
-\end{enumerate}
+\subsection{Schemat kontrolki hostującej MonoGame}
 
-\subsubsection{Scenariusz tworzenia pojazdu z pliku graficznego:}
-\begin{enumerate}
-  \item Użytkownik wczytuje plik graficzny.
-  \item Użytkownik dobiera parametry trasowania.
-  \item System trasuje plik graficzny do postaci wektorowej.
-  \item Użytkownik wyznacza oś i zwrot pojazdu.
-  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
-\end{enumerate}
+\begin{center}
+\includegraphics[scale=1.0]{MonoGameControlSchemat}\\
+\textit{Schemat 1. MonoGameControl}
+\end{center}
+~\\
+\subsection{Metody abstrakcyjne wymagające nadpisania}
+\begin{itemize}
+  \item \textbf{abstract void Initialize()} - wywoływana przy tworzeniu kontrolki
+  \item \textbf{abstract void Unitialize()} - wywoływana przy destrukcji kontrolki
+  \item \textbf{abstract void Render(TimeSpan time)} - wywoływana cyklicznie, odpowiada za ponowne renderowanie obrazu wyświetlanego na kontrolce
+\end{itemize}
 
-\subsubsection{Scenariusz tworzenia mapy z pliku graficznego:}
-\begin{enumerate}
-  \item Użytkownik wczytuje plik graficzny.
-  \item Użytkownik dobiera parametry trasowania.
-  \item System trasuje plik graficzny do postaci wektorowej.
-  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
-\end{enumerate}
+\subsection{Przykład Implementacji własnej kontrolki hostującej MonoGame}
+\begin{lstlisting}
+       public class MyOwnControl : MonoGameControl
+       {
+           private SpriteBatch spriteBatch;
+    
+           protected override void Initialize()
+           {
+               spriteBatch = new SpriteBatch(GraphicsDevice);
+           }
 
-\subsubsection{Scenariusz symulacji algorytmu:}
-\begin{enumerate}
-  \item Użytkownik wczytuje pojazd.
-  \item Użytkownik wczytuje mapę.
-  \item Użytkownik wskazuje początek i koniec trasy.
-  \item Użytkownik rozpoczyna symulację.
-  \item System przedstawia wizualizację, jeżeli takowa jest możliwa.
-\end{enumerate}
+           protected override void Unitialize()
+           {
+               spriteBatch.Dispose();
+           }
 
+           protected override void Render(TimeSpan time)
+           {
+               GraphicsDevice.Clear(Color.LightSkyBlue);
+               GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-\section{Wymagania funkcjonalne}
+               spriteBatch.BeginDraw();
+
+               // DRAW
+
+               spriteBatch.End();
+           }
+       }
+\end{lstlisting}
+
+\section{Osadzenie obrazka}
+
+\begin{center}
+\includegraphics[scale=0.7]{vehicleeditor}\\
+\textit{Rysunek 1. Edytor pojazdu}
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.7]{mapeditor}\\
+\textit{Rysunek 2. Edytor map}
+\end{center}
 
 \subsubsection{Moduł wizualizacji}
 \begin{itemize}
