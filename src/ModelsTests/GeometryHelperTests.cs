@@ -7,8 +7,15 @@ namespace SRL.ModelsTests
     public class GeometryHelperTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void SegmentIntersectionTrue()
         {
+
+        }
+
+        [TestMethod]
+        public void SegmentIntersectionFalse()
+        {
+
         }
     }
 }

@@ -28,7 +28,7 @@ namespace SRL.Editors
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ActualPolygon = new Polygon();
-            Map = new Map(512, 512); // TODO
+            Map = new Map(512, 512); 
             Mode = MapEditorMode.Idle;
             CursorPosition = new Point(0, 0);
             ActualPolygonState = DrawPolygonState.Empty;

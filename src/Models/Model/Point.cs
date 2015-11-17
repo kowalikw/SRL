@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -94,6 +95,11 @@ namespace SRL.Models.Model
         public static Point operator -(Point p1, Point p2)
         {
             return new Point(p1.X - p2.X, p1.Y - p2.Y);
+        }
+
+        public double DistanceTo(Point p)
+        {
+            return Math.Sqrt(Math.Pow((X - p.X), 2) + Math.Pow((Y - p.Y), 2));
         }
     }
 }
