@@ -58,7 +58,7 @@ namespace SRL.Main
 
         private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MapEditorControl.CurrentPolygon.VertexCount > Polygon.MinVerticesCount && GeometryHelper.DistanceBetweenPoints(MapEditorControl.CurrentPolygon.Vertices[0],
+            if (MapEditorControl.CurrentPolygon.VertexCount > Polygon.MinVerticesCount && GeometryHelper.GetDistance(MapEditorControl.CurrentPolygon.Vertices[0],
                 new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= Polygon.StartPointRadius && MapEditorControl.CurrentPolygonState != DrawPolygonState.Incorrect)
             {
                 btnDraw.IsChecked = false;

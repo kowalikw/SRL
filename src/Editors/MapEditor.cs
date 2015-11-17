@@ -82,7 +82,7 @@ namespace SRL.Editors
         /// <summary>
         /// Draws current polygon.
         /// </summary>
-        private void DrawActualPolygon()
+        private void DrawCurrentPolygon()
         {
             spriteBatch.DrawPolygon(CurrentPolygon, CurrentPolygonState, CursorPosition);
         }
@@ -94,7 +94,7 @@ namespace SRL.Editors
         {
             foreach (Polygon polygon in Map.Obstacles)
                 spriteBatch.DrawPolygon(polygon, DrawPolygonState.Done);
-            DrawActualPolygon();
+            DrawCurrentPolygon();
         }
     }
 }

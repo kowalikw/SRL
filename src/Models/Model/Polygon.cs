@@ -103,21 +103,11 @@ namespace SRL.Models.Model
 
         public bool IsCorrect()
         {
-            if (VertexCount < MinVerticesCount) return false;
+            if (VertexCount < MinVerticesCount)
+                return false;
 
             for (int i = 1; i < VertexCount - 2; i++)
-                if (GeometryHelper.SegmentIntersection(Vertices[i], Vertices[i + 1], Vertices[VertexCount - 1], Vertices[0]))
-                    return false;
-
-            return true;
-        }
-
-        public bool IsCorrect(Point nextVertex)
-        {
-            if (VertexCount < MinVerticesCount) return false;
-
-            for (int i = 1; i < VertexCount - 2; i++)
-                if (GeometryHelper.SegmentIntersection(Vertices[i], Vertices[i + 1], nextVertex, Vertices[0]))
+                if (GeometryHelper.DoSegmentsIntersect(Vertices[i], Vertices[i + 1], Vertices[VertexCount - 1], Vertices[0]))
                     return false;
 
             return true;
@@ -125,7 +115,7 @@ namespace SRL.Models.Model
 
         public bool IsFinished()
         {
-            if (GeometryHelper.DistanceBetweenPoints(Vertices[0], Vertices[VertexCount - 1]) <= StartPointRadius && VertexCount >= MinVerticesCount && IsCorrect())
+            if (GeometryHelper.GetDistance(Vertices[0], Vertices[VertexCount - 1]) <= StartPointRadius && VertexCount >= MinVerticesCount && IsCorrect())
                 return true;
 
             return false;
@@ -133,7 +123,7 @@ namespace SRL.Models.Model
 
         public bool IsFinished(Point nextVertex)
         {
-            if (Vertices.Count >= MinVerticesCount && GeometryHelper.DistanceBetweenPoints(Vertices[0], nextVertex) <= StartPointRadius)
+            if (Vertices.Count >= MinVerticesCount && GeometryHelper.GetDistance(Vertices[0], nextVertex) <= StartPointRadius)
                 return true;
 
             return false;

@@ -31,7 +31,7 @@ namespace SRL.Editors
                     return DrawLineState.Done;
 
             for (int i = 0; i < polygon.VertexCount - 2; i++)
-                if (GeometryHelper.SegmentIntersection(polygon.Vertices[i], polygon.Vertices[i + 1], polygon.Vertices[polygon.VertexCount - 1], nextVertice))
+                if (GeometryHelper.DoSegmentsIntersect(polygon.Vertices[i], polygon.Vertices[i + 1], polygon.Vertices[polygon.VertexCount - 1], nextVertice))
                     return DrawLineState.Incorrect;
 
             return DrawLineState.Correct;

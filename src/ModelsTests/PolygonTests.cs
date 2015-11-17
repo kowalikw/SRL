@@ -54,10 +54,10 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsCorrectTrue2()
         {
-            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125), new Point(25, 150));
 
             var expected = true;
-            var actual = polygon.IsCorrect(new Point(25, 150));
+            var actual = polygon.IsCorrect();
 
             Assert.AreEqual(expected, actual);
         }
@@ -65,10 +65,10 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsCorrectFalse2()
         {
-            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125), new Point(75, 125));
 
             var expected = false;
-            var actual = polygon.IsCorrect(new Point(75, 125));
+            var actual = polygon.IsCorrect();
 
             Assert.AreEqual(expected, actual);
         }

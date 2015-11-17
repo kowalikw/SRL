@@ -107,7 +107,7 @@ namespace SRL.Main
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var cursorPosition = e.GetPosition(VehicleEditorControl);
-            if (VehicleEditorControl.Vehicle.Shape.VertexCount >= 3 && GeometryHelper.DistanceBetweenPoints(VehicleEditorControl.Vehicle.Shape.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8 && VehicleEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
+            if (VehicleEditorControl.Vehicle.Shape.VertexCount >= 3 && GeometryHelper.GetDistance(VehicleEditorControl.Vehicle.Shape.Vertices[0], new Point(cursorPosition.X, cursorPosition.Y)) <= 8 && VehicleEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
             {
                 btnDraw.IsEnabled = false;
                 btnSetAxis.IsEnabled = true;
