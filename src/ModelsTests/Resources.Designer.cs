@@ -62,7 +62,8 @@ namespace SRL.ModelsTests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;vmd xmlns=&quot;pl.pw.mini.KowMisPie.SRL&quot;&gt;
+        ///&lt;vmd xmlns=&quot;pl.pw.mini.KowMisPie.SRL&quot;
+        ///     width=&quot;10&quot; height=&quot;12&quot;&gt;
         ///  &lt;polygon&gt;
         ///    &lt;point x=&quot;1.1&quot; y=&quot;1.2&quot; /&gt;
         ///    &lt;point x=&quot;2.1&quot; y=&quot;2.2&quot; /&gt;
@@ -85,8 +86,8 @@ namespace SRL.ModelsTests {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;vvd xmlns=&quot;pl.pw.mini.KowMisPie.SRL&quot;&gt;
         ///  &lt;orientation&gt;
-        ///    &lt;angle&gt;0&lt;/angle&gt;
-        ///    &lt;point x=&quot;0.5&quot; y=&quot;0.5&quot; /&gt;
+        ///    &lt;angle&gt;45.5&lt;/angle&gt;
+        ///    &lt;point x=&quot;0.45&quot; y=&quot;0.5&quot; /&gt;
         ///  &lt;/orientation&gt;
         ///  &lt;polygon&gt;
         ///    &lt;point x=&quot;0&quot; y=&quot;0&quot; /&gt;

@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Models.Model;
 using System.Collections.Generic;
-using SRL.Models;
 
 namespace SRL.ModelsTests
 {
@@ -18,7 +17,7 @@ namespace SRL.ModelsTests
         public MarshallingTests()
         {
             _schemaSet = new XmlSchemaSet();
-
+            
             string schemaString = Models.Resources.XmlSchema;
             var reader = new StringReader(schemaString);
             _schemaSet.Add("pl.pw.mini.KowMisPie.SRL", XmlReader.Create(reader));
@@ -86,7 +85,7 @@ namespace SRL.ModelsTests
                 }),
                 new Point(0.45, 0.5),
                 45.5);
-
+            
             TextReader reader = new StringReader(Resources.Vehicle1);
             Vehicle output = (Vehicle)serializer.Deserialize(reader);
 

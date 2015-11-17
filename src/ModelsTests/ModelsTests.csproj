@@ -58,6 +58,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PolygonTests.cs" />
     <Compile Include="GeometryHelperTests.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj">
