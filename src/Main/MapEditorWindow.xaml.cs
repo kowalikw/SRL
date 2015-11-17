@@ -58,8 +58,8 @@ namespace SRL.Main
 
         private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MapEditorControl.ActualPolygon.VertexCount > Polygon.MinVerticesCount && GeometryHelper.DistanceBetweenPoints(MapEditorControl.ActualPolygon.Vertices[0],
-                new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= Polygon.StartPointRadius && MapEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
+            if (MapEditorControl.CurrentPolygon.VertexCount > Polygon.MinVerticesCount && GeometryHelper.DistanceBetweenPoints(MapEditorControl.CurrentPolygon.Vertices[0],
+                new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y)) <= Polygon.StartPointRadius && MapEditorControl.CurrentPolygonState != DrawPolygonState.Incorrect)
             {
                 btnDraw.IsChecked = false;
             }
@@ -67,8 +67,8 @@ namespace SRL.Main
 
         private void MapEditorControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MapEditorControl.Mode == MapEditorMode.DrawPolygon && MapEditorControl.ActualPolygonState != DrawPolygonState.Incorrect)
-                MapEditorControl.ActualPolygon.Vertices.Add(new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y));
+            if (MapEditorControl.Mode == MapEditorMode.DrawPolygon && MapEditorControl.CurrentPolygonState != DrawPolygonState.Incorrect)
+                MapEditorControl.CurrentPolygon.Vertices.Add(new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y));
         }
 
         private void MapEditorControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -80,7 +80,7 @@ namespace SRL.Main
         {
             btnDraw.IsChecked = false;
             MapEditorControl.Map.Obstacles.Clear();
-            MapEditorControl.ActualPolygon.Vertices.Clear();
+            MapEditorControl.CurrentPolygon.Vertices.Clear();
             MapEditorControl.Mode = MapEditorMode.Idle;
         }
     }

@@ -25,14 +25,6 @@ namespace SRL.Models.Model
             Vertices = vertices.ToList();
         }
 
-        public Polygon(List<Point> vertices)
-        {
-            if (vertices.Count < MinVerticesCount)
-                throw new ArgumentException("Polygon must have minimum 3 vertices.");
-
-            Vertices = new List<Point>(vertices);
-        }
-
         #region IXmlSerializable members
 
         /// <remarks>
@@ -120,12 +112,12 @@ namespace SRL.Models.Model
             return true;
         }
 
-        public bool IsCorrect(Point nextVertice)
+        public bool IsCorrect(Point nextVertex)
         {
             if (VertexCount < MinVerticesCount) return false;
 
             for (int i = 1; i < VertexCount - 2; i++)
-                if (GeometryHelper.SegmentIntersection(Vertices[i], Vertices[i + 1], nextVertice, Vertices[0]))
+                if (GeometryHelper.SegmentIntersection(Vertices[i], Vertices[i + 1], nextVertex, Vertices[0]))
                     return false;
 
             return true;
@@ -139,9 +131,9 @@ namespace SRL.Models.Model
             return false;
         }
 
-        public bool IsFinished(Point nextVertice)
+        public bool IsFinished(Point nextVertex)
         {
-            if (Vertices.Count >= MinVerticesCount && GeometryHelper.DistanceBetweenPoints(Vertices[0], nextVertice) <= StartPointRadius)
+            if (Vertices.Count >= MinVerticesCount && GeometryHelper.DistanceBetweenPoints(Vertices[0], nextVertex) <= StartPointRadius)
                 return true;
 
             return false;

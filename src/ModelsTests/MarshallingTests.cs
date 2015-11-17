@@ -30,18 +30,16 @@ namespace SRL.ModelsTests
             var output = new XDocument();
 
             Map map = new Map(10, 12);
-            map.Obstacles.Add(new Polygon(new Point[]
-            {
+            map.Obstacles.Add(new Polygon(
                 new Point(1.1,1.2),
                 new Point(2.1,2.2),
-                new Point(3.1,3.2),
-            }));
-            map.Obstacles.Add(new Polygon(new List<Point>()
-            {
+                new Point(3.1,3.2)
+            ));
+            map.Obstacles.Add(new Polygon(
                 new Point(1.3,1.4),
                 new Point(2.3,2.4),
-                new Point(3.3,3.4),
-            }));
+                new Point(3.3,3.4)
+            ));
 
             using (XmlWriter writer = output.CreateWriter())
                 serializer.Serialize(writer, map);
@@ -56,12 +54,11 @@ namespace SRL.ModelsTests
             var output = new XDocument();
 
             Vehicle vehicle = new Vehicle(
-                new Polygon(new List<Point>()
-                {
+                new Polygon(
                     new Point(0, 0),
                     new Point(2, 0),
-                    new Point(0, 2),
-                }),
+                    new Point(0, 2)
+                ),
                 new Point(0.5, 0.5),
                 45.5);
 

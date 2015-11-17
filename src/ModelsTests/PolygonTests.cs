@@ -14,7 +14,8 @@ namespace SRL.ModelsTests
         public void PolygonException()
         {
             List<Point> vertices = new List<Point>() { new Point(0, 0) };
-            Polygon polygon = new Polygon(vertices);
+         //   Polygon polygon = new Polygon(vertices);
+            Assert.Fail();
         }
 
         [TestMethod]
@@ -31,7 +32,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsCorrectTrue1()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(20, 20), new Point(80, 100) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(20, 20), new Point(80, 100));
 
             var expected = true;
             var actual = polygon.IsCorrect();
@@ -42,7 +43,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsCorrectFalse1()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0,0), new Point(100, 100), new Point(20, 100), new Point(80, 100) });
+            Polygon polygon = new Polygon(new Point(0,0), new Point(100, 100), new Point(20, 100), new Point(80, 100));
 
             var expected = false;
             var actual = polygon.IsCorrect();
@@ -53,7 +54,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsCorrectTrue2()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
 
             var expected = true;
             var actual = polygon.IsCorrect(new Point(25, 150));
@@ -64,7 +65,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsCorrectFalse2()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
 
             var expected = false;
             var actual = polygon.IsCorrect(new Point(75, 125));
@@ -75,7 +76,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsFinishedTrue1()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(20, 20), new Point(80, 100), new Point(2, 3) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(20, 20), new Point(80, 100), new Point(2, 3));
 
             var expected = true;
             var actual = polygon.IsFinished();
@@ -86,7 +87,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsFinishedFalse1()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(20, 20), new Point(80, 100) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(20, 20), new Point(80, 100));
 
             var expected = false;
             var actual = polygon.IsFinished();
@@ -97,7 +98,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsFinishedTrue2()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
 
             var expected = true;
             var actual = polygon.IsFinished(new Point(3, 2));
@@ -108,7 +109,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsFinishedFalse2()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
 
             var expected = false;
             var actual = polygon.IsFinished(new Point(25, 150));
@@ -130,7 +131,7 @@ namespace SRL.ModelsTests
         [TestMethod]
         public void IsEmptyFalse()
         {
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100), new Point(25, 125));
 
             var expected = false;
             var actual = polygon.IsEmpty();

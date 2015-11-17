@@ -15,11 +15,11 @@ namespace SRL.Editors
     {
         private SpriteBatch spriteBatch;
 
-        public Polygon ActualPolygon { get; private set; }
+        public Polygon CurrentPolygon { get; private set; }
         public Map Map { get; private set; }
         public MapEditorMode Mode { get; set; }
         public Point CursorPosition { get; set; }
-        public DrawPolygonState ActualPolygonState { get; set; }
+        public DrawPolygonState CurrentPolygonState { get; set; }
 
         /// <summary>
         /// Initialize map editor control.
@@ -27,11 +27,11 @@ namespace SRL.Editors
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ActualPolygon = new Polygon();
+            CurrentPolygon = new Polygon();
             Map = new Map(512, 512); 
             Mode = MapEditorMode.Idle;
             CursorPosition = new Point(0, 0);
-            ActualPolygonState = DrawPolygonState.Empty;
+            CurrentPolygonState = DrawPolygonState.Empty;
         }
 
         /// <summary>
@@ -58,19 +58,19 @@ namespace SRL.Editors
             switch (Mode)
             {
                 case MapEditorMode.DrawPolygon:
-                    ActualPolygonState = CheckPolygon(ActualPolygon, CursorPosition, true);
+                    CurrentPolygonState = CheckPolygon(CurrentPolygon, CursorPosition, true);
                     break;
                 case MapEditorMode.DrawDone:
-                    ActualPolygonState = CheckPolygon(ActualPolygon, CursorPosition, false);
+                    CurrentPolygonState = CheckPolygon(CurrentPolygon, CursorPosition, false);
 
-                    if (ActualPolygon.IsFinished())
-                        ActualPolygon.Vertices.RemoveAt(ActualPolygon.VertexCount - 1);
+                    if (CurrentPolygon.IsFinished())
+                        CurrentPolygon.Vertices.RemoveAt(CurrentPolygon.VertexCount - 1);
                     
-                    if (ActualPolygon.IsCorrect())
-                        Map.Obstacles.Add(ActualPolygon);
+                    if (CurrentPolygon.IsCorrect())
+                        Map.Obstacles.Add(CurrentPolygon);
 
                     Mode = MapEditorMode.Idle;
-                    ActualPolygon = new Polygon();
+                    CurrentPolygon = new Polygon();
                     break;
                 case MapEditorMode.Idle:
                     break;
@@ -84,7 +84,7 @@ namespace SRL.Editors
         /// </summary>
         private void DrawActualPolygon()
         {
-            spriteBatch.DrawPolygon(ActualPolygon, ActualPolygonState, CursorPosition);
+            spriteBatch.DrawPolygon(CurrentPolygon, CurrentPolygonState, CursorPosition);
         }
 
         /// <summary>

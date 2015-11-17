@@ -14,7 +14,7 @@ namespace EditorsTests
         public void CheckLineCorrect()
         {
             MapEditor editor = new MapEditor();
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
 
             var expected = DrawLineState.Correct;
             var actual = editor.CheckLine(polygon, new Point(0, 30));
@@ -26,7 +26,7 @@ namespace EditorsTests
         public void CheckLineIncorrect()
         {
             MapEditor editor = new MapEditor();
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
 
             var expected = DrawLineState.Incorrect;
             var actual = editor.CheckLine(polygon, new Point(50, 0));
@@ -38,7 +38,7 @@ namespace EditorsTests
         public void CheckLineDone()
         {
             MapEditor editor = new MapEditor();
-            Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(80, 100) });
+            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(80, 100));
 
             var expected = DrawLineState.Done;
             var actual = editor.CheckLine(polygon, new Point(0, 0));
