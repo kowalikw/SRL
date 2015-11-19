@@ -15,9 +15,9 @@ namespace SRL.Main.View
     /// <summary>
     /// Interaction logic for EditorWindow.xaml
     /// </summary>
-    public partial class VehicleEditorWindow : Window
+    public partial class VehicleEditorView : Window
     {
-        public VehicleEditorWindow()
+        public VehicleEditorView()
         {
             InitializeComponent();
 

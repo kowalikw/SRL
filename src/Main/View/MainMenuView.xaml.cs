@@ -3,13 +3,13 @@
 namespace SRL.Main.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainMenuView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainMenuView : Window
     {
         private string language;
 
-        public MainWindow(string language)
+        public MainMenuView(string language)
         {
             InitializeComponent();
 
@@ -18,13 +18,13 @@ namespace SRL.Main.View
 
         private void addVehicle_Click(object sender, RoutedEventArgs e)
         {
-            Window editorWindow = new VehicleEditorWindow();
+            Window editorWindow = new VehicleEditorView();
             editorWindow.Show();
         }
 
         private void addMap_Click(object sender, RoutedEventArgs e)
         {
-            Window editorWindow = new MapEditorWindow();
+            Window editorWindow = new MapEditorView();
             editorWindow.Show();
         }
     }

@@ -12,11 +12,11 @@ using Point = SRL.Models.Model.Point;
 namespace SRL.Main.View
 {
     /// <summary>
-    /// Interaction logic for MapEditorWindow.xaml
+    /// Interaction logic for MapEditorView.xaml
     /// </summary>
-    public partial class MapEditorWindow : Window
+    public partial class MapEditorView : Window
     {
-        public MapEditorWindow()
+        public MapEditorView()
         {
             InitializeComponent();
         }

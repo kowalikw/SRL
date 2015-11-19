@@ -3,25 +3,25 @@
 namespace SRL.Main.View
 {
     /// <summary>
-    /// Interaction logic for ChooseLanguageWindow.xaml
+    /// Interaction logic for LanguagePickerView.xaml
     /// </summary>
-    public partial class ChooseLanguageWindow : Window
+    public partial class LanguagePickerView : Window
     {
-        public ChooseLanguageWindow()
+        public LanguagePickerView()
         {
             InitializeComponent();
         }
 
         private void btnPolish_Click(object sender, RoutedEventArgs e)
         {
-            Window mainWindow = new MainWindow("pl");
+            Window mainWindow = new MainMenuView("pl");
             mainWindow.Show();
             this.Close();
         }
 
         private void btnEnglish_Click(object sender, RoutedEventArgs e)
         {
-            Window mainWindow = new MainWindow("en");
+            Window mainWindow = new MainMenuView("en");
             mainWindow.Show();
             this.Close();
         }

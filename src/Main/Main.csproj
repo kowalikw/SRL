@@ -74,35 +74,35 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PL.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\ChooseLanguageWindow.xaml.cs">
-      <DependentUpon>ChooseLanguageWindow.xaml</DependentUpon>
+    <Compile Include="View\LanguagePickerView.xaml.cs">
+      <DependentUpon>LanguagePickerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="View\MainMenuView.xaml.cs">
+      <DependentUpon>MainMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MapEditorWindow.xaml.cs">
-      <DependentUpon>MapEditorWindow.xaml</DependentUpon>
+    <Compile Include="View\MapEditorView.xaml.cs">
+      <DependentUpon>MapEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\VehicleEditorWindow.xaml.cs">
-      <DependentUpon>VehicleEditorWindow.xaml</DependentUpon>
+    <Compile Include="View\VehicleEditorView.xaml.cs">
+      <DependentUpon>VehicleEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ChooseLanguageWindow.xaml">
+    <Page Include="View\LanguagePickerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\MainWindow.xaml">
+    <Page Include="View\MainMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\MapEditorWindow.xaml">
+    <Page Include="View\MapEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\VehicleEditorWindow.xaml">
+    <Page Include="View\VehicleEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
