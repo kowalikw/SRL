@@ -1,17 +1,15 @@
-﻿using System.Windows;
-using SRL.Models.Enum;
-using Microsoft.Win32;
+﻿using System.IO;
+using System.Windows;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using System.Xml;
-using SRL.Models.Model;
-using System.IO;
-using Point = SRL.Models.Model.Point;
-using SRL.Main.Resources;
-using System;
+using Microsoft.Win32;
 using SRL.Models;
+using SRL.Models.Enum;
+using SRL.Models.Model;
+using Point = SRL.Models.Model.Point;
 
-namespace SRL.Main
+namespace SRL.Main.View
 {
     /// <summary>
     /// Interaction logic for MapEditorWindow.xaml

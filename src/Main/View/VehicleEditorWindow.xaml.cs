@@ -1,28 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using System.IO;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using SRL.Models.Enum;
-using Point = SRL.Models.Model.Point;
-using Microsoft.Win32;
 using System.Xml;
-using System.Xml.Serialization;
-using SRL.Models.Model;
 using System.Xml.Linq;
+using System.Xml.Serialization;
+using Microsoft.Win32;
 using SRL.Models;
+using SRL.Models.Enum;
+using SRL.Models.Model;
+using Point = SRL.Models.Model.Point;
 
-namespace SRL.Main
+namespace SRL.Main.View
 {
     /// <summary>
     /// Interaction logic for EditorWindow.xaml

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SRL.Main
+namespace SRL.Main.View
 {
     /// <summary>
     /// Interaction logic for ChooseLanguageWindow.xaml
