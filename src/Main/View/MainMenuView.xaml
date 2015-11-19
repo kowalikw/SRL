@@ -8,14 +8,10 @@
         mc:Ignorable="d"
         Title="MainMenuView" Height="150" Width="525">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Button Grid.Column="0" Grid.Row="0" x:Name="addVehicle" Click="addVehicle_Click">Dodaj pojazd</Button>
-        <Button Grid.Column="1" Grid.Row="0" x:Name="addMap" Click="addMap_Click">Dodaj mapę</Button>
+        <StackPanel>
+            <Button Command="{Binding VehicleEditorCommand}">Dodaj pojazd</Button>
+            <Button Command="{Binding MapEditorCommand}">Dodaj mapę</Button>
+        </StackPanel>
+
     </Grid>
 </Window>

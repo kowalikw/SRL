@@ -13,6 +13,8 @@ namespace SRL.Main.View
         {
             InitializeComponent();
             DataContext = new MainMenuViewModel();
+
+            //TODO do something with the lang setting. Do not pass it to the view-model!
         }
 
         private void addVehicle_Click(object sender, RoutedEventArgs e)

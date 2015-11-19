@@ -14,16 +14,16 @@ namespace SRL.Main.ViewModel
         {
             PolishLanguageCommand = new RelayCommand(o =>
             {
-                Window mainWindow = new MainMenuView(Language.Polish);
-                mainWindow.Show();
+                Window window = new MainMenuView(Language.Polish);
+                window.Show();
 
                 //TODO close LanguagePickerView window.
             });
             
             EnglishLanguageCommand = new RelayCommand(o =>
             {
-                Window mainWindow = new MainMenuView(Language.English);
-                mainWindow.Show();
+                Window window = new MainMenuView(Language.English);
+                window.Show();
 
                 //TODO close LanguagePickerView window.
             });
