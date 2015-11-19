@@ -59,6 +59,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Language.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="Resources\EN.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -74,6 +76,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PL.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\LanguagePickerViewModel.cs" />
+    <Compile Include="ViewModel\MainMenuViewModel.cs" />
+    <Compile Include="ViewModel\MapEditorViewModel.cs" />
+    <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="View\LanguagePickerView.xaml.cs">
       <DependentUpon>LanguagePickerView.xaml</DependentUpon>
     </Compile>
@@ -160,10 +166,7 @@
       <Name>MonoGameControl</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

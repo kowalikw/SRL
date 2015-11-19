@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using SRL.Main.ViewModel;
 
 namespace SRL.Main.View
 {
@@ -10,20 +11,7 @@ namespace SRL.Main.View
         public LanguagePickerView()
         {
             InitializeComponent();
-        }
-
-        private void btnPolish_Click(object sender, RoutedEventArgs e)
-        {
-            Window mainWindow = new MainMenuView("pl");
-            mainWindow.Show();
-            this.Close();
-        }
-
-        private void btnEnglish_Click(object sender, RoutedEventArgs e)
-        {
-            Window mainWindow = new MainMenuView("en");
-            mainWindow.Show();
-            this.Close();
+            DataContext = new LanguagePickerViewModel();
         }
     }
 }

@@ -7,9 +7,9 @@
         Title="LanguagePickerView" Height="180" Width="300">
     <Grid>
         <StackPanel>
-            <Label Margin="3" FontWeight="Bold" FontSize="16">Wybierz język:</Label>
-            <Button x:Name="btnPolish" Height="40" Margin="5" Click="btnPolish_Click">Polski</Button>
-            <Button x:Name="btnEnglish" Height="40" Margin="5" Click="btnEnglish_Click">English</Button>
+            <Label>Wybierz język:</Label>
+            <Button Command="{Binding PolishLanguageCommand}">Polski</Button>
+            <Button Command="{Binding EnglishLanguageCommand}">English</Button>
         </StackPanel>
     </Grid>
 </Window>

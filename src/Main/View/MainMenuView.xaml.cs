@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using SRL.Main.Model;
+using SRL.Main.ViewModel;
 
 namespace SRL.Main.View
 {
@@ -7,13 +9,10 @@ namespace SRL.Main.View
     /// </summary>
     public partial class MainMenuView : Window
     {
-        private string language;
-
-        public MainMenuView(string language)
+        public MainMenuView(Language lang)
         {
             InitializeComponent();
-
-            this.language = language;
+            DataContext = new MainMenuViewModel();
         }
 
         private void addVehicle_Click(object sender, RoutedEventArgs e)
