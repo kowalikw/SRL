@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Win32;
+using SRL.Main.ViewModel;
 using SRL.Models;
 using SRL.Models.Enum;
 using SRL.Models.Model;
@@ -19,6 +20,7 @@ namespace SRL.Main.View
         public MapEditorView()
         {
             InitializeComponent();
+            DataContext = new MapEditorViewModel();
         }
 
         private void btnDraw_Checked(object sender, RoutedEventArgs e)
@@ -47,11 +49,6 @@ namespace SRL.Main.View
 
                 File.WriteAllText(saveFileDialog.FileName, output.ToString());
             }
-        }
-
-        private void btnExit_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

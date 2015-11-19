@@ -76,6 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PL.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\LanguagePickerViewModel.cs" />
     <Compile Include="ViewModel\MainMenuViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />

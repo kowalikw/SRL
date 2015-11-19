@@ -21,7 +21,6 @@
             <ToggleButton x:Name="btnDraw" Margin="3" Height="30" Checked="btnDraw_Checked" Unchecked="btnDraw_Unchecked">Rysuj przeszkodę</ToggleButton>
             <Button x:Name="btnReset" Margin="3" Height="30" Click="resetMap_Click">Resetuj mapę</Button>
             <Button x:Name="btnSave" Margin="3" Height="30" Click="btnSave_Click">Zapisz mapę</Button>
-            <Button x:Name="btnClose" Margin="3" Height="30" Click="btnExit_Click" >Zamknij</Button>
         </StackPanel>
     </Grid>
 </Window>
