@@ -1,7 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SRL.Model;
 using SRL.Model.Enum;
 using SRL.Model.Model;
+using SRL.MonoGameControl;
 
 namespace SRL.Main.View.Control
 {
@@ -19,6 +22,51 @@ namespace SRL.Main.View.Control
         protected Color correctActiveDrawColor = Color.Green;
         protected Color incorrectActiveDrawColor = Color.Red;
         protected Color activeStartCircleColor = Color.Orange;
+
+
+
+
+
+
+        protected SpriteBatch SpriteBatch;
+
+        protected override void Initialize()
+        {
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+        }
+
+        protected override void Unitialize()
+        {
+            SpriteBatch.Dispose();
+        }
+
+        protected override void Render(TimeSpan time)
+        {
+            GraphicsDevice.Clear(Color.LightSkyBlue);
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            SpriteBatch.BeginDraw();
+            Render(SpriteBatch, time);
+            SpriteBatch.EndDraw();
+        }
+
+        protected abstract void Render(SpriteBatch spriteBatch, TimeSpan time);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public DrawLineState CheckLine(Polygon polygon, Model.Model.Point nextVertice)
         {

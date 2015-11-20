@@ -10,8 +10,6 @@ namespace SRL.Main.View.Control
 {
     public class MapEditArea : EditArea
     {
-        private SpriteBatch spriteBatch;
-
         public Polygon CurrentPolygon { get; private set; }
         public Map Map { get; private set; }
         public MapEditorMode Mode { get; set; }
@@ -23,7 +21,8 @@ namespace SRL.Main.View.Control
         /// </summary>
         protected override void Initialize()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            base.Initialize();
+
             CurrentPolygon = new Polygon();
             Map = new Map(512, 512);
             Mode = MapEditorMode.Idle;
@@ -31,26 +30,9 @@ namespace SRL.Main.View.Control
             CurrentPolygonState = DrawPolygonState.Empty;
         }
 
-        /// <summary>
-        /// Uninitialize map editor control.
-        /// </summary>
-        protected override void Unitialize()
+        protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
-            spriteBatch.Dispose();
-        }
-
-        /// <summary>
-        /// Render map editor control content.
-        /// </summary>
-        /// <param name="time">Time of rendering.</param>
-        protected override void Render(TimeSpan time)
-        {
-            GraphicsDevice.Clear(Color.LightSkyBlue);
-            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-
-            spriteBatch.BeginDraw();
-
-            DrawMap();
+            DrawMap(spriteBatch);
 
             switch (Mode)
             {
@@ -72,14 +54,12 @@ namespace SRL.Main.View.Control
                 case MapEditorMode.Idle:
                     break;
             }
-
-            spriteBatch.End();
         }
 
         /// <summary>
         /// Draws current polygon.
         /// </summary>
-        private void DrawCurrentPolygon()
+        private void DrawCurrentPolygon(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawPolygon(CurrentPolygon, CurrentPolygonState, CursorPosition);
         }
@@ -87,11 +67,11 @@ namespace SRL.Main.View.Control
         /// <summary>
         /// Draws map.
         /// </summary>
-        private void DrawMap()
+        private void DrawMap(SpriteBatch spriteBatch)
         {
             foreach (Polygon polygon in Map.Obstacles)
                 spriteBatch.DrawPolygon(polygon, DrawPolygonState.Done);
-            DrawCurrentPolygon();
+            DrawCurrentPolygon(spriteBatch);
         }
     }
 }

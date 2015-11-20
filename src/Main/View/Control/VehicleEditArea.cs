@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Model.Enum;
 using SRL.Model.Model;
@@ -18,7 +17,6 @@ namespace SRL.Main.View.Control
         private const int ArrowBottomX = -12;
         private const int ArrowBottomY = 6;
 
-        private SpriteBatch spriteBatch;
 
         public Vehicle Vehicle { get; private set; }
         public VehicleEditorMode Mode { get; set; }
@@ -30,26 +28,17 @@ namespace SRL.Main.View.Control
 
         protected override void Initialize()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            base.Initialize();
+            
             Mode = VehicleEditorMode.Empty;
             Vehicle = new Vehicle();
             CursorPosition = new Point(0, 0);
             ActualPolygonState = DrawPolygonState.Empty;
         }
 
-        protected override void Unitialize()
+        protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
-            spriteBatch.Dispose();
-        }
-
-        protected override void Render(TimeSpan time)
-        {
-            GraphicsDevice.Clear(Color.LightSkyBlue);
-            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-
-            spriteBatch.BeginDraw();
-
-            DrawVehicle();
+            DrawVehicle(spriteBatch);
 
             switch (Mode)
             {
@@ -58,7 +47,7 @@ namespace SRL.Main.View.Control
                     ActualPolygonState = DrawPolygonState.Empty;
                     break;
                 case VehicleEditorMode.DrawPolygon:
-                    //if (DrawPolygon(spriteBatch, Vehicle.Shape, CursorPosition, true) == DrawPolygonState.Incorrect)
+                    //if (DrawPolygon(SpriteBatch, Vehicle.Shape, CursorPosition, true) == DrawPolygonState.Incorrect)
                     //    IsSegmentIntersection = true;
                     ActualPolygonState = CheckPolygon(Vehicle.Shape, CursorPosition, true);
 
@@ -73,7 +62,7 @@ namespace SRL.Main.View.Control
                     //DrawVehicle();
 
                     if (OriginStart != null)
-                        DrawAxis(OriginStart, CursorPosition, CalculateAxisAngle(OriginStart, CursorPosition), true);
+                        DrawAxis(spriteBatch, OriginStart, CursorPosition, CalculateAxisAngle(OriginStart, CursorPosition), true);
 
                     if (OriginEnd != null)
                     {
@@ -89,11 +78,9 @@ namespace SRL.Main.View.Control
                 case VehicleEditorMode.Idle:
                     ActualPolygonState = CheckPolygon(Vehicle.Shape);
                     //DrawVehicle();
-                    DrawAxis(OriginStart, OriginEnd, Vehicle.DirectionAngle, false);
+                    DrawAxis(spriteBatch, OriginStart, OriginEnd, Vehicle.DirectionAngle, false);
                     break;
             }
-
-            spriteBatch.End();
         }
 
         public void Reset()
@@ -106,13 +93,13 @@ namespace SRL.Main.View.Control
             Mode = VehicleEditorMode.Empty;
         }
 
-        private void DrawVehicle()
+        private void DrawVehicle(SpriteBatch spriteBatch)
         {
-            //spriteBatch.DrawPolygon(Vehicle.Shape)
+            //SpriteBatch.DrawPolygon(Vehicle.Shape)
             spriteBatch.DrawPolygon(Vehicle.Shape, ActualPolygonState, CursorPosition);
         }
 
-        private void DrawAxis(Point axisStart, Point axisEnd, double axisAngle, bool activeDraw)
+        private void DrawAxis(SpriteBatch spriteBatch, Point axisStart, Point axisEnd, double axisAngle, bool activeDraw)
         {
             Point arrowCenter = new Point(ArrowCenterX, ArrowCenterY);
             Point arrowTop = new Point(ArrowTopX, ArrowTopY);

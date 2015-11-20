@@ -25,7 +25,7 @@ namespace SRL.Main.ViewModel
 
         protected abstract string SaveFileExtension { get; }
         protected abstract T ModelToSave { get; }
-        protected abstract bool IsCurrentModelValid { get; } // Don't forget to call OnPropertyChanged!
+        protected abstract bool IsCurrentModelValid { get; set; } // Don't forget to call OnPropertyChanged!
 
         protected EditorViewModel()
         {
