@@ -1,26 +1,32 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Win32;
+using SRL.Main.Annotations;
 
 namespace SRL.Main.ViewModel
 {
-    internal abstract class EditorViewModel<T> where T : IXmlSerializable
+    internal abstract class EditorViewModel<T> : INotifyPropertyChanged 
+        where T : IXmlSerializable
     {
-        public ICommand ResetModelCommand { get; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ICommand ResetCommand { get; }
         public ICommand SaveModelCommand { get; }
         public ICommand LoadModelCommand { get; }
 
         protected abstract string SaveFileExtension { get; }
         protected abstract T ModelToSave { get; }
-        protected abstract bool IsModelValid { get; }
+        protected abstract bool IsCurrentModelValid { get; } // Don't forget to call OnPropertyChanged!
 
         protected EditorViewModel()
         {
-            ResetModelCommand = new RelayCommand(o => ResetModel());
+            ResetCommand = new RelayCommand(o => Reset());
 
             SaveModelCommand = new RelayCommand(o =>
             {
@@ -40,7 +46,7 @@ namespace SRL.Main.ViewModel
                     File.WriteAllText(dialog.FileName, output.ToString());
                 }
             },
-            predicate => IsModelValid);
+            predicate => IsCurrentModelValid);
 
             LoadModelCommand = new RelayCommand(o =>
             {
@@ -59,7 +65,14 @@ namespace SRL.Main.ViewModel
 
         }
 
-        protected abstract void ResetModel();
+        protected abstract void Reset();
         protected abstract void LoadModel(T model);
+        
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
