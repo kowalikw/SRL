@@ -87,6 +87,29 @@ namespace SRL.Model.Model
             return !Equals(a, b);
         }
 
+        public static explicit operator System.Windows.Point(Point p)
+        {
+            return new System.Windows.Point(p.X, p.Y);
+        }
+
+        public static explicit operator Point(System.Windows.Point p)
+        {
+            return new Point(p.X, p.Y);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static Point operator +(Point p1, Point p2)
         {
             return new Point(p1.X + p2.X, p1.Y + p2.Y);
