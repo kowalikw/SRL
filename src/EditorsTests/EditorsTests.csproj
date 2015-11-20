@@ -61,9 +61,9 @@
     <Compile Include="EditorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Editors\Editors.csproj">
-      <Project>{40831d8a-60a3-4507-9e10-fc7c80985a49}</Project>
-      <Name>Editors</Name>
+    <ProjectReference Include="..\Main\Main.csproj">
+      <Project>{664beb89-24fa-47bd-976a-62f246b61b93}</Project>
+      <Name>Main</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Model.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>

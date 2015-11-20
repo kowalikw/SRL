@@ -72,6 +72,9 @@
     <Compile Include="ViewModel\MainMenuViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
+    <Compile Include="View\Control\Editor.cs" />
+    <Compile Include="View\Control\MapEditor.cs" />
+    <Compile Include="View\Control\VehicleEditor.cs" />
     <Compile Include="View\LanguagePickerView.xaml.cs">
       <DependentUpon>LanguagePickerView.xaml</DependentUpon>
     </Compile>
@@ -156,10 +159,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Editors\Editors.csproj">
-      <Project>{40831d8a-60a3-4507-9e10-fc7c80985a49}</Project>
-      <Name>Editors</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Models\Model.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
       <Name>Model</Name>

@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SRL.Editors;
+using SRL.Main.View.Control;
 using SRL.Model.Enum;
 using SRL.Model.Model;
 using System.Collections.Generic;
