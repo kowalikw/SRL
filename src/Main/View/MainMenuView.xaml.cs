@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using SRL.Main.Model;
 using SRL.Main.ViewModel;
 
 namespace SRL.Main.View
@@ -9,7 +8,7 @@ namespace SRL.Main.View
     /// </summary>
     public partial class MainMenuView : Window
     {
-        public MainMenuView(Language lang)
+        public MainMenuView(Language.Language lang)
         {
             InitializeComponent();
             DataContext = new MainMenuViewModel();

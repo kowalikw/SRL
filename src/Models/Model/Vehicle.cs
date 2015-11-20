@@ -2,7 +2,7 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Models.Model
+namespace SRL.Model.Model
 {
     [XmlRoot(ElementName = "vvd", Namespace = "pl.pw.mini.KowMisPie.SRL")]
     public class Vehicle : IXmlSerializable

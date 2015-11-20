@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SRL.Models.Enum;
-using SRL.Models.Model;
+using SRL.Model.Enum;
+using SRL.Model.Model;
 using System;
 using System.Collections.Generic;
-using Point = SRL.Models.Model.Point;
+using Point = SRL.Model.Model.Point;
 
 namespace SRL.MonoGameControl
 {

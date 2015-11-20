@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Models.Marshalling
+namespace SRL.Model.Marshalling
 {
     public static class Marshaller<T> where T : IXmlSerializable
     {
@@ -15,7 +15,7 @@ namespace SRL.Models.Marshalling
         {
             _schemaSet = new XmlSchemaSet();
 
-            string schemaString = SRL.Models.Resources.XmlSchema;
+            string schemaString = Resources.XmlSchema;
             var reader = new StringReader(schemaString);
             _schemaSet.Add("pl.pw.mini.KowMisPie.SRL", XmlReader.Create(reader));
         }

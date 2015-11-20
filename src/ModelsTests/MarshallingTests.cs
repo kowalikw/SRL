@@ -4,7 +4,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SRL.Models.Model;
+using SRL.Model.Model;
 using System.Collections.Generic;
 
 namespace SRL.ModelsTests
@@ -18,7 +18,7 @@ namespace SRL.ModelsTests
         {
             _schemaSet = new XmlSchemaSet();
             
-            string schemaString = Models.Resources.XmlSchema;
+            string schemaString = Model.Resources.XmlSchema;
             var reader = new StringReader(schemaString);
             _schemaSet.Add("pl.pw.mini.KowMisPie.SRL", XmlReader.Create(reader));
         }

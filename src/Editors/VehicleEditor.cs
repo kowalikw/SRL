@@ -1,11 +1,11 @@
 ﻿using System;
 using SRL.MonoGameControl;
-using SRL.Models.Model;
-using SRL.Models.Enum;
+using SRL.Model.Model;
+using SRL.Model.Enum;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Point = SRL.Models.Model.Point;
-using SRL.Models;
+using Point = SRL.Model.Model.Point;
+using SRL.Model;
 
 namespace SRL.Editors
 {

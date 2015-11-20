@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SRL.Models {
+namespace SRL.Model {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace SRL.Models {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Models.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Model.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,20 +62,17 @@ namespace SRL.Models {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; 
-        ///           targetNamespace=&quot;pl.pw.mini.KowMisPie.SRL&quot; 
-        ///           xmlns=&quot;pl.pw.mini.KowMisPie.SRL&quot; 
+        ///&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;
+        ///           targetNamespace=&quot;pl.pw.mini.KowMisPie.SRL&quot;
+        ///           xmlns=&quot;pl.pw.mini.KowMisPie.SRL&quot;
         ///           elementFormDefault=&quot;qualified&quot;&gt;
         ///
         ///  &lt;xs:complexType name=&quot;mapType&quot;&gt;
         ///    &lt;xs:sequence&gt;
         ///      &lt;xs:element name=&quot;polygon&quot; type=&quot;polygonType&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;/&gt;
         ///    &lt;/xs:sequence&gt;
-        ///  &lt;/xs:complexType&gt;
-        ///
-        ///  &lt;xs:complexType name=&quot;vehicleType&quot;&gt;
-        ///    &lt;xs:all&gt;
-        ///      &lt;xs:element name=&quot;po [rest of string was truncated]&quot;;.
+        ///    &lt;xs:attribute name=&quot;width&quot; type=&quot;nonNegativeDoubleType&quot; use=&quot;required&quot;/&gt;
+        ///    &lt;xs:attribute name=&quot;hei [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XmlSchema {
             get {

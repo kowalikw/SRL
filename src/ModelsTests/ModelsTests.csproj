@@ -65,9 +65,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj">
+    <ProjectReference Include="..\Models\Model.csproj">
       <Project>{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}</Project>
-      <Name>Models</Name>
+      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

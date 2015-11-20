@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Models.Model
+namespace SRL.Model.Model
 {
     // This class shall remain immutable.
     public class Point : IXmlSerializable, IEquatable<Point>

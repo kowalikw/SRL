@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using SRL.Models;
-using SRL.Models.Enum;
-using SRL.Models.Model;
-using Point = SRL.Models.Model.Point;
+using SRL.Model;
+using SRL.Model.Enum;
+using SRL.Model.Model;
+using Point = SRL.Model.Model.Point;
 
 namespace SRL.Editors
 {

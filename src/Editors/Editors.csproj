@@ -70,9 +70,9 @@
     <Compile Include="VehicleEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj">
+    <ProjectReference Include="..\Models\Model.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
-      <Name>Models</Name>
+      <Name>Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\MonoGameControl\MonoGameControl.csproj">
       <Project>{fc4b8b52-884c-46a1-aae1-3dfe9a5c8604}</Project>

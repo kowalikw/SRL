@@ -1,12 +1,11 @@
-﻿using SRL.Models.Enum;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Models.Model
+namespace SRL.Model.Model
 {
     public class Polygon : IXmlSerializable, IEquatable<Polygon>
     {
@@ -72,18 +71,18 @@ namespace SRL.Models.Model
         /// </remarks>
         public bool Equals(Polygon other)
         {
-            if (this.VertexCount == other.VertexCount)
+            if (VertexCount == other.VertexCount)
             {
                 int i;
                 for (i = 0; i < VertexCount; i++)
                 {
-                    if (this.Vertices[i] == other.Vertices[0])
+                    if (Vertices[i] == other.Vertices[0])
                         break;
                 }
                 if (i < VertexCount)
                 {
                     for (int j = 0; j < VertexCount; j++)
-                        if (this.Vertices[(i + j)%VertexCount] != other.Vertices[j])
+                        if (Vertices[(i + j)%VertexCount] != other.Vertices[j])
                             return false;
                     return true;
                 }

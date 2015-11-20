@@ -1,4 +1,4 @@
-﻿namespace SRL.Main.Model
+﻿namespace SRL.Main.View.Language
 {
     public enum Language
     {

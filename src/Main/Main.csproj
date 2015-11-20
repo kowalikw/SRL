@@ -59,24 +59,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Language.cs" />
     <Compile Include="MouseBehavior.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="Resources\EN.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EN.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\Number.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Number.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\PL.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PL.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\LanguagePickerViewModel.cs" />
@@ -85,6 +74,17 @@
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="View\LanguagePickerView.xaml.cs">
       <DependentUpon>LanguagePickerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Language\EN.Designer.cs">
+      <DependentUpon>EN.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="View\Language\Language.cs" />
+    <Compile Include="View\Language\PL.Designer.cs">
+      <DependentUpon>PL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="View\MainMenuView.xaml.cs">
       <DependentUpon>MainMenuView.xaml</DependentUpon>
@@ -134,15 +134,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EN.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EN.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Number.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Number.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PL.resx">
+    <EmbeddedResource Include="View\Language\EN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Language\PL.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PL.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -160,9 +160,9 @@
       <Project>{40831d8a-60a3-4507-9e10-fc7c80985a49}</Project>
       <Name>Editors</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models\Models.csproj">
+    <ProjectReference Include="..\Models\Model.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
-      <Name>Models</Name>
+      <Name>Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\MonoGameControl\MonoGameControl.csproj">
       <Project>{fc4b8b52-884c-46a1-aae1-3dfe9a5c8604}</Project>

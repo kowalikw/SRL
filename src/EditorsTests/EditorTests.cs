@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Editors;
-using SRL.Models.Enum;
-using SRL.Models.Model;
+using SRL.Model.Enum;
+using SRL.Model.Model;
 using System.Collections.Generic;
 
 namespace EditorsTests

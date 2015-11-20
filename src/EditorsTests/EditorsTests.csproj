@@ -65,9 +65,9 @@
       <Project>{40831d8a-60a3-4507-9e10-fc7c80985a49}</Project>
       <Name>Editors</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models\Models.csproj">
+    <ProjectReference Include="..\Models\Model.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
-      <Name>Models</Name>
+      <Name>Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\MonoGameControl\MonoGameControl.csproj">
       <Project>{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}</Project>

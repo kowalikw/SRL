@@ -1,7 +1,7 @@
 ﻿using System;
-using Point = SRL.Models.Model.Point;
+using SRL.Model.Model;
 
-namespace SRL.Models
+namespace SRL.Model
 {
 
     public static class GeometryHelper

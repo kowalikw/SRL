@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "src\Main\Main.cspro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameControl", "src\MonoGameControl\MonoGameControl.csproj", "{FC4B8B52-884C-46A1-AAE1-3DFE9A5C8604}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "src\Models\Models.csproj", "{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "src\Models\Model.csproj", "{4DE2F8D4-1ABA-432D-B2BF-C0FF7340D8BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsTests", "src\ModelsTests\ModelsTests.csproj", "{3630E755-8BD8-4691-80C5-40E3C9A2C0EA}"
 EndProject

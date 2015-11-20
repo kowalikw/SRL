@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Models.Model
+namespace SRL.Model.Model
 {
     [XmlRoot(ElementName = "vmd", Namespace = "pl.pw.mini.KowMisPie.SRL")]
     public class Map : IXmlSerializable

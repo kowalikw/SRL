@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using SRL.Main.Model;
 using SRL.Main.View;
+using SRL.Main.View.Language;
 
 namespace SRL.Main.ViewModel
 {

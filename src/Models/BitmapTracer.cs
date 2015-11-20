@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using CsPotrace;
-using SRL.Models.Model;
-using Bitmap = System.Drawing.Bitmap;
+using SRL.Model.Model;
+using Point = SRL.Model.Model.Point;
 
-namespace SRL.Models
+namespace SRL.Model
 {
     public class BitmapTracer
     {
