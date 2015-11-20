@@ -8,7 +8,7 @@ using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.View.Control
 {
-    public class MapEditor : Editor
+    public class MapEditArea : EditArea
     {
         private SpriteBatch spriteBatch;
 

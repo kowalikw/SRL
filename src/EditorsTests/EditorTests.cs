@@ -13,11 +13,11 @@ namespace EditorsTests
         [TestMethod]
         public void CheckLineCorrect()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editArea = new MapEditArea();
             Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
 
             var expected = DrawLineState.Correct;
-            var actual = editor.CheckLine(polygon, new Point(0, 30));
+            var actual = editArea.CheckLine(polygon, new Point(0, 30));
 
             Assert.AreEqual(expected, actual);
         }
@@ -25,11 +25,11 @@ namespace EditorsTests
         [TestMethod]
         public void CheckLineIncorrect()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editArea = new MapEditArea();
             Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
 
             var expected = DrawLineState.Incorrect;
-            var actual = editor.CheckLine(polygon, new Point(50, 0));
+            var actual = editArea.CheckLine(polygon, new Point(50, 0));
 
             Assert.AreEqual(expected, actual);
         }
@@ -37,11 +37,11 @@ namespace EditorsTests
         [TestMethod]
         public void CheckLineDone()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editArea = new MapEditArea();
             Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(80, 100));
 
             var expected = DrawLineState.Done;
-            var actual = editor.CheckLine(polygon, new Point(0, 0));
+            var actual = editArea.CheckLine(polygon, new Point(0, 0));
 
             Assert.AreEqual(expected, actual);
         }
@@ -49,7 +49,7 @@ namespace EditorsTests
         /*[TestMethod]
         public void DrawPolygonEmpty()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editor = new MapEditArea();
             Polygon polygon = new Polygon();
 
             var expected = DrawPolygonState.Empty;
@@ -61,7 +61,7 @@ namespace EditorsTests
         [TestMethod]
         public void DrawPolygonDone()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editor = new MapEditArea();
             Polygon polygon = new Polygon();
 
             var expected = DrawPolygonState.Done;
@@ -73,7 +73,7 @@ namespace EditorsTests
         /*[TestMethod]
         public void DrawPolygonCorrect()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editor = new MapEditArea();
             Polygon polygon = new Polygon(new List<Point>() { new Point(0,0), new Point(100, 100), new Point(50, 100) });
 
             var expected = DrawPolygonState.Correct;
@@ -85,7 +85,7 @@ namespace EditorsTests
         [TestMethod]
         public void DrawPolygonIncorrect()
         {
-            MapEditor editor = new MapEditor();
+            MapEditArea editor = new MapEditArea();
             Polygon polygon = new Polygon(new List<Point>() { new Point(0, 0), new Point(100, 100), new Point(50, 100) });
 
             var expected = DrawPolygonState.Incorrect;

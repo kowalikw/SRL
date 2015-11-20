@@ -125,11 +125,11 @@ namespace SRL.Main.View
 
         private void btnSetAxis_Unchecked(object sender, RoutedEventArgs e)
         {
-            /*VehicleEditorControl.Vehicle.Origin = null;
-            VehicleEditorControl.OriginStart = null;
-            VehicleEditorControl.OriginEnd = null;
-            VehicleEditorControl.IsAngleSet = false;
-            VehicleEditorControl.Mode = VehicleEditorMode.DrawDone;*/
+            /*VehicleEditAreaControl.Vehicle.Origin = null;
+            VehicleEditAreaControl.OriginStart = null;
+            VehicleEditAreaControl.OriginEnd = null;
+            VehicleEditAreaControl.IsAngleSet = false;
+            VehicleEditAreaControl.Mode = VehicleEditorMode.DrawDone;*/
         }
     }
 }

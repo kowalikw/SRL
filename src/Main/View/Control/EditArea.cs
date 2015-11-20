@@ -5,7 +5,7 @@ using SRL.Model.Model;
 
 namespace SRL.Main.View.Control
 {
-    public abstract class Editor : MonoGameControl.MonoGameControl
+    public abstract class EditArea : MonoGameControl.MonoGameControl
     {
         protected const int StartCircleRadius = 8;
         protected const int StartCircleThickness = 3;

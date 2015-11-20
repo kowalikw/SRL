@@ -8,7 +8,7 @@ using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.View.Control
 {
-    public class VehicleEditor : Editor
+    public class VehicleEditArea : EditArea
     {
         private const int AxisThickness = 2;
         private const int ArrowTopX = -12;
