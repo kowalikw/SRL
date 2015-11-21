@@ -38,6 +38,7 @@ namespace SRL.Main.ViewModel
                 {
                     _isCurrentModelValid = value;
                     OnPropertyChanged();
+                    ((RelayCommand)SaveModelCommand).OnCanExecuteChanged();
                 }
 
             }

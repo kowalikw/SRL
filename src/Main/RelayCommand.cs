@@ -33,7 +33,8 @@ namespace SRL.Main
 
         public void OnCanExecuteChanged()
         {
-            CanExecuteChanged(this, EventArgs.Empty);
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

@@ -16,7 +16,6 @@ namespace SRL.Main.ViewModel
     internal abstract class EditorViewModel<T> : INotifyPropertyChanged 
         where T : IXmlSerializable
     {
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand ResetCommand { get; }
