@@ -21,8 +21,8 @@ namespace SRL.Main
 
         #region Private Members
 
-        private static readonly Dictionary<String, List<Point>> circleCache = new Dictionary<string, List<Point>>();
-        private static Texture2D pixel;
+        private static readonly Dictionary<String, List<Point>> CircleCache = new Dictionary<string, List<Point>>();
+        private static Texture2D _pixel;
 
         #endregion
 
@@ -32,8 +32,8 @@ namespace SRL.Main
         /// <param name="spriteBatch">The destination drawing surface</param>
         private static void CreateThePixel(SpriteBatch spriteBatch)
         {
-            pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            pixel.SetData(new[] { Color.White });
+            _pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            _pixel.SetData(new[] { Color.White });
         }
 
         /// <summary>
@@ -65,9 +65,9 @@ namespace SRL.Main
         {
             // Look for a cached version of this circle
             String circleKey = radius + "x" + sides;
-            if (circleCache.ContainsKey(circleKey))
+            if (CircleCache.ContainsKey(circleKey))
             {
-                return circleCache[circleKey];
+                return CircleCache[circleKey];
             }
 
             List<Point> vectors = new List<Point>();
@@ -84,7 +84,7 @@ namespace SRL.Main
             vectors.Add(new Point((float)(radius * Math.Cos(0)), (float)(radius * Math.Sin(0))));
 
             // Cache this circle so that it can be quickly drawn next time
-            circleCache.Add(circleKey, vectors);
+            CircleCache.Add(circleKey, vectors);
 
             return vectors;
         }
@@ -95,7 +95,7 @@ namespace SRL.Main
         /// <param name="spriteBatch">The destination drawing surface.</param>
         internal static void BeginDraw(this SpriteBatch spriteBatch)
         {
-            pixel = null;
+            _pixel = null;
             spriteBatch.Begin();
         }
 
@@ -105,7 +105,7 @@ namespace SRL.Main
         /// <param name="spriteBatch">The destination drawing surface.</param>
         internal static void EndDraw(this SpriteBatch spriteBatch)
         {
-            pixel = null;
+            _pixel = null;
             spriteBatch.End();
         }
 
@@ -127,13 +127,13 @@ namespace SRL.Main
 
             //DrawLine(spriteBatch, point1, distance, angle, color, thickness);
 
-            if (pixel == null)
+            if (_pixel == null)
             {
                 CreateThePixel(spriteBatch);
             }
 
             // stretch the pixel between the two vectors
-            spriteBatch.Draw(pixel,
+            spriteBatch.Draw(_pixel,
                              new Vector2((float)point1.X, (float)point1.Y),
                              null,
                              color,
@@ -155,13 +155,13 @@ namespace SRL.Main
         /// <param name="thickness">The thickness of the line.</param>
         internal static void DrawLine(this SpriteBatch spriteBatch, Point point, float length, float angle, Color color, float thickness)
         {
-            if (pixel == null)
+            if (_pixel == null)
             {
                 CreateThePixel(spriteBatch);
             }
 
             // stretch the pixel between the two vectors
-            spriteBatch.Draw(pixel,
+            spriteBatch.Draw(_pixel,
                              new Vector2((float)point.X, (float)point.Y),
                              null,
                              color,
@@ -180,12 +180,12 @@ namespace SRL.Main
         /// <param name="color">The color of the pixel.</param>
         internal static void PutPixel(this SpriteBatch spriteBatch, Point position, Color color)
         {
-            if (pixel == null)
+            if (_pixel == null)
             {
                 CreateThePixel(spriteBatch);
             }
 
-            spriteBatch.Draw(pixel, new Vector2((float)position.X, (float)position.Y), color);
+            spriteBatch.Draw(_pixel, new Vector2((float)position.X, (float)position.Y), color);
         }
 
         /// <summary>
@@ -218,16 +218,16 @@ namespace SRL.Main
 
         internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Color color, float thickness = 1.0f)
         {
-            const int ArrowTopX = -12;
-            const int ArrowTopY = -6;
-            const int ArrowCenterX = 0;
-            const int ArrowCenterY = 0;
-            const int ArrowBottomX = -12;
-            const int ArrowBottomY = 6;
+            const int arrowTopX = -12;
+            const int arrowTopY = -6;
+            const int arrowCenterX = 0;
+            const int arrowCenterY = 0;
+            const int arrowBottomX = -12;
+            const int arrowBottomY = 6;
 
-            Point arrowCenter = new Point(ArrowCenterX, ArrowCenterY);
-            Point arrowTop = new Point(ArrowTopX, ArrowTopY);
-            Point arrowBottom = new Point(ArrowBottomX, ArrowBottomY);
+            Point arrowCenter = new Point(arrowCenterX, arrowCenterY);
+            Point arrowTop = new Point(arrowTopX, arrowTopY);
+            Point arrowBottom = new Point(arrowBottomX, arrowBottomY);
 
             // Mirror of arrow
             if (origin.X > tip.X)

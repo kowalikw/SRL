@@ -19,8 +19,8 @@
                          SnapsToDevicePixels="True"
                          Stretch="Fill"/>
         <StackPanel Grid.Column="1">
-            <Button Margin="3" Height="30">Resetuj pojazd</Button>
-            <Button Margin="3" Height="30">Zapisz pojazd</Button>
+            <Button Margin="3" Height="30" Command="{Binding ResetCommand}">Resetuj pojazd</Button>
+            <Button Margin="3" Height="30" Command="{Binding SaveModelCommand}">Zapisz pojazd</Button>
         </StackPanel>
     </Grid>
 </Window>

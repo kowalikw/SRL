@@ -103,7 +103,6 @@ namespace SRL.Main.ViewModel
         protected override void LoadModel(Vehicle model)
         {
             Reset();
-
             CurrentModel = model;
 
             //TODO check if loaded vehicle has orientation, set Stage accordingly
