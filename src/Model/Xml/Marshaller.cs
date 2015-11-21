@@ -36,9 +36,20 @@ namespace SRL.Model.Xml
             return output;
         }
 
-        public static T Unmarshall(XDocument obj)
+        public static T Unmarshall(XDocument doc)
         {
-            throw new NotImplementedException();
+            doc.Validate(_schemaSet, (o, e) =>
+            {
+                throw new XmlSchemaValidationException();
+            });
+
+            var serializer = new XmlSerializer(typeof(T));
+            T output;
+
+            using (XmlReader reader = doc.CreateReader())
+                output = (T)serializer.Deserialize(reader);
+
+            return output;
         }
     }
 }
