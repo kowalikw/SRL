@@ -78,11 +78,20 @@ namespace SRL.Main.ViewModel
 
         protected override bool CanAddVertex(Point newPoint)
         {
-            if (CurrentPolygon.Count <= 2)
+            int vCount = CurrentPolygon.Count;
+
+            if (vCount <= 2)
                 return true;
             
-            //TODO check if placing new vertex creates an intersection with other segments of the polygon
-
+            for (int i = 0; i < vCount - 2; i++)
+            {
+                if (GeometryHelper.DoSegmentsIntersect(
+                    CurrentPolygon[i], CurrentPolygon[i + 1],
+                    CurrentPolygon[vCount - 1], newPoint))
+                {
+                    return false;
+                }
+            }
             return true;
         }
 

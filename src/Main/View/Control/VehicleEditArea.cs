@@ -82,27 +82,23 @@ namespace SRL.Main.View.Control
 
         protected override void OnMouseUp(SrlPoint position)
         {
-            if (_context.CloseVehicleShapeCommand.CanExecute(null) 
-                && IsMousePulledByPoint(FirstShapeVertex))
+            if (_context.CloseVehicleShapeCommand.CanExecute(null) && IsMousePulledByPoint(FirstShapeVertex))
             {
                 _context.CloseVehicleShapeCommand.Execute(null);
-                return;
             }
-            if (_context.AddVertexCommand.CanExecute(position))
+            else if (_context.AddVertexCommand.CanExecute(position))
             {
                 _context.AddVertexCommand.Execute(position);
-                return;
             }
-            if (_context.SetOrientationOriginCommand.CanExecute(position))
+            else if (_context.SetOrientationOriginCommand.CanExecute(position))
             {
                 _context.SetOrientationOriginCommand.Execute(position);
-                return;
             }
-            double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
-            if (_context.SetOrientationAngleCommand.CanExecute(angle))
+            else if (_context.Stage == EditingStage.OrientationOriginSet) //Checking stage is necessary here due to angle calculation.
             {
-                _context.SetOrientationAngleCommand.Execute(angle);
-                return;
+                double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
+                if (_context.SetOrientationAngleCommand.CanExecute(angle))
+                    _context.SetOrientationAngleCommand.Execute(angle);
             }
         }
     }

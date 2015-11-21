@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using SRL.Model.Model;
+using SRL.Model;
 
 namespace SRL.Main.ViewModel
 {
@@ -109,13 +110,25 @@ namespace SRL.Main.ViewModel
             //TODO check if loaded vehicle has orientation, set Stage accordingly
         }
 
-        protected override bool CanAddVertex(Point point)
+        protected override bool CanAddVertex(Point newPoint)
         {
             if (Stage >= EditingStage.ShapeDone)
                 return false;
 
-            //TODO check if placing new vertex creates an intersection with other segments of the polygon
+            int vCount = VehicleShape.Count;
 
+            if (vCount <= 2)
+                return true;
+
+            for (int i = 0; i < vCount - 2; i++)
+            {
+                if (GeometryHelper.DoSegmentsIntersect(
+                    VehicleShape[i], VehicleShape[i + 1],
+                    VehicleShape[vCount - 1], newPoint))
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
