@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SRL.Main"
         xmlns:control="clr-namespace:SRL.Main.View.Control"
         mc:Ignorable="d"
-        Title="VehicleEditorView" Height="480" Width="640" MouseUp="Window_MouseUp">
+        Title="VehicleEditorView" Height="480" Width="640">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*" />
@@ -17,13 +17,10 @@
                          Grid.Column="0"
                          Margin="5"
                          SnapsToDevicePixels="True"
-                         Stretch="Fill" MouseUp="VehicleEditorControl_MouseUp" MouseMove="VehicleEditorControl_MouseMove" />
+                         Stretch="Fill"/>
         <StackPanel Grid.Column="1">
-            <ToggleButton x:Name="btnDraw" Margin="3" Height="30" Checked="btnDraw_Checked" Unchecked="btnDraw_Unchecked">Rysuj pojazd</ToggleButton>
-            <ToggleButton x:Name="btnSetAxis" Margin="3" Height="30" Checked="btnSetAxis_Checked" Unchecked="btnSetAxis_Unchecked">Wyznacz oś pojazdu</ToggleButton>
-            <Button x:Name="btnReset" Margin="3" Height="30" Click="bntReset_Click">Resetuj pojazd</Button>
-            <Button x:Name="btnSave" Margin="3" Height="30" Click="btnSave_Click">Zapisz pojazd</Button>
-            <Button x:Name="btnClose" Margin="3" Height="30" Click="btnExit_Click">Zamknij</Button>
+            <Button x:Name="btnReset" Margin="3" Height="30">Resetuj pojazd</Button>
+            <Button x:Name="btnSave" Margin="3" Height="30">Zapisz pojazd</Button>
         </StackPanel>
     </Grid>
 </Window>

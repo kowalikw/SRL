@@ -7,8 +7,8 @@ namespace SRL.Main.ViewModel
     internal sealed class VehicleEditorViewModel : EditorViewModel<Vehicle>
     {
         public ICommand CloseVehicleShapeCommand { get; }
-        public ICommand SetOrientationOrigin { get; }
-        public ICommand SetOrientationAngle { get; }
+        public ICommand SetOrientationOriginCommand { get; }
+        public ICommand SetOrientationAngleCommand { get; }
 
 
         public override Vehicle CurrentModel { get; protected set; }
@@ -30,11 +30,13 @@ namespace SRL.Main.ViewModel
 
             }
         }
+        public bool IsShapeDone { get; private set; }
+        public bool IsOrientationOriginSet { get; }
+        public bool IsOrientationAngleSet { get; private set; }
         protected override string SaveFileExtension => "vvd";
         
 
         private bool _isCurrentModelValid;
-        private bool _shapeDone;
 
 
         public VehicleEditorViewModel()
@@ -43,11 +45,11 @@ namespace SRL.Main.ViewModel
 
             CloseVehicleShapeCommand = new RelayCommand(o =>
             {
-                _shapeDone = true;
+                IsShapeDone = true;
             },
-            c => !_shapeDone && VehicleShape.Count >= 3);
+            c => !IsShapeDone && VehicleShape.Count >= 3);
 
-            SetOrientationOrigin = new RelayCommand(o =>
+            SetOrientationOriginCommand = new RelayCommand(o =>
             {
                 Point position = (Point) o;
                 CurrentModel.Origin = position;
@@ -59,7 +61,7 @@ namespace SRL.Main.ViewModel
                 return true;
             });
 
-            SetOrientationAngle = new RelayCommand(o =>
+            SetOrientationAngleCommand = new RelayCommand(o =>
             {
                 double angle = (double) o;
                 CurrentModel.DirectionAngle = angle;
@@ -72,7 +74,7 @@ namespace SRL.Main.ViewModel
         {
             CurrentModel = new Vehicle();
             VehicleShape = new List<Point>();
-            _shapeDone = false;
+            IsShapeDone = false;
 
             IsCurrentModelValid = false;
         }
@@ -82,14 +84,14 @@ namespace SRL.Main.ViewModel
             Reset();
 
             CurrentModel = model;
-            _shapeDone = true;
+            IsShapeDone = true;
 
             //TODO check if loaded vehicle has orientation, set IsCurrentModelValid accordingly
         }
 
         protected override bool CanAddVertex(Point point)
         {
-            if (_shapeDone)
+            if (IsShapeDone)
                 return false;
 
             //TODO check if placing new vertex creates an intersection with other segments of the polygon

@@ -1,14 +1,30 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SRL.Main.ViewModel;
+using SRL.Model;
 using SRL.Model.Enum;
 using SRL.Model.Model;
 using SRL.MonoGameControl;
 using Point = SRL.Model.Model.Point;
+using SrlPoint = SRL.Model.Model.Point;
+using WinPoint = System.Windows.Point;
+using XnaPoint = Microsoft.Xna.Framework.Point;
 
 namespace SRL.Main.View.Control
 {
     public class VehicleEditArea : EditArea
     {
+        private VehicleEditorViewModel _context;
+
+
+        private SrlPoint LastPolygonVertex => _context.VehicleShape[_context.VehicleShape.Count - 1];
+        private SrlPoint FirstPolygonVertex => _context.VehicleShape[0];
+
+
+
+
+
         private const int AxisThickness = 2;
         private const int ArrowTopX = -12;
         private const int ArrowTopY = -6;
@@ -22,87 +38,73 @@ namespace SRL.Main.View.Control
         public VehicleEditorMode Mode { get; set; }
         public Point OriginStart { get; set; }
         public Point OriginEnd { get; set; }
-        public Point CursorPosition { get; set; }
         public bool IsAngleSet { get; set; }
         public DrawPolygonState ActualPolygonState { get; private set; }
 
         protected override void Initialize()
         {
             base.Initialize();
-            
-            Mode = VehicleEditorMode.Empty;
-            Vehicle = new Vehicle();
-            CursorPosition = new Point(0, 0);
-            ActualPolygonState = DrawPolygonState.Empty;
+            _context = (VehicleEditorViewModel) DataContext;
         }
 
         protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
-            //DrawVehicle(spriteBatch);
 
-            //switch (Mode)
-            //{
-            //    case VehicleEditorMode.Empty:
-            //        Vehicle.Shape = new Polygon();
-            //        ActualPolygonState = DrawPolygonState.Empty;
-            //        break;
-            //    case VehicleEditorMode.DrawPolygon:
-            //        //if (DrawPolygon(SpriteBatch, Vehicle.Shape, CursorPosition, true) == DrawPolygonState.Incorrect)
-            //        //    IsSegmentIntersection = true;
-            //        ActualPolygonState = CheckPolygon(Vehicle.Shape, CursorPosition, true);
+            //Draw shape of the vehicle.
+            Color shapeColor = _context.IsShapeDone ? RegularColor : ActiveColor;
+            spriteBatch.DrawPath(_context.VehicleShape, _context.IsShapeDone, shapeColor, LineThickness);
 
-            //        break;
-            //    case VehicleEditorMode.DrawDone:
-            //        ActualPolygonState = CheckPolygon(Vehicle.Shape, CursorPosition, false);
-            //        if (!Vehicle.Shape.IsCorrect())
-            //            Vehicle.Shape.Vertices.Clear();
-            //        break;
-            //    case VehicleEditorMode.SetAxis:
-            //        ActualPolygonState = CheckPolygon(Vehicle.Shape);
-            //        //DrawVehicle();
+            
+            if (!_context.IsShapeDone)
+            {
+                //Draw new potential shape polygon side.
+                Color segmentColor = _context.AddVertexCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
 
-            //        if (OriginStart != null)
-            //            DrawAxis(spriteBatch, OriginStart, CursorPosition, CalculateAxisAngle(OriginStart, CursorPosition), true);
+                //TODO
+            }
+            else if (!_context.IsOrientationOriginSet)
+            {
+                //Draw new potential orientation origin.
+                Color originColor = _context.SetOrientationOriginCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
 
-            //        if (OriginEnd != null)
-            //        {
-            //            if (!IsAngleSet)
-            //            {
-            //                Vehicle.DirectionAngle = CalculateAxisAngle(OriginStart, OriginEnd);
-            //                Mode = VehicleEditorMode.Idle;
-            //                IsAngleSet = true;
-            //            }
-            //        }
+                //TODO
+            }
+            else if (!_context.IsOrientationAngleSet)
+            {
+                //Draw new potential orientation axis.
+                Color axisColor = _context.SetOrientationAngleCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
 
-            //        break;
-            //    case VehicleEditorMode.Idle:
-            //        ActualPolygonState = CheckPolygon(Vehicle.Shape);
-            //        //DrawVehicle();
-            //        DrawAxis(spriteBatch, OriginStart, OriginEnd, Vehicle.DirectionAngle, false);
-            //        break;
-            //}
+                //TODO
+            }
         }
 
 
         protected override void OnMouseUp(Point position)
         {
-            throw new NotImplementedException();
-        }
+            if (!_context.IsShapeDone)
+            {
+                if (GeometryHelper.GetDistance(position, FirstPolygonVertex) < VertexPullRadius)
+                {
+                    if (_context.CloseVehicleShapeCommand.CanExecute(null))
+                    {
+                        _context.CloseVehicleShapeCommand.Execute(null);
+                        return;
+                    }
+                }
 
-        public void Reset()
-        {
-            Vehicle.Shape.Vertices.Clear();
-            Vehicle.Origin = null;
-            OriginStart = null;
-            OriginEnd = null;
-            IsAngleSet = false;
-            Mode = VehicleEditorMode.Empty;
-        }
-
-        private void DrawVehicle(SpriteBatch spriteBatch)
-        {
-            //SpriteBatch.DrawPolygon(Vehicle.Shape)
-            //spriteBatch.DrawPolygon(Vehicle.Shape, ActualPolygonState, CursorPosition);
+                if (_context.AddVertexCommand.CanExecute(position))
+                    _context.AddVertexCommand.Execute(position);
+            }
+            else if (!_context.IsOrientationOriginSet)
+            {
+                if (_context.SetOrientationOriginCommand.CanExecute(position))
+                    _context.SetOrientationOriginCommand.Execute(position);
+            }
+            else if (!_context.IsOrientationAngleSet)
+            {
+                if (_context.SetOrientationAngleCommand.CanExecute(position))
+                    _context.SetOrientationAngleCommand.Execute(position);
+            }
         }
 
         private void DrawAxis(SpriteBatch spriteBatch, Point axisStart, Point axisEnd, double axisAngle, bool activeDraw)

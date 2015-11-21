@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Main.ViewModel;
@@ -14,31 +13,17 @@ namespace SRL.Main.View.Control
 {
     public class MapEditArea : EditArea
     {
-        
-
         private MapEditorViewModel _context;
-
-        public Polygon CurrentPolygon { get; private set; }
-        public Map Map { get; private set; }
-        public MapEditorMode Mode { get; set; }
-        public DrawPolygonState CurrentPolygonState { get; set; }
 
 
         private SrlPoint LastPolygonVertex => _context.CurrentPolygon[_context.CurrentPolygon.Count - 1];
         private SrlPoint FirstPolygonVertex => _context.CurrentPolygon[0];
 
+
         protected override void Initialize()
         {
             base.Initialize();
             _context = (MapEditorViewModel)DataContext;
-
-
-
-
-            CurrentPolygon = new Polygon();
-            Map = new Map(512, 512);
-            Mode = MapEditorMode.Idle;
-            CurrentPolygonState = DrawPolygonState.Empty;
         }
 
         protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
@@ -49,39 +34,15 @@ namespace SRL.Main.View.Control
                 spriteBatch.DrawPolygon(polygon, RegularColor, LineThickness);
             }
 
-            spriteBatch.DrawPath(_context.CurrentPolygon, false, RegularColor, LineThickness);
+            //Draw currently constructed obstacle.
+            spriteBatch.DrawPath(_context.CurrentPolygon, false, ActiveColor, LineThickness);
 
+            //Draw new potential obstacle polygon side.
             if (!_context.IsCurrentModelValid)
             {
-                Color color = _context.AddVertexCommand.CanExecute(MousePosition) ? ActiveColor : InvalidColor;
-                spriteBatch.DrawLine(LastPolygonVertex, MousePosition, color, LineThickness);
+                Color segmentColor = _context.AddVertexCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
+                spriteBatch.DrawLine(LastPolygonVertex, MousePosition, segmentColor, LineThickness);
             }
-
-            
-            /*
-            DrawMap(spriteBatch);
-
-            switch (Mode)
-            {
-                case MapEditorMode.DrawPolygon:
-                    CurrentPolygonState = CheckPolygon(CurrentPolygon, CursorPosition, true);
-                    break;
-                case MapEditorMode.DrawDone:
-                    CurrentPolygonState = CheckPolygon(CurrentPolygon, CursorPosition, false);
-
-                    if (CurrentPolygon.IsFinished())
-                        CurrentPolygon.Vertices.RemoveAt(CurrentPolygon.VertexCount - 1);
-
-                    if (CurrentPolygon.IsCorrect())
-                        Map.Obstacles.Add(CurrentPolygon);
-
-                    Mode = MapEditorMode.Idle;
-                    CurrentPolygon = new Polygon();
-                    break;
-                case MapEditorMode.Idle:
-                    break;
-            }
-            */
         }
 
         protected override void OnMouseUp(SrlPoint position)
@@ -96,6 +57,7 @@ namespace SRL.Main.View.Control
                         return;
                     }
                 }
+
             }
 
             if (_context.AddVertexCommand.CanExecute(position))

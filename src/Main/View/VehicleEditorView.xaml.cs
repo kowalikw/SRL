@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Win32;
+using SRL.Main.ViewModel;
 using SRL.Model;
 using SRL.Model.Enum;
 using SRL.Model.Model;
@@ -20,6 +21,10 @@ namespace SRL.Main.View
         public VehicleEditorView()
         {
             InitializeComponent();
+            DataContext = new VehicleEditorViewModel();
+
+
+
 
             btnSetAxis.IsEnabled = false;
             btnSave.IsEnabled = false;
