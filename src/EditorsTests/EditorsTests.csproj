@@ -65,7 +65,7 @@
       <Project>{664beb89-24fa-47bd-976a-62f246b61b93}</Project>
       <Name>Main</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models\Model.csproj">
+    <ProjectReference Include="..\Model\Model.csproj">
       <Project>{4de2f8d4-1aba-432d-b2bf-c0ff7340d8bd}</Project>
       <Name>Model</Name>
     </ProjectReference>

@@ -5,7 +5,6 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Model.Model;
-using System.Collections.Generic;
 
 namespace SRL.ModelsTests
 {

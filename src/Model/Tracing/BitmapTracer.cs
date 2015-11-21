@@ -5,7 +5,7 @@ using CsPotrace;
 using SRL.Model.Model;
 using Point = SRL.Model.Model.Point;
 
-namespace SRL.Model
+namespace SRL.Model.Tracing
 {
     public class BitmapTracer
     {

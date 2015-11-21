@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SRL.Model;
-using SRL.Model.Model;
 using System.Collections.Generic;
+using SRL.Model.Model;
 
 namespace SRL.ModelsTests
 {

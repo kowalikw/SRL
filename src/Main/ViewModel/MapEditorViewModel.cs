@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
 using SRL.Model;
 using SRL.Model.Model;

@@ -45,13 +45,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitmapTracer.cs" />
-    <Compile Include="Enum\DrawLineState.cs" />
-    <Compile Include="Enum\DrawPolygonState.cs" />
-    <Compile Include="Enum\MapEditorMode.cs" />
-    <Compile Include="Enum\VehicleEditorMode.cs" />
     <Compile Include="GeometryHelper.cs" />
-    <Compile Include="Marshalling\Marshaller.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Point.cs" />
     <Compile Include="Model\Polygon.cs" />
@@ -62,9 +56,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Tracing\BitmapTracer.cs" />
+    <Compile Include="Xml\Marshaller.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="XmlSchema.xsd">
+    <None Include="Xml\XmlSchema.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

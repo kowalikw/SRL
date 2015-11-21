@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Model.Marshalling
+namespace SRL.Model.Xml
 {
     public static class Marshaller<T> where T : IXmlSerializable
     {
