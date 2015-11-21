@@ -66,6 +66,7 @@ namespace SRL.Main.ViewModel
 
             CloseVehicleShapeCommand = new RelayCommand(o =>
             {
+                CurrentModel.Shape = new Polygon(VehicleShape);
                 Stage = EditingStage.ShapeDone;
             },
             c => Stage == EditingStage.ShapeStarted && VehicleShape.Count >= 3);

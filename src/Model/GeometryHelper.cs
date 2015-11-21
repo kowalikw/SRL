@@ -3,7 +3,6 @@ using SRL.Model.Model;
 
 namespace SRL.Model
 {
-
     public static class GeometryHelper
     {
         public static double GetDistance(Point p1, Point p2)

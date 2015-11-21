@@ -143,5 +143,19 @@ namespace SRL.ModelsTests
 
             AssertMapEquality(expected, output);
         }
+
+        [TestMethod]
+        public void MarshallAndUnmarshallDoesntChangeVehicle()
+        {
+            Vehicle expected = new Vehicle(
+                new Polygon(new Point(0, 0), new Point(2, 0), new Point(0, 2)),
+                new Point(0.45, 0.5),
+                45.5);
+
+            XDocument marshalled = Marshaller<Vehicle>.Marshall(expected);
+            Vehicle output = Marshaller<Vehicle>.Unmarshall(marshalled);
+
+            AssertVehicleEquality(expected, output);
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Win32;
 using SRL.Main.Annotations;
+using SRL.Model.Xml;
 using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.ViewModel
@@ -41,11 +42,7 @@ namespace SRL.Main.ViewModel
 
                 if (dialog.ShowDialog() == true)
                 {
-                    var serializer = new XmlSerializer(typeof(T));
-                    var output = new XDocument();
-
-                    using (XmlWriter writer = output.CreateWriter())
-                        serializer.Serialize(writer, CurrentModel);
+                    var output = Marshaller<T>.Marshall(CurrentModel);
 
                     File.WriteAllText(dialog.FileName, output.ToString());
                 }

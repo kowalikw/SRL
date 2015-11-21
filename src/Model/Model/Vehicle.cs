@@ -9,7 +9,18 @@ namespace SRL.Model.Model
     {
         public Polygon Shape { get; set; }
         public Point OrientationOrigin { get; set; }
-        public double OrientationAngle { get; set; }
+
+        public double OrientationAngle
+        {
+            get { return _orientationAngle;}
+            set
+            {
+                value = value%360;
+                _orientationAngle = value < 0 ? 360 + value : value;
+            }
+        }
+
+        private double _orientationAngle;
 
         /// <remarks>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.
@@ -29,7 +40,7 @@ namespace SRL.Model.Model
         {
             Shape = shape;
             OrientationOrigin = orientationOrigin;
-            OrientationAngle = angle % 360;
+            OrientationAngle = angle;
 
             //TODO check if OrientationOrigin lies inside the shape polygon. Throw argument exception otherwise.
         }
