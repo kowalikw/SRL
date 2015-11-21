@@ -111,7 +111,7 @@ namespace SRL.Model.Model
                 return false;
 
             for (int i = 1; i < VertexCount - 2; i++)
-                if (GeometryHelper.SegmentsIntersect(Vertices[i], Vertices[i + 1], Vertices[VertexCount - 1], Vertices[0]))
+                if (GeometryHelper.DoSegmentsIntersect(Vertices[i], Vertices[i + 1], Vertices[VertexCount - 1], Vertices[0]))
                     return false;
 
             return true;

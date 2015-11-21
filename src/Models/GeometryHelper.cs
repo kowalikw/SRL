@@ -11,7 +11,7 @@ namespace SRL.Model
             return Math.Sqrt(Math.Pow((p1.X - p2.X), 2) + Math.Pow((p1.Y - p2.Y), 2));
         }
 
-        public static bool SegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
+        public static bool DoSegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
         {
             double d1 = CrossProduct((q2 - q1), (p1 - q1));
             double d2 = CrossProduct((q2 - q1), (p2 - q1));
@@ -26,18 +26,18 @@ namespace SRL.Model
             if (d12 < 0 || d34 < 0)
                 return true;
 
-            return LiesInsideRect(p1, q1, q2)
-                || LiesInsideRect(p2, q1, q2)
-                || LiesInsideRect(q1, p1, p2)
-                || LiesInsideRect(q2, p1, p2);
+            return IsInsideRect(p1, q1, q2)
+                || IsInsideRect(p2, q1, q2)
+                || IsInsideRect(q1, p1, p2)
+                || IsInsideRect(q2, p1, p2);
         }
 
-        private static bool LiesInsideRect(Point point, Point p1, Point p2)
+        private static bool IsInsideRect(Point point, Point corner1, Point corner2)
         {
-            return Math.Min(p1.X, p2.X) <= point.X
-                && point.X <= Math.Max(p1.X, p2.X)
-                && Math.Min(p1.Y, p2.Y) <= point.Y
-                && point.Y <= Math.Max(p1.Y, p2.Y);
+            return Math.Min(corner1.X, corner2.X) <= point.X
+                && point.X <= Math.Max(corner1.X, corner2.X)
+                && Math.Min(corner1.Y, corner2.Y) <= point.Y
+                && point.Y <= Math.Max(corner1.Y, corner2.Y);
         }
 
         public static double CrossProduct(Point p1, Point p2)
