@@ -49,7 +49,7 @@ namespace SRL.Main.View.Control
         {
             if (!_context.IsCurrentModelValid)
             {
-                if (GeometryHelper.GetDistance(position, FirstPolygonVertex) < VertexPullRadius)
+                if (IsMousePulledByPoint(FirstPolygonVertex))
                 {
                     if (_context.CloseCurrentPolygonCommand.CanExecute(null))
                     {

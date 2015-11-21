@@ -6,11 +6,32 @@ namespace SRL.Main.ViewModel
 {
     internal sealed class VehicleEditorViewModel : EditorViewModel<Vehicle>
     {
+        public enum EditingStage
+        {
+            NotStarted = 0,
+            ShapeStarted,
+            ShapeDone,
+            OrientationOriginSet,
+            OrientationAngleSet,
+        }
+
         public ICommand CloseVehicleShapeCommand { get; }
         public ICommand SetOrientationOriginCommand { get; }
         public ICommand SetOrientationAngleCommand { get; }
 
 
+        public EditingStage Stage
+        {
+            get
+            {
+                return _stage;
+            }
+            private set
+            {
+                _stage = value;
+                IsCurrentModelValid = _stage == EditingStage.OrientationAngleSet;
+            }
+        }
         public override Vehicle CurrentModel { get; protected set; }
         public List<Point> VehicleShape { get; private set; }
         public override bool IsCurrentModelValid
@@ -30,13 +51,11 @@ namespace SRL.Main.ViewModel
 
             }
         }
-        public bool IsShapeDone { get; private set; }
-        public bool IsOrientationOriginSet { get; }
-        public bool IsOrientationAngleSet { get; private set; }
         protected override string SaveFileExtension => "vvd";
         
 
         private bool _isCurrentModelValid;
+        private EditingStage _stage;
 
 
         public VehicleEditorViewModel()
@@ -45,17 +64,21 @@ namespace SRL.Main.ViewModel
 
             CloseVehicleShapeCommand = new RelayCommand(o =>
             {
-                IsShapeDone = true;
+                Stage = EditingStage.ShapeDone;
             },
-            c => !IsShapeDone && VehicleShape.Count >= 3);
+            c => Stage == EditingStage.ShapeStarted && VehicleShape.Count >= 3);
 
             SetOrientationOriginCommand = new RelayCommand(o =>
             {
                 Point position = (Point) o;
                 CurrentModel.Origin = position;
+                Stage = EditingStage.OrientationOriginSet;
             },
             c =>
             {
+                if (Stage != EditingStage.ShapeDone)
+                    return false;
+
                 Point position = (Point) c;
                 //TODO check whether origin position is inside the shape polygon's bounds.
                 return true;
@@ -65,18 +88,16 @@ namespace SRL.Main.ViewModel
             {
                 double angle = (double) o;
                 CurrentModel.DirectionAngle = angle;
-                IsCurrentModelValid = true;
+                Stage = EditingStage.OrientationAngleSet;
             },
-            c => true);
+            c => Stage == EditingStage.OrientationOriginSet);
         }
 
         protected override void Reset()
         {
             CurrentModel = new Vehicle();
             VehicleShape = new List<Point>();
-            IsShapeDone = false;
-
-            IsCurrentModelValid = false;
+            Stage = EditingStage.NotStarted;
         }
 
         protected override void LoadModel(Vehicle model)
@@ -84,14 +105,13 @@ namespace SRL.Main.ViewModel
             Reset();
 
             CurrentModel = model;
-            IsShapeDone = true;
 
-            //TODO check if loaded vehicle has orientation, set IsCurrentModelValid accordingly
+            //TODO check if loaded vehicle has orientation, set Stage accordingly
         }
 
         protected override bool CanAddVertex(Point point)
         {
-            if (IsShapeDone)
+            if (Stage >= EditingStage.ShapeDone)
                 return false;
 
             //TODO check if placing new vertex creates an intersection with other segments of the polygon
@@ -102,6 +122,7 @@ namespace SRL.Main.ViewModel
         protected override void AddVertex(Point newPoint)
         {
             VehicleShape.Add(newPoint);
+            Stage = EditingStage.ShapeStarted;
         }
     }
 }

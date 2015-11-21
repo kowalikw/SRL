@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SRL.Model;
 using SrlPoint = SRL.Model.Model.Point;
 using WinPoint = System.Windows.Point;
 using XnaPoint = Microsoft.Xna.Framework.Point;
@@ -13,12 +14,8 @@ namespace SRL.Main.View.Control
     {
         protected const double VertexPullRadius = 8;
 
-        //protected const int StartCircleRadius = 8;
-        //protected const int StartCircleThickness = 3;
-        //protected const int PointRadius = 3;
-        //protected const int PointThickness = 3;
+        protected const int VertexThickness = 2;
         protected const int LineThickness = 2;
-        protected const int CircleSegmentCount = 100;
 
         protected static readonly Color RegularColor = Color.Black;
         protected static readonly Color ActiveColor = Color.Blue;
@@ -31,16 +28,17 @@ namespace SRL.Main.View.Control
 
         protected SpriteBatch SpriteBatch;
 
+
         protected override void Initialize()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            MouseUp += (object o, MouseButtonEventArgs e) =>
+            MouseUp += (o, e) =>
             {
                 WinPoint position = e.GetPosition((UIElement) o);
                 OnMouseUp((SrlPoint)position);
             };
-            MouseMove += (object o, MouseEventArgs e) =>
+            MouseMove += (o, e) =>
             {
                 WinPoint position = e.GetPosition((UIElement)o);
                 MousePosition = ((SrlPoint)position);
@@ -66,7 +64,10 @@ namespace SRL.Main.View.Control
         
         protected abstract void OnMouseUp(SrlPoint position);
 
-
+        protected bool IsMousePulledByPoint(SrlPoint point)
+        {
+            return GeometryHelper.GetDistance(MousePosition, point) <= VertexPullRadius;
+        }
 
 
 

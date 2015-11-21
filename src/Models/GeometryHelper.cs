@@ -34,15 +34,25 @@ namespace SRL.Model
 
         private static bool LiesInsideRect(Point point, Point p1, Point p2)
         {
-            return Math.Min(p1.X, p2.X) <= point.X 
-                && point.X <= Math.Max(p1.X, p2.X) 
-                && Math.Min(p1.Y, p2.Y) <= point.Y 
+            return Math.Min(p1.X, p2.X) <= point.X
+                && point.X <= Math.Max(p1.X, p2.X)
+                && Math.Min(p1.Y, p2.Y) <= point.Y
                 && point.Y <= Math.Max(p1.Y, p2.Y);
         }
 
         public static double CrossProduct(Point p1, Point p2)
         {
             return p1.X * p2.Y - p2.X * p1.Y;
+        }
+
+        public static double GetDegAngle(Point start, Point end)
+        {
+            return GetRadAngle(start, end) * 180 / Math.PI;
+        }
+
+        public static double GetRadAngle(Point start, Point end)
+        {
+            return Math.Atan((end.Y - start.Y) / (end.X - start.X));
         }
     }
 }

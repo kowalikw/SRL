@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SRL.Model;
 using SRL.Model.Enum;
 using SRL.Model.Model;
 using Point = SRL.Model.Model.Point;
@@ -10,13 +11,6 @@ namespace SRL.Main
 {
     public static class DrawHelper
     {
-        public const int StartCircleRadius = 8;
-        public const int StartCircleThickness = 3;
-        public const int PointRadius = 3;
-        public const int PointThickness = 3;
-        public const int LineThickness = 2;
-        public const int CircleSegments = 100;
-
         /*
         private static readonly Color normalDrawColor = Color.Black;
         private static readonly Color activeDrawColor = Color.Blue;
@@ -211,10 +205,10 @@ namespace SRL.Main
         internal static void DrawPath(this SpriteBatch spriteBatch, List<Point> vertices, bool closed, Color color, float thickness = 1.0f)
         {
             for (int i = 0; i < vertices.Count - 1; i++)
-                spriteBatch.DrawLine(vertices[i], vertices[i+1], color, thickness);
+                spriteBatch.DrawLine(vertices[i], vertices[i + 1], color, thickness);
 
             if (closed)
-                spriteBatch.DrawLine(vertices[vertices.Count-1], vertices[0], color, thickness);
+                spriteBatch.DrawLine(vertices[vertices.Count - 1], vertices[0], color, thickness);
         }
 
         internal static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Color color, float thickness = 1.0f)
@@ -222,45 +216,53 @@ namespace SRL.Main
             DrawPath(spriteBatch, polygon.Vertices, true, color, thickness);
         }
 
-        /*
-        
-
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, DrawPolygonState state, Point cursorPosition = null)
+        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Color color, float thickness = 1.0f)
         {
-            if (state == DrawPolygonState.Done)
-            {
-                for (int i = 0; i < polygon.VertexCount; i++)
-                    spriteBatch.DrawLine(polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.VertexCount], normalDrawColor, LineThickness);
-            }
-            else if (state == DrawPolygonState.Empty) return;
-            else
-            {
-                for (int i = 0; i < polygon.VertexCount; i++)
-                {
-                    if (i == 0)
-                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegmentCount, activeDrawColor, StartCircleThickness);
-                    else
-                        spriteBatch.DrawLine(polygon.Vertices[i - 1], polygon.Vertices[i], activeDrawColor, LineThickness);
+            const int ArrowTopX = -12;
+            const int ArrowTopY = -6;
+            const int ArrowCenterX = 0;
+            const int ArrowCenterY = 0;
+            const int ArrowBottomX = -12;
+            const int ArrowBottomY = 6;
 
-                    spriteBatch.DrawCircle(polygon.Vertices[0], PointRadius, CircleSegmentCount, activeDrawColor, PointThickness);
-                }
+            Point arrowCenter = new Point(ArrowCenterX, ArrowCenterY);
+            Point arrowTop = new Point(ArrowTopX, ArrowTopY);
+            Point arrowBottom = new Point(ArrowBottomX, ArrowBottomY);
 
-                if (state == DrawPolygonState.Correct)
-                {
-                    if (polygon.IsFinished(cursorPosition))
-                    {
-                        spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], polygon.Vertices[0], correctActiveDrawColor, LineThickness);
-                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegmentCount, activeStartCircleColor, StartCircleThickness);
-                    }
-                    else
-                        spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, correctActiveDrawColor, LineThickness);
-                }
-                else if (state == DrawPolygonState.Incorrect)
-                {
-                    spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, incorrectActiveDrawColor, LineThickness);
-                }
+            // Mirror of arrow
+            if (origin.X > tip.X)
+            {
+                arrowCenter = new Point(arrowCenter.X, arrowCenter.Y);
+                arrowTop = new Point(-arrowTop.X, arrowTop.Y);
+                arrowBottom = new Point(-arrowBottom.X, arrowBottom.Y);
             }
+
+            // Rotate and translate of arrow
+            double axisAngle = GeometryHelper.GetRadAngle(origin, tip);
+            arrowCenter = new Point(tip.X, tip.Y);
+            arrowTop = new Point(((arrowTop.X * Math.Cos(axisAngle) - arrowTop.Y * Math.Sin(axisAngle)) + tip.X),
+                ((arrowTop.X * Math.Sin(axisAngle) + arrowTop.Y * Math.Cos(axisAngle)) + tip.Y));
+            arrowBottom = new Point(((arrowBottom.X * Math.Cos(axisAngle) - arrowBottom.Y * Math.Sin(axisAngle)) + tip.X),
+                ((arrowBottom.X * Math.Sin(axisAngle) + arrowBottom.Y * Math.Cos(axisAngle)) + tip.Y));
+
+            // Draw
+            spriteBatch.DrawLine(arrowTop, arrowCenter, color, thickness);
+            spriteBatch.DrawLine(arrowBottom, arrowCenter, color, thickness);
+            spriteBatch.DrawLine(origin, tip, color, thickness);
         }
-        */
+
+        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, float length, float angle, Color color,
+            float thickness = 1.0f)
+        {
+            //TODO   
+        }
+
+        internal static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Color color, float thickness = 1.0f)
+        {
+            const int circleRadius = 5;
+            const int circleSides = 10;
+
+            spriteBatch.DrawCircle(vertex, circleRadius, circleSides, color, thickness);
+        }
     }
 }
