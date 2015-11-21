@@ -24,7 +24,7 @@ namespace SRL.Main.ViewModel
         /// </summary>
         public List<Point> CurrentPolygon { get; private set; }
         /// <summary>
-        /// Checks if all polygons (those already placed and the one being drawn) make up a valid map. Virtually, it says whether a polygon is being constructed by the user.
+        /// Checks if all polygons (those already placed and the one being drawn) make up a valid map. Virtually, it says whether a new polygon is being constructed by the user.
         /// </summary>
         public override bool IsCurrentModelValid // Model is both map AND currently drawn polygon.
         {
@@ -72,19 +72,21 @@ namespace SRL.Main.ViewModel
         
         protected override void LoadModel(Map model)
         {
+            Reset();
             CurrentModel = model;
-            CurrentPolygon = new List<Point>();
-
-            IsCurrentModelValid = true;
         }
 
-        protected override bool CanPlacePoint(Point newPoint)
+        protected override bool CanAddVertex(Point newPoint)
         {
-            //TODO check if placing new point doesn't create an intersection with other segments of the polygon
+            if (CurrentPolygon.Count <= 2)
+                return true;
+            
+            //TODO check if placing new vertex creates an intersection with other segments of the polygon
+
             return true;
         }
 
-        protected override void PlacePoint(Point newPoint)
+        protected override void AddVertex(Point newPoint)
         {
             CurrentPolygon.Add(newPoint);
             IsCurrentModelValid = false;

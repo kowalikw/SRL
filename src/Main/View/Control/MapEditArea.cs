@@ -53,7 +53,7 @@ namespace SRL.Main.View.Control
 
             if (!_context.IsCurrentModelValid)
             {
-                Color color = _context.PlacePointCommand.CanExecute(MousePosition) ? ActiveColor : InvalidColor;
+                Color color = _context.AddVertexCommand.CanExecute(MousePosition) ? ActiveColor : InvalidColor;
                 spriteBatch.DrawLine(LastPolygonVertex, MousePosition, color, LineThickness);
             }
 
@@ -98,8 +98,8 @@ namespace SRL.Main.View.Control
                 }
             }
 
-            if (_context.PlacePointCommand.CanExecute(position))
-                _context.PlacePointCommand.Execute(position);
+            if (_context.AddVertexCommand.CanExecute(position))
+                _context.AddVertexCommand.Execute(position);
         }
 
     }

@@ -1,14 +1,5 @@
-﻿using System.IO;
-using System.Windows;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Microsoft.Win32;
+﻿using System.Windows;
 using SRL.Main.ViewModel;
-using SRL.Model;
-using SRL.Model.Enum;
-using SRL.Model.Model;
-using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.View
 {
@@ -22,7 +13,5 @@ namespace SRL.Main.View
             InitializeComponent();
             DataContext = new MapEditorViewModel();
         }
-
-
     }
 }

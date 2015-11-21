@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
@@ -21,7 +20,7 @@ namespace SRL.Main.ViewModel
         public ICommand ResetCommand { get; }
         public ICommand SaveModelCommand { get; }
         public ICommand LoadModelCommand { get; }
-        public ICommand PlacePointCommand { get; }
+        public ICommand AddVertexCommand { get; }
 
         public abstract T CurrentModel { get; protected set; }
         public abstract bool IsCurrentModelValid { get; protected set; } // Don't forget to call OnPropertyChanged!
@@ -33,6 +32,8 @@ namespace SRL.Main.ViewModel
 
             SaveModelCommand = new RelayCommand(o =>
             {
+                //TODO serialize encoding (UTF-8)
+
                 var dialog = new SaveFileDialog();
                 dialog.Filter = String.Format("{0} files (*.{1})|*.{1}",
                     SaveFileExtension.ToUpper(),
@@ -66,22 +67,22 @@ namespace SRL.Main.ViewModel
                 }
             });
 
-            PlacePointCommand = new RelayCommand(o =>
+            AddVertexCommand = new RelayCommand(o =>
             {
                 var point = (Point) o;
-                PlacePoint(point);
+                AddVertex(point);
             },
             c =>
             {
                 var point = (Point)c;
-                return CanPlacePoint(point);
+                return CanAddVertex(point);
             });
         }
 
         protected abstract void Reset();
         protected abstract void LoadModel(T model);
-        protected abstract bool CanPlacePoint(Point point);
-        protected abstract void PlacePoint(Point point);
+        protected abstract bool CanAddVertex(Point point);
+        protected abstract void AddVertex(Point point);
 
 
         [NotifyPropertyChangedInvocator]
