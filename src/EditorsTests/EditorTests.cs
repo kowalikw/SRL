@@ -13,37 +13,43 @@ namespace EditorsTests
         [TestMethod]
         public void CheckLineCorrect()
         {
-            MapEditArea editArea = new MapEditArea();
-            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
+            Assert.Fail();
 
-            var expected = DrawLineState.Correct;
-            var actual = editArea.CheckLine(polygon, new Point(0, 30));
+            //MapEditArea editArea = new MapEditArea();
+            //Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
 
-            Assert.AreEqual(expected, actual);
+            //var expected = DrawLineState.Correct;
+            //var actual = editArea.CheckLine(polygon, new Point(0, 30));
+
+            //Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void CheckLineIncorrect()
         {
-            MapEditArea editArea = new MapEditArea();
-            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
+            Assert.Fail();
 
-            var expected = DrawLineState.Incorrect;
-            var actual = editArea.CheckLine(polygon, new Point(50, 0));
+            //MapEditArea editArea = new MapEditArea();
+            //Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(50, 100));
 
-            Assert.AreEqual(expected, actual);
+            //var expected = DrawLineState.Incorrect;
+            //var actual = editArea.CheckLine(polygon, new Point(50, 0));
+
+            //Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void CheckLineDone()
         {
-            MapEditArea editArea = new MapEditArea();
-            Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(80, 100));
+            Assert.Fail();
 
-            var expected = DrawLineState.Done;
-            var actual = editArea.CheckLine(polygon, new Point(0, 0));
+            //MapEditArea editArea = new MapEditArea();
+            //Polygon polygon = new Polygon(new Point(0, 0), new Point(100, 100), new Point(80, 100));
 
-            Assert.AreEqual(expected, actual);
+            //var expected = DrawLineState.Done;
+            //var actual = editArea.CheckLine(polygon, new Point(0, 0));
+
+            //Assert.AreEqual(expected, actual);
         }
 
         /*[TestMethod]

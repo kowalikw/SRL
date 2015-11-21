@@ -67,7 +67,6 @@
     <Compile Include="MonoGameControl.cs" />
     <Compile Include="D3D11.cs" />
     <Compile Include="D3D9.cs" />
-    <Compile Include="DrawHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

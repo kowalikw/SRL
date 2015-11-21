@@ -1,38 +1,92 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Input;
+using SRL.Model;
 using SRL.Model.Model;
+using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.ViewModel
 {
-    internal class MapEditorViewModel : EditorViewModel<Map>
+    internal sealed class MapEditorViewModel : EditorViewModel<Map>
     {
+        private readonly double _mapWidth = 512; //TODO perhaps let user set it? also, I don't like to have something dependant on WPF control size
+        private readonly double _mapHeight = 512; //TODO [same as above]
+
+
+        public ICommand CloseCurrentPolygonCommand { get; }
+
+        /// <summary>
+        /// Currently drawn (valid) map. Doesn't include the polygon that is being constructed (if such exists).
+        /// </summary>
+        public override Map CurrentModel { get; protected set; }
+        /// <summary>
+        /// Currently constructed polygon. Empty list if no polygon is being placed.
+        /// </summary>
+        public List<Point> CurrentPolygon { get; private set; }
+        /// <summary>
+        /// Checks if all polygons (those already placed and the one being drawn) make up a valid map. Virtually, it says whether a polygon is being constructed by the user.
+        /// </summary>
+        public override bool IsCurrentModelValid // Model is both map AND currently drawn polygon.
+        {
+            get
+            {
+                return _isCurrentModelValid;
+            }
+            protected set
+            {
+                if (_isCurrentModelValid != value)
+                {
+                    _isCurrentModelValid = value;
+                    OnPropertyChanged();
+                }
+
+            }
+        }
         protected override string SaveFileExtension => "vmd";
-        protected override Map ModelToSave => _currentMap;
-        protected override bool IsCurrentModelValid { get; set; }
+
+        
+        private bool _isCurrentModelValid; 
 
 
-        private Map _currentMap;
+        public MapEditorViewModel()
+        {
+            Reset();
 
+            CloseCurrentPolygonCommand = new RelayCommand(o =>
+            {
+                CurrentModel.Obstacles.Add(new Polygon(CurrentPolygon));
+                CurrentPolygon = new List<Point>();
+                IsCurrentModelValid = true;
+            },
+            c => CurrentPolygon.Count >= 3);
+        }
 
         protected override void Reset()
         {
-            throw new System.NotImplementedException();
-        }
+            CurrentModel = new Map(_mapWidth, _mapHeight);
+            CurrentPolygon = new List<Point>();
 
+            IsCurrentModelValid = true;
+        }
+        
         protected override void LoadModel(Map model)
         {
-            throw new System.NotImplementedException();
+            CurrentModel = model;
+            CurrentPolygon = new List<Point>();
+
+            IsCurrentModelValid = true;
         }
 
-        protected override bool CanAddPoint(Point point)
+        protected override bool CanPlacePoint(Point newPoint)
         {
-            throw new System.NotImplementedException();
+            //TODO check if placing new point doesn't create an intersection with other segments of the polygon
+            return true;
         }
 
-        protected override void AddPoint(Point point)
+        protected override void PlacePoint(Point newPoint)
         {
-            //TODO Add point, check if map is valid and update IsCurrentModelValid property. 
-
-            throw new System.NotImplementedException();
+            CurrentPolygon.Add(newPoint);
+            IsCurrentModelValid = false;
         }
     }
 }

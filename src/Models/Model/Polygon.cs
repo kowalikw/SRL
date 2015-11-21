@@ -24,6 +24,11 @@ namespace SRL.Model.Model
             Vertices = vertices.ToList();
         }
 
+        public Polygon(ICollection<Point> vertices)
+        {
+            Vertices = new List<Point>(vertices);
+        }
+
         #region IXmlSerializable members
 
         /// <remarks>

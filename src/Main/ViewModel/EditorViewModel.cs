@@ -16,6 +16,7 @@ namespace SRL.Main.ViewModel
     internal abstract class EditorViewModel<T> : INotifyPropertyChanged 
         where T : IXmlSerializable
     {
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand ResetCommand { get; }
@@ -23,9 +24,9 @@ namespace SRL.Main.ViewModel
         public ICommand LoadModelCommand { get; }
         public ICommand PlacePointCommand { get; }
 
+        public abstract T CurrentModel { get; protected set; }
+        public abstract bool IsCurrentModelValid { get; protected set; } // Don't forget to call OnPropertyChanged!
         protected abstract string SaveFileExtension { get; }
-        protected abstract T ModelToSave { get; }
-        protected abstract bool IsCurrentModelValid { get; set; } // Don't forget to call OnPropertyChanged!
 
         protected EditorViewModel()
         {
@@ -44,7 +45,7 @@ namespace SRL.Main.ViewModel
                     var output = new XDocument();
 
                     using (XmlWriter writer = output.CreateWriter())
-                        serializer.Serialize(writer, ModelToSave);
+                        serializer.Serialize(writer, CurrentModel);
 
                     File.WriteAllText(dialog.FileName, output.ToString());
                 }
@@ -68,20 +69,20 @@ namespace SRL.Main.ViewModel
 
             PlacePointCommand = new RelayCommand(o =>
             {
-                var e = (MouseButtonEventArgs) o;
-                AddPoint((Point)e.GetPosition((UIElement)e.Source));
+                var point = (Point) o;
+                PlacePoint(point);
             },
             c =>
             {
-                var e = (MouseButtonEventArgs) c;
-                return CanAddPoint((Point)e.GetPosition((UIElement)e.Source));
+                var point = (Point)c;
+                return CanPlacePoint(point);
             });
         }
 
         protected abstract void Reset();
         protected abstract void LoadModel(T model);
-        protected abstract bool CanAddPoint(Point point);
-        protected abstract void AddPoint(Point point);
+        protected abstract bool CanPlacePoint(Point point);
+        protected abstract void PlacePoint(Point point);
 
 
         [NotifyPropertyChangedInvocator]

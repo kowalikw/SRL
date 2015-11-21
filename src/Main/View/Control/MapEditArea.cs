@@ -1,37 +1,64 @@
 ﻿using System;
+using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SRL.Main.ViewModel;
+using SRL.Model;
 using SRL.Model.Enum;
 using SRL.Model.Model;
-using SRL.MonoGameControl;
-using Point = SRL.Model.Model.Point;
+using SrlPoint = SRL.Model.Model.Point;
+using WinPoint = System.Windows.Point;
+using XnaPoint = Microsoft.Xna.Framework.Point;
 
 namespace SRL.Main.View.Control
 {
     public class MapEditArea : EditArea
     {
+        
+
+        private MapEditorViewModel _context;
+
         public Polygon CurrentPolygon { get; private set; }
         public Map Map { get; private set; }
         public MapEditorMode Mode { get; set; }
-        public Point CursorPosition { get; set; }
         public DrawPolygonState CurrentPolygonState { get; set; }
 
-        /// <summary>
-        /// Initialize map editor control.
-        /// </summary>
+
+        private SrlPoint LastPolygonVertex => _context.CurrentPolygon[_context.CurrentPolygon.Count - 1];
+        private SrlPoint FirstPolygonVertex => _context.CurrentPolygon[0];
+
         protected override void Initialize()
         {
             base.Initialize();
+            _context = (MapEditorViewModel)DataContext;
+
+
+
 
             CurrentPolygon = new Polygon();
             Map = new Map(512, 512);
             Mode = MapEditorMode.Idle;
-            CursorPosition = new Point(0, 0);
             CurrentPolygonState = DrawPolygonState.Empty;
         }
 
         protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
+            //Draw placed, valid polygons.
+            foreach (var polygon in _context.CurrentModel.Obstacles)
+            {
+                spriteBatch.DrawPolygon(polygon, RegularColor, LineThickness);
+            }
+
+            spriteBatch.DrawPath(_context.CurrentPolygon, false, RegularColor, LineThickness);
+
+            if (!_context.IsCurrentModelValid)
+            {
+                Color color = _context.PlacePointCommand.CanExecute(MousePosition) ? ActiveColor : InvalidColor;
+                spriteBatch.DrawLine(LastPolygonVertex, MousePosition, color, LineThickness);
+            }
+
+            
+            /*
             DrawMap(spriteBatch);
 
             switch (Mode)
@@ -54,24 +81,26 @@ namespace SRL.Main.View.Control
                 case MapEditorMode.Idle:
                     break;
             }
+            */
         }
 
-        /// <summary>
-        /// Draws current polygon.
-        /// </summary>
-        private void DrawCurrentPolygon(SpriteBatch spriteBatch)
+        protected override void OnMouseUp(SrlPoint position)
         {
-            spriteBatch.DrawPolygon(CurrentPolygon, CurrentPolygonState, CursorPosition);
+            if (!_context.IsCurrentModelValid)
+            {
+                if (GeometryHelper.GetDistance(position, FirstPolygonVertex) < VertexPullRadius)
+                {
+                    if (_context.CloseCurrentPolygonCommand.CanExecute(null))
+                    {
+                        _context.CloseCurrentPolygonCommand.Execute(null);
+                        return;
+                    }
+                }
+            }
+
+            if (_context.PlacePointCommand.CanExecute(position))
+                _context.PlacePointCommand.Execute(position);
         }
 
-        /// <summary>
-        /// Draws map.
-        /// </summary>
-        private void DrawMap(SpriteBatch spriteBatch)
-        {
-            foreach (Polygon polygon in Map.Obstacles)
-                spriteBatch.DrawPolygon(polygon, DrawPolygonState.Done);
-            DrawCurrentPolygon(spriteBatch);
-        }
     }
 }

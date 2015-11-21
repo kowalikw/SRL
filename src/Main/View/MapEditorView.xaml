@@ -17,7 +17,7 @@
                          Grid.Column="0"
                          Margin="5"
                          SnapsToDevicePixels="True"
-                         Stretch="Fill" MouseUp="MapEditorControl_MouseUp" MouseMove="MapEditorControl_MouseMove" />
+                         Stretch="Fill"/>
         <StackPanel Grid.Column="1">
             <ToggleButton x:Name="btnDraw" Margin="3" Height="30" Checked="btnDraw_Checked" Unchecked="btnDraw_Unchecked">Rysuj przeszkodę</ToggleButton>
             <Button x:Name="btnReset" Margin="3" Height="30" Click="resetMap_Click">Resetuj mapę</Button>

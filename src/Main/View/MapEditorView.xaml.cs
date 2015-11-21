@@ -68,7 +68,7 @@ namespace SRL.Main.View
 
         private void MapEditorControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            MapEditorControl.CursorPosition = new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y);
+           // MapEditorControl.CursorPosition = new Point(e.GetPosition(MapEditorControl).X, e.GetPosition(MapEditorControl).Y);
         }
 
         private void resetMap_Click(object sender, RoutedEventArgs e)

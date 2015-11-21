@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SRL.Main.ViewModel
 {
-    class VehicleEditorViewModel
+    sealed class VehicleEditorViewModel
     {
     }
 }

@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Model.Enum;
 using SRL.Model.Model;
-using System;
-using System.Collections.Generic;
 using Point = SRL.Model.Model.Point;
 
-namespace SRL.MonoGameControl
+namespace SRL.Main
 {
     public static class DrawHelper
     {
@@ -17,11 +17,13 @@ namespace SRL.MonoGameControl
         public const int LineThickness = 2;
         public const int CircleSegments = 100;
 
+        /*
         private static readonly Color normalDrawColor = Color.Black;
         private static readonly Color activeDrawColor = Color.Blue;
         private static readonly Color correctActiveDrawColor = Color.Green;
         private static readonly Color incorrectActiveDrawColor = Color.Red;
         private static readonly Color activeStartCircleColor = Color.Orange;
+        */
 
         #region Private Members
 
@@ -56,43 +58,6 @@ namespace SRL.MonoGameControl
             for (int i = 1; i < points.Count; i++)
             {
                 DrawLine(spriteBatch, points[i - 1] + position, points[i] + position, color, thickness);
-            }
-        }
-
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, DrawPolygonState state, Point cursorPosition = null)
-        {
-            if (state == DrawPolygonState.Done)
-            {
-                for (int i = 0; i < polygon.VertexCount; i++)
-                    spriteBatch.DrawLine(polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.VertexCount], normalDrawColor, LineThickness);
-            }
-            else if (state == DrawPolygonState.Empty) return;
-            else
-            {
-                for (int i = 0; i < polygon.VertexCount; i++)
-                {
-                    if (i == 0)
-                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegments, activeDrawColor, StartCircleThickness);
-                    else
-                        spriteBatch.DrawLine(polygon.Vertices[i - 1], polygon.Vertices[i], activeDrawColor, LineThickness);
-
-                    spriteBatch.DrawCircle(polygon.Vertices[0], PointRadius, CircleSegments, activeDrawColor, PointThickness);
-                }
-
-                if (state == DrawPolygonState.Correct)
-                {
-                    if (polygon.IsFinished(cursorPosition))
-                    {
-                        spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], polygon.Vertices[0], correctActiveDrawColor, LineThickness);
-                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegments, activeStartCircleColor, StartCircleThickness);
-                    }
-                    else
-                        spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, correctActiveDrawColor, LineThickness);
-                }
-                else if (state == DrawPolygonState.Incorrect)
-                {
-                    spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, incorrectActiveDrawColor, LineThickness);
-                }
             }
         }
 
@@ -134,7 +99,7 @@ namespace SRL.MonoGameControl
         /// Begins drawing in SpriteBatch.
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface.</param>
-        public static void BeginDraw(this SpriteBatch spriteBatch)
+        internal static void BeginDraw(this SpriteBatch spriteBatch)
         {
             pixel = null;
             spriteBatch.Begin();
@@ -144,7 +109,7 @@ namespace SRL.MonoGameControl
         /// Ends drawing in SpriteBatch.
         /// </summary>
         /// <param name="spriteBatch">The destination drawing surface.</param>
-        public static void EndDraw(this SpriteBatch spriteBatch)
+        internal static void EndDraw(this SpriteBatch spriteBatch)
         {
             pixel = null;
             spriteBatch.End();
@@ -158,7 +123,7 @@ namespace SRL.MonoGameControl
         /// <param name="point2">The second point</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the line</param>
-        public static void DrawLine(this SpriteBatch spriteBatch, Point point1, Point point2, Color color, float thickness = 1.0f)
+        internal static void DrawLine(this SpriteBatch spriteBatch, Point point1, Point point2, Color color, float thickness = 1.0f)
         {
             // calculate the distance between the two vectors
             float length = Vector2.Distance(new Vector2((float)point1.X, (float)point1.Y), new Vector2((float)point2.X, (float)point2.Y));
@@ -194,7 +159,7 @@ namespace SRL.MonoGameControl
         /// <param name="angle">The angle of this line from the starting point.</param>
         /// <param name="color">The color to use.</param>
         /// <param name="thickness">The thickness of the line.</param>
-        public static void DrawLine(this SpriteBatch spriteBatch, Point point, float length, float angle, Color color, float thickness)
+        internal static void DrawLine(this SpriteBatch spriteBatch, Point point, float length, float angle, Color color, float thickness)
         {
             if (pixel == null)
             {
@@ -219,7 +184,7 @@ namespace SRL.MonoGameControl
         /// <param name="spriteBatch">The destination drawing surface.</param>
         /// <param name="position">The position of the pixel.</param>
         /// <param name="color">The color of the pixel.</param>
-        public static void PutPixel(this SpriteBatch spriteBatch, Point position, Color color)
+        internal static void PutPixel(this SpriteBatch spriteBatch, Point position, Color color)
         {
             if (pixel == null)
             {
@@ -238,9 +203,64 @@ namespace SRL.MonoGameControl
         /// <param name="sides">The number of sides to generate.</param>
         /// <param name="color">The color of the circle.</param>
         /// <param name="thickness">The thickness of the lines used.</param>
-        public static void DrawCircle(this SpriteBatch spriteBatch, Point center, float radius, int sides, Color color, float thickness = 1.0f)
+        internal static void DrawCircle(this SpriteBatch spriteBatch, Point center, float radius, int sides, Color color, float thickness = 1.0f)
         {
             DrawPoints(spriteBatch, center, CreateCircle(radius, sides), color, thickness);
         }
+
+        internal static void DrawPath(this SpriteBatch spriteBatch, List<Point> vertices, bool closed, Color color, float thickness = 1.0f)
+        {
+            for (int i = 0; i < vertices.Count - 1; i++)
+                spriteBatch.DrawLine(vertices[i], vertices[i+1], color, thickness);
+
+            if (closed)
+                spriteBatch.DrawLine(vertices[vertices.Count-1], vertices[0], color, thickness);
+        }
+
+        internal static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Color color, float thickness = 1.0f)
+        {
+            DrawPath(spriteBatch, polygon.Vertices, true, color, thickness);
+        }
+
+        /*
+        
+
+        public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, DrawPolygonState state, Point cursorPosition = null)
+        {
+            if (state == DrawPolygonState.Done)
+            {
+                for (int i = 0; i < polygon.VertexCount; i++)
+                    spriteBatch.DrawLine(polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.VertexCount], normalDrawColor, LineThickness);
+            }
+            else if (state == DrawPolygonState.Empty) return;
+            else
+            {
+                for (int i = 0; i < polygon.VertexCount; i++)
+                {
+                    if (i == 0)
+                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegmentCount, activeDrawColor, StartCircleThickness);
+                    else
+                        spriteBatch.DrawLine(polygon.Vertices[i - 1], polygon.Vertices[i], activeDrawColor, LineThickness);
+
+                    spriteBatch.DrawCircle(polygon.Vertices[0], PointRadius, CircleSegmentCount, activeDrawColor, PointThickness);
+                }
+
+                if (state == DrawPolygonState.Correct)
+                {
+                    if (polygon.IsFinished(cursorPosition))
+                    {
+                        spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], polygon.Vertices[0], correctActiveDrawColor, LineThickness);
+                        spriteBatch.DrawCircle(polygon.Vertices[0], StartCircleRadius, CircleSegmentCount, activeStartCircleColor, StartCircleThickness);
+                    }
+                    else
+                        spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, correctActiveDrawColor, LineThickness);
+                }
+                else if (state == DrawPolygonState.Incorrect)
+                {
+                    spriteBatch.DrawLine(polygon.Vertices[polygon.VertexCount - 1], cursorPosition, incorrectActiveDrawColor, LineThickness);
+                }
+            }
+        }
+        */
     }
 }

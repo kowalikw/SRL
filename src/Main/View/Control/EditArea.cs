@@ -1,31 +1,32 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SRL.Model;
-using SRL.Model.Enum;
-using SRL.Model.Model;
-using SRL.MonoGameControl;
+using SrlPoint = SRL.Model.Model.Point;
+using WinPoint = System.Windows.Point;
+using XnaPoint = Microsoft.Xna.Framework.Point;
 
 namespace SRL.Main.View.Control
 {
     public abstract class EditArea : MonoGameControl.MonoGameControl
     {
-        protected const int StartCircleRadius = 8;
-        protected const int StartCircleThickness = 3;
-        protected const int PointRadius = 3;
-        protected const int PointThickness = 3;
+        protected const double VertexPullRadius = 8;
+
+        //protected const int StartCircleRadius = 8;
+        //protected const int StartCircleThickness = 3;
+        //protected const int PointRadius = 3;
+        //protected const int PointThickness = 3;
         protected const int LineThickness = 2;
-        protected const int CircleSegments = 100;
+        protected const int CircleSegmentCount = 100;
 
-        protected Color normalDrawColor = Color.Black;
-        protected Color activeDrawColor = Color.Blue;
-        protected Color correctActiveDrawColor = Color.Green;
-        protected Color incorrectActiveDrawColor = Color.Red;
-        protected Color activeStartCircleColor = Color.Orange;
-
+        protected static readonly Color RegularColor = Color.Black;
+        protected static readonly Color ActiveColor = Color.Blue;
+        protected static readonly Color InvalidColor = Color.Red;
+        protected static readonly Color ValidColor = Color.Green;
 
 
-
+        protected SrlPoint MousePosition { get; private set; }
 
 
         protected SpriteBatch SpriteBatch;
@@ -33,6 +34,17 @@ namespace SRL.Main.View.Control
         protected override void Initialize()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            MouseUp += (object o, MouseButtonEventArgs e) =>
+            {
+                WinPoint position = e.GetPosition((UIElement) o);
+                OnMouseUp((SrlPoint)position);
+            };
+            MouseMove += (object o, MouseEventArgs e) =>
+            {
+                WinPoint position = e.GetPosition((UIElement)o);
+                MousePosition = ((SrlPoint)position);
+            };
         }
 
         protected override void Unitialize()
@@ -51,6 +63,8 @@ namespace SRL.Main.View.Control
         }
 
         protected abstract void Render(SpriteBatch spriteBatch, TimeSpan time);
+        
+        protected abstract void OnMouseUp(SrlPoint position);
 
 
 
@@ -67,7 +81,7 @@ namespace SRL.Main.View.Control
 
 
 
-
+        /*
         public DrawLineState CheckLine(Polygon polygon, Model.Model.Point nextVertice)
         {
             foreach (Model.Model.Point p in polygon.Vertices)
@@ -104,6 +118,7 @@ namespace SRL.Main.View.Control
             }
         }
 
+    */
 
     }
 }
