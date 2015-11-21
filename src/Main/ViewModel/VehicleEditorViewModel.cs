@@ -15,6 +15,7 @@ namespace SRL.Main.ViewModel
             OrientationAngleSet,
         }
 
+
         public ICommand CloseVehicleShapeCommand { get; }
         public ICommand SetOrientationOriginCommand { get; }
         public ICommand SetOrientationAngleCommand { get; }
@@ -71,7 +72,7 @@ namespace SRL.Main.ViewModel
             SetOrientationOriginCommand = new RelayCommand(o =>
             {
                 Point position = (Point) o;
-                CurrentModel.Origin = position;
+                CurrentModel.OrientationOrigin = position;
                 Stage = EditingStage.OrientationOriginSet;
             },
             c =>
@@ -87,7 +88,7 @@ namespace SRL.Main.ViewModel
             SetOrientationAngleCommand = new RelayCommand(o =>
             {
                 double angle = (double) o;
-                CurrentModel.DirectionAngle = angle;
+                CurrentModel.OrientationAngle = angle;
                 Stage = EditingStage.OrientationAngleSet;
             },
             c => Stage == EditingStage.OrientationOriginSet);

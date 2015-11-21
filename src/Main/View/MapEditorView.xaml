@@ -21,6 +21,7 @@
         <StackPanel Grid.Column="1">
             <Button Margin="3" Height="30" Command="{Binding ResetCommand}">Resetuj mapę</Button>
             <Button Margin="3" Height="30" Command="{Binding SaveModelCommand}">Zapisz mapę</Button>
+            <Button Margin="3" Height="30" Command="{Binding LoadModelCommand}">Wczytaj mapę</Button>
         </StackPanel>
     </Grid>
 </Window>

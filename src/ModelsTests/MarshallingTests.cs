@@ -86,8 +86,8 @@ namespace SRL.ModelsTests
             TextReader reader = new StringReader(Resources.Vehicle1);
             Vehicle output = (Vehicle)serializer.Deserialize(reader);
 
-            Assert.AreEqual(expected.DirectionAngle, output.DirectionAngle);
-            Assert.AreEqual<Point>(expected.Origin, output.Origin);
+            Assert.AreEqual(expected.OrientationAngle, output.OrientationAngle);
+            Assert.AreEqual<Point>(expected.OrientationOrigin, output.OrientationOrigin);
             Assert.AreEqual<Polygon>(expected.Shape, output.Shape);
         }
 

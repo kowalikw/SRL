@@ -8,8 +8,8 @@ namespace SRL.Model.Model
     public class Vehicle : IXmlSerializable
     {
         public Polygon Shape { get; set; }
-        public Point Origin { get; set; }
-        public double DirectionAngle { get; set; }
+        public Point OrientationOrigin { get; set; }
+        public double OrientationAngle { get; set; }
 
         /// <remarks>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.
@@ -23,15 +23,15 @@ namespace SRL.Model.Model
         /// Initializes a new instance of the <see cref="Vehicle"/> class.
         /// </summary>
         /// <param name="shape"><see cref="Polygon"/> that constitutes the vehicle's boundary.</param>
-        /// <param name="origin">Origin of the axis defining the vehicle's front.</param>
+        /// <param name="orientationOrigin">OrientationOrigin of the axis defining the vehicle's front.</param>
         /// <param name="angle">Angle of the axis defining the vehicle's front.</param>
-        public Vehicle(Polygon shape, Point origin, double angle)
+        public Vehicle(Polygon shape, Point orientationOrigin, double angle)
         {
             Shape = shape;
-            Origin = origin;
-            DirectionAngle = angle % 360;
+            OrientationOrigin = orientationOrigin;
+            OrientationAngle = angle % 360;
 
-            //TODO check if origin lies inside the shape polygon. Throw argument exception otherwise.
+            //TODO check if OrientationOrigin lies inside the shape polygon. Throw argument exception otherwise.
         }
 
         #region IXmlSerializable members
@@ -69,13 +69,13 @@ namespace SRL.Model.Model
                         {
                             if (reader.LocalName == "angle" && !angleDone)
                             {
-                                DirectionAngle = reader.ReadElementContentAsDouble();
+                                OrientationAngle = reader.ReadElementContentAsDouble();
                                 angleDone = true;
                             }
                             else if (reader.LocalName == "point" && !originDone)
                             {
-                                Origin = new Point();
-                                Origin.ReadXml(reader);
+                                OrientationOrigin = new Point();
+                                OrientationOrigin.ReadXml(reader);
                                 originDone = true;
                             }
                             else
@@ -108,11 +108,11 @@ namespace SRL.Model.Model
             writer.WriteStartElement("orientation");
             {
                 writer.WriteStartElement("point");
-                Origin.WriteXml(writer);
+                OrientationOrigin.WriteXml(writer);
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("angle");
-                writer.WriteValue(DirectionAngle);
+                writer.WriteValue(OrientationAngle);
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();

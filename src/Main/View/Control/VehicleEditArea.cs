@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Main.ViewModel;
 using SRL.Model;
-using Point = SRL.Model.Model.Point;
 using SrlPoint = SRL.Model.Model.Point;
 using WinPoint = System.Windows.Point;
 using XnaPoint = Microsoft.Xna.Framework.Point;
@@ -14,11 +13,9 @@ namespace SRL.Main.View.Control
     public class VehicleEditArea : EditArea
     {
         private const float AxisLength = 50;
-
-
+        
         private VehicleEditorViewModel _context;
         
-
         private SrlPoint LastShapeVertex => _context.VehicleShape[_context.VehicleShape.Count - 1];
         private SrlPoint FirstShapeVertex => _context.VehicleShape[0];
 
@@ -35,69 +32,78 @@ namespace SRL.Main.View.Control
             Color shapeColor = _context.Stage > EditingStage.ShapeStarted ? RegularColor : ActiveColor;
             spriteBatch.DrawPath(_context.VehicleShape, _context.Stage > EditingStage.ShapeStarted, shapeColor, LineThickness);
 
-            if (_context.Stage == EditingStage.ShapeStarted)
+            switch (_context.Stage)
             {
-                //Draw new potential shape polygon side.
-                Color segmentColor = _context.AddVertexCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
-                spriteBatch.DrawLine(LastShapeVertex, MousePosition, segmentColor, LineThickness);
+                case EditingStage.NotStarted:
+                    break;
+                case EditingStage.ShapeStarted:
+                    {
+                        //Draw new potential shape polygon side.
+                        Color segmentColor = _context.AddVertexCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
+                        spriteBatch.DrawLine(LastShapeVertex, MousePosition, segmentColor, LineThickness);
+                        break;
+                    }
+                case EditingStage.ShapeDone:
+                    {
+                        //Draw new potential orientation origin.
+                        Color originColor = _context.SetOrientationOriginCommand.CanExecute(MousePosition)
+                            ? ValidColor
+                            : InvalidColor;
+                        spriteBatch.DrawVertex(MousePosition, originColor, VertexThickness);
+                        break;
+                    }
+                case EditingStage.OrientationOriginSet:
+                    {
+                        //Draw orientation origin.
+                        spriteBatch.DrawVertex(_context.CurrentModel.OrientationOrigin, ActiveColor, VertexThickness);
+
+                        //Draw new potential orientation axis.
+                        double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
+                        Color axisColor = _context.SetOrientationAngleCommand.CanExecute(angle) ? ValidColor : InvalidColor;
+                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, MousePosition, axisColor, LineThickness);
+                        break;
+                    }
+                case EditingStage.OrientationAngleSet:
+                    {
+                        //Draw orientation origin.
+                        spriteBatch.DrawVertex(_context.CurrentModel.OrientationOrigin, RegularColor, VertexThickness);
+
+                        double angle = _context.CurrentModel.OrientationAngle;
+
+                        //TODO draw fixed length arrow (implement draw arrow)
+                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, AxisLength, (float)(angle * Math.PI / 180),
+                            RegularColor, LineThickness);
+                        break;
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else if (_context.Stage == EditingStage.ShapeDone)
-            {
-                //Draw new potential orientation origin.
-                Color originColor = _context.SetOrientationOriginCommand.CanExecute(MousePosition) ? ValidColor : InvalidColor;
-                spriteBatch.DrawVertex(MousePosition, originColor, VertexThickness);
-            }
-            else if (_context.Stage == EditingStage.OrientationOriginSet)
-            {
-                //Draw orientation origin.
-                spriteBatch.DrawVertex(_context.CurrentModel.Origin, ActiveColor, VertexThickness);
-
-                //Draw new potential orientation axis.
-                double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.Origin, MousePosition);
-                Color axisColor = _context.SetOrientationAngleCommand.CanExecute(angle) ? ValidColor : InvalidColor;
-                spriteBatch.DrawArrow(_context.CurrentModel.Origin, MousePosition, axisColor, LineThickness);
-
-                //TODO draw fixed length arrow instead of dynamic length arrow (implement draw arrow)
-                spriteBatch.DrawArrow(_context.CurrentModel.Origin, MousePosition, axisColor, LineThickness);
-                //spriteBatch.DrawArrow(_context.CurrentModel.Origin, AxisLength, (float)(angle * Math.PI / 180), RegularColor, LineThickness);
-            }
-            else if (_context.Stage == EditingStage.OrientationAngleSet)
-            {
-                //Draw orientation origin.
-                spriteBatch.DrawVertex(_context.CurrentModel.Origin, RegularColor, VertexThickness);
-
-                double angle = _context.CurrentModel.DirectionAngle;
-
-                //TODO draw fixed length arrow (implement draw arrow)
-                spriteBatch.DrawArrow(_context.CurrentModel.Origin, AxisLength, (float)(angle * Math.PI / 180), RegularColor, LineThickness);
-            }
-
-            //TODO remove stage checking here?
         }
 
-        protected override void OnMouseUp(Point position)
+        protected override void OnMouseUp(SrlPoint position)
         {
-            if (_context.Stage < EditingStage.ShapeDone)
+            if (_context.CloseVehicleShapeCommand.CanExecute(null) 
+                && IsMousePulledByPoint(FirstShapeVertex))
             {
-                if (_context.CloseVehicleShapeCommand.CanExecute(null) && IsMousePulledByPoint(FirstShapeVertex))
-                    _context.CloseVehicleShapeCommand.Execute(null);
-                else if (_context.AddVertexCommand.CanExecute(position))
-                    _context.AddVertexCommand.Execute(position);
+                _context.CloseVehicleShapeCommand.Execute(null);
+                return;
             }
-            else if (_context.Stage == EditingStage.ShapeDone)
+            if (_context.AddVertexCommand.CanExecute(position))
             {
-                if (_context.SetOrientationOriginCommand.CanExecute(position))
-                    _context.SetOrientationOriginCommand.Execute(position);
+                _context.AddVertexCommand.Execute(position);
+                return;
             }
-            else if (_context.Stage == EditingStage.OrientationOriginSet)
+            if (_context.SetOrientationOriginCommand.CanExecute(position))
             {
-                double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.Origin, MousePosition);
-                if (_context.SetOrientationAngleCommand.CanExecute(angle))
-                    _context.SetOrientationAngleCommand.Execute(angle);
-                //TODO pass angle
+                _context.SetOrientationOriginCommand.Execute(position);
+                return;
             }
-
-            //TODO remove stage checking here?
+            double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
+            if (_context.SetOrientationAngleCommand.CanExecute(angle))
+            {
+                _context.SetOrientationAngleCommand.Execute(angle);
+                return;
+            }
         }
     }
 }

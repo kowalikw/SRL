@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Model;
-using SRL.Model.Enum;
 using SRL.Model.Model;
 using Point = SRL.Model.Model.Point;
 
@@ -11,14 +10,6 @@ namespace SRL.Main
 {
     public static class DrawHelper
     {
-        /*
-        private static readonly Color normalDrawColor = Color.Black;
-        private static readonly Color activeDrawColor = Color.Blue;
-        private static readonly Color correctActiveDrawColor = Color.Green;
-        private static readonly Color incorrectActiveDrawColor = Color.Red;
-        private static readonly Color activeStartCircleColor = Color.Orange;
-        */
-
         #region Private Members
 
         private static readonly Dictionary<String, List<Point>> CircleCache = new Dictionary<string, List<Point>>();
@@ -254,7 +245,13 @@ namespace SRL.Main
         internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, float length, float angle, Color color,
             float thickness = 1.0f)
         {
-            //TODO   
+            Point tip = new Point(
+                origin.X + Math.Cos(angle) * length,
+                origin.Y + Math.Sin(angle) * length);
+
+            spriteBatch.DrawLine(origin, tip, color, thickness);
+
+            //TODO fix
         }
 
         internal static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Color color, float thickness = 1.0f)
