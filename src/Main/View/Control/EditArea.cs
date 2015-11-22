@@ -2,6 +2,7 @@
 using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SRL.Main.Utilities;
 using SRL.Model;
 using SrlPoint = SRL.Model.Model.Point;
 using WinPoint = System.Windows.Point;

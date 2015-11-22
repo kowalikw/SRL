@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Win32;
 using SRL.Main.Annotations;
+using SRL.Main.Utilities;
 using SRL.Model.Xml;
 using Point = SRL.Model.Model.Point;
 

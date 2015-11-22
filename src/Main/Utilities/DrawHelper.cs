@@ -6,13 +6,13 @@ using SRL.Model;
 using SRL.Model.Model;
 using Point = SRL.Model.Model.Point;
 
-namespace SRL.Main
+namespace SRL.Main.Utilities
 {
     public static class DrawHelper
     {
         #region Private Members
 
-        private static readonly Dictionary<String, List<Point>> CircleCache = new Dictionary<string, List<Point>>();
+        private static readonly Dictionary<string, List<Point>> CircleCache = new Dictionary<string, List<Point>>();
         private static Texture2D _pixel;
 
         #endregion

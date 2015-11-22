@@ -1,0 +1,83 @@
+﻿<Window x:Class="SRL.Main.View.TracingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SRL.Main.View"
+        xmlns:main="clr-namespace:SRL.Main"
+        xmlns:utilities="clr-namespace:SRL.Main.Utilities"
+        mc:Ignorable="d"
+        Title="TracingView" Height="480" Width="640">
+    
+    <Window.Resources>
+        <utilities:PolygonToPointCollection x:Key="PolygonToPointCollectionConverter"/>
+    </Window.Resources>
+    
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" 
+               Content="Area threshold"/>
+            <Slider Grid.Row="0" Grid.Column="1" 
+                Minimum="0"  Maximum="100"
+                Value="{Binding AreaThreshold, Mode=TwoWay}"/>
+            <TextBox Grid.Row="0" Grid.Column="2" 
+                 IsReadOnly="True"
+                 Text="{Binding AreaThreshold, Mode=OneWay}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" 
+               Content="Color threshold"/>
+            <Slider Grid.Row="1" Grid.Column="1"
+                Minimum="0" Maximum="100"
+                Value="{Binding ColorThreshold, Mode=TwoWay}"/>
+            <TextBox Grid.Row="1" Grid.Column="2" 
+                 IsReadOnly="True"
+                 Text="{Binding ColorThreshold, Mode=OneWay}"/>
+
+            <Button Grid.Row="0" Grid.Column="3"
+                Content="Load bitmap"/>
+            <Button Grid.Row="1" Grid.Column="3"
+                Content="Save model"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Column="0" Source="{Binding BitmapToTrace}"/>
+
+            <ItemsControl Grid.Column="1" ItemsSource="{Binding Path=TracedPolygons}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="LightBlue" Width="Auto" Height="Auto"  />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Polygon Points="{Binding Path=., Converter={StaticResource PolygonToPointCollectionConverter}}" 
+                                 Stroke="Red" StrokeThickness="3"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</Window>
