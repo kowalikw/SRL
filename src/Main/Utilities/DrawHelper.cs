@@ -8,7 +8,7 @@ using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.Utilities
 {
-    public static class DrawHelper
+    internal static class DrawHelper
     {
         #region Private Members
 

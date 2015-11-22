@@ -10,7 +10,7 @@ using WinPoint = System.Windows.Point;
 
 namespace SRL.Main.Utilities
 {
-    public class PolygonToPointCollection : IValueConverter
+    internal class PolygonToPointCollection : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
