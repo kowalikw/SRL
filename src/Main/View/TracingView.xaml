@@ -52,9 +52,11 @@
                  Text="{Binding ColorThreshold, Mode=OneWay}"/>
 
             <Button Grid.Row="0" Grid.Column="3"
-                Content="Load bitmap"/>
+                Content="Load bitmap"
+                    Command="{Binding LoadBitmapCommand}"/>
             <Button Grid.Row="1" Grid.Column="3"
-                Content="Save model"/>
+                Content="Accept"
+                    Command="{Binding AcceptVectorCommand}"/>
         </Grid>
 
         <Grid Grid.Row="1">
