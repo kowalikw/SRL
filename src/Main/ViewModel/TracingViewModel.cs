@@ -20,24 +20,60 @@ namespace SRL.Main.ViewModel
         public ICommand LoadBitmapCommand { get; }
         public ICommand AcceptVectorCommand { get; }
 
-
-        public int AreaThreshold { get; set; }
-        public int ColorThreshold { get; set; }
+        private BitmapTracer _tracer;
+        private BitmapSource _bitmapToTrace;
+        private int _areaThreshold;
+        private int _colorThresHold;
 
         public BitmapSource BitmapToTrace
         {
-            get { return _bitmapToTrace;}
+            get { return _bitmapToTrace; }
             private set
             {
                 _bitmapToTrace = value;
                 OnPropertyChanged();
             }
         }
+        public int AreaThreshold
+        {
+            get { return _areaThreshold; }
+            set
+            {
+                _areaThreshold = value;
+
+                if (_tracer != null)
+                {
+                    var traceOutput = _tracer.Trace(_areaThreshold, _colorThresHold);
+                    foreach (var polygon in traceOutput)
+                        TracedPolygons.Add(polygon);
+                }
+                OnPropertyChanged();
+            }
+        }
+        public int ColorThreshold
+        {
+            get { return _colorThresHold; }
+            set
+            {
+                _colorThresHold = value;
+
+                if (_tracer != null)
+                {                    
+                    var traceOutput = _tracer.Trace(_areaThreshold, _colorThresHold);
+                    //if (TracedPolygons.Count > 0)
+                    //    TracedPolygons[0].Vertices.Clear();
+                    TracedPolygons.Clear();
+                    //TracedPolygons = new ObservableCollection<Polygon>();
+                    OnPropertyChanged();
+                    foreach (var polygon in traceOutput)
+                        TracedPolygons.Add(polygon);
+                }
+                OnPropertyChanged();
+            }
+        }
+
+        
         public ObservableCollection<Polygon> TracedPolygons { get; private set; }
-
-
-        private BitmapSource _bitmapToTrace;
-        private BitmapTracer _tracer;
 
 
         public TracingViewModel()
@@ -50,16 +86,16 @@ namespace SRL.Main.ViewModel
             LoadBitmapCommand = new RelayCommand(o =>
             {
                 var dialog = new OpenFileDialog();
-               // dialog.Filter = "BMP files (*.bmp)|*.bmp";
+                dialog.Filter = "Image files (*.bmp, *.jpg, *.jpeg, *.gif, *.png) | *.bmp; *.jpg; *.jpeg; *.gif; *.png";
 
                 if (dialog.ShowDialog() == true)
                 {
                     BitmapToTrace = new BitmapImage(new Uri(dialog.FileName));
                     _tracer = new BitmapTracer(dialog.FileName);
 
-                    var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
-                    foreach (var polygon in traceOutput)
-                        TracedPolygons.Add(polygon);
+                    
+
+                    
 
                     //TODO re-trace on each area/color threshold change
                 }
@@ -68,11 +104,14 @@ namespace SRL.Main.ViewModel
             AcceptVectorCommand = new RelayCommand(o =>
             {
                 //TODO
+
+                TracedPolygons.Clear();
+                OnPropertyChanged();
             },
             c =>
             {
                 //TODO
-                return false;
+                return true;
             });
         }
 

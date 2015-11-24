@@ -97,6 +97,8 @@ namespace SRL.Model.Model
 
         public override bool Equals(object obj)
         {
+          //  if (Dis) return false;
+
             return Equals((Polygon) obj);
         }
 

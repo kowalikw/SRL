@@ -75,7 +75,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Polygon Points="{Binding Path=., Converter={StaticResource PolygonToPointCollectionConverter}}" 
+                        <Polygon Points="{Binding Path=., Converter={StaticResource PolygonToPointCollectionConverter}, Mode=TwoWay}" 
                                  Stroke="Red" StrokeThickness="3"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
