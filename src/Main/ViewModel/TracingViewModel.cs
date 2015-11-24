@@ -21,8 +21,25 @@ namespace SRL.Main.ViewModel
         public ICommand AcceptVectorCommand { get; }
 
 
-        public int AreaThreshold { get; set; }
-        public int ColorThreshold { get; set; }
+        public int AreaThreshold
+        {
+            get { return _areaThreshold; }
+            set
+            {
+                _areaThreshold = value;
+                OnPropertyChanged();
+            }
+        }
+        public int ColorThreshold
+        {
+            get { return _colorThreshold; }
+            set
+            {
+                _colorThreshold = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public BitmapSource BitmapToTrace
         {
@@ -37,8 +54,11 @@ namespace SRL.Main.ViewModel
 
 
         private BitmapSource _bitmapToTrace;
-        private BitmapTracer _tracer;
+        private int _areaThreshold;
+        private int _colorThreshold;
 
+        private BitmapTracer _tracer;
+        
 
         public TracingViewModel()
         {
@@ -57,6 +77,7 @@ namespace SRL.Main.ViewModel
                     BitmapToTrace = new BitmapImage(new Uri(dialog.FileName));
                     _tracer = new BitmapTracer(dialog.FileName);
 
+                    TracedPolygons.Clear();
                     var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
                     foreach (var polygon in traceOutput)
                         TracedPolygons.Add(polygon);

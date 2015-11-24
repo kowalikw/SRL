@@ -97,7 +97,9 @@ namespace SRL.Model.Model
 
         public override bool Equals(object obj)
         {
-            return Equals((Polygon) obj);
+            if (obj is Polygon)
+                return Equals((Polygon) obj);
+            return false;
         }
 
         public override int GetHashCode()
