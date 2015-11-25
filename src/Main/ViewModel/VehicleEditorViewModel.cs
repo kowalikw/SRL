@@ -99,8 +99,11 @@ namespace SRL.Main.ViewModel
 
             SetOrientationAngleCommand = new RelayCommand(o =>
             {
-                double angle = (double) o;
+                Point position = (Point) o;
+                double angle = GeometryHelper.GetDegAngle(CurrentModel.OrientationOrigin, position);
+
                 CurrentModel.OrientationAngle = angle;
+                CurrentModel.OrientationOriginEnd = position;
                 Stage = EditingStage.OrientationAngleSet;
             },
             c => Stage == EditingStage.OrientationOriginSet);

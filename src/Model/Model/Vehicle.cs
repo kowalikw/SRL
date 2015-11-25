@@ -9,6 +9,7 @@ namespace SRL.Model.Model
     {
         public Polygon Shape { get; set; }
         public Point OrientationOrigin { get; set; }
+        public Point OrientationOriginEnd { get; set; }
 
         public double OrientationAngle
         {

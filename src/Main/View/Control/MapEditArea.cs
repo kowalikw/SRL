@@ -27,9 +27,10 @@ namespace SRL.Main.View.Control
         protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
             //Draw placed, valid polygons.
-            foreach (var polygon in _context.CurrentModel.Obstacles)
+            if(_context.CurrentModel != null)
             {
-                spriteBatch.DrawPolygon(polygon, RegularColor, LineThickness);
+                foreach (var polygon in _context.CurrentModel.Obstacles)
+                    spriteBatch.DrawPolygon(polygon, RegularColor, LineThickness);
             }
 
             //Draw currently constructed obstacle.

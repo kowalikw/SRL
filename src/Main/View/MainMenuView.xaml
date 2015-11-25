@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:SRL.Main"
         xmlns:control="clr-namespace:SRL.MonoGameControl;assembly=SRL.MonoGameControl"
         mc:Ignorable="d"
-        Title="MainMenuView" Height="150" Width="525">
+        Title="MainMenuView" Height="144" Width="525">
     <Grid>
         <StackPanel>
-            <Button Command="{Binding VehicleEditorCommand}">Dodaj pojazd</Button>
-            <Button Command="{Binding MapEditorCommand}">Dodaj mapę</Button>
+            <Button Height="35" Command="{Binding VehicleEditorCommand}">Dodaj pojazd</Button>
+            <Button Height="35" Command="{Binding MapEditorCommand}">Dodaj mapę</Button>
+            <Button Height="35" Command="{Binding TracerCommand}">Wczytaj plik graficzny</Button>
         </StackPanel>
 
     </Grid>

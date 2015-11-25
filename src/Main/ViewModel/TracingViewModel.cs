@@ -11,6 +11,9 @@ using SRL.Model.Model;
 using SRL.Model.Tracing;
 using System.Windows;
 using SRL.Main.View;
+using System.Windows.Threading;
+using System.Timers;
+using System.Collections.Generic;
 
 namespace SRL.Main.ViewModel
 {
@@ -19,9 +22,10 @@ namespace SRL.Main.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand LoadBitmapCommand { get; }
-        public ICommand AcceptVectorCommand { get; }
+        public ICommand TraceCommand { get; }
+        public ICommand CreateMapCommand { get; }
+        public ICommand CreateVehicleCommand { get; }
 
-        public bool IsCorrect { get; private set; }
         public int AreaThreshold
         {
             get { return _areaThreshold; }
@@ -30,9 +34,10 @@ namespace SRL.Main.ViewModel
                 _areaThreshold = value;
 
                 if (BitmapToTrace != null)
-                    Trace();
-
-                // TODO - retrace in timer?
+                {
+                    _tracerTimer.Stop();
+                    _tracerTimer.Start();
+                }
 
                 OnPropertyChanged();
             }
@@ -45,9 +50,10 @@ namespace SRL.Main.ViewModel
                 _colorThreshold = value;
 
                 if (BitmapToTrace != null)
-                    Trace();
-
-                // TODO - retrace in timer?
+                {
+                    _tracerTimer.Stop();
+                    _tracerTimer.Start();
+                }
 
                 OnPropertyChanged();
             }
@@ -71,12 +77,17 @@ namespace SRL.Main.ViewModel
         private int _colorThreshold;
 
         private BitmapTracer _tracer;
+        private DispatcherTimer _tracerTimer;
 
 
         public TracingViewModel()
         {
             AreaThreshold = 50;
             ColorThreshold = 50;
+
+            _tracerTimer = new DispatcherTimer();
+            _tracerTimer.Tick += TracerTimer_Tick;
+            _tracerTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
 
             TracedPolygons = new ObservableCollection<Polygon>();
 
@@ -90,23 +101,44 @@ namespace SRL.Main.ViewModel
                     BitmapToTrace = new BitmapImage(new Uri(dialog.FileName));
                     _tracer = new BitmapTracer(dialog.FileName);
 
-                    Trace();
+                    ((RelayCommand)TraceCommand).OnCanExecuteChanged();
                 }
             });
 
-            AcceptVectorCommand = new RelayCommand(o =>
+            TraceCommand = new RelayCommand(o =>
             {
-                //TODO
+                Trace();
+            },
+            c =>
+            {
+                return _bitmapToTrace != null;
+            });
 
-                // MAP
-                /*List<Polygon> obstacles = new List<Polygon>();
+            CreateMapCommand = new RelayCommand(o =>
+            {
+                List<Polygon> obstacles = new List<Polygon>();
                 foreach (var polygon in TracedPolygons)
                     obstacles.Add(polygon);
                 var map = new Map(512, 512, obstacles);
                 Window window = new MapEditorView(map);
-                window.Show();*/
+                window.Show();
 
-                // VEHICLE
+                OnClosingRequest();
+            },
+            c =>
+            {
+                if (TracedPolygons.Count == 0)
+                    return false;
+
+                foreach (var polygon in TracedPolygons)
+                    if (!polygon.IsCorrect())
+                        return false;
+
+                return true;
+            });
+
+            CreateVehicleCommand = new RelayCommand(o =>
+            {
                 var vehicle = new Vehicle(TracedPolygons[0], null, 0);
                 Window window = new VehicleEditorView(vehicle);
                 window.Show();
@@ -115,15 +147,10 @@ namespace SRL.Main.ViewModel
             },
             c =>
             {
-                return true;
-                /*if (TracedPolygons.Count == 0)
-                    return false;
+                if (TracedPolygons.Count == 1 && TracedPolygons[0].IsCorrect())
+                    return true;
 
-                foreach (var polygon in TracedPolygons)
-                    if (!polygon.IsCorrect())
-                        return false;
-
-                return true;*/
+                return false;
             });
         }
 
@@ -133,6 +160,15 @@ namespace SRL.Main.ViewModel
             var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
             foreach (var polygon in traceOutput)
                 TracedPolygons.Add(polygon);
+
+            ((RelayCommand)CreateMapCommand).OnCanExecuteChanged();
+            ((RelayCommand)CreateVehicleCommand).OnCanExecuteChanged();
+        }
+
+        private void TracerTimer_Tick(object sender, EventArgs e)
+        {
+            Trace();
+            _tracerTimer.Stop();
         }
 
         [NotifyPropertyChangedInvocator]

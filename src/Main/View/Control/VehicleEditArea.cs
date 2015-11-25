@@ -59,7 +59,6 @@ namespace SRL.Main.View.Control
                         spriteBatch.DrawVertex(_context.CurrentModel.OrientationOrigin, ActiveColor, VertexThickness);
 
                         //Draw new potential orientation axis.
-                        double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
                         spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, MousePosition, ActiveColor, LineThickness, AxisLength);
                         break;
                     }
@@ -69,10 +68,7 @@ namespace SRL.Main.View.Control
                         spriteBatch.DrawVertex(_context.CurrentModel.OrientationOrigin, RegularColor, VertexThickness);
 
                         //Draw orientation axis.
-                        double angle = _context.CurrentModel.OrientationAngle;
-
-                        // TODO: Fix
-                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, (float)angle, (float)AxisLength, RegularColor, LineThickness);
+                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, _context.CurrentModel.OrientationOriginEnd, RegularColor, LineThickness, AxisLength);
                         break;
                     }
                 default:
@@ -96,9 +92,9 @@ namespace SRL.Main.View.Control
             }
             else if (_context.Stage == EditingStage.OrientationOriginSet) //Checking stage is necessary here due to angle calculation.
             {
-                double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
-                if (_context.SetOrientationAngleCommand.CanExecute(angle))
-                    _context.SetOrientationAngleCommand.Execute(angle);
+                //double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
+                //if (_context.SetOrientationAngleCommand.CanExecute(angle))
+                _context.SetOrientationAngleCommand.Execute(position);
             }
         }
     }

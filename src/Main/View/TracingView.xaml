@@ -17,6 +17,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -55,12 +56,24 @@
                 Content="Load bitmap"
                     Command="{Binding LoadBitmapCommand}"/>
             <Button Grid.Row="1" Grid.Column="3"
-                Content="Jako pojazd"
-                    Command="{Binding AcceptVectorCommand}"
+                Content="Trace"
+                    Command="{Binding TraceCommand}"
                     />
         </Grid>
-
         <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0"
+                Content="CreateVehicle"
+                    Command="{Binding CreateVehicleCommand}"/>
+            <Button Grid.Row="1" Grid.Column="1"
+                Content="Create Map"
+                    Command="{Binding CreateMapCommand}"
+                    />
+        </Grid>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

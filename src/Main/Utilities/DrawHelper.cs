@@ -216,9 +216,6 @@ namespace SRL.Main.Utilities
             const int arrowBottomX = -12;
             const int arrowBottomY = 6;
 
-            double a = (tip.Y - origin.Y) / (tip.X - origin.X);
-            double b = origin.Y - a * origin.X;
-
             Point arrowCenter = new Point(arrowCenterX, arrowCenterY);
             Point arrowTop = new Point(arrowTopX, arrowTopY);
             Point arrowBottom = new Point(arrowBottomX, arrowBottomY);
@@ -243,7 +240,6 @@ namespace SRL.Main.Utilities
             }
 
             // Rotate and translate of arrow
-            
             arrowCenter = new Point(end.X, end.Y);
             arrowTop = new Point(((arrowTop.X * Math.Cos(axisAngle) - arrowTop.Y * Math.Sin(axisAngle)) + end.X),
                 ((arrowTop.X * Math.Sin(axisAngle) + arrowTop.Y * Math.Cos(axisAngle)) + end.Y));
@@ -254,17 +250,6 @@ namespace SRL.Main.Utilities
             spriteBatch.DrawLine(arrowTop, arrowCenter, color, thickness);
             spriteBatch.DrawLine(arrowBottom, arrowCenter, color, thickness);
             spriteBatch.DrawLine(origin, end, color, thickness);
-        }
-
-        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, float angle, float length, Color color, float thickness = 1.0f)
-        {
-            Point tip = new Point(
-                origin.X + Math.Cos(angle) * length,
-                origin.Y + Math.Sin(angle) * length);
-
-            DrawArrow(spriteBatch, origin, tip, color, thickness, length);
-
-            // TODO: Fix
         }
 
         internal static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Color color, float thickness = 1.0f)
