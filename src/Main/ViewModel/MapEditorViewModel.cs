@@ -4,6 +4,7 @@ using SRL.Main.Utilities;
 using SRL.Model;
 using SRL.Model.Model;
 using Point = SRL.Model.Model.Point;
+using System;
 
 namespace SRL.Main.ViewModel
 {
@@ -49,9 +50,11 @@ namespace SRL.Main.ViewModel
         private bool _isCurrentModelValid; 
 
 
-        public MapEditorViewModel()
+        public MapEditorViewModel(object model = null)
         {
             Reset();
+
+            CurrentModel = model is Map ? (Map)model : null;
 
             CloseCurrentPolygonCommand = new RelayCommand(o =>
             {

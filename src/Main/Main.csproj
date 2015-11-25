@@ -64,6 +64,7 @@
     <Compile Include="Utilities\DrawHelper.cs" />
     <Compile Include="Utilities\PolygonToPointCollection.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
+    <Compile Include="ViewModel\CloseableViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\LanguagePickerViewModel.cs" />
     <Compile Include="ViewModel\MainMenuViewModel.cs" />

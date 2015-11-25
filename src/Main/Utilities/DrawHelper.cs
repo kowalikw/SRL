@@ -207,7 +207,7 @@ namespace SRL.Main.Utilities
             DrawPath(spriteBatch, polygon.Vertices, true, color, thickness);
         }
 
-        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Color color, float thickness = 1.0f)
+        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Color color, float thickness = 1.0f, float length = 100.0f)
         {
             const int arrowTopX = -12;
             const int arrowTopY = -6;
@@ -216,9 +216,19 @@ namespace SRL.Main.Utilities
             const int arrowBottomX = -12;
             const int arrowBottomY = 6;
 
+            double a = (tip.Y - origin.Y) / (tip.X - origin.X);
+            double b = origin.Y - a * origin.X;
+
             Point arrowCenter = new Point(arrowCenterX, arrowCenterY);
             Point arrowTop = new Point(arrowTopX, arrowTopY);
             Point arrowBottom = new Point(arrowBottomX, arrowBottomY);
+
+            double axisAngle = GeometryHelper.GetRadAngle(origin, tip);
+            Point end = new Point(
+                origin.X + Math.Cos(axisAngle) * 100,
+                origin.Y + Math.Sin(axisAngle) * 100);
+
+            if (origin.X == tip.X && origin.Y == tip.Y) return;
 
             // Mirror of arrow
             if (origin.X > tip.X)
@@ -226,32 +236,35 @@ namespace SRL.Main.Utilities
                 arrowCenter = new Point(arrowCenter.X, arrowCenter.Y);
                 arrowTop = new Point(-arrowTop.X, arrowTop.Y);
                 arrowBottom = new Point(-arrowBottom.X, arrowBottom.Y);
+
+                end = new Point(
+                    origin.X - Math.Cos(axisAngle) * length,
+                    origin.Y - Math.Sin(axisAngle) * length);
             }
 
             // Rotate and translate of arrow
-            double axisAngle = GeometryHelper.GetRadAngle(origin, tip);
-            arrowCenter = new Point(tip.X, tip.Y);
-            arrowTop = new Point(((arrowTop.X * Math.Cos(axisAngle) - arrowTop.Y * Math.Sin(axisAngle)) + tip.X),
-                ((arrowTop.X * Math.Sin(axisAngle) + arrowTop.Y * Math.Cos(axisAngle)) + tip.Y));
-            arrowBottom = new Point(((arrowBottom.X * Math.Cos(axisAngle) - arrowBottom.Y * Math.Sin(axisAngle)) + tip.X),
-                ((arrowBottom.X * Math.Sin(axisAngle) + arrowBottom.Y * Math.Cos(axisAngle)) + tip.Y));
+            
+            arrowCenter = new Point(end.X, end.Y);
+            arrowTop = new Point(((arrowTop.X * Math.Cos(axisAngle) - arrowTop.Y * Math.Sin(axisAngle)) + end.X),
+                ((arrowTop.X * Math.Sin(axisAngle) + arrowTop.Y * Math.Cos(axisAngle)) + end.Y));
+            arrowBottom = new Point(((arrowBottom.X * Math.Cos(axisAngle) - arrowBottom.Y * Math.Sin(axisAngle)) + end.X),
+                ((arrowBottom.X * Math.Sin(axisAngle) + arrowBottom.Y * Math.Cos(axisAngle)) + end.Y));
 
             // Draw
             spriteBatch.DrawLine(arrowTop, arrowCenter, color, thickness);
             spriteBatch.DrawLine(arrowBottom, arrowCenter, color, thickness);
-            spriteBatch.DrawLine(origin, tip, color, thickness);
+            spriteBatch.DrawLine(origin, end, color, thickness);
         }
 
-        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, float length, float angle, Color color,
-            float thickness = 1.0f)
+        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, float angle, float length, Color color, float thickness = 1.0f)
         {
             Point tip = new Point(
                 origin.X + Math.Cos(angle) * length,
                 origin.Y + Math.Sin(angle) * length);
 
-            spriteBatch.DrawLine(origin, tip, color, thickness);
+            DrawArrow(spriteBatch, origin, tip, color, thickness, length);
 
-            //TODO fix
+            // TODO: Fix
         }
 
         internal static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Color color, float thickness = 1.0f)

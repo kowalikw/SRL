@@ -6,7 +6,7 @@ using SRL.Main.View.Language;
 
 namespace SRL.Main.ViewModel
 {
-    internal class LanguagePickerViewModel
+    internal class LanguagePickerViewModel : CloseableViewModel
     {
         public ICommand PolishLanguageCommand { get; }
         public ICommand EnglishLanguageCommand { get; }
@@ -18,7 +18,7 @@ namespace SRL.Main.ViewModel
                 Window window = new MainMenuView(Language.Polish);
                 window.Show();
 
-                //TODO close LanguagePickerView window.
+                OnClosingRequest();
             });
             
             EnglishLanguageCommand = new RelayCommand(o =>
@@ -26,7 +26,7 @@ namespace SRL.Main.ViewModel
                 Window window = new MainMenuView(Language.English);
                 window.Show();
 
-                //TODO close LanguagePickerView window.
+                OnClosingRequest();
             });
         }
     }

@@ -15,7 +15,7 @@ namespace SRL.Model.Model
             get { return _orientationAngle;}
             set
             {
-                value = value%360;
+                value = value % 360;
                 _orientationAngle = value < 0 ? 360 + value : value;
             }
         }

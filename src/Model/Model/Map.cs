@@ -25,6 +25,13 @@ namespace SRL.Model.Model
             Height = height;
         }
 
+        public Map(double width, double height, List<Polygon> obstacles)
+        {
+            Obstacles = obstacles;
+            Width = width;
+            Height = height;
+        }
+
         #region IXmlSerializable members
 
         /// <remarks>

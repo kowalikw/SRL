@@ -3,6 +3,7 @@ using System.Windows.Input;
 using SRL.Main.Utilities;
 using SRL.Model.Model;
 using SRL.Model;
+using System;
 
 namespace SRL.Main.ViewModel
 {
@@ -61,9 +62,17 @@ namespace SRL.Main.ViewModel
         private EditingStage _stage;
 
 
-        public VehicleEditorViewModel()
+        public VehicleEditorViewModel(object model = null)
         {
             Reset();
+
+            CurrentModel = model is Vehicle ? (Vehicle)model : null;
+
+            if(CurrentModel != null)
+            {
+                Stage = EditingStage.ShapeDone;
+                VehicleShape = CurrentModel.Shape.Vertices;
+            }
 
             CloseVehicleShapeCommand = new RelayCommand(o =>
             {

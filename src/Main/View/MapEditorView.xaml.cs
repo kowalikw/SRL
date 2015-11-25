@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using SRL.Main.ViewModel;
+using SRL.Model.Model;
 
 namespace SRL.Main.View
 {
@@ -8,10 +9,10 @@ namespace SRL.Main.View
     /// </summary>
     public partial class MapEditorView : Window
     {
-        public MapEditorView()
+        public MapEditorView(object model = null)
         {
             InitializeComponent();
-            DataContext = new MapEditorViewModel();
+            DataContext = new MapEditorViewModel(model);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace SRL.Main.View.Control
 {
     public class VehicleEditArea : EditArea
     {
-        private const float AxisLength = 50;
+        private const float AxisLength = 100;
         
         private VehicleEditorViewModel _context;
         
@@ -50,7 +50,7 @@ namespace SRL.Main.View.Control
                         Color originColor = _context.SetOrientationOriginCommand.CanExecute(MousePosition)
                             ? ValidColor
                             : InvalidColor;
-                        spriteBatch.DrawVertex(MousePosition, originColor, VertexThickness);
+                        //spriteBatch.DrawVertex(MousePosition, originColor, VertexThickness);
                         break;
                     }
                 case EditingStage.OrientationOriginSet:
@@ -60,8 +60,7 @@ namespace SRL.Main.View.Control
 
                         //Draw new potential orientation axis.
                         double angle = GeometryHelper.GetDegAngle(_context.CurrentModel.OrientationOrigin, MousePosition);
-                        Color axisColor = _context.SetOrientationAngleCommand.CanExecute(angle) ? ValidColor : InvalidColor;
-                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, MousePosition, axisColor, LineThickness);
+                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, MousePosition, ActiveColor, LineThickness, AxisLength);
                         break;
                     }
                 case EditingStage.OrientationAngleSet:
@@ -69,11 +68,11 @@ namespace SRL.Main.View.Control
                         //Draw orientation origin.
                         spriteBatch.DrawVertex(_context.CurrentModel.OrientationOrigin, RegularColor, VertexThickness);
 
+                        //Draw orientation axis.
                         double angle = _context.CurrentModel.OrientationAngle;
 
-                        //TODO draw fixed length arrow (implement draw arrow)
-                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, AxisLength, (float)(angle * Math.PI / 180),
-                            RegularColor, LineThickness);
+                        // TODO: Fix
+                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, (float)angle, (float)AxisLength, RegularColor, LineThickness);
                         break;
                     }
                 default:

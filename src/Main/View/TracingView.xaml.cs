@@ -11,7 +11,10 @@ namespace SRL.Main.View
         public TracingView()
         {
             InitializeComponent();
-            DataContext = new TracingViewModel();
+
+            var viewModel = new TracingViewModel();
+            viewModel.ClosingRequest += (sender, e) => this.Close();
+            DataContext = viewModel;
         }
     }
 }

@@ -3,30 +3,37 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using SRL.Main.Annotations;
 using SRL.Main.Utilities;
 using SRL.Model.Model;
 using SRL.Model.Tracing;
+using System.Windows;
+using SRL.Main.View;
 
 namespace SRL.Main.ViewModel
 {
-    internal class TracingViewModel : INotifyPropertyChanged
+    internal class TracingViewModel : CloseableViewModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand LoadBitmapCommand { get; }
         public ICommand AcceptVectorCommand { get; }
 
-
+        public bool IsCorrect { get; private set; }
         public int AreaThreshold
         {
             get { return _areaThreshold; }
             set
             {
                 _areaThreshold = value;
+
+                if (BitmapToTrace != null)
+                    Trace();
+
+                // TODO - retrace in timer?
+
                 OnPropertyChanged();
             }
         }
@@ -36,6 +43,12 @@ namespace SRL.Main.ViewModel
             set
             {
                 _colorThreshold = value;
+
+                if (BitmapToTrace != null)
+                    Trace();
+
+                // TODO - retrace in timer?
+
                 OnPropertyChanged();
             }
         }
@@ -70,31 +83,56 @@ namespace SRL.Main.ViewModel
             LoadBitmapCommand = new RelayCommand(o =>
             {
                 var dialog = new OpenFileDialog();
-               // dialog.Filter = "BMP files (*.bmp)|*.bmp";
+                dialog.Filter = "BMP files (*.bmp, *.png, *.jpg, *.jpeg)|*.bmp; *.png; *.jpg; *.jpeg;";
 
                 if (dialog.ShowDialog() == true)
                 {
                     BitmapToTrace = new BitmapImage(new Uri(dialog.FileName));
                     _tracer = new BitmapTracer(dialog.FileName);
 
-                    TracedPolygons.Clear();
-                    var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
-                    foreach (var polygon in traceOutput)
-                        TracedPolygons.Add(polygon);
-
-                    //TODO re-trace on each area/color threshold change
+                    Trace();
                 }
             });
 
             AcceptVectorCommand = new RelayCommand(o =>
             {
                 //TODO
+
+                // MAP
+                /*List<Polygon> obstacles = new List<Polygon>();
+                foreach (var polygon in TracedPolygons)
+                    obstacles.Add(polygon);
+                var map = new Map(512, 512, obstacles);
+                Window window = new MapEditorView(map);
+                window.Show();*/
+
+                // VEHICLE
+                var vehicle = new Vehicle(TracedPolygons[0], null, 0);
+                Window window = new VehicleEditorView(vehicle);
+                window.Show();
+
+                OnClosingRequest();
             },
             c =>
             {
-                //TODO
-                return false;
+                return true;
+                /*if (TracedPolygons.Count == 0)
+                    return false;
+
+                foreach (var polygon in TracedPolygons)
+                    if (!polygon.IsCorrect())
+                        return false;
+
+                return true;*/
             });
+        }
+
+        private void Trace()
+        {
+            TracedPolygons.Clear();
+            var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
+            foreach (var polygon in traceOutput)
+                TracedPolygons.Add(polygon);
         }
 
         [NotifyPropertyChangedInvocator]

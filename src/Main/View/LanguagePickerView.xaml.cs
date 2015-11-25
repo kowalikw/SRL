@@ -11,7 +11,10 @@ namespace SRL.Main.View
         public LanguagePickerView()
         {
             InitializeComponent();
-            DataContext = new LanguagePickerViewModel();
+
+            var viewModel = new LanguagePickerViewModel();
+            viewModel.ClosingRequest += (sender, e) => this.Close();
+            DataContext = viewModel;
         }
     }
 }
