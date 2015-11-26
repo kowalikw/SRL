@@ -3,7 +3,6 @@
 \usepackage[T1]{fontenc}
 \usepackage[UTF8]{inputenc}
 \usepackage[polish]{babel}
-
 \usepackage{enumitem}
 \usepackage{tabulary}
 \usepackage{multirow}
@@ -39,267 +38,155 @@
 \renewcommand\section{\clearpage\oldsection} %break after every section
 
 \definecolor{hlinecolor}{gray}{0.8}
+\lstset{
+	language=XML,
+	morekeywords={encoding,
+	}
+}
 
-\newcommand{\pielat}{\small{\textsf{MP}}}
-\newcommand{\kowalik}{\small{\textsf{WK}}}
-\newcommand{\miskiewicz}{\small{\textsf{KM}}}
-\newcommand{\everyone}{\small{\textsf{ALL}}}
 
 \begin{document}
-\title{\textbf{Projekt Zespołowy}\\Edytor pojazdów i map}
+\title{\textbf{Projekt Zespołowy}\\Moduł generowania pojazdów i map\\z plików graficznych}
 \author{Wojciech Kowalik, Konrad Miśkiewicz, Mateusz Pielat}
 \maketitle
 
 
-\section{XML - do dodania gdzieś}
 
-\lstset{
-  language=XML,
-  morekeywords={encoding,
-    }
-}
+\tableofcontents
+
+
+\section{Streszczenie}
+Projekt ma na celu stworzenie aplikacji symulującej ruch pojazdu w labiryncie. Pojazd będzie omijał przeszkody poruszając się do przodu i wykonując skręty w miejscu. Aplikacja będzie podzielona na kilka podstawowych modułów, które razem umożliwią przygotowanie i przeprowadzenie symulacji.
+\\\\Dokument opisuje technologie oraz rozwiązania zastosowane przy implementacji modułu generowania pojazdów i map z plików graficznych. Moduł ten umożliwia użytkownikowi załadowanie pliku graficznego w jednym z dozwolonych formatów, a następnie jego trasowanie. Użytkownik otrzymuje listę wygenerowanych wielokątów, z których następnie może stworzyć mapę lub pojazd. Aby możliwe było stworzenie mapy, lista wygenerowanych wielokątów nie może być pusta, natomiast stworzenie pojazdu będzie możliwe wtedy i tylko wtedy, gdy na tej liścia będzie znajdował się jeden wielokąt. Moduł umożliwia zapisanie pracy w plikach XML, które będą wykorzystywane przez inne moduły aplikacji.
+
+
+\section{Przygotowanie modułu}
+
+Moduł został zaprojektowany z wykorzystaniem technologii \textit{WPF} i \textit{MonoGame}. Ponownie wykorzystane zostały pliki XML zaprojektowane przy okazji tworzenia modułu edycji ręcznej map i pojazdów, które nie uległy żadnym modyfikacjom. Do przygotowania głównej funkcjonalności tego modułu – trasowania, wykorzystana została biblioteka \textit{D3DPotrace}. Trasowanie zostało dokładniej opisane w dalszej części dokumentu.
+\subsection{Wymagania funkcjonalne modułu}
+\begin{itemize}
+	\item System powinien umożliwiac wczytanie pliku graficznego w jednym z dozwolonych formatów.
+	\item System powinien umożliwiać dobór parametrów trasowania:
+		\\- \textit{area threshold}
+		\\- \textit{color threshold}
+		\\(parametry te zostały opisane w dalszej części dokumentacji)
+	\item System powinien wyświetlać użytkownikowi wynik trasowania dla aktualnie dobranych parametrów.
+	\item System powinien umożliwiać stworzenie mapy z wygenerowanych kształtów (warunkiem umożliwiającym stworzenie mapy jest liczba wygenerowanych wielokątów większa od 0).
+	\item System powinien umożliwiać stworzenie pojazdu z wygenerowanego kształtu (warunkiem umożliwiającym stworzenie pojazdu jest liczba wygenerowanych wielokątów równa 1 - pojazd nie może składać się z dwóch oddzielnych części).
+	\item System powinien umożliwiać zapisanie wygenerowanych map/pojazdów do plików wektorowych.
+
+\end{itemize}
+\newpage
+\subsection{Przykłady reprezentacji mapy i pojazdu w XML}
+
+Moduł generowania pojazdów i map z plików graficznych, podobnie jak moduł ich ręcznej edycji wymagał użycia plików XML opisujących odpowiednio mapę i pojazd. W tym etapie wektorowa reprezentacja pojazdu i mapy nie uległa zmianie, jednak dla porządku ponownie zaprezentowane zostały przykładowe pliki XML.
+
+\subsubsection{Reprezentacja mapy}
 \begin{lstlisting}
 <vmd xmlns="pl.pw.mini.KowMisPie.SRL" width="512" height="512">
-  <polygon>
-        <point x = "160" y="119" />
-        <point x = "58" y="284" />
-        <point x = "357" y="275" />
-    </polygon>
-    <polygon>
-        <point x = "393" y="32" />
-        <point x = "390" y="398" />
-        <point x = "457" y="400" />
-        <point x = "458" y="33" />
-    </polygon>
-    <polygon>
-        <point x="233" y="327" />
-        <point x="30" y="316" />
-        <point x="27" y="60" />
-        <point x="357" y="60" />
-        <point x="362" y="23" />
-        <point x="466" y="21" />
-        <point x="467" y="7" />
-        <point x="16" y="42" />
-        <point x="15" y="334" />
-        <point x="258" y="406" />
-        <point x="315" y="358" />
-    </polygon>
+	<polygon>
+		<point x = "160" y="119" />
+		<point x = "58" y="284" />
+		<point x = "357" y="275" />
+	</polygon>
+	<polygon>
+		<point x = "393" y="32" />
+		<point x = "390" y="398" />
+		<point x = "457" y="400" />
+	</polygon>
+	<polygon>
+		<point x="30" y="316" />
+		<point x="27" y="60" />
+		<point x="357" y="60" />
+		<point x="362" y="23" />
+		<point x="466" y="21" />
+	</polygon>
 </vmd>
 \end{lstlisting}
 
+~\\\subsubsection{Reprezentacja pojazdu}
 \begin{lstlisting}
 <vvd xmlns="pl.pw.mini.KowMisPie.SRL">
-    <orientation>
-        <point x="0" y="0" />
-        <angle>1.9091524329963763</angle>
-    </orientation>
-    <polygon>
-        <point x="112" y="93" />
-        <point x="359" y="95" />
-        <point x="433" y="165" />
-        <point x="371" y="222" />
-        <point x="111" y="222" />
-    </polygon>
+	<orientation>
+		<point x="189" y="144" />
+		<angle>1.9091524329963763</angle>
+	</orientation>
+	<polygon>
+		<point x="112" y="93" />
+		<point x="359" y="95" />
+		<point x="433" y="165" />
+		<point x="371" y="222" />
+		<point x="111" y="222" />
+	</polygon>
 </vvd>
 \end{lstlisting}
 
-\section{Połączenie technologii WPF i MonoGame}
+\subsection{Dozwolone formaty plików graficznych}
 
-Aby interfejs użytkownika był możliwie prosty, a tworzenie map i pojazdów maksymalnie wydajne połączone zostały technologie Windows Presentation Foundation (WPF) i MonoGame. Technologia WPF domyślnie nie umożliwia osadzenia zewnętrznego silnika graficznego, więc aby móc skorzystać z MonoGame w tym środowisku konieczne było napisanie odpowiedniej kontrolki. 
+Aplikacja umożliwia trasowanie plików graficznych znajdujących się w jednym z poniższych formatów:
 
-~\\W związku z tym stworzona została kontrolka \textit{MonoGameControl}. W rzeczywistości jest ona klasą abstrakcyjną, która zawiera trzy metody abstrakcyjne. Aby z niej skorzystać konieczne jest utworzenie własnej klasy dziedziczącej po \textit{MonoGameControl} i implementującej metody: \textbf{Initialize()}, \textbf{Uninitialize()} oraz \textbf{Render(TimeSpan time)}. Budowę takiej kontrolki oraz jej implementację przedstawiono poniżej.
-
-\subsection{Schemat kontrolki hostującej MonoGame}
-
-\begin{center}
-\includegraphics[scale=1.0]{MonoGameControlSchemat}\\
-\textit{Schemat 1. MonoGameControl}
-\end{center}
-~\\
-\subsection{Metody abstrakcyjne wymagające nadpisania}
 \begin{itemize}
-  \item \textbf{abstract void Initialize()} - wywoływana przy tworzeniu kontrolki
-  \item \textbf{abstract void Unitialize()} - wywoływana przy destrukcji kontrolki
-  \item \textbf{abstract void Render(TimeSpan time)} - wywoływana cyklicznie, odpowiada za ponowne renderowanie obrazu wyświetlanego na kontrolce
+	\item bmp
+	\item png
+	\item jpg
+	\item jpeg
+	\item gif
 \end{itemize}
 
-\subsection{Przykład Implementacji własnej kontrolki hostującej MonoGame}
-\begin{lstlisting}
-       public class MyOwnControl : MonoGameControl
-       {
-           private SpriteBatch spriteBatch;
-    
-           protected override void Initialize()
-           {
-               spriteBatch = new SpriteBatch(GraphicsDevice);
-           }
+Uwaga: Dla formatu gif plik powinien być statycznym obrazem. Dla animacji znajdującej się w tym formacie poprawne działanie modułu trasowania nie jest gwarantowane.
 
-           protected override void Unitialize()
-           {
-               spriteBatch.Dispose();
-           }
+\section{Zmiany w architekturze systemu}
 
-           protected override void Render(TimeSpan time)
-           {
-               GraphicsDevice.Clear(Color.LightSkyBlue);
-               GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+W porównaniu z poprzednią wersją aplikacji, architektura nie uległa znaczącym zmianom. Najważniejszą klasą, która pojawiła się w systemie jest klasa \textit{BitmapTracer}. Poniżej przedstawiono jej strukturę oraz opis pól i metod.
 
-               spriteBatch.BeginDraw();
-
-               // DRAW
-
-               spriteBatch.End();
-           }
-       }
-\end{lstlisting}
-
-\section{Osadzenie obrazka}
-
-\begin{center}
-\includegraphics[scale=0.7]{vehicleeditor}\\
-\textit{Rysunek 1. Edytor pojazdu}
+~\\\begin{center}
+	\includegraphics[scale=1.0]{bitmaptracer-class}\\
+	\textit{Schemat 1. Klasa BitmapTracer}
 \end{center}
 
-\begin{center}
-\includegraphics[scale=0.7]{mapeditor}\\
-\textit{Rysunek 2. Edytor map}
+~\\Powyższa klasa zawiera jedno pole prywatne - \textit{\_bitmap}, które jest polem oznaczonym modyfikatorem \textit{readonly}. Jest ono inicjalizowane w konstruktorze klasy. Pole to przechowuje obiekt typu \textit{Bitmap}, który będzie podlegał trasowaniu.
+\\\\Poza dwoma konstruktorarmi, jedyną i kluczową metodą klasy \textit{BitmapTracer} jest metoda \textit{Trace(int, int)}. Jako parametry przyjmuje ona \textit{area threshold} i \textit{color threshold}, natomiast jako wynik swojej pracy zwraca nam listę rozpoznanych wielokątów.
+
+\section{Trasowanie pliku graficznego}
+
+\subsection{Biblioteka}
+
+Trasowanie odbywa się przy pomocy wrappera zewnętrznej biblioteki \textit{D3DPotrace} będącej dotnetowym portem biblioteki \textit{Potrace}. Jest to jedna z dwóch (obok \textit{AutoTrace}) popularnych bibliotek do trasowania obrazów rastrowych o otwartym kodzie. 
+\\\\Działanie samej biblioteki oparte jest na koncepcji hirarchizacji trasowanych obszarów. Przykładowo: umieszczona na białym tle czarna, wypełniona w środku plama jest obszarem traktowanym jako (zamknięty) wielokąt. Jeżeli na takiej czarnej plamie umieścimy całkowicie się w niej zawierającą plamę białą (tworząc czarny obwarzanek), to zostanie ona uznana za potomka plamy czarnej. Jeszcze mniejsza plama czarna zawarta w białej będzie potomkiem białej i pra-potomkiem pierwszej czarnej plamy itd. 
+Ponieważ wielokąty zawarte całkowicie w innych wielokątach nie mają żadnego znaczenia (pojazd omijając przeszkodę i tak bierze pod uwagę tylko jej krawędź, a nie jak jest w środku "podziurawiona"), dzięki takiej hierarchizacji danych możemy w łatwy sposób odrzucać wszystkie nieistotne dla obliczenia ścieżki kształty.
+
+\subsection{Wrapper}
+
+Poza odrzucaniem niepotrzebnych figur wrapper ułatwia korzystanie z biblioteki upubliczniając jedynie te parametry, których kastomizacja ma sens. Przykładowo, wrapper ma zakodowany na stałe współczynnik określający w jakim stopniu krawędzie trasowane są do linii beziera zamiast linii prostych. De facto dba o to, żeby krawędzie wyjściowe były wyłącznie odcinkami prostymi.
+\\\\Wrapper upublicznia dwa parametry:
+\\- Color threshold - procentowa wartość od 0 do 100. Określa stopień w jakim muszą różnić się dwa różnokolorowe fragmenty obrazka, aby zostały zinterpretowane jako dwa różne wielokąty. Przykładowo: mała wartość sprawi, że dwa nachodzące na siebie kwadraty - jeden czerwony, drugi czerwony z niewielką domieszką żółtego - zostaną przetrasowane do dwóch odrębnych obiektów. Duża wartość sprawi, że algorytm zwróci dla tego samego wejścia jeden kształt o polu będącym sumą pól kwadratów - chyba, że kwadraty będą miały zupełnie inne kolory (np. ciemny czerwony i jasny niebieski).
+\\- Area threshold - minimalnym pole (de facto ilość pikseli) jakie musi mieć figura, aby nie była zignorowana przez algorytm trasujący. Wartość równa 0 sprawia, że nawet najmniejsze elementy na bitmapie zostaną potraktowane jak wielokąty. Ten parametr może być szczególnie przydatny w celu pozbycia się artefaktów generowanych przez aparat, gdy obrazek wejściowy jest zdjęciem.
+
+\section{Działanie modułu}
+	
+Użytkownik po wybraniu z menu głównego opcji „Wczytaj plik graficzny” zostaje przeniesiony do odpowiedniego widoku, w którym będzie mógł zdefiniować parametry trasowania a następnie je zrealizować. Bezpośrednio po wejściu do widoku modułu jedynym aktywnym przyciskiem jest przycisk "Wczytaj obraz", po wciśnięciu którego nastąpi otwarcie okna dialogowego i użytkownik będzie miał możliwość pliku graficznego który ma zostać przetworzony. Ponadto podczas pracy z modułem trasowania, cały czas aktywne pozostają suwaki umożliwiające zmianę parametrów \textit{area threshold} i \textit{color threshold}.
+
+~\\\begin{center}
+	\includegraphics[scale=0.7]{tracingview}\\
+	\textit{Rysunek 1. Moduł trasowania}
+\end{center}
+\newpage
+Po wyborze i akceptacji obrazka wejściowego odblokowany zostanie przycisk "Trasuj", po wciśnięciu którego użytkownik będzie mógł zobaczyć wygenerowane kształty. Przykładowe działanie aplikacji zaprezentowano poniżej.
+
+~\\\begin{center}
+	\includegraphics[scale=0.56]{tracingview2}\\
+	\textit{Rysunek 2. Przykład trasowania 1}
 \end{center}
 
-\subsubsection{Moduł wizualizacji}
-\begin{itemize}
-  \item System powinien umożliwiać wczytywanie uprzednio zapisanych w odpowiednim formacie map i pojazdów.
-  \item System powinien umożliwiać ustawienie początku i końca trasy pojazdu.
-  \item System powinien umożliwiać ustawienie prędkości animacji ruchu pojazdu.
-  \item System powinien umożliwiać pauzowanie trwającej wizualizacji.
-  \item System powinien umożliwiać przejście suwakiem do dowolnego momentu symulacji.
-  \item System powinien umożliwiać zapisywanie wygenerowanej symulacji.
-\end{itemize}
+~\\Jak łatwo zauważyć na powyższym obrazku, aktywowany został przycisk „Utwórz mapę”, natomiast przycisk „Utwórz pojazd” pozostał nadal nieaktywny. Stało się tak dlatego, że wygenerowanych zostało kilka wielokątów. Sytuacja ta jest prawidłowa dla obiektu mapy, gdyż może się ona składać z dowolnej liczby wielokątów będących przeszkodami. Jeśli chodzi zaś o pojazdy, to oczekujemy, że pojazd składa się tylko z jednego wielokąta, więc w sytuacji, gdy wygenerowanych kształtów jest więcej stworzenie pojazdu nie będzie możliwe. 
+\\\\Czasami jednak trasowanie obrazków może dawać zaskakujące efekty i w sytuacji, gdy intuicja podpowiada nam, że powinno powstać kilka wielokątów, powstanie tylko jeden. Wszystko to zależy oczywiście również od odpowiedniego doboru parametrów trasowania. Poniższy zaprezentowano  sytuację, w której z kilku zamkniętych kształtów na obrazku wejściowym powstaje jeden wielokąt.
+~\\\begin{center}
+	\includegraphics[scale=0.7]{tracingview3}\\
+	\textit{Rysunek 3. Przykład trasowania 2}
+\end{center}
 
-\subsubsection{Moduł rysowania pojazdów i map}
-\begin{itemize}
-  \item System powinien umożliwiać rysowanie wielokątów reprezentujących pojazdy lub przeszkody omijane przez pojazd.
-  \item System powinien zamykać wielokąt, jeżeli użytkownik nie zamknie go sam.
-  \item System powinien umożliwiać zapisywanie narysowanych pojazdów/map do postaci wektorowej.
-\end{itemize}
+\section{Testy}
 
-\subsubsection{Moduł generowania pojazdów i map z plików graficznych}
-\begin{itemize}
-  \item System powinien umożliwiać wczytanie pliku graficznego w jednym z dozwolonych formatów.
-  \item System powinien umożliwiać dobór parametrów trasowania.
-  \item System powinien wyświetlać użytkownikowi wynik trasowania dla aktualnie dobranych parametrów.
-  \item System powinien umożliwiać zapisywanie wygenerowanych pojazdów/map do postaci wektorowej.
-\end{itemize}
-
-\subsubsection{Moduł algorytmu}
-\begin{itemize}
-  \item System powinien znajdować ścieżkę między punktem startowym a punktem końcowym dla danego pojazdu z uwzględnieniem przeszkód.
-  \item System powinien eksportować wynik obliczeń do listy rozkazów.
-\end{itemize}
-
-
-\section{Wymagania niefunkcjonalne}
-
-\begin{itemize}
-  \item Aplikacja powinna poprawnie działać na systemach operacyjnych z rodziny \textit{Windows}.
-  \item System powinien poinformować użytkownika, gdy przeprowadzenie symulacji jest niemożliwe.
-  \item Dozwolone formaty dla plików graficznych: \textbf{bmp}, \textbf{jpeg}, \textbf{png}, \textbf{gif}.
-  \item Rysowanie pojazdów i map nie powinno odbywać się poprzez rysowanie ciągłe, a raczej poprzez dodawanie kolejnych punktów do wielokątów.
-  \item Podczas rysowania wielokątów ich krawędzie nie mogą się przecinać. 
-  \item System powinien dać się łatwo tłumaczyć na różne języki:
-  \begin{itemize}
-    \item Powinien mieć wbudowany język polski i angielski.
-    \item Dodanie nowego języka powinno ograniczać się do zmian w pliku konfiguracyjnym.
-  \end{itemize}
-\end{itemize}
-
-
-\section{Metodologia pracy}
-
-Aplikacja będzie tworzona zgodnie z modelem przyrostowym (ang. \textit{incremental development}). Zakłada on realizację jedynie pewnej części systemu w każdym kolejnym `cyklu pracy. Poszczególne porcje funkcjonalności powinny być spójne, aby możliwe było przetestowanie i dostarczenie ich w wersji finalnej klientowi.
-
-\subsection{Uzasadnienie wyboru}
-
-Preferencja modelu przyrostowego nad modelem kaskadowym wynika ze struktury naszej aplikacji. Można ją podzielić na wiele odrębnych modułów działających (do pewnego stopnia) oddzielnie i niezależnie od siebie. Ponadto, ta metodologia zakłada brak konieczności definiowania z góry szczegółowych wymagań poszczególnych części systemu, dzięki czemu proces tworzenia jest bardziej elastyczny niż w przypadku modelu kaskadowego.
-
-\section{Harmonogram pracy}
-\setlist{nosep}
-\begin{tabulary}{\textwidth}{cp{0.8\textwidth}c}
-  \arrayrulecolor{hlinecolor}\hline
- 
-  %-------------------------------------------------------------
-  \hline
-  & & \parbox[t]{2mm}{\multirow{13}{*}{\rotatebox[origin=c]{-90}{17.11.15}}} \\ 
-  \multicolumn{2}{l}{\textbf{Architektura systemu}} & \\ 
-  
-  \kowalik & repozytorium i struktura katalogów & \\
-  \miskiewicz & przygotowanie diagramu klas & \\
-  \everyone & zdefiniowanie reprezentacji pojazdu i mapy & \\
-  \everyone & zdefiniowanie reprezentacji rozkazów ruchu pojazdu & \\
-
-  %-------------------------------------------------------------
-  \\ \multicolumn{2}{l}{\textbf{Interfejs graficzny}} & \\
-  
-  \pielat & przygotowanie mock-up poszczególnych okien interfejsu & \\
-  \miskiewicz & implementacja interakcji pomiędzy oknami & \\
-  
-  %-------------------------------------------------------------
-  \\ \multicolumn{2}{l}{\textbf{Tworzenie pojazdów i map}} & \\
-  
-  \miskiewicz & serializacja i deserializacja do XML & \\
-  \kowalik & tworzenie pojazdów i przeszkód przy pomocy kursora & \\
-  \hline
-  \pielat & selekcja trasowanych grafik rastrowych pod względem rozszerzeń i treści & \parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{-90}{01.12.15}}}\\
-  \pielat & trasowanie z użyciem wybranej biblioteki; wyświetlanie efektu użytkownikowi dla odpowiednio dobranych parametrów trasowania & \\
-  \hline
-
-  %-------------------------------------------------------------
-   & & \parbox[t]{2mm}{\multirow{11}{*}{\rotatebox[origin=c]{-90}{15.12.15}}} \\
-  \multicolumn{2}{l}{\textbf{Mock-up algorytmu}} & \\
-  
-  \miskiewicz & losowe generowanie tras & \\
-  \miskiewicz & eksport trasy do listy rozkazów & \\
-  
-  %-------------------------------------------------------------
-  \\ \multicolumn{2}{l}{\textbf{Wizualizacja}} & \\
-  
-  \kowalik & tworzenie przeszkód i pojazdu na mapie & \\
-  \kowalik & ustawianie początku i końca trasy & \\
-  \pielat & animacja ruchu na podstawie rozkazów & \\
-  \miskiewicz & selekcja trasowanych grafik rastrowych pod względem rozszerzeń i treści & \\
-  \pielat & implementacja suwaka osi czasu wizualizacji & \\
-  \hline
-  
-  %-------------------------------------------------------------
-  & & \parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{-90}{12.01.16}}} \\ 
-  \multicolumn{2}{l}{\textbf{Algorytm}} & \\
-  
-  \everyone & opracowanie koncepcji algorytmu wyszukiwania drogi & \\
-  \everyone & implementacja algorytmu wyszukiwania drogi & \\
-  \everyone & eksport i mapowanie wyników obliczeń do listy rozkazów & \\
-  \hline
-
-\end{tabulary}\\\\
-\everyone \space - zadania przydzielone dla wszystkich\\
-\kowalik \space - zadania przydzielone dla Wojciecha Kowalika\\
-\miskiewicz \space - zadania przydzielone dla Konrada Miśkiewicza\\
-\pielat \space - zadania przydzielone dla Mateusza Pielata
-
-
-\section{Kamienie milowe}
-
-Każdy kamień milowy stanowi oddzielny, funkcjonalny moduł systemu. Wszystkie z nich kończą się testami i dokumentacją.
-
-\setlist{}
-
-\begin{enumerate}
-  \item \textbf{Moduł tworzenia map i pojazdów przez użytkownika}\par 
-  Zostanie stworzony interfejs użytkownika oraz możliwe będzie ręczne tworzenie map i pojazdów z wykorzystaniem wbudowanego edytora i zapisywanie ich do formatu wektorowego
-  \item \textbf{Moduł wczytywania map i pojazdów z plików graficznych}\par
-  Możliwe będzie wczytywanie pojazdów i map z plików graficznych oraz eksportowanie ich do formatu wektorowego
-  \item \textbf{Moduł wizualizacji ruchu}\par
-  Użytkownik może wybierać pojazd, mapę oraz zaznaczać początek i koniec trasy. Mock-up algorytmu wygeneruje losową trasę dla pojazdu, która zostanie przedstawiona użytkownikowi. Użytkownik będzie miał możliwość ustawienia prędkości symulacji, pauzy oraz przejścia w czasie suwakiem.
-  \item \textbf{Moduł algorytmu wyszukiwania drogi}\par
-  Zaimplementowany zostanie algorytm wyznaczania drogi, który zastąpi wcześniejszy mock-up. Wszystkie moduły aplikacji zostaną ze sobą zintegrowane.
-\end{enumerate}
+Dla celów testowych aplikacji napisanych zostało kilka testów sprawdzających poprawność zaimplementowanych metod. Oprócz testowania małych i pomocniczych metod, jak np. metody implementujące proste algorytmy geometryczne, została również przetestowana funkcja trasująca obrazy. Wyniki testów są pozytywne – funkcja trasowania dla różnych obrazów testowych i przy założonych wartościach progowania wygenerowała spodziewane listy wielokątów. Jedynym problemem okazało się generowanie zbyt dużej liczby zbędnych punktów (które leżą na krawędzi wielokąta) dla niektórych przypadków, jednak problem ten zostanie rozwiązany w dalszej części prac nad aplikacją.
 
 \end{document}
