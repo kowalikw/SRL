@@ -29,7 +29,7 @@ namespace SRL.Model.Tracing
             Potrace.curveoptimizing = false; // Bezier curve optimization.
 
             ArrayList polygons = new ArrayList();
-            bool[,] matrix = Potrace.BitMapToBinary(_bitmap, colorThreshold);
+            bool[,] matrix = Potrace.BitMapToBinary(_bitmap, 100 - colorThreshold);
             Potrace.potrace_trace(matrix, polygons);
 
             for (int i = 0; i < polygons.Count; i++)
