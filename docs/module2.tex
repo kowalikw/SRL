@@ -164,26 +164,28 @@ Poza odrzucaniem niepotrzebnych figur wrapper ułatwia korzystanie z biblioteki 
 
 \section{Działanie modułu}
 	
-Użytkownik po wybraniu z menu głównego opcji „Wczytaj plik graficzny” zostaje przeniesiony do odpowiedniego widoku, w którym będzie mógł zdefiniować parametry trasowania a następnie je zrealizować. Bezpośrednio po wejściu do widoku modułu jedynym aktywnym przyciskiem jest przycisk "Wczytaj obraz", po wciśnięciu którego nastąpi otwarcie okna dialogowego i użytkownik będzie miał możliwość pliku graficznego który ma zostać przetworzony. Ponadto podczas pracy z modułem trasowania, cały czas aktywne pozostają suwaki umożliwiające zmianę parametrów \textit{area threshold} i \textit{color threshold}.
+Użytkownik po wybraniu z menu głównego opcji „Wczytaj plik graficzny” zostaje przeniesiony do odpowiedniego widoku, w którym będzie mógł zdefiniować parametry trasowania a następnie je zrealizować. Bezpośrednio po wejściu do widoku modułu jedynym aktywnym przyciskiem jest przycisk "Wczytaj obraz", po wciśnięciu którego nastąpi otwarcie okna dialogowego i użytkownik będzie miał możliwość wyboru pliku graficznego który ma zostać przetworzony. Ponadto podczas pracy z modułem trasowania, cały czas aktywne pozostają suwaki umożliwiające zmianę parametrów \textit{area threshold} i \textit{color threshold}.
 
 ~\\\begin{center}
 	\includegraphics[scale=0.7]{tracingview}\\
 	\textit{Rysunek 1. Moduł trasowania}
 \end{center}
 \newpage
-Po wyborze i akceptacji obrazka wejściowego odblokowany zostanie przycisk "Trasuj", po wciśnięciu którego użytkownik będzie mógł zobaczyć wygenerowane kształty. Przykładowe działanie aplikacji zaprezentowano poniżej.
+Po wyborze i akceptacji obrazka wejściowego odblokowany zostanie przycisk "Trasuj", po wciśnięciu którego użytkownik będzie mógł zobaczyć wygenerowane kształty. Przykładowe działanie aplikacji zaprezentowano poniżej (po lewej stronie wejściowy obrazek, po prawej stronie wyniki trasowania).
 
 ~\\\begin{center}
-	\includegraphics[scale=0.56]{tracingview2}\\
+	\includegraphics[scale=0.54]{tracingview2}\\
 	\textit{Rysunek 2. Przykład trasowania 1}
 \end{center}
 
-~\\Jak łatwo zauważyć na powyższym obrazku, aktywowany został przycisk „Utwórz mapę”, natomiast przycisk „Utwórz pojazd” pozostał nadal nieaktywny. Stało się tak dlatego, że wygenerowanych zostało kilka wielokątów. Sytuacja ta jest prawidłowa dla obiektu mapy, gdyż może się ona składać z dowolnej liczby wielokątów będących przeszkodami. Jeśli chodzi zaś o pojazdy, to oczekujemy, że pojazd składa się tylko z jednego wielokąta, więc w sytuacji, gdy wygenerowanych kształtów jest więcej stworzenie pojazdu nie będzie możliwe. 
-\\\\Czasami jednak trasowanie obrazków może dawać zaskakujące efekty i w sytuacji, gdy intuicja podpowiada nam, że powinno powstać kilka wielokątów, powstanie tylko jeden. Wszystko to zależy oczywiście również od odpowiedniego doboru parametrów trasowania. Poniższy zaprezentowano  sytuację, w której z kilku zamkniętych kształtów na obrazku wejściowym powstaje jeden wielokąt.
+~\\Jak łatwo zauważyć na powyższym obrazku, aktywowany został przycisk „Utwórz mapę”, natomiast przycisk „Utwórz pojazd” pozostał nadal nieaktywny. Stało się tak dlatego, że wygenerowanych zostało kilka wielokątów. Sytuacja ta jest prawidłowa dla obiektu mapy, gdyż może się ona składać z dowolnej liczby wielokątów będących przeszkodami. Jeśli chodzi zaś o pojazdy, to oczekujemy, że będą się one składać tylko z jednego wielokąta. Konieczne jest więc wskazanie przez użytkownika, który wielokąt chciałby traktować jako kształt pojazdu. Aby to zrobić należy wykonać kliknięcie lewym przyciskiem myszy gdy kursor znajduje się wewnątrz danego wielokąta - zostanie on dodatkowo podświetlony. Gdy wielokąt został już wybrany i nastąpi kliknięcie wewnątrz innego wielokąta, to kształt z którego tworzony będzie pojazd ulegnie zmianie. Wielokąt, który w danej chwili jest kształtem tworzącym pojazd zostanie dodatkowo oznaczony. Po wybraniu wielokąta tworzącego pojazd przycisk "Utwórz pojazd" zostanie odblokowany.
+\\\\\\Czasami jednak trasowanie obrazków może dawać zaskakujące efekty i w sytuacji, gdy intuicja podpowiada nam, że powinno powstać kilka wielokątów, powstanie tylko jeden. Wszystko to zależy oczywiście również od odpowiedniego doboru parametrów trasowania. Poniżej zaprezentowano  sytuację, w której z kilku zamkniętych kształtów na obrazku wejściowym powstaje jeden wielokąt.
 ~\\\begin{center}
-	\includegraphics[scale=0.7]{tracingview3}\\
+	\includegraphics[scale=0.58]{tracingview3}\\
 	\textit{Rysunek 3. Przykład trasowania 2}
 \end{center}
+
+~\\Dodatkowo warto dodać, iż jeżeli w obrazku wejściowym jakiś wielokąt zawarty jest wewnątrz innego wielokąta, to zostanie on odrzucony. Odrzucenie to odbywa się już na etapie trasowania poprzez wykrywanie potomków. 
 
 \section{Testy}
 

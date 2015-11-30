@@ -94,8 +94,8 @@ namespace SRL.Main.ViewModel
                     return false;
 
                 Point position = (Point) c;
-                //TODO check whether origin position is inside the shape polygon's bounds.
-                return true;
+
+                return GeometryHelper.IsPointInPolygon(position, CurrentModel.Shape);
             });
 
             SetOrientationAngleCommand = new RelayCommand(o =>

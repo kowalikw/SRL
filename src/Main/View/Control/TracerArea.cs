@@ -24,12 +24,21 @@ namespace SRL.Main.View.Control
         protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
             foreach (var polygon in _context.CurrentModel)
-                spriteBatch.DrawPolygon(polygon, EditArea.RegularColor, EditArea.LineThickness);
+            {
+                if(GeometryHelper.IsPointInPolygon(MousePosition, polygon))
+                    spriteBatch.DrawPolygon(polygon, EditArea.HoverColor, EditArea.LineThickness);
+                else if(_context.CurrentShape.Equals(polygon))
+                    spriteBatch.DrawPolygon(polygon, EditArea.ActiveColor, EditArea.LineThickness);
+                else
+                    spriteBatch.DrawPolygon(polygon, EditArea.RegularColor, EditArea.LineThickness);
+            }
         }
 
         protected override void OnMouseUp(SrlPoint position)
         {
-            
+            foreach (var polygon in _context.CurrentModel)
+                if(GeometryHelper.IsPointInPolygon(MousePosition, polygon))
+                    _context.CurrentShape = polygon;
         }
     }
 }

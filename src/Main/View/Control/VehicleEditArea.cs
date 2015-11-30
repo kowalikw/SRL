@@ -8,6 +8,7 @@ using SrlPoint = SRL.Model.Model.Point;
 using WinPoint = System.Windows.Point;
 using XnaPoint = Microsoft.Xna.Framework.Point;
 using EditingStage = SRL.Main.ViewModel.VehicleEditorViewModel.EditingStage;
+using SRL.Model.Model;
 
 namespace SRL.Main.View.Control
 {
@@ -31,6 +32,11 @@ namespace SRL.Main.View.Control
         {
             //Draw shape of the vehicle.
             Color shapeColor = _context.Stage > EditingStage.ShapeStarted ? RegularColor : ActiveColor;
+
+            // TODO
+            /*if (GeometryHelper.IsPointInPolygon(MousePosition, new Model.Model.Polygon(_context.VehicleShape)))
+                shapeColor = Color.Yellow;*/
+
             spriteBatch.DrawPath(_context.VehicleShape, _context.Stage > EditingStage.ShapeStarted, shapeColor, LineThickness);
 
             switch (_context.Stage)
@@ -47,9 +53,10 @@ namespace SRL.Main.View.Control
                 case EditingStage.ShapeDone:
                     {
                         //Draw new potential orientation origin.
-                        Color originColor = _context.SetOrientationOriginCommand.CanExecute(MousePosition)
+                        shapeColor = MousePosition != null && GeometryHelper.IsPointInPolygon(MousePosition, _context.CurrentModel.Shape)
                             ? ValidColor
                             : InvalidColor;
+                        spriteBatch.DrawPath(_context.VehicleShape, _context.Stage > EditingStage.ShapeStarted, shapeColor, LineThickness);
                         //spriteBatch.DrawVertex(MousePosition, originColor, VertexThickness);
                         break;
                     }

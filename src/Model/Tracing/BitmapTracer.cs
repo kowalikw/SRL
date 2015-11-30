@@ -45,7 +45,7 @@ namespace SRL.Model.Tracing
                 output.Add(new Polygon(polygonPoints));
             }
 
-            return output;
+            return GeometryHelper.ClearInternalPolygons(output);
         }
     }
 }

@@ -69,9 +69,21 @@ namespace SRL.Main.ViewModel
                 OnPropertyChanged();
             }
         }
+        public Polygon CurrentShape
+        {
+            get { return _currentShape; }
+            set
+            {
+                _currentShape = value;
+
+                if(CreateVehicleCommand != null)
+                    ((RelayCommand)CreateVehicleCommand).OnCanExecuteChanged();
+            }
+        }
         public List<Polygon> CurrentModel { get; private set; }
 
         private BitmapSource _bitmapToTrace;
+        private Polygon _currentShape;
         private int _areaThreshold;
         private int _colorThreshold;
 
@@ -89,6 +101,7 @@ namespace SRL.Main.ViewModel
             _tracerTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
 
             CurrentModel = new List<Polygon>();
+            CurrentShape = new Polygon();
 
             LoadBitmapCommand = new RelayCommand(o =>
             {
@@ -138,7 +151,7 @@ namespace SRL.Main.ViewModel
 
             CreateVehicleCommand = new RelayCommand(o =>
             {
-                var vehicle = new Vehicle(CurrentModel[0], null, 0);
+                var vehicle = new Vehicle(CurrentShape, null, 0);
                 Window window = new VehicleEditorView(vehicle);
                 window.Show();
 
@@ -146,10 +159,7 @@ namespace SRL.Main.ViewModel
             },
             c =>
             {
-                if (CurrentModel.Count == 1 && CurrentModel[0].IsCorrect())
-                    return true;
-
-                return false;
+                return CurrentShape.IsCorrect();
             });
         }
 
