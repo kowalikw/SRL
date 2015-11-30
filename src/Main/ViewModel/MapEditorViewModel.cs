@@ -54,7 +54,7 @@ namespace SRL.Main.ViewModel
         {
             Reset();
 
-            CurrentModel = model is Map ? (Map)model : null;
+            if (model is Map) CurrentModel = (Map)model;
 
             CloseCurrentPolygonCommand = new RelayCommand(o =>
             {

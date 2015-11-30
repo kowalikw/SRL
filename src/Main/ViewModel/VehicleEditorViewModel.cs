@@ -66,13 +66,11 @@ namespace SRL.Main.ViewModel
         {
             Reset();
 
-            CurrentModel = model is Vehicle ? (Vehicle)model : null;
+            if (model is Vehicle)
+                CurrentModel = (Vehicle)model;
 
             if(CurrentModel != null)
-            {
-                Stage = EditingStage.ShapeDone;
                 VehicleShape = CurrentModel.Shape.Vertices;
-            }
 
             CloseVehicleShapeCommand = new RelayCommand(o =>
             {
