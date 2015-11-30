@@ -67,7 +67,10 @@ namespace SRL.Main.ViewModel
             Reset();
 
             if (model is Vehicle)
+            {
                 CurrentModel = (Vehicle)model;
+                Stage = EditingStage.ShapeDone;
+            }
 
             if(CurrentModel != null)
                 VehicleShape = CurrentModel.Shape.Vertices;
