@@ -69,8 +69,7 @@ namespace SRL.Main.ViewModel
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<Polygon> TracedPolygons { get; private set; }
-
+        public List<Polygon> CurrentModel { get; private set; }
 
         private BitmapSource _bitmapToTrace;
         private int _areaThreshold;
@@ -89,7 +88,7 @@ namespace SRL.Main.ViewModel
             _tracerTimer.Tick += TracerTimer_Tick;
             _tracerTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
 
-            TracedPolygons = new ObservableCollection<Polygon>();
+            CurrentModel = new List<Polygon>();
 
             LoadBitmapCommand = new RelayCommand(o =>
             {
@@ -117,7 +116,7 @@ namespace SRL.Main.ViewModel
             CreateMapCommand = new RelayCommand(o =>
             {
                 List<Polygon> obstacles = new List<Polygon>();
-                foreach (var polygon in TracedPolygons)
+                foreach (var polygon in CurrentModel)
                     obstacles.Add(polygon);
                 var map = new Map(512, 512, obstacles);
                 Window window = new MapEditorView(map);
@@ -127,10 +126,10 @@ namespace SRL.Main.ViewModel
             },
             c =>
             {
-                if (TracedPolygons.Count == 0)
+                if (CurrentModel.Count == 0)
                     return false;
 
-                foreach (var polygon in TracedPolygons)
+                foreach (var polygon in CurrentModel)
                     if (!polygon.IsCorrect())
                         return false;
 
@@ -139,7 +138,7 @@ namespace SRL.Main.ViewModel
 
             CreateVehicleCommand = new RelayCommand(o =>
             {
-                var vehicle = new Vehicle(TracedPolygons[0], null, 0);
+                var vehicle = new Vehicle(CurrentModel[0], null, 0);
                 Window window = new VehicleEditorView(vehicle);
                 window.Show();
 
@@ -147,7 +146,7 @@ namespace SRL.Main.ViewModel
             },
             c =>
             {
-                if (TracedPolygons.Count == 1 && TracedPolygons[0].IsCorrect())
+                if (CurrentModel.Count == 1 && CurrentModel[0].IsCorrect())
                     return true;
 
                 return false;
@@ -156,10 +155,10 @@ namespace SRL.Main.ViewModel
 
         private void Trace()
         {
-            TracedPolygons.Clear();
+            CurrentModel.Clear();
             var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
             foreach (var polygon in traceOutput)
-                TracedPolygons.Add(polygon);
+                CurrentModel.Add(polygon);
 
             ((RelayCommand)CreateMapCommand).OnCanExecuteChanged();
             ((RelayCommand)CreateVehicleCommand).OnCanExecuteChanged();

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SRL.Main.View"
+        xmlns:control="clr-namespace:SRL.Main.View.Control"
         xmlns:main="clr-namespace:SRL.Main"
         xmlns:utilities="clr-namespace:SRL.Main.Utilities"
         mc:Ignorable="d"
@@ -78,22 +79,13 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
             <Image Grid.Column="0" Source="{Binding BitmapToTrace}"/>
-
-            <ItemsControl Grid.Column="1" ItemsSource="{Binding Path=TracedPolygons}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Background="LightBlue" Width="Auto" Height="Auto"  />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Polygon Points="{Binding Path=., Converter={StaticResource PolygonToPointCollectionConverter}, Mode=TwoWay}" 
-                                 Stroke="Red" StrokeThickness="3"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <control:TracerArea x:Name="TracerControl"
+                         Grid.Row="0"
+                         Grid.Column="1"
+                         Margin="5"
+                         SnapsToDevicePixels="True"
+                         Stretch="Fill"/>
         </Grid>
     </Grid>
 </Window>

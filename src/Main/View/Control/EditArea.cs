@@ -19,20 +19,18 @@ namespace SRL.Main.View.Control
 
         protected static readonly Color RegularColor = Color.Black;
         protected static readonly Color ActiveColor = Color.Blue;
+        protected static readonly Color HoverColor = Color.Yellow;
         protected static readonly Color InvalidColor = Color.Red;
         protected static readonly Color ValidColor = Color.Green;
 
-
         protected SrlPoint MousePosition { get; private set; }
 
-
         protected SpriteBatch SpriteBatch;
-
 
         protected override void Initialize()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             MouseUp += (o, e) =>
             {
                 WinPoint position = e.GetPosition((UIElement) o);

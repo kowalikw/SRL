@@ -73,6 +73,7 @@
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="View\Control\EditArea.cs" />
     <Compile Include="View\Control\MapEditArea.cs" />
+    <Compile Include="View\Control\TracerArea.cs" />
     <Compile Include="View\Control\VehicleEditArea.cs" />
     <Compile Include="View\LanguagePickerView.xaml.cs">
       <DependentUpon>LanguagePickerView.xaml</DependentUpon>
