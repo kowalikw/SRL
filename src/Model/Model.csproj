@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeometryHelper.cs" />
+    <Compile Include="IAlgorithm.cs" />
     <Compile Include="Model\Map.cs" />
+    <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Point.cs" />
     <Compile Include="Model\Polygon.cs" />
     <Compile Include="Model\Vehicle.cs" />

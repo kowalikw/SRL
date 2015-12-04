@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -11,8 +10,6 @@ using SRL.Model.Model;
 using SRL.Model.Tracing;
 using System.Windows;
 using SRL.Main.View;
-using System.Windows.Threading;
-using System.Timers;
 using System.Collections.Generic;
 
 namespace SRL.Main.ViewModel
@@ -26,43 +23,13 @@ namespace SRL.Main.ViewModel
         public ICommand CreateMapCommand { get; }
         public ICommand CreateVehicleCommand { get; }
 
-        public int AreaThreshold
-        {
-            get { return _areaThreshold; }
-            set
-            {
-                _areaThreshold = value;
-
-                if (BitmapToTrace != null)
-                {
-                    _tracerTimer.Stop();
-                    _tracerTimer.Start();
-                }
-
-                OnPropertyChanged();
-            }
-        }
-        public int ColorThreshold
-        {
-            get { return _colorThreshold; }
-            set
-            {
-                _colorThreshold = value;
-
-                if (BitmapToTrace != null)
-                {
-                    _tracerTimer.Stop();
-                    _tracerTimer.Start();
-                }
-
-                OnPropertyChanged();
-            }
-        }
+        public int AreaThreshold { get; set; }
+        public int ColorThreshold { get; set; }
 
 
         public BitmapSource BitmapToTrace
         {
-            get { return _bitmapToTrace;}
+            get { return _bitmapToTrace; }
             private set
             {
                 _bitmapToTrace = value;
@@ -76,7 +43,7 @@ namespace SRL.Main.ViewModel
             {
                 _currentShape = value;
 
-                if(CreateVehicleCommand != null)
+                if (CreateVehicleCommand != null)
                     ((RelayCommand)CreateVehicleCommand).OnCanExecuteChanged();
             }
         }
@@ -84,21 +51,14 @@ namespace SRL.Main.ViewModel
 
         private BitmapSource _bitmapToTrace;
         private Polygon _currentShape;
-        private int _areaThreshold;
-        private int _colorThreshold;
 
         private BitmapTracer _tracer;
-        private DispatcherTimer _tracerTimer;
 
 
         public TracingViewModel()
         {
             AreaThreshold = 50;
             ColorThreshold = 50;
-
-            _tracerTimer = new DispatcherTimer();
-            _tracerTimer.Tick += TracerTimer_Tick;
-            _tracerTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
 
             CurrentModel = new List<Polygon>();
             CurrentShape = new Polygon();
@@ -117,10 +77,7 @@ namespace SRL.Main.ViewModel
                 }
             });
 
-            TraceCommand = new RelayCommand(o =>
-            {
-                Trace();
-            },
+            TraceCommand = new RelayCommand(o => Trace(),
             c =>
             {
                 return _bitmapToTrace != null;
@@ -172,12 +129,6 @@ namespace SRL.Main.ViewModel
 
             ((RelayCommand)CreateMapCommand).OnCanExecuteChanged();
             ((RelayCommand)CreateVehicleCommand).OnCanExecuteChanged();
-        }
-
-        private void TracerTimer_Tick(object sender, EventArgs e)
-        {
-            Trace();
-            _tracerTimer.Stop();
         }
 
         [NotifyPropertyChangedInvocator]
