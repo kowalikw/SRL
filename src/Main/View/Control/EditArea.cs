@@ -17,11 +17,11 @@ namespace SRL.Main.View.Control
         protected const int VertexThickness = 2;
         protected const int LineThickness = 2;
 
-        protected static readonly Color RegularColor = Color.Black;
-        protected static readonly Color ActiveColor = Color.Blue;
-        protected static readonly Color HoverColor = Color.Yellow;
-        protected static readonly Color InvalidColor = Color.Red;
-        protected static readonly Color ValidColor = Color.Green;
+        protected static readonly Color RegularColor = new Color(255, 255, 255);
+        protected static readonly Color ActiveColor = Color.Yellow;
+        protected static readonly Color HoverColor = new Color(255, 255, 20);
+        protected static readonly Color InvalidColor = new Color(255, 20, 20);
+        protected static readonly Color ValidColor = new Color(20, 255, 20);
 
         protected SrlPoint MousePosition { get; private set; }
 
@@ -50,7 +50,7 @@ namespace SRL.Main.View.Control
 
         protected override void Render(TimeSpan time)
         {
-            GraphicsDevice.Clear(Color.LightSkyBlue);
+            GraphicsDevice.Clear(new Color(1, 47, 135));
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             SpriteBatch.BeginDraw();
