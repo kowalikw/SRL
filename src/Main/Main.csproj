@@ -71,8 +71,10 @@
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
     <Compile Include="ViewModel\TracingViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
+    <Compile Include="ViewModel\VisualizationModuleViewModel.cs" />
     <Compile Include="View\Control\EditArea.cs" />
     <Compile Include="View\Control\MapEditArea.cs" />
+    <Compile Include="View\Control\SimulationArea.cs" />
     <Compile Include="View\Control\TraceArea.cs" />
     <Compile Include="View\Control\VehicleEditArea.cs" />
     <Compile Include="View\LanguagePickerView.xaml.cs">
@@ -105,6 +107,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="View\VisualizationModuleView.xaml.cs">
+      <DependentUpon>VisualizationModuleView.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\LanguagePickerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -124,6 +129,10 @@
     <Page Include="View\VehicleEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\VisualizationModuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
