@@ -45,6 +45,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm.cs" />
     <Compile Include="GeometryHelper.cs" />
     <Compile Include="IAlgorithm.cs" />
     <Compile Include="Model\Map.cs" />
