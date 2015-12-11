@@ -6,10 +6,8 @@ namespace SRL.Algorithm
 {
     public class MockAlgorithm : IAlgorithm
     {
-        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, Point vehicleRotation)
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
-            //TODO
-
             throw new System.NotImplementedException();
         }
     }

@@ -23,8 +23,10 @@ namespace SRL.Main.ViewModel
 
 
         public uint CurrentTimeFrame { get; set; }
-        public uint MaxTimeFrame => _maxTimeFrame;
-        private const uint _maxTimeFrame = 8192 - 1;
+        public uint MaxTimeFrame => 8192 - 1;
+
+
+        
 
 
         public Map Map { get; private set; }
@@ -40,7 +42,10 @@ namespace SRL.Main.ViewModel
             
         }
 
-
+        private void DivideIntoFrames(List<Order> orders)
+        {
+            
+        }
 
     }
 }
