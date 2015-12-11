@@ -3,6 +3,6 @@
     public class Order
     {
         public double Rotation { get; set; }
-        public double Stride { get; set; }
+        public Point Destination { get; set; }
     }
 }

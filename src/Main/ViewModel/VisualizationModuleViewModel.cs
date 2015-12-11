@@ -11,28 +11,33 @@ namespace SRL.Main.ViewModel
 {
     internal class VisualizationModuleViewModel
     {
-        ICommand CalculatePathCommand { get; }
+        public ICommand CalculatePathCommand { get; }
 
-        ICommand LoadSimulationCommand { get; }
-        ICommand LoadVehicleCommand { get; }
-        ICommand LoadMapCommand { get; }
+        public ICommand LoadSimulationCommand { get; }
+        public ICommand LoadVehicleCommand { get; }
+        public ICommand LoadMapCommand { get; }
 
-        ICommand SetVehicleRotation { get; }
-        ICommand SetStartpoint { get; }
-        ICommand SetEndpoint { get; }
-
-        
+        public ICommand SetVehicleRotation { get; }
+        public ICommand SetStartpoint { get; }
+        public ICommand SetEndpoint { get; }
 
 
+        public uint CurrentTimeFrame { get; set; }
+        public uint MaxTimeFrame => _maxTimeFrame;
+        private const uint _maxTimeFrame = 8192 - 1;
 
-        public Map Map { get; set; }
-        public Vehicle Vehicle { get; set; }
-        
+
+        public Map Map { get; private set; }
+        public Vehicle Vehicle { get; private set; }
+        public double VehicleRotation { get; private set; }
+        public Point Startpoint { get; private set; }
+        public Point Endpoint { get; private set; }
+
         
 
         public VisualizationModuleViewModel()
         {
-
+            
         }
 
 

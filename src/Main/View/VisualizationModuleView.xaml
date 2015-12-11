@@ -16,6 +16,7 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="Wczytaj symulację"/>
+            <Button Content="Zapisz symulację"/>
             <Button Content="Wczytaj mapę"/>
             <Button Content="Wczytaj pojazd"/>
             <Button Content="Pauza"/>
