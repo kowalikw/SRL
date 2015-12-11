@@ -67,57 +67,5 @@ namespace SRL.Main.View.Control
             return GeometryHelper.GetDistance(MousePosition, point) <= VertexPullRadius;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        public DrawLineState CheckLine(Polygon polygon, Model.Model.Point nextVertice)
-        {
-            foreach (Model.Model.Point p in polygon.Vertices)
-                if (p.X == nextVertice.X && p.Y == nextVertice.Y)
-                    return DrawLineState.Done;
-
-            for (int i = 0; i < polygon.VertexCount - 2; i++)
-                if (GeometryHelper.DoSegmentsIntersect(polygon.Vertices[i], polygon.Vertices[i + 1], polygon.Vertices[polygon.VertexCount - 1], nextVertice))
-                    return DrawLineState.Incorrect;
-
-            return DrawLineState.Correct;
-        }
-
-        public DrawPolygonState CheckPolygon(Polygon polygon, Model.Model.Point cursorPosition = null, bool activeDraw = false)
-        {
-            if (!activeDraw)
-                return DrawPolygonState.Done;
-            else
-            {
-                if (!polygon.IsEmpty())
-                {
-                    switch (CheckLine(polygon, cursorPosition))
-                    {
-                        case DrawLineState.Correct:
-                            return DrawPolygonState.Correct;
-                        case DrawLineState.Incorrect:
-                            return DrawPolygonState.Incorrect;
-                        case DrawLineState.Done:
-                            return DrawPolygonState.Correct;
-                    }
-                }
-
-                return DrawPolygonState.Empty;
-            }
-        }
-
-    */
-
     }
 }

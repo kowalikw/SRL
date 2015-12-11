@@ -1,0 +1,30 @@
+﻿<Window x:Class="SRL.Main.View.VisualizationModuleView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SRL.Main.View"
+        xmlns:control="clr-namespace:SRL.Main.View.Control"
+        mc:Ignorable="d"
+        Title="VisualizationModuleView" Height="480" Width="640">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="Wczytaj symulację"/>
+            <Button Content="Zapisz symulację"/>
+            <Button Content="Wczytaj mapę"/>
+            <Button Content="Wczytaj pojazd"/>
+            <Button Content="Pauza"/>
+            <Button Content="Wznów"/>
+        </StackPanel>
+
+        <control:SimulationArea Grid.Row="1" />
+        
+        <Slider Grid.Row="2" Maximum="9999" TickPlacement="BottomRight"/>
+    </Grid>
+</Window>
