@@ -17,6 +17,6 @@ namespace SRL.Model
         /// <param name="angleDensity">Rotation accuracy - number of angles that divide the 360 degree spectrum. A value of 360 
         /// means that the smallest turn the vehicle can take is 1 degree.</param>
         /// <returns>A list of orders that make up the path for the vehicle.</returns>
-        List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, Point vehicleRotation, int angleDensity);
+        List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity);
     }
 }

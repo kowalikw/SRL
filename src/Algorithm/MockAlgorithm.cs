@@ -9,7 +9,7 @@ namespace SRL.Model
 {
     class MockAlgorithm : IAlgorithm
     {
-        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, Point vehicleRotation)
+        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
@@ -23,10 +23,10 @@ namespace SRL.Model
             }
             Vehicle vehicleTemplate = new Vehicle(new Polygon(lst), new Point(0, 0), 0);
 
-            return GenerateRandomOrders(map, vehicleTemplate, start, end);
+            return GenerateRandomOrders(map, vehicleTemplate, start, end, vehicleRotation + vehicle.OrientationAngle);
         }
 
-        List<Order> GenerateRandomOrders(Map map, Vehicle vehicleTemplate, Point start, Point end)
+        List<Order> GenerateRandomOrders(Map map, Vehicle vehicleTemplate, Point start, Point end, double vehicleRotation)
         {
             Random r = new Random();
             List<Order> lst = new List<Order>();
@@ -39,7 +39,7 @@ namespace SRL.Model
                 shp.Add(vehicleTemplate.Shape.Vertices[i] + start);
             }
             currentState = new Vehicle(new Polygon(shp), start, 0);
-            o.Rotation = 0; o.Stride = 0;
+            o.Rotation = vehicleRotation; o.Destination = start;
             lst.Add(o);
             for (int i = 0; i < iterations; i++)
             {
@@ -64,12 +64,11 @@ namespace SRL.Model
                     }
                     currentState = new Vehicle(new Polygon(shp), new Point(currentState.OrientationOrigin.X + strideX, currentState.OrientationOrigin.Y + strideY), rotation);
                 } while (c);
-                lst.Add(new Order { Rotation = rotation, Stride = stride });
+                lst.Add(new Order { Rotation = rotation, Destination = currentState.OrientationOrigin });
             }
-            double finalRotation, finalStride;
+            double finalRotation;
             finalRotation = Math.Atan((currentState.OrientationOrigin.X - end.X) / (currentState.OrientationOrigin.Y - end.Y));
-            finalStride = Math.Sqrt(Math.Pow((currentState.OrientationOrigin.X - end.X), 2) + Math.Pow((currentState.OrientationOrigin.Y - end.Y), 2));
-            lst.Add(new Order() { Rotation = finalRotation, Stride = finalStride });
+            lst.Add(new Order() { Rotation = finalRotation, Destination = end });
             return lst;
         }
 
