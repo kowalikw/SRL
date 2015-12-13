@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 using SRL.Main.Utilities;
 using SRL.Model;
 using SRL.Model.Model;
 using System.Windows.Threading;
-using SRL.Main.Utilities;
 
 namespace SRL.Main.ViewModel
 {
     internal class VisualizationModuleViewModel
     {
-
-
         public ICommand CalculatePathCommand { get; }
 
         public ICommand LoadSimulationCommand { get; }
@@ -25,14 +21,16 @@ namespace SRL.Main.ViewModel
         public ICommand SetStartpoint { get; }
         public ICommand SetEndpoint { get; }
 
+        public ICommand ResumeCommand { get; }
+        public ICommand PauseCommand { get; }
+
 
         public int CurrentFrameIdx { get; set; }
-        public Frame CurrentFrame => _frames[CurrentFrameIdx];
+        public Frame CurrentFrame => _frames?[CurrentFrameIdx];
         public int MaxFrameIdx => _frames?.Length - 1 ?? -1;
         private Frame[] _frames;
 
         private DispatcherTimer _timer;
-        private int _frameNumber;
 
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
@@ -46,6 +44,11 @@ namespace SRL.Main.ViewModel
 
         public VisualizationModuleViewModel()
         {
+            _timer = new DispatcherTimer();
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            _timer.Tick += _timer_Tick;
+            
+
             CalculatePathCommand = new RelayCommand(o =>
             {
                 var orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
@@ -55,7 +58,9 @@ namespace SRL.Main.ViewModel
                 else
                 {
                     //TODO ??
-        }
+                }
+
+                _timer.Start(); //TODO delete
             },
             c =>
             {
@@ -126,12 +131,33 @@ namespace SRL.Main.ViewModel
                 //TODO check if point is inside an obstacle
                 return true;
             });
+
+            ResumeCommand = new RelayCommand(o =>
+            {
+                _timer.Start();
+            });
+            PauseCommand = new RelayCommand(o =>
+            {
+                _timer.Stop();
+            });
         }
 
         private void ResetSimulation()
         {
             _frames = null;
-            CurrentFrame = null;
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            CurrentFrameIdx++;
+
+            if (CurrentFrameIdx + 1 > MaxFrameIdx)
+            {
+                CurrentFrameIdx = 0;
+                _timer.Stop();
+            }
+            else
+                CurrentFrameIdx++;
         }
 
         private Frame[] DivideIntoFrames(List<Order> orders)

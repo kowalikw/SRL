@@ -19,8 +19,8 @@
             <Button Content="Zapisz symulację" Command="{Binding SaveSimulationCommand}"/>
             <Button Content="Wczytaj mapę" Command="{Binding LoadMapCommand}"/>
             <Button Content="Wczytaj pojazd" Command="{Binding LoadVehicleCommand}"/>
-            <Button Content="Pauza"/>
-            <Button Content="Wznów"/>
+            <Button Content="Pauza" Command="{Binding PauseCommand}"/>
+            <Button Content="Wznów" Command="{Binding ResumeCommand}"/>
         </StackPanel>
 
         <control:SimulationArea 
