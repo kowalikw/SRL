@@ -28,7 +28,9 @@ namespace SRL.Main.ViewModel
         public ICommand SetEndpoint { get; }
 
 
-        public Frame CurrentFrame { get; private set; }
+        public int CurrentFrameIdx { get; set; }
+        public Frame CurrentFrame => _frames[CurrentFrameIdx];
+        public int MaxFrameIdx => _frames?.Length - 1 ?? -1;
         private Frame[] _frames;
 
 
