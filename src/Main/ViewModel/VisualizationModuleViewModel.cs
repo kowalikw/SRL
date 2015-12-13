@@ -23,16 +23,12 @@ namespace SRL.Main.ViewModel
         public ICommand SetStartpoint { get; }
         public ICommand SetEndpoint { get; }
 
-        public ICommand NextCommand { get; }
-
 
         public Frame CurrentFrame { get; private set; }
         private Frame[] _frames;
 
         private DispatcherTimer _timer;
         private int _frameNumber;
-
-        public int i = 0;
 
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
@@ -44,19 +40,6 @@ namespace SRL.Main.ViewModel
 
         public VisualizationModuleViewModel()
         {
-            NextCommand = new RelayCommand(o =>
-            {
-                i++;
-            });
-
-            /*List<Order> orders = new List<Order>();
-            orders.Add(new Order() { Destination = new Point(100, 100), Rotation = 0 });
-            orders.Add(new Order() { Destination = new Point(150, 300), Rotation = Math.PI / 4 });
-            orders.Add(new Order() { Destination = new Point(300, 100), Rotation = 0 });
-            orders.Add(new Order() { Destination = new Point(400, 350), Rotation = -Math.PI * 3 / 4 });*/
-
-
-
             Startpoint = new Point(50, 100);
             Endpoint = new Point(500, 500);
 
@@ -77,7 +60,7 @@ namespace SRL.Main.ViewModel
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
             _timer.Tick += _timer_Tick;
-            //_timer.Start();
+            _timer.Start();
         }
 
         private void _timer_Tick(object sender, EventArgs e)

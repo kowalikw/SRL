@@ -21,7 +21,6 @@
             <Button Content="Wczytaj pojazd"/>
             <Button Content="Pauza"/>
             <Button Content="Wznów"/>
-            <Button Content="Next" Command="{Binding NextCommand}" Width="75"/>
         </StackPanel>
 
         <control:SimulationArea 
