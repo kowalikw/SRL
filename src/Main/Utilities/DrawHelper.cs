@@ -477,5 +477,32 @@ namespace SRL.Main.Utilities
         {
             return 1 - fpart(val);
         }
+
+
+        public static void DrawMap(this SpriteBatch spriteBatch, Map map)
+        {
+            foreach (var obstacle in map.Obstacles)
+                DrawPolygon(spriteBatch, obstacle, Color.White);
+        }
+
+
+        public static void DrawVehicle(this SpriteBatch spriteBatch, Vehicle vehicle)
+        {
+            DrawPolygon(spriteBatch, vehicle.Shape, Color.Aqua);
+        }
+
+
+        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map)
+        {
+            List<Point> rotatedVehicle = new List<Point>();
+            foreach (var point in vehicle.Shape.Vertices)
+            {
+                Point positionDifference = frame.Position - vehicle.OrientationOrigin;
+                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, frame.Rotation));
+            }
+
+            DrawMap(spriteBatch, map);
+            DrawVehicle(spriteBatch, new Vehicle(new Polygon(rotatedVehicle), vehicle.OrientationOrigin, vehicle.OrientationAngle));
+        }
     }
 }

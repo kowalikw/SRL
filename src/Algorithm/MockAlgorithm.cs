@@ -7,9 +7,9 @@ using SRL.Model.Model;
 
 namespace SRL.Model
 {
-    class MockAlgorithm : IAlgorithm
+    public class MockAlgorithm : IAlgorithm
     {
-        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
@@ -26,11 +26,12 @@ namespace SRL.Model
             return GenerateRandomOrders(map, vehicleTemplate, start, end, vehicleRotation + vehicle.OrientationAngle);
         }
 
-        List<Order> GenerateRandomOrders(Map map, Vehicle vehicleTemplate, Point start, Point end, double vehicleRotation)
+        public List<Order> GenerateRandomOrders(Map map, Vehicle vehicleTemplate, Point start, Point end, double vehicleRotation)
         {
             Random r = new Random();
             List<Order> lst = new List<Order>();
-            int iterations = r.Next(10) + 5;
+            //int iterations = r.Next(10) + 5;
+            int iterations = 0;
             Order o = new Order();
             Vehicle currentState = new Vehicle();
             List<Point> shp = new List<Point>();

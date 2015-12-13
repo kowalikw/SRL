@@ -4,16 +4,13 @@ using System.Linq;
 using System.Windows.Input;
 using SRL.Model;
 using SRL.Model.Model;
+using System.Windows.Threading;
 
 namespace SRL.Main.ViewModel
 {
     internal class VisualizationModuleViewModel
     {
-        public class Frame
-        {
-            public Point Position { get; set; }
-            public double Rotation { get; set; }
-        }
+        
 
         public ICommand CalculatePathCommand { get; }
 
@@ -29,7 +26,8 @@ namespace SRL.Main.ViewModel
         public Frame CurrentFrame { get; private set; }
         private Frame[] _frames;
 
-
+        private DispatcherTimer _timer;
+        private int _frameNumber;
 
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
@@ -40,6 +38,50 @@ namespace SRL.Main.ViewModel
 
 
         public VisualizationModuleViewModel()
+        {
+
+
+            /*List<Order> orders = new List<Order>();
+            orders.Add(new Order() { Destination = new Point(100, 100), Rotation = 0 });
+            orders.Add(new Order() { Destination = new Point(150, 300), Rotation = Math.PI / 4 });
+            orders.Add(new Order() { Destination = new Point(300, 100), Rotation = 0 });
+            orders.Add(new Order() { Destination = new Point(400, 350), Rotation = -Math.PI * 3 / 4 });*/
+
+            
+
+            Startpoint = new Point(50, 100);
+            Endpoint = new Point(500, 500);
+
+            Polygon obstacle1 = new Polygon(new List<Point>() { new Point(200, 200), new Point(240, 240), new Point (200, 240) });
+            Polygon obstacle2 = new Polygon(new List<Point>() { new Point(420, 90), new Point(480, 120), new Point(470, 180), new Point(450, 150) });
+
+            Map = new Map(512, 512, new List<Polygon>() { obstacle1, obstacle2 });
+
+            Polygon vehicle = new Polygon(new List<Point>() { new Point(30,90), new Point(70, 90), new Point(80, 100), new Point(70, 110), new Point(30, 110) });
+            Vehicle = new Vehicle(vehicle, new Point(50, 100), 0);
+
+            MockAlgorithm mock = new MockAlgorithm();
+            List<Order> orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
+
+            DivideIntoFrames(orders);
+            CurrentFrame = _frames[0];
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 33);
+            _timer.Tick += _timer_Tick;
+            _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            _frameNumber++;
+            CurrentFrame = _frames[_frameNumber];
+
+            if (_frameNumber == _frames.Length - 1)
+                _timer.Stop();
+        }
+
+        private void Animation()
         {
 
         }

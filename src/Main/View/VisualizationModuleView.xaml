@@ -23,8 +23,12 @@
             <Button Content="Wznów"/>
         </StackPanel>
 
-        <control:SimulationArea Grid.Row="1" />
+        <control:SimulationArea 
+                Grid.Row="1"
+                Margin="5"
+                SnapsToDevicePixels="True"
+                Stretch="Fill"/>
         
-        <Slider Grid.Row="2" Maximum="9999" TickPlacement="BottomRight"/>
+        <Slider Grid.Row="2" Maximum="9999" Margin="5" TickPlacement="BottomRight"/>
     </Grid>
 </Window>

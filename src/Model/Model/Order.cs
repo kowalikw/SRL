@@ -2,7 +2,7 @@
 {
     public class Order
     {
-        public double Rotation { get; set; }
+        public double Rotation { get; set; } // RADIANS
         public Point Destination { get; set; }
     }
 }
