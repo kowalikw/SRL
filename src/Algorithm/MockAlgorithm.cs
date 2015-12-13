@@ -44,6 +44,7 @@ namespace SRL.Model
             //lst.Add(o);
             for (int i = 0; i < iterations; i++)
             {
+                bool rotate = false;
                 bool c = false;
                 double rotation = 0, x = 0, y = 0;
                 do
@@ -65,7 +66,7 @@ namespace SRL.Model
                     if (rotation < 0)
                     {
                         rotation = rotation + (2 * Math.PI);
-                        rotation = -rotation;
+                        rotate = true;
                     }
                     for (int j = 0; j < vehicleTemplate.Shape.VertexCount; j++)
                     {
@@ -81,7 +82,10 @@ namespace SRL.Model
                     }
                     
                 } while (c);
-                lst.Add(new Order { Rotation = rotation, Destination = new Point(x, y) });
+                if (rotate)
+                    lst.Add(new Order { Rotation = -rotation, Destination = new Point(x, y) });
+                else
+                    lst.Add(new Order { Rotation = rotation, Destination = new Point(x, y) });
                 currentState = new Vehicle(new Polygon(shp), new Point(x, y), rotation);
             }
             double finalRotation;

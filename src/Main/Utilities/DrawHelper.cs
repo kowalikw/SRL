@@ -504,7 +504,7 @@ namespace SRL.Main.Utilities
             foreach (var point in vehicle.Shape.Vertices)
             {
                 Point positionDifference = order.Destination - vehicle.OrientationOrigin;
-                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, order.Rotation));
+                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, Math.Abs(order.Rotation)));
             }
 
             DrawMap(spriteBatch, map);
