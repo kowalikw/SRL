@@ -53,16 +53,16 @@ namespace SRL.Main.ViewModel
             Polygon vehicle = new Polygon(new List<Point>() { new Point(30,90), new Point(70, 90), new Point(80, 100), new Point(70, 110), new Point(30, 110) });
             Vehicle = new Vehicle(vehicle, new Point(50, 100), 0);
 
-            //MockAlgorithm mock = new MockAlgorithm();
-           // orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
+            MockAlgorithm mock = new MockAlgorithm();
+            orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
             
 
             InitialRotation = 0.523599; //30 deg
 
-            orders = new List<Order>();
+            /*orders = new List<Order>();
             orders.Add(new Order() { Destination = new Point(100,100), Rotation = -0.79}); // -45 deg
             orders.Add(new Order() { Destination = new Point(140, 100), Rotation = 0 }); // 0 deg
-            orders.Add(new Order() { Destination = new Point(150, 40), Rotation = 1.41 }); // 81 deg
+            orders.Add(new Order() { Destination = new Point(150, 40), Rotation = 1.41 }); // 81 deg*/
 
 
 

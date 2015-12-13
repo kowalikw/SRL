@@ -44,7 +44,6 @@ namespace SRL.Model
             //lst.Add(o);
             for (int i = 0; i < iterations; i++)
             {
-                bool rotate = false;
                 bool c = false;
                 double rotation = 0, x = 0, y = 0;
                 do
@@ -53,21 +52,20 @@ namespace SRL.Model
                     shp.Clear();
                     y = r.Next((int)map.Height);
                     x = r.Next((int)map.Width);
-                    try {
+                    try
+                    {
                         rotation = Math.Atan((-currentState.OrientationOrigin.Y + y) / (-currentState.OrientationOrigin.X + x));
                     }
                     catch
                     {
-                        c = true;
+                        continue;
                     }
                     
                     if (x < currentState.OrientationOrigin.X)
                         rotation += Math.PI;
                     if (rotation < 0)
-                    {
                         rotation = rotation + (2 * Math.PI);
-                        rotate = true;
-                    }
+                    
                     for (int j = 0; j < vehicleTemplate.Shape.VertexCount; j++)
                     {
                         Point rotatedPoint = GeometryHelper.RotatePoint(vehicleTemplate.Shape.Vertices[j], new Point(0, 0), rotation);
@@ -82,14 +80,13 @@ namespace SRL.Model
                     }
                     
                 } while (c);
-                if (rotate)
-                    lst.Add(new Order { Rotation = -rotation, Destination = new Point(x, y) });
-                else
-                    lst.Add(new Order { Rotation = rotation, Destination = new Point(x, y) });
+                lst.Add(new Order { Rotation = rotation, Destination = new Point(x, y) });
                 currentState = new Vehicle(new Polygon(shp), new Point(x, y), rotation);
             }
             double finalRotation;
             finalRotation = Math.Atan((-currentState.OrientationOrigin.Y + end.Y) / (-currentState.OrientationOrigin.X + end.X));
+            if (currentState.OrientationOrigin.X > end.X)
+                finalRotation += Math.PI;
             lst.Add(new Order() { Rotation = finalRotation, Destination = end });
             return lst;
         }
