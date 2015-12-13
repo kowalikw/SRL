@@ -16,20 +16,28 @@ namespace SRL.Main.View.Control
         protected override void Initialize()
         {
             base.Initialize();
-            _context = (VisualizationModuleViewModel) DataContext;
+            _context = (VisualizationModuleViewModel)DataContext;
         }
 
         protected override void Render(SpriteBatch spriteBatch, TimeSpan time)
         {
-            if (_context.CurrentFrame != null)
-                spriteBatch.DrawFrame(_context.CurrentFrame, _context.Vehicle, _context.Map);
+            spriteBatch.DrawFrame(_context.CurrentFrame, _context.Vehicle, _context.Map, _context.Startpoint, _context.Endpoint);
+
+            if (_context.orders != null)
+            {
+                for (int i = 1; i < _context.orders.Count; i++)
+                    spriteBatch.DrawLine(_context.orders[i - 1].Destination, _context.orders[i].Destination, Color.Red);
+                spriteBatch.DrawLine(_context.Startpoint, _context.orders[0].Destination, Color.Red);
+                spriteBatch.DrawLine(_context.Endpoint, _context.orders[_context.orders.Count - 1].Destination, Color.Red);
+            }
         }
 
         protected override void OnMouseUp(Point position)
         {
-            //throw new NotImplementedException();
+            if (_context.Endpoint == null)
+                _context.Endpoint = position;
         }
 
-        
+
     }
 }

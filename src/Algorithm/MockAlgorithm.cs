@@ -13,8 +13,9 @@ namespace SRL.Model
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
-                if (p.X >= map.Width || p.X < 0 || p.Y >= map.Height || p.Y < 0)
-                    throw new Exception("Vehicle out of map");
+                // TODO: Vehicle out of map.
+                    //if (p.X >= map.Width || p.X < 0 || p.Y >= map.Height || p.Y < 0)
+                    //    throw new Exception("Vehicle out of map");
             }
             List<Point> lst = new List<Point>();
             for (int i = 0; i < vehicle.Shape.VertexCount; i++)

@@ -10,10 +10,11 @@ namespace SRL.Model.Model
         public Polygon Shape { get; set; }
         public Point OrientationOrigin { get; set; }
         public Point OrientationOriginEnd { get; set; }
+        public Point OrientationOriginOld { get; set; } // TODO: To delete/refactor.
 
         public double OrientationAngle
         {
-            get { return _orientationAngle;}
+            get { return _orientationAngle; }
             set
             {
                 value = value % 360;
@@ -68,6 +69,8 @@ namespace SRL.Model.Model
 
                 reader.ReadStartElement();
 
+                reader.MoveToContent();
+
                 while (!orientationDone || !shapeDone)
                 {
                     if (reader.LocalName == "orientation" && !orientationDone)
@@ -77,12 +80,15 @@ namespace SRL.Model.Model
 
                         reader.ReadStartElement();
 
+                        reader.MoveToContent();
+
                         while (!angleDone || !originDone)
                         {
                             if (reader.LocalName == "angle" && !angleDone)
                             {
                                 OrientationAngle = reader.ReadElementContentAsDouble();
                                 angleDone = true;
+                                //reader.MoveToContent();
                             }
                             else if (reader.LocalName == "point" && !originDone)
                             {
@@ -91,7 +97,8 @@ namespace SRL.Model.Model
                                 originDone = true;
                             }
                             else
-                                throw new XmlException();
+                                reader.MoveToContent(); // TODO: ?
+                                // throw new XmlException();
                         }
 
                         reader.ReadEndElement();
@@ -104,7 +111,7 @@ namespace SRL.Model.Model
                         shapeDone = true;
                     }
                     else
-                        throw new XmlException();
+                        reader.MoveToContent();
                 }
 
                 reader.ReadEndElement();

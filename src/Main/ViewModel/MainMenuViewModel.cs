@@ -10,6 +10,7 @@ namespace SRL.Main.ViewModel
         public ICommand VehicleEditorCommand { get; }
         public ICommand MapEditorCommand { get; }
         public ICommand TracerCommand { get; }
+        public ICommand VizualizationCommand { get; }
 
         public MainMenuViewModel()
         {
@@ -28,6 +29,12 @@ namespace SRL.Main.ViewModel
             TracerCommand = new RelayCommand(o =>
             {
                 Window window = new TracingView();
+                window.Show();
+            });
+
+            VizualizationCommand = new RelayCommand(o =>
+            {
+                Window window = new VisualizationModuleView();
                 window.Show();
             });
         }

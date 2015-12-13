@@ -40,8 +40,8 @@
   </xs:complexType>
 
   <xs:complexType name="pointType">
-    <xs:attribute name="x" type="nonNegativeDoubleType" use="required"/>
-    <xs:attribute name="y" type="nonNegativeDoubleType" use="required"/>
+    <xs:attribute name="x" type="xs:double" use="required"/>
+    <xs:attribute name="y" type="xs:double" use="required"/>
   </xs:complexType>
 
   <xs:simpleType name="nonNegativeDoubleType">

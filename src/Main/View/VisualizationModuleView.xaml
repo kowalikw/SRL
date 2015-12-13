@@ -21,6 +21,7 @@
             <Button Content="Wczytaj pojazd" Command="{Binding LoadVehicleCommand}"/>
             <Button Content="Pauza" Command="{Binding PauseCommand}"/>
             <Button Content="Wznów" Command="{Binding ResumeCommand}"/>
+            <Button Content="Oblicz ścieżkę" Command="{Binding CalculatePathCommand}"/>
         </StackPanel>
 
         <control:SimulationArea 

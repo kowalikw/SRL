@@ -5,6 +5,9 @@ using SRL.Main.Utilities;
 using SRL.Model;
 using SRL.Model.Model;
 using System.Windows.Threading;
+using System.IO;
+using System.Xml;
+using Microsoft.Win32;
 
 namespace SRL.Main.ViewModel
 {
@@ -36,8 +39,9 @@ namespace SRL.Main.ViewModel
         public Vehicle Vehicle { get; private set; }
         public double? InitialRotation { get; private set; }
         public Point Startpoint { get; private set; }
-        public Point Endpoint { get; private set; }
+        public Point Endpoint { get; set; }
 
+        public List<Order> orders { get; set; } // TODO: Temp to test.
 
         private IAlgorithm _algorithm = new MockAlgorithm();
 
@@ -47,11 +51,10 @@ namespace SRL.Main.ViewModel
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
             _timer.Tick += _timer_Tick;
-            
 
             CalculatePathCommand = new RelayCommand(o =>
             {
-                var orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
+                orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
 
                 if (orders != null)
                     _frames = DivideIntoFrames(orders);
@@ -59,8 +62,6 @@ namespace SRL.Main.ViewModel
                 {
                     //TODO ??
                 }
-
-                _timer.Start(); //TODO delete
             },
             c =>
             {
@@ -68,8 +69,9 @@ namespace SRL.Main.ViewModel
                     return false;
                 if (Startpoint == null || Endpoint == null)
                     return false;
-                if (InitialRotation == null)
-                    return false;
+                InitialRotation = 0;
+                /*if (InitialRotation == null)
+                    return false;*/
                 return true;
             });
 
@@ -77,12 +79,49 @@ namespace SRL.Main.ViewModel
             LoadMapCommand = new RelayCommand(o =>
             {
                 ResetSimulation();
-                //TODO 
+
+                Map = new Map(512, 512);
+
+                var dialog = new OpenFileDialog();
+                dialog.Filter = String.Format("{0} files (*.{1})|*.{1}",
+                "vmd".ToUpper(),
+                "vmd".ToLower());
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var sr = new StreamReader(dialog.FileName);
+
+                    var serializer = XmlReader.Create(new StringReader(sr.ReadToEnd()));
+
+                    Map.ReadXml(serializer);
+                }
+
+                ((RelayCommand)CalculatePathCommand).OnCanExecuteChanged();
             });
+
             LoadVehicleCommand = new RelayCommand(o =>
             {
                 ResetSimulation();
-                //TODO
+
+                Vehicle = new Vehicle();
+
+                var dialog = new OpenFileDialog();
+                dialog.Filter = String.Format("{0} files (*.{1})|*.{1}",
+                "vvd".ToUpper(),
+                "vvd".ToLower());
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var sr = new StreamReader(dialog.FileName);
+
+                    var serializer = XmlReader.Create(new StringReader(sr.ReadToEnd()));
+
+                    Vehicle.ReadXml(serializer);
+                }
+
+                Startpoint = Vehicle.OrientationOrigin;
+
+                ((RelayCommand)CalculatePathCommand).OnCanExecuteChanged();
             });
             LoadSimulationCommand = new RelayCommand(o =>
             {

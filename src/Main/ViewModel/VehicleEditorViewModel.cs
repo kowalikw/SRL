@@ -100,11 +100,29 @@ namespace SRL.Main.ViewModel
 
             SetOrientationAngleCommand = new RelayCommand(o =>
             {
-                Point position = (Point) o;
-                double angle = GeometryHelper.GetDegAngle(CurrentModel.OrientationOrigin, position);
+                // TODO: Refactoring
+                Point position = (Point)o;
 
+                double angle = GeometryHelper.GetRadAngle(CurrentModel.OrientationOrigin, position);
+                if (CurrentModel.OrientationOrigin.X > position.X) angle += Math.PI;
+                if (angle < 0) angle += 2 * Math.PI;
+
+                // TODO: Refactoring.
+                CurrentModel.OrientationOriginOld = CurrentModel.OrientationOrigin;
                 CurrentModel.OrientationAngle = angle;
                 CurrentModel.OrientationOriginEnd = position;
+
+                List<Point> lst = new List<Point>();
+                for (int i = 0; i < CurrentModel.Shape.VertexCount; i++)
+                {
+                    lst.Add(GeometryHelper.RotatePoint(CurrentModel.Shape.Vertices[i] - CurrentModel.OrientationOrigin, new Point(0, 0), -CurrentModel.OrientationAngle));
+                }
+                Vehicle vehicleTemplate = new Vehicle(new Polygon(lst), new Point(0, 0), 0);
+                vehicleTemplate.OrientationOriginEnd = CurrentModel.OrientationOriginEnd;
+                vehicleTemplate.OrientationOriginOld = CurrentModel.OrientationOriginOld;
+
+                CurrentModel = vehicleTemplate;
+
                 Stage = EditingStage.OrientationAngleSet;
             },
             c => Stage == EditingStage.OrientationOriginSet);

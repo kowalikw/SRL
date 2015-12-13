@@ -116,7 +116,7 @@ namespace SRL.Main.Utilities
             // calculate the angle between the two vectors
             //float angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
 
-            
+
 
             //DrawLine(spriteBatch, point1, distance, angle, color, thickness);
 
@@ -148,7 +148,7 @@ namespace SRL.Main.Utilities
 
             bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
 
-            
+
 
             if (steep)
             {
@@ -156,7 +156,7 @@ namespace SRL.Main.Utilities
                 Swap(ref x1, ref y1);
             }
 
-            if(x0 > x1)
+            if (x0 > x1)
             {
                 Swap(ref x0, ref x1);
                 Swap(ref y0, ref y1);
@@ -175,7 +175,7 @@ namespace SRL.Main.Utilities
             int xPxl1 = (int)xEnd;
             int yPxl1 = (int)yEnd;
 
-            if(steep)
+            if (steep)
             {
                 spriteBatch.PutPixel(yPxl1, xPxl1, color, (float)(rfpart(yEnd) * xGap));
                 spriteBatch.PutPixel(yPxl1 + 1, xPxl1, color, (float)(fpart(yEnd) * xGap));
@@ -207,9 +207,9 @@ namespace SRL.Main.Utilities
             }
 
             // main loop
-            for(int x = xPxl1 + 1; x < xPxl2; x++)
+            for (int x = xPxl1 + 1; x < xPxl2; x++)
             {
-                if(steep)
+                if (steep)
                 {
                     spriteBatch.PutPixel((int)intery, x, color, rfpart(intery));
                     spriteBatch.PutPixel((int)intery + 1, x, color, fpart(intery));
@@ -341,7 +341,7 @@ namespace SRL.Main.Utilities
 
         internal static void PutPixel(this SpriteBatch spriteBatch, int x, int y, Color color, float intense)
         {
-            Color newColor = new Color((float)color.R * intense/ 255.0f, (float)color.G * intense / 255.0f, (float)color.B * intense / 255.0f, intense);
+            Color newColor = new Color((float)color.R * intense / 255.0f, (float)color.G * intense / 255.0f, (float)color.B * intense / 255.0f, intense);
             PutPixel(spriteBatch, new Point(x, y), newColor);
             PutPixel(spriteBatch, new Point(x + 1, y), newColor);
             PutPixel(spriteBatch, new Point(x, y + 1), newColor);
@@ -361,7 +361,7 @@ namespace SRL.Main.Utilities
         /// <param name="color">The color of the pixel.</param>
         internal static void PutPixel(this SpriteBatch spriteBatch, Point position, Color color)
         {
-           
+
 
             spriteBatch.Draw(_pixel, new Vector2((float)position.X, (float)position.Y), color);
         }
@@ -415,23 +415,12 @@ namespace SRL.Main.Utilities
             Point arrowBottom = new Point(arrowBottomX, arrowBottomY);
 
             double axisAngle = GeometryHelper.GetRadAngle(origin, tip);
+            if (origin.X > tip.X) axisAngle += Math.PI;
             Point end = new Point(
                 origin.X + Math.Cos(axisAngle) * 100,
                 origin.Y + Math.Sin(axisAngle) * 100);
 
             if (origin.X == tip.X && origin.Y == tip.Y) return;
-
-            // Mirror of arrow
-            if (origin.X > tip.X)
-            {
-                arrowCenter = new Point(arrowCenter.X, arrowCenter.Y);
-                arrowTop = new Point(-arrowTop.X, arrowTop.Y);
-                arrowBottom = new Point(-arrowBottom.X, arrowBottom.Y);
-
-                end = new Point(
-                    origin.X - Math.Cos(axisAngle) * length,
-                    origin.Y - Math.Sin(axisAngle) * length);
-            }
 
             // Rotate and translate of arrow
             arrowCenter = new Point(end.X, end.Y);
@@ -492,23 +481,28 @@ namespace SRL.Main.Utilities
         }
 
 
-        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map)
+        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map, Point startPoint, Point endPoint)
         {
-            List<Point> rotatedVehicle = new List<Point>();
-            foreach (var point in vehicle.Shape.Vertices)
+            if (map != null)
+                DrawMap(spriteBatch, map);
+
+            if (endPoint != null)
+                spriteBatch.DrawVertex(endPoint, Color.Red);
+
+            if (vehicle != null && vehicle.Shape.VertexCount > 0 && frame != null)
             {
-                Point positionDifference = frame.Position - vehicle.OrientationOrigin;
-                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, -frame.Rotation));
+                List<Point> rotatedVehicle2 = new List<Point>();
+                foreach (var point in vehicle.Shape.Vertices)
+                {
+                    Point positionDifference = frame.Position - vehicle.OrientationOrigin;
+                    rotatedVehicle2.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, -frame.Rotation));
+                    Console.WriteLine(frame.Rotation);
+                }
+
+                DrawVehicle(spriteBatch, new Vehicle(new Polygon(rotatedVehicle2), vehicle.OrientationOrigin, vehicle.OrientationAngle));
             }
-
-            /*foreach (var point in vehicle.Shape.Vertices)
-            {
-                Point positionDifference = order.Destination - vehicle.OrientationOrigin;
-                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, Math.Abs(order.Rotation)));
-            }*/
-
-            DrawMap(spriteBatch, map);
-            DrawVehicle(spriteBatch, new Vehicle(new Polygon(rotatedVehicle), vehicle.OrientationOrigin, vehicle.OrientationAngle));
+            else if (vehicle != null && vehicle.Shape.VertexCount > 0 && frame == null)
+                DrawVehicle(spriteBatch, vehicle);
         }
     }
 }

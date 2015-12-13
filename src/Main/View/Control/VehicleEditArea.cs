@@ -72,10 +72,10 @@ namespace SRL.Main.View.Control
                 case EditingStage.OrientationAngleSet:
                     {
                         //Draw orientation origin.
-                        spriteBatch.DrawVertex(_context.CurrentModel.OrientationOrigin, RegularColor, VertexThickness);
+                        spriteBatch.DrawVertex(_context.CurrentModel.OrientationOriginOld, RegularColor, VertexThickness);
 
                         //Draw orientation axis.
-                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOrigin, _context.CurrentModel.OrientationOriginEnd, RegularColor, LineThickness, AxisLength);
+                        spriteBatch.DrawArrow(_context.CurrentModel.OrientationOriginOld, _context.CurrentModel.OrientationOriginEnd, RegularColor, LineThickness, AxisLength);
                         break;
                     }
                 default:
