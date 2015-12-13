@@ -80,14 +80,14 @@ namespace SRL.Model
                     }
                     
                 } while (c);
-                lst.Add(new Order { Rotation = rotation, Destination = new Point(x, y) });
+                lst.Add(new Order { Rotation = -rotation, Destination = new Point(x, y) });
                 currentState = new Vehicle(new Polygon(shp), new Point(x, y), rotation);
             }
             double finalRotation;
             finalRotation = Math.Atan((-currentState.OrientationOrigin.Y + end.Y) / (-currentState.OrientationOrigin.X + end.X));
             if (currentState.OrientationOrigin.X > end.X)
                 finalRotation += Math.PI;
-            lst.Add(new Order() { Rotation = finalRotation, Destination = end });
+            lst.Add(new Order() { Rotation = -finalRotation, Destination = end });
             return lst;
         }
 
