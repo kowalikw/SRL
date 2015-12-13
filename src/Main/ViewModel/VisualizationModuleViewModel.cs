@@ -40,19 +40,31 @@ namespace SRL.Main.ViewModel
 
         public VisualizationModuleViewModel()
         {
-            Startpoint = new Point(50, 100);
-            Endpoint = new Point(500, 500);
 
+            Startpoint = new Point(50, 50);
+            Endpoint = new Point(150, 40);
+
+            
             Polygon obstacle1 = new Polygon(new List<Point>() { new Point(200, 200), new Point(240, 240), new Point (200, 240) });
             Polygon obstacle2 = new Polygon(new List<Point>() { new Point(420, 90), new Point(480, 120), new Point(470, 180), new Point(450, 150) });
 
             Map = new Map(512, 512, new List<Polygon>() { obstacle1, obstacle2 });
-
+            
             Polygon vehicle = new Polygon(new List<Point>() { new Point(30,90), new Point(70, 90), new Point(80, 100), new Point(70, 110), new Point(30, 110) });
             Vehicle = new Vehicle(vehicle, new Point(50, 100), 0);
 
-            MockAlgorithm mock = new MockAlgorithm();
-            orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
+            //MockAlgorithm mock = new MockAlgorithm();
+           // orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
+            
+
+            InitialRotation = 0.523599; //30 deg
+
+            orders = new List<Order>();
+            orders.Add(new Order() { Destination = new Point(100,100), Rotation = -0.79}); // -45 deg
+            orders.Add(new Order() { Destination = new Point(140, 100), Rotation = 0 }); // 0 deg
+            orders.Add(new Order() { Destination = new Point(150, 40), Rotation = 1.41 }); // 81 deg
+
+
 
             DivideIntoFrames(orders);
             CurrentFrame = _frames[0];
@@ -107,7 +119,7 @@ namespace SRL.Main.ViewModel
                     frames.Push(new Frame
                     {
                         Position = currentPosition,
-                        Rotation = currentAngle < 0 ? Math.PI * 2 - currentAngle : currentAngle
+                        Rotation = currentAngle < 0 ? Math.PI * 2 + currentAngle : currentAngle
                     });
                 }
 
@@ -142,7 +154,7 @@ namespace SRL.Main.ViewModel
                 }
                 else if (Math.Abs(dy) < 0.5)
                 {
-                    for (double x = xStep; Math.Abs(x) <= Math.Abs(dx); x += yStep)
+                    for (double x = xStep; Math.Abs(x) <= Math.Abs(dx); x += xStep)
                     {
                         frames.Push(new Frame
                         {
