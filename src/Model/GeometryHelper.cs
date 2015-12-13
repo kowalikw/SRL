@@ -134,7 +134,6 @@ namespace SRL.Model
                     sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
                     (sinTheta * (pointToRotate.X - centerPoint.X) +
                     cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y));
-
         }
     }
 }

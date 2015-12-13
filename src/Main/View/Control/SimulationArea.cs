@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using SRL.Main.ViewModel;
 using SRL.Model.Model;
 using SRL.Main.Utilities;
+using Microsoft.Xna.Framework;
+using Point = SRL.Model.Model.Point;
 
 namespace SRL.Main.View.Control
 {
@@ -27,6 +29,8 @@ namespace SRL.Main.View.Control
             //throw new NotImplementedException();
 
             spriteBatch.DrawFrame(_context.CurrentFrame, _context.Vehicle, _context.Map);
+
+            spriteBatch.DrawLine(_context.Startpoint, _context.Endpoint, Color.Red);
         }
 
         protected override void OnMouseUp(Point position)

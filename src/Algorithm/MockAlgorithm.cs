@@ -41,7 +41,7 @@ namespace SRL.Model
             }
             currentState = new Vehicle(new Polygon(shp), start, vehicleRotation);
             //o.Rotation = vehicleRotation; o.Destination = start;
-            lst.Add(o);
+            //lst.Add(o);
             for (int i = 0; i < iterations; i++)
             {
                 bool c = false;

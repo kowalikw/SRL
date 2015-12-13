@@ -74,7 +74,7 @@ namespace SRL.Main.ViewModel
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            _frameNumber++;
+            //_frameNumber++;
             CurrentFrame = _frames[_frameNumber];
 
             if (_frameNumber == _frames.Length - 1)
@@ -128,7 +128,7 @@ namespace SRL.Main.ViewModel
                 frames.Push(new Frame
                 {
                     Position = currentPosition,
-                    Rotation = orders[o].Rotation
+                    Rotation = Math.Abs(orders[o].Rotation)
                 });
 
                 // Move frames.
@@ -150,7 +150,7 @@ namespace SRL.Main.ViewModel
                         frames.Push(new Frame
                         {
                             Position = new Point(currentPosition.X, currentPosition.Y + y),
-                            Rotation = currentAngle,
+                            Rotation = Math.Abs(currentAngle),
                         });
                     }
                 }
@@ -161,7 +161,7 @@ namespace SRL.Main.ViewModel
                         frames.Push(new Frame
                         {
                             Position = new Point(currentPosition.X + x, currentPosition.Y),
-                            Rotation = currentAngle,
+                            Rotation = Math.Abs(currentAngle),
                         });
                     }
                 }
@@ -183,7 +183,7 @@ namespace SRL.Main.ViewModel
                             frames.Push(new Frame
                             {
                                 Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = currentAngle,
+                                Rotation = Math.Abs(currentAngle),
                             });
                         }
                     }
@@ -202,7 +202,7 @@ namespace SRL.Main.ViewModel
                             frames.Push(new Frame
                             {
                                 Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = currentAngle,
+                                Rotation = Math.Abs(currentAngle),
                             });
                         }
                     }
