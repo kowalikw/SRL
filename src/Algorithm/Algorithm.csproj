@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm.cs" />
     <Compile Include="MockAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

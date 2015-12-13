@@ -19,7 +19,7 @@ namespace SRL.Model
             List<Point> lst = new List<Point>();
             for (int i = 0; i < vehicle.Shape.VertexCount; i++)
             {
-                lst.Add(RotatePoint(vehicle.Shape.Vertices[i] - vehicle.OrientationOrigin, new Point(0, 0), -vehicle.OrientationAngle));
+                lst.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[i] - vehicle.OrientationOrigin, new Point(0, 0), -vehicle.OrientationAngle));
             }
             Vehicle vehicleTemplate = new Vehicle(new Polygon(lst), new Point(0, 0), 0);
 
@@ -38,50 +38,40 @@ namespace SRL.Model
             {
                 shp.Add(vehicleTemplate.Shape.Vertices[i] + start);
             }
-            currentState = new Vehicle(new Polygon(shp), start, 0);
-            o.Rotation = vehicleRotation; o.Destination = start;
+            currentState = new Vehicle(new Polygon(shp), start, vehicleRotation);
+            //o.Rotation = vehicleRotation; o.Destination = start;
             lst.Add(o);
             for (int i = 0; i < iterations; i++)
             {
                 bool c = false;
-                double rotation, stride;
+                double rotation, stride, strideX=0, strideY=0;
                 do
                 {
-                    double strideX = 0, strideY = 0;
                     shp.Clear();
                     rotation = r.NextDouble() * 2 * Math.PI;
                     stride = r.NextDouble() * 200;
+                    strideX = Math.Sin(rotation) * stride;
+                    strideY = Math.Cos(rotation) * stride;
                     for (int j = 0; j < vehicleTemplate.Shape.VertexCount; j++)
                     {
-                        Point rotatedPoint = RotatePoint(vehicleTemplate.Shape.Vertices[j], new Point(0, 0), rotation);
-                        strideX = Math.Sin(rotation) * stride;
-                        strideY = Math.Cos(rotation) * stride;
+                        Point rotatedPoint = GeometryHelper.RotatePoint(vehicleTemplate.Shape.Vertices[j], new Point(0, 0), rotation);
                         double newPointX = rotatedPoint.X + strideX + currentState.OrientationOrigin.X;
                         double newPointY = rotatedPoint.Y + strideY + currentState.OrientationOrigin.Y;
                         shp.Add(new Point(newPointX, newPointY));
                         if (newPointX >= map.Width || newPointX < 0 || newPointY >= map.Height || newPointY < 0)
                             c = true;
                     }
-                    currentState = new Vehicle(new Polygon(shp), new Point(currentState.OrientationOrigin.X + strideX, currentState.OrientationOrigin.Y + strideY), rotation);
+                    
                 } while (c);
-                lst.Add(new Order { Rotation = rotation, Destination = currentState.OrientationOrigin });
+                lst.Add(new Order { Rotation = currentState.OrientationAngle - rotation, Destination = new Point(currentState.OrientationOrigin.X + strideX, currentState.OrientationOrigin.Y + strideY) });
+                currentState = new Vehicle(new Polygon(shp), new Point(currentState.OrientationOrigin.X + strideX, currentState.OrientationOrigin.Y + strideY), rotation);
             }
             double finalRotation;
             finalRotation = Math.Atan((currentState.OrientationOrigin.X - end.X) / (currentState.OrientationOrigin.Y - end.Y));
-            lst.Add(new Order() { Rotation = finalRotation, Destination = end });
+            lst.Add(new Order() { Rotation = currentState.OrientationAngle - finalRotation, Destination = end });
             return lst;
         }
 
-        static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInRadians)
-        {
-            double cosTheta = Math.Cos(angleInRadians);
-            double sinTheta = Math.Sin(angleInRadians);
-            return new Point(
-                    (cosTheta * (pointToRotate.X - centerPoint.X) -
-                    sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
-                    (sinTheta * (pointToRotate.X - centerPoint.X) +
-                    cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y));
-
-        }
+        
     }
 }
