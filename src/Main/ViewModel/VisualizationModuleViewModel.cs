@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using SRL.Main.Utilities;
 using SRL.Model;
 using SRL.Model.Model;
 using System.Windows.Threading;
@@ -11,11 +12,12 @@ namespace SRL.Main.ViewModel
 {
     internal class VisualizationModuleViewModel
     {
-        
+
 
         public ICommand CalculatePathCommand { get; }
 
         public ICommand LoadSimulationCommand { get; }
+        public ICommand SaveSimulationCommand { get; }
         public ICommand LoadVehicleCommand { get; }
         public ICommand LoadMapCommand { get; }
 
@@ -24,7 +26,9 @@ namespace SRL.Main.ViewModel
         public ICommand SetEndpoint { get; }
 
 
-        public Frame CurrentFrame { get; private set; }
+        public int CurrentFrameIdx { get; set; }
+        public Frame CurrentFrame => _frames[CurrentFrameIdx];
+        public int MaxFrameIdx => _frames?.Length - 1 ?? -1;
         private Frame[] _frames;
 
         private DispatcherTimer _timer;
@@ -32,59 +36,105 @@ namespace SRL.Main.ViewModel
 
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
-        public double InitialRotation { get; private set; }
+        public double? InitialRotation { get; private set; }
         public Point Startpoint { get; private set; }
         public Point Endpoint { get; private set; }
 
-        public List<Order> orders { get; set; } // TODO: DELETE
+
+        private IAlgorithm _algorithm = new MockAlgorithm();
+
 
         public VisualizationModuleViewModel()
         {
+            CalculatePathCommand = new RelayCommand(o =>
+            {
+                var orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
 
-            Startpoint = new Point(50, 50);
-            Endpoint = new Point(150, 40);
-
-            
-            Polygon obstacle1 = new Polygon(new List<Point>() { new Point(200, 200), new Point(240, 240), new Point (200, 240) });
-            Polygon obstacle2 = new Polygon(new List<Point>() { new Point(420, 90), new Point(480, 120), new Point(470, 180), new Point(450, 150) });
-
-            Map = new Map(512, 512, new List<Polygon>() { obstacle1, obstacle2 });
-            
-            Polygon vehicle = new Polygon(new List<Point>() { new Point(30,90), new Point(70, 90), new Point(80, 100), new Point(70, 110), new Point(30, 110) });
-            Vehicle = new Vehicle(vehicle, new Point(50, 100), 0);
-
-            MockAlgorithm mock = new MockAlgorithm();
-            orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
-            
-
-            InitialRotation = 0.523599; //30 deg
-
-            /*orders = new List<Order>();
-            orders.Add(new Order() { Destination = new Point(100,100), Rotation = -0.79}); // -45 deg
-            orders.Add(new Order() { Destination = new Point(140, 100), Rotation = 0 }); // 0 deg
-            orders.Add(new Order() { Destination = new Point(150, 40), Rotation = 1.41 }); // 81 deg*/
+                if (orders != null)
+                    _frames = DivideIntoFrames(orders);
+                else
+                {
+                    //TODO ??
+        }
+            },
+            c =>
+            {
+                if (Map == null || Vehicle == null)
+                    return false;
+                if (Startpoint == null || Endpoint == null)
+                    return false;
+                if (InitialRotation == null)
+                    return false;
+                return true;
+            });
 
 
+            LoadMapCommand = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                //TODO 
+            });
+            LoadVehicleCommand = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                //TODO
+            });
+            LoadSimulationCommand = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                //TODO
+            });
+            SaveSimulationCommand = new RelayCommand(o =>
+            {
+                //TODO
+            },
+            c =>
+            {
+                return _frames != null;
+            });
 
-            DivideIntoFrames(orders);
-            CurrentFrame = _frames[0];
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            _timer.Tick += _timer_Tick;
-            _timer.Start();
+            SetInitialRotation = new RelayCommand(o =>
+            {
+                InitialRotation = (double) o;
+            });
+            SetStartpoint = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                Startpoint = (Point) o;
+            }, c =>
+            {
+                Point point = (Point) c;
+
+                if (Map == null)
+                    return false;
+
+                //TODO check if point is inside an obstacle
+                return true;
+            });
+            SetEndpoint = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                Endpoint = (Point) o;
+            }, c =>
+            {
+                Point point = (Point)c;
+
+                if (Map == null)
+                    return false;
+
+                //TODO check if point is inside an obstacle
+                return true;
+            });
         }
 
-        private void _timer_Tick(object sender, EventArgs e)
+        private void ResetSimulation()
         {
-            _frameNumber++;
-            CurrentFrame = _frames[_frameNumber];
-
-            if (_frameNumber == _frames.Length - 1)
-                _timer.Stop();
+            _frames = null;
+            CurrentFrame = null;
         }
 
-        private void DivideIntoFrames(List<Order> orders)
+        private Frame[] DivideIntoFrames(List<Order> orders)
         {
             const int partsPerRadian = 128;
             double radiansPerPart = 1 / (double)partsPerRadian;
@@ -93,7 +143,7 @@ namespace SRL.Main.ViewModel
             frames.Push(new Frame
             {
                 Position = Startpoint,
-                Rotation = InitialRotation
+                Rotation = InitialRotation.Value
             });
 
             for (int o = 0; o < orders.Count; o++)
@@ -102,7 +152,7 @@ namespace SRL.Main.ViewModel
                 double relativeRotation;
 
                 if (o == 0)
-                    relativeRotation = orders[o].Rotation - InitialRotation;
+                    relativeRotation = orders[o].Rotation - InitialRotation.Value;
                 else
                     relativeRotation = orders[o].Rotation - orders[o - 1].Rotation;
 
@@ -207,8 +257,9 @@ namespace SRL.Main.ViewModel
                 }
 
             }
-            _frames = frames.ToArray();
-            Array.Reverse(_frames);
+            var fArray = frames.ToArray();
+            Array.Reverse(fArray);
+            return fArray;
         }
     }
 }

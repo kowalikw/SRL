@@ -15,10 +15,10 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Wczytaj symulację"/>
-            <Button Content="Zapisz symulację"/>
-            <Button Content="Wczytaj mapę"/>
-            <Button Content="Wczytaj pojazd"/>
+            <Button Content="Wczytaj symulację" Command="{Binding LoadSimulationCommand}"/>
+            <Button Content="Zapisz symulację" Command="{Binding SaveSimulationCommand}"/>
+            <Button Content="Wczytaj mapę" Command="{Binding LoadMapCommand}"/>
+            <Button Content="Wczytaj pojazd" Command="{Binding LoadVehicleCommand}"/>
             <Button Content="Pauza"/>
             <Button Content="Wznów"/>
         </StackPanel>
@@ -29,6 +29,6 @@
                 SnapsToDevicePixels="True"
                 Stretch="Fill"/>
         
-        <Slider Grid.Row="2" Maximum="9999" Margin="5" TickPlacement="BottomRight"/>
+        <Slider Grid.Row="2" Maximum="{Binding MaxFrameIdx}" Value="{Binding CurrentFrameIdx}" TickPlacement="BottomRight"/>
     </Grid>
 </Window>
