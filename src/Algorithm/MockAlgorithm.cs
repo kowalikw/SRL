@@ -59,6 +59,9 @@ namespace SRL.Model
                     {
                         c = true;
                     }
+                    
+                    if (x < currentState.OrientationOrigin.X)
+                        rotation += Math.PI;
                     if (rotation < 0)
                     {
                         rotation = rotation + (2 * Math.PI);
