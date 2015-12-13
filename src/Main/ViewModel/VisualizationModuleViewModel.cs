@@ -5,6 +5,7 @@ using System.Windows.Input;
 using SRL.Model;
 using SRL.Model.Model;
 using System.Windows.Threading;
+using SRL.Main.Utilities;
 
 namespace SRL.Main.ViewModel
 {
@@ -22,6 +23,8 @@ namespace SRL.Main.ViewModel
         public ICommand SetStartpoint { get; }
         public ICommand SetEndpoint { get; }
 
+        public ICommand NextCommand { get; }
+
 
         public Frame CurrentFrame { get; private set; }
         private Frame[] _frames;
@@ -29,17 +32,22 @@ namespace SRL.Main.ViewModel
         private DispatcherTimer _timer;
         private int _frameNumber;
 
+        public int i = 0;
+
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
         public double InitialRotation { get; private set; }
         public Point Startpoint { get; private set; }
         public Point Endpoint { get; private set; }
 
-
+        public List<Order> orders { get; set; } // TODO: DELETE
 
         public VisualizationModuleViewModel()
         {
-
+            NextCommand = new RelayCommand(o =>
+            {
+                i++;
+            });
 
             /*List<Order> orders = new List<Order>();
             orders.Add(new Order() { Destination = new Point(100, 100), Rotation = 0 });
@@ -47,7 +55,7 @@ namespace SRL.Main.ViewModel
             orders.Add(new Order() { Destination = new Point(300, 100), Rotation = 0 });
             orders.Add(new Order() { Destination = new Point(400, 350), Rotation = -Math.PI * 3 / 4 });*/
 
-            
+
 
             Startpoint = new Point(50, 100);
             Endpoint = new Point(500, 500);
@@ -61,29 +69,24 @@ namespace SRL.Main.ViewModel
             Vehicle = new Vehicle(vehicle, new Point(50, 100), 0);
 
             MockAlgorithm mock = new MockAlgorithm();
-            List<Order> orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
+            orders = mock.GetPath(Map, Vehicle, Startpoint, Endpoint, 0, 0);
 
             DivideIntoFrames(orders);
             CurrentFrame = _frames[0];
 
             _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 33);
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
             _timer.Tick += _timer_Tick;
-            _timer.Start();
+            //_timer.Start();
         }
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            //_frameNumber++;
+            _frameNumber++;
             CurrentFrame = _frames[_frameNumber];
 
             if (_frameNumber == _frames.Length - 1)
                 _timer.Stop();
-        }
-
-        private void Animation()
-        {
-
         }
 
         private void DivideIntoFrames(List<Order> orders)
@@ -128,7 +131,7 @@ namespace SRL.Main.ViewModel
                 frames.Push(new Frame
                 {
                     Position = currentPosition,
-                    Rotation = Math.Abs(orders[o].Rotation)
+                    Rotation = orders[o].Rotation
                 });
 
                 // Move frames.
@@ -150,7 +153,7 @@ namespace SRL.Main.ViewModel
                         frames.Push(new Frame
                         {
                             Position = new Point(currentPosition.X, currentPosition.Y + y),
-                            Rotation = Math.Abs(currentAngle),
+                            Rotation = currentAngle,
                         });
                     }
                 }
@@ -161,7 +164,7 @@ namespace SRL.Main.ViewModel
                         frames.Push(new Frame
                         {
                             Position = new Point(currentPosition.X + x, currentPosition.Y),
-                            Rotation = Math.Abs(currentAngle),
+                            Rotation = currentAngle,
                         });
                     }
                 }
@@ -183,7 +186,7 @@ namespace SRL.Main.ViewModel
                             frames.Push(new Frame
                             {
                                 Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = Math.Abs(currentAngle),
+                                Rotation = currentAngle,
                             });
                         }
                     }
@@ -202,7 +205,7 @@ namespace SRL.Main.ViewModel
                             frames.Push(new Frame
                             {
                                 Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = Math.Abs(currentAngle),
+                                Rotation = currentAngle,
                             });
                         }
                     }

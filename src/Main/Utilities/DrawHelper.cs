@@ -492,13 +492,19 @@ namespace SRL.Main.Utilities
         }
 
 
-        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map)
+        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map, Order order)
         {
             List<Point> rotatedVehicle = new List<Point>();
-            foreach (var point in vehicle.Shape.Vertices)
+            /*foreach (var point in vehicle.Shape.Vertices)
             {
                 Point positionDifference = frame.Position - vehicle.OrientationOrigin;
-                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, 0.8441539));
+                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, frame.Rotation));
+            }*/
+
+            foreach (var point in vehicle.Shape.Vertices)
+            {
+                Point positionDifference = order.Destination - vehicle.OrientationOrigin;
+                rotatedVehicle.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, order.Rotation));
             }
 
             DrawMap(spriteBatch, map);
