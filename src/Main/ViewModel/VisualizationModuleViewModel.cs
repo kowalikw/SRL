@@ -34,7 +34,7 @@ namespace SRL.Main.ViewModel
 
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
-        public double InitialRotation { get; private set; }
+        public double? InitialRotation { get; private set; }
         public Point Startpoint { get; private set; }
         public Point Endpoint { get; private set; }
 
@@ -46,33 +46,40 @@ namespace SRL.Main.ViewModel
         {
             CalculatePathCommand = new RelayCommand(o =>
             {
-                var orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation, 360); //TODO set angle denisty somewhere else
+                var orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
 
                 if (orders != null)
                     _frames = DivideIntoFrames(orders);
                 else
                 {
-                    _frames = null;
                     //TODO ??
                 }
             },
             c =>
             {
-                //TODO map, vehicle, startpoint, endpoint, initialrotation are set
-                return false;
+                if (Map == null || Vehicle == null)
+                    return false;
+                if (Startpoint == null || Endpoint == null)
+                    return false;
+                if (InitialRotation == null)
+                    return false;
+                return true;
             });
 
 
             LoadMapCommand = new RelayCommand(o =>
             {
+                ResetSimulation();
                 //TODO 
             });
             LoadVehicleCommand = new RelayCommand(o =>
             {
+                ResetSimulation();
                 //TODO
             });
             LoadSimulationCommand = new RelayCommand(o =>
             {
+                ResetSimulation();
                 //TODO
             });
             SaveSimulationCommand = new RelayCommand(o =>
@@ -81,21 +88,13 @@ namespace SRL.Main.ViewModel
             },
             c =>
             {
-                //TODO only if path exists and is calculated
-                return false;
+                return _frames != null;
             });
 
 
             SetInitialRotation = new RelayCommand(o =>
             {
                 InitialRotation = (double) o;
-            }, c =>
-            {
-                if (Map == null || Vehicle == null)
-                    return false;
-
-                //TODO the vehicle has to fit in without colliding with any obstacles
-                return false;
             });
             SetStartpoint = new RelayCommand(o =>
             {
@@ -103,6 +102,12 @@ namespace SRL.Main.ViewModel
                 Startpoint = (Point) o;
             }, c =>
             {
+                Point point = (Point) c;
+
+                if (Map == null)
+                    return false;
+
+                //TODO check if point is inside an obstacle
                 return true;
             });
             SetEndpoint = new RelayCommand(o =>
@@ -111,6 +116,12 @@ namespace SRL.Main.ViewModel
                 Endpoint = (Point) o;
             }, c =>
             {
+                Point point = (Point)c;
+
+                if (Map == null)
+                    return false;
+
+                //TODO check if point is inside an obstacle
                 return true;
             });
         }
@@ -130,7 +141,7 @@ namespace SRL.Main.ViewModel
             frames.Push(new Frame
             {
                 Position = Startpoint,
-                Rotation = InitialRotation
+                Rotation = InitialRotation.Value
             });
 
             for (int o = 0; o < orders.Count; o++)
@@ -139,7 +150,7 @@ namespace SRL.Main.ViewModel
                 double relativeRotation;
 
                 if (o == 0)
-                    relativeRotation = orders[o].Rotation - InitialRotation;
+                    relativeRotation = orders[o].Rotation - InitialRotation.Value;
                 else
                     relativeRotation = orders[o].Rotation - orders[o - 1].Rotation;
 
