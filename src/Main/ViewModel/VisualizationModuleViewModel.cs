@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using SRL.Main.Utilities;
 using SRL.Model;
 using SRL.Model.Model;
 
@@ -18,6 +19,7 @@ namespace SRL.Main.ViewModel
         public ICommand CalculatePathCommand { get; }
 
         public ICommand LoadSimulationCommand { get; }
+        public ICommand SaveSimulationCommand { get; }
         public ICommand LoadVehicleCommand { get; }
         public ICommand LoadMapCommand { get; }
 
@@ -30,7 +32,6 @@ namespace SRL.Main.ViewModel
         private Frame[] _frames;
 
 
-
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
         public double InitialRotation { get; private set; }
@@ -38,13 +39,89 @@ namespace SRL.Main.ViewModel
         public Point Endpoint { get; private set; }
 
 
+        private IAlgorithm _algorithm = new MockAlgorithm();
+
 
         public VisualizationModuleViewModel()
         {
+            CalculatePathCommand = new RelayCommand(o =>
+            {
+                var orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation, 360); //TODO set angle denisty somewhere else
 
+                if (orders != null)
+                    _frames = DivideIntoFrames(orders);
+                else
+                {
+                    _frames = null;
+                    //TODO ??
+                }
+            },
+            c =>
+            {
+                //TODO map, vehicle, startpoint, endpoint, initialrotation are set
+                return false;
+            });
+
+
+            LoadMapCommand = new RelayCommand(o =>
+            {
+                //TODO 
+            });
+            LoadVehicleCommand = new RelayCommand(o =>
+            {
+                //TODO
+            });
+            LoadSimulationCommand = new RelayCommand(o =>
+            {
+                //TODO
+            });
+            SaveSimulationCommand = new RelayCommand(o =>
+            {
+                //TODO
+            },
+            c =>
+            {
+                //TODO only if path exists and is calculated
+                return false;
+            });
+
+
+            SetInitialRotation = new RelayCommand(o =>
+            {
+                InitialRotation = (double) o;
+            }, c =>
+            {
+                if (Map == null || Vehicle == null)
+                    return false;
+
+                //TODO the vehicle has to fit in without colliding with any obstacles
+                return false;
+            });
+            SetStartpoint = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                Startpoint = (Point) o;
+            }, c =>
+            {
+                return true;
+            });
+            SetEndpoint = new RelayCommand(o =>
+            {
+                ResetSimulation();
+                Endpoint = (Point) o;
+            }, c =>
+            {
+                return true;
+            });
         }
 
-        private void DivideIntoFrames(List<Order> orders)
+        private void ResetSimulation()
+        {
+            _frames = null;
+            CurrentFrame = null;
+        }
+
+        private Frame[] DivideIntoFrames(List<Order> orders)
         {
             const int partsPerRadian = 128;
             double radiansPerPart = 1 / (double)partsPerRadian;
@@ -167,8 +244,9 @@ namespace SRL.Main.ViewModel
                 }
 
             }
-            _frames = frames.ToArray();
-            Array.Reverse(_frames);
+            var fArray = frames.ToArray();
+            Array.Reverse(fArray);
+            return fArray;
         }
     }
 }

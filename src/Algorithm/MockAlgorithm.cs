@@ -7,7 +7,7 @@ using SRL.Model.Model;
 
 namespace SRL.Model
 {
-    class MockAlgorithm : IAlgorithm
+    public class MockAlgorithm : IAlgorithm
     {
         List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
