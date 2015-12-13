@@ -13,7 +13,7 @@ namespace SRL.Model.Model
         public double Height { get; private set; }
         public int ObstacleCount => Obstacles.Count;
 
-        private Map()
+        public Map()
         {
             Obstacles = new List<Polygon>();
         }

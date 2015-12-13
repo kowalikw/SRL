@@ -102,7 +102,7 @@ namespace SRL.Model.Model
                         Shape = new Polygon();
                         Shape.ReadXml(reader);
                         shapeDone = true;
-        }
+                    }
                     else
                         throw new XmlException();
                 }
