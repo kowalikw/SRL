@@ -123,12 +123,27 @@ namespace SRL.Main.ViewModel
         private void Trace()
         {
             CurrentModel.Clear();
-            var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+            if (bw.IsBusy != true)
+            {
+                bw.RunWorkerAsync();
+            }
+            /*var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
             foreach (var polygon in traceOutput)
-                CurrentModel.Add(polygon);
+                CurrentModel.Add(polygon);*/
 
             ((RelayCommand)CreateMapCommand).OnCanExecuteChanged();
             ((RelayCommand)CreateVehicleCommand).OnCanExecuteChanged();
+        }
+
+       
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            var traceOutput = _tracer.Trace(AreaThreshold, ColorThreshold);
+            foreach (var polygon in traceOutput)
+                CurrentModel.Add(polygon);
         }
 
         [NotifyPropertyChangedInvocator]
