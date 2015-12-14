@@ -135,5 +135,10 @@ namespace SRL.Model
                     (sinTheta * (pointToRotate.X - centerPoint.X) +
                     cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y));
         }
+
+        public static bool IsPointOnRectangleOfPolygon(Point point, Polygon polygon)
+        {
+            return IsPointInPolygon(point, polygon); // TODO
+        }
     }
 }

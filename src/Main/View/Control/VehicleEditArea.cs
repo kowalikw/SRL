@@ -104,5 +104,10 @@ namespace SRL.Main.View.Control
                 _context.SetOrientationAngleCommand.Execute(position);
             }
         }
+
+        protected override void OnMouseDown(SrlPoint position)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

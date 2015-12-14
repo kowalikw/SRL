@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
+using SRL.Model.Model;
 using SrlPoint = SRL.Model.Model.Point;
 using WinPoint = System.Windows.Point;
 using XnaPoint = Microsoft.Xna.Framework.Point;
@@ -63,5 +64,9 @@ namespace SRL.Main.View.Control
                 _context.AddVertexCommand.Execute(position);
         }
 
+        protected override void OnMouseDown(SrlPoint position)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

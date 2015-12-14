@@ -38,7 +38,7 @@ namespace SRL.Main.ViewModel
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
         public double? InitialRotation { get; private set; }
-        public Point Startpoint { get; private set; }
+        public Point Startpoint { get; set; }
         public Point Endpoint { get; set; }
 
         public List<Order> orders { get; set; } // TODO: Temp to test.
@@ -54,6 +54,8 @@ namespace SRL.Main.ViewModel
 
             CalculatePathCommand = new RelayCommand(o =>
             {
+                CurrentFrameIdx = 0;
+
                 orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
 
                 if (orders != null)

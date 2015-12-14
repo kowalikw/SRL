@@ -41,5 +41,10 @@ namespace SRL.Main.View.Control
                 if(GeometryHelper.IsPointInPolygon(MousePosition, polygon))
                     _context.CurrentShape = polygon;
         }
+
+        protected override void OnMouseDown(SrlPoint position)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

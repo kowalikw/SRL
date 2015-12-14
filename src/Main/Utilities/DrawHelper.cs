@@ -486,6 +486,9 @@ namespace SRL.Main.Utilities
             if (map != null)
                 DrawMap(spriteBatch, map);
 
+            if (startPoint != null)
+                spriteBatch.DrawVertex(startPoint, Color.Green);
+
             if (endPoint != null)
                 spriteBatch.DrawVertex(endPoint, Color.Red);
 

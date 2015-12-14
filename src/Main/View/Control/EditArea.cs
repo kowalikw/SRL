@@ -36,6 +36,11 @@ namespace SRL.Main.View.Control
                 WinPoint position = e.GetPosition((UIElement) o);
                 OnMouseUp((SrlPoint)position);
             };
+            MouseDown += (o, e) =>
+            {
+                WinPoint position = e.GetPosition((UIElement)o);
+                OnMouseDown((SrlPoint)position);
+            };
             MouseMove += (o, e) =>
             {
                 WinPoint position = e.GetPosition((UIElement)o);
@@ -61,6 +66,7 @@ namespace SRL.Main.View.Control
         protected abstract void Render(SpriteBatch spriteBatch, TimeSpan time);
         
         protected abstract void OnMouseUp(SrlPoint position);
+        protected abstract void OnMouseDown(SrlPoint position);
 
         protected bool IsMousePulledByPoint(SrlPoint point)
         {
