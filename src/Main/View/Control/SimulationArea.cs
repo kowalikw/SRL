@@ -49,6 +49,7 @@ namespace SRL.Main.View.Control
 
                     _context.Endpoint = null;
                     _context.orders = null;
+                    _context._frames = null;
                 }
 
                 lastDistance = distance;
@@ -69,6 +70,7 @@ namespace SRL.Main.View.Control
 
                     _context.Endpoint = null;
                     _context.orders = null;
+                    _context._frames = null;
                 }
 
                 lastMousePosition = MousePosition;

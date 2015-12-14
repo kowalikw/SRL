@@ -37,7 +37,7 @@ namespace SRL.Main.ViewModel
         public int CurrentFrameIdx { get; set; }
         public Frame CurrentFrame => _frames?[CurrentFrameIdx];
         public int MaxFrameIdx => _frames?.Length - 1 ?? -1;
-        private Frame[] _frames;
+        public Frame[] _frames; // TODO: To private.
 
         private DispatcherTimer _timer;
 
