@@ -138,7 +138,42 @@ namespace SRL.Model
 
         public static bool IsPointOnRectangleOfPolygon(Point point, Polygon polygon)
         {
-            return IsPointInPolygon(point, polygon); // TODO
+            double minX = int.MaxValue, maxX = int.MinValue;
+            double minY = int.MaxValue, maxY = int.MinValue;
+
+            foreach (var p in polygon.Vertices)
+            {
+                if (p.X < minX) minX = p.X;
+                if (p.X > maxX) maxX = p.X;
+                if (p.Y < minY) minY = p.Y;
+                if (p.Y > maxY) maxY = p.Y;
+            }
+
+            return point.X >= minX && point.X <= maxX && point.Y >= minY && point.Y <= maxY;
+        }
+
+        public static Corner IsPointOnCornerOfRectangleOfPolygon(Point point, Polygon polygon)
+        {
+            // TODO: Refactoring
+            int lineLength = 5;
+
+            double minX = int.MaxValue, maxX = int.MinValue;
+            double minY = int.MaxValue, maxY = int.MinValue;
+
+            foreach (var p in polygon.Vertices)
+            {
+                if (p.X < minX) minX = p.X;
+                if (p.X > maxX) maxX = p.X;
+                if (p.Y < minY) minY = p.Y;
+                if (p.Y > maxY) maxY = p.Y;
+            }
+
+            if (point.X >= minX - lineLength && point.X <= minX + lineLength && point.Y >= minY - lineLength && point.Y <= minY + lineLength) return Corner.TopLeft;
+            if (point.X >= maxX - lineLength && point.X <= maxX + lineLength && point.Y >= minY - lineLength && point.Y <= minY + lineLength) return Corner.TopRight;
+            if (point.X >= minX - lineLength && point.X <= minX + lineLength && point.Y >= maxY - lineLength && point.Y <= maxY + lineLength) return Corner.BottomLeft;
+            if (point.X >= maxX - lineLength && point.X <= maxX + lineLength && point.Y >= maxY - lineLength && point.Y <= maxY + lineLength) return Corner.BottomRight;
+
+            return Corner.None;
         }
     }
 }

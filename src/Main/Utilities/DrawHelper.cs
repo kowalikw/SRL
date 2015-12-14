@@ -35,7 +35,7 @@ namespace SRL.Main.Utilities
         /// <param name="points">The points to connect with lines</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the lines</param>
-        private static void DrawPoints(SpriteBatch spriteBatch, Point position, List<Point> points, Color color, float thickness)
+        private static void DrawPoints(SpriteBatch spriteBatch, Point position, List<Point> points, Color color, int thickness = 2)
         {
             if (points.Count < 2)
                 return;
@@ -108,7 +108,7 @@ namespace SRL.Main.Utilities
         /// <param name="point2">The second point</param>
         /// <param name="color">The color to use</param>
         /// <param name="thickness">The thickness of the line</param>
-        internal static void DrawLine(this SpriteBatch spriteBatch, Point point1, Point point2, Color color, float thickness = 1.0f)
+        internal static void DrawLine(this SpriteBatch spriteBatch, Point point1, Point point2, Color color, int thickness = 2)
         {
             // calculate the distance between the two vectors
             //float length = Vector2.Distance(new Vector2((float)point1.X, (float)point1.Y), new Vector2((float)point2.X, (float)point2.Y));
@@ -177,13 +177,13 @@ namespace SRL.Main.Utilities
 
             if (steep)
             {
-                spriteBatch.PutPixel(yPxl1, xPxl1, color, (float)(rfpart(yEnd) * xGap));
-                spriteBatch.PutPixel(yPxl1 + 1, xPxl1, color, (float)(fpart(yEnd) * xGap));
+                spriteBatch.PutPixel(yPxl1, xPxl1, color, (float)(rfpart(yEnd) * xGap), thickness);
+                spriteBatch.PutPixel(yPxl1 + 1, xPxl1, color, (float)(fpart(yEnd) * xGap), thickness);
             }
             else
             {
-                spriteBatch.PutPixel(xPxl1, yPxl1, color, (float)(rfpart(yEnd) * xGap));
-                spriteBatch.PutPixel(xPxl1, yPxl1 + 1, color, (float)(fpart(yEnd) * xGap));
+                spriteBatch.PutPixel(xPxl1, yPxl1, color, (float)(rfpart(yEnd) * xGap), thickness);
+                spriteBatch.PutPixel(xPxl1, yPxl1 + 1, color, (float)(fpart(yEnd) * xGap), thickness);
             }
 
             double intery = yEnd + gradient;
@@ -197,13 +197,13 @@ namespace SRL.Main.Utilities
 
             if (steep)
             {
-                spriteBatch.PutPixel(yPxl2, xPxl2, color, (float)(rfpart(yEnd) * xGap));
-                spriteBatch.PutPixel(yPxl2 + 1, xPxl2, color, (float)(fpart(yEnd) * xGap));
+                spriteBatch.PutPixel(yPxl2, xPxl2, color, (float)(rfpart(yEnd) * xGap), thickness);
+                spriteBatch.PutPixel(yPxl2 + 1, xPxl2, color, (float)(fpart(yEnd) * xGap), thickness);
             }
             else
             {
-                spriteBatch.PutPixel(xPxl2, yPxl2, color, (float)(rfpart(yEnd) * xGap));
-                spriteBatch.PutPixel(xPxl2, yPxl2 + 1, color, (float)(fpart(yEnd) * xGap));
+                spriteBatch.PutPixel(xPxl2, yPxl2, color, (float)(rfpart(yEnd) * xGap), thickness);
+                spriteBatch.PutPixel(xPxl2, yPxl2 + 1, color, (float)(fpart(yEnd) * xGap), thickness);
             }
 
             // main loop
@@ -211,13 +211,13 @@ namespace SRL.Main.Utilities
             {
                 if (steep)
                 {
-                    spriteBatch.PutPixel((int)intery, x, color, rfpart(intery));
-                    spriteBatch.PutPixel((int)intery + 1, x, color, fpart(intery));
+                    spriteBatch.PutPixel((int)intery, x, color, rfpart(intery), thickness);
+                    spriteBatch.PutPixel((int)intery + 1, x, color, fpart(intery), thickness);
                 }
                 else
                 {
-                    spriteBatch.PutPixel(x, (int)intery, color, rfpart(intery));
-                    spriteBatch.PutPixel(x, (int)intery + 1, color, fpart(intery));
+                    spriteBatch.PutPixel(x, (int)intery, color, rfpart(intery), thickness);
+                    spriteBatch.PutPixel(x, (int)intery + 1, color, fpart(intery), thickness);
                 }
                 intery = intery + gradient;
             }
@@ -320,7 +320,7 @@ namespace SRL.Main.Utilities
         /// <param name="angle">The angle of this line from the starting point.</param>
         /// <param name="color">The color to use.</param>
         /// <param name="thickness">The thickness of the line.</param>
-        internal static void DrawLine(this SpriteBatch spriteBatch, Point point, float length, float angle, Color color, float thickness)
+        /*internal static void DrawLine(this SpriteBatch spriteBatch, Point point, float length, float angle, Color color, float thickness)
         {
             if (_pixel == null)
             {
@@ -336,16 +336,19 @@ namespace SRL.Main.Utilities
                              Vector2.Zero,
                              new Vector2(length, thickness),
                              SpriteEffects.None,
-                             0);*/
-        }
+                             0);
+        }*/
 
-        internal static void PutPixel(this SpriteBatch spriteBatch, int x, int y, Color color, float intense)
+        internal static void PutPixel(this SpriteBatch spriteBatch, int x, int y, Color color, float intense, int thickness = 2)
         {
             Color newColor = new Color((float)color.R * intense / 255.0f, (float)color.G * intense / 255.0f, (float)color.B * intense / 255.0f, intense);
             PutPixel(spriteBatch, new Point(x, y), newColor);
-            PutPixel(spriteBatch, new Point(x + 1, y), newColor);
-            PutPixel(spriteBatch, new Point(x, y + 1), newColor);
-            PutPixel(spriteBatch, new Point(x + 1, y + 1), newColor);
+            if (thickness == 2)
+            {
+                PutPixel(spriteBatch, new Point(x + 1, y), newColor);
+                PutPixel(spriteBatch, new Point(x, y + 1), newColor);
+                PutPixel(spriteBatch, new Point(x + 1, y + 1), newColor);
+            }
         }
 
         internal static void PutPixel(this SpriteBatch spriteBatch, int x, int y, Color color)
@@ -375,12 +378,12 @@ namespace SRL.Main.Utilities
         /// <param name="sides">The number of sides to generate.</param>
         /// <param name="color">The color of the circle.</param>
         /// <param name="thickness">The thickness of the lines used.</param>
-        internal static void DrawCircle(this SpriteBatch spriteBatch, Point center, float radius, int sides, Color color, float thickness = 1.0f)
+        internal static void DrawCircle(this SpriteBatch spriteBatch, Point center, float radius, int sides, Color color, int thickness = 1)
         {
             DrawPoints(spriteBatch, center, CreateCircle(radius, sides), color, thickness);
         }
 
-        internal static void DrawPath(this SpriteBatch spriteBatch, List<Point> vertices, bool closed, Color color, float thickness = 1.0f)
+        internal static void DrawPath(this SpriteBatch spriteBatch, List<Point> vertices, bool closed, Color color, int thickness = 2)
         {
             for (int i = 0; i < vertices.Count - 1; i++)
             {
@@ -396,12 +399,12 @@ namespace SRL.Main.Utilities
             }
         }
 
-        internal static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Color color, float thickness = 1.0f)
+        internal static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Color color, int thickness = 2)
         {
             DrawPath(spriteBatch, polygon.Vertices, true, color, thickness);
         }
 
-        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Color color, float thickness = 1.0f, float length = 100.0f)
+        internal static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Color color, int thickness = 1, float length = 100.0f)
         {
             const int arrowTopX = -12;
             const int arrowTopY = -6;
@@ -435,7 +438,7 @@ namespace SRL.Main.Utilities
             spriteBatch.DrawLine(origin, end, color, thickness);
         }
 
-        internal static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Color color, float thickness = 1.0f)
+        internal static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Color color, int thickness = 2)
         {
             const int circleRadius = 5;
             const int circleSides = 10;
@@ -481,7 +484,7 @@ namespace SRL.Main.Utilities
         }
 
 
-        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map, Point startPoint, Point endPoint)
+        public static void DrawFrame(this SpriteBatch spriteBatch, Frame frame, Vehicle vehicle, Map map, Point startPoint, Point endPoint, bool isVehicleSelected = false, Corner corner = Corner.None)
         {
             if (map != null)
                 DrawMap(spriteBatch, map);
@@ -492,6 +495,9 @@ namespace SRL.Main.Utilities
             if (endPoint != null)
                 spriteBatch.DrawVertex(endPoint, Color.Red);
 
+            if (isVehicleSelected)
+                DrawEditRectangleOfPolygon(spriteBatch, vehicle.Shape, Color.Yellow, corner);
+
             if (vehicle != null && vehicle.Shape.VertexCount > 0 && frame != null)
             {
                 List<Point> rotatedVehicle2 = new List<Point>();
@@ -499,13 +505,65 @@ namespace SRL.Main.Utilities
                 {
                     Point positionDifference = frame.Position - vehicle.OrientationOrigin;
                     rotatedVehicle2.Add(GeometryHelper.RotatePoint(point + positionDifference, vehicle.OrientationOrigin + positionDifference, -frame.Rotation));
-                    Console.WriteLine(frame.Rotation);
+                    //Console.WriteLine(frame.Rotation);
                 }
 
                 DrawVehicle(spriteBatch, new Vehicle(new Polygon(rotatedVehicle2), vehicle.OrientationOrigin, vehicle.OrientationAngle));
             }
             else if (vehicle != null && vehicle.Shape.VertexCount > 0 && frame == null)
                 DrawVehicle(spriteBatch, vehicle);
+        }
+
+        public static void DrawEditRectangleOfPolygon(this SpriteBatch spriteBatch, Polygon polygon, Color color, Corner corner = Corner.None)
+        {
+            int cornerTranslation = 3;
+            int lineLength = 6;
+            double minX = int.MaxValue, maxX = int.MinValue;
+            double minY = int.MaxValue, maxY = int.MinValue;
+
+            foreach (var point in polygon.Vertices)
+            {
+                if (point.X < minX) minX = point.X;
+                if (point.X > maxX) maxX = point.X;
+                if (point.Y < minY) minY = point.Y;
+                if (point.Y > maxY) maxY = point.Y;
+            }
+
+            minX -= cornerTranslation;
+            maxX += cornerTranslation;
+            minY -= cornerTranslation;
+            maxY += cornerTranslation;
+
+            // TODO: Refactoring.
+            spriteBatch.DrawLine(new Point(minX, minY), new Point(minX + lineLength, minY), corner == Corner.TopLeft ? Color.Red : color);
+            spriteBatch.DrawLine(new Point(minX, minY), new Point(minX, minY + lineLength), corner == Corner.TopLeft ? Color.Red : color);
+
+            spriteBatch.DrawLine(new Point(maxX, minY), new Point(maxX - lineLength, minY), corner == Corner.TopRight ? Color.Red : color);
+            spriteBatch.DrawLine(new Point(maxX, minY), new Point(maxX, minY + lineLength), corner == Corner.TopRight ? Color.Red : color);
+
+            spriteBatch.DrawLine(new Point(minX, maxY), new Point(minX + lineLength, maxY), corner == Corner.BottomLeft ? Color.Red : color);
+            spriteBatch.DrawLine(new Point(minX, maxY), new Point(minX, maxY - lineLength), corner == Corner.BottomLeft ? Color.Red : color);
+
+            spriteBatch.DrawLine(new Point(maxX, maxY), new Point(maxX - lineLength, maxY), corner == Corner.BottomRight ? Color.Red : color);
+            spriteBatch.DrawLine(new Point(maxX, maxY), new Point(maxX, maxY - lineLength), corner == Corner.BottomRight ? Color.Red : color);
+
+            int horizontalLines = (int)(maxX - minX - 2 * lineLength) / (3 * lineLength);
+            int verticalLines = (int)(maxY - minY - 2 * lineLength) / (3 * lineLength);
+
+            double horizontalInterspace = ((maxX - minX - 2 * lineLength) - horizontalLines * lineLength) / (horizontalLines + 1);
+            double verticalInterspace = ((maxY - minY - 2 * lineLength) - verticalLines * lineLength) / (verticalLines + 1);
+
+            for (int i = 0; i < horizontalLines; i++)
+            {
+                spriteBatch.DrawLine(new Point(minX + (i + 1) * (lineLength + horizontalInterspace), minY), new Point(minX + (i + 1) * (lineLength + horizontalInterspace) + lineLength, minY), color, 1);
+                spriteBatch.DrawLine(new Point(minX + (i + 1) * (lineLength + horizontalInterspace), maxY), new Point(minX + (i + 1) * (lineLength + horizontalInterspace) + lineLength, maxY), color, 1);
+            }
+
+            for (int i = 0; i < verticalLines; i++)
+            {
+                spriteBatch.DrawLine(new Point(minX, minY + (i + 1) * (lineLength + verticalInterspace)), new Point(minX, minY + (i + 1) * (lineLength + verticalInterspace) + lineLength), color, 1);
+                spriteBatch.DrawLine(new Point(maxX, minY + (i + 1) * (lineLength + verticalInterspace)), new Point(maxX, minY + (i + 1) * (lineLength + verticalInterspace) + lineLength), color, 1);
+            }
         }
     }
 }

@@ -125,7 +125,7 @@ namespace SRL.Main.ViewModel
                     Vehicle.ReadXml(serializer);
                 }
 
-                Startpoint = Vehicle.OrientationOrigin;
+                Startpoint = Vehicle != null ? Vehicle.OrientationOrigin : null;
 
                 ((RelayCommand)CalculatePathCommand).OnCanExecuteChanged();
             });
