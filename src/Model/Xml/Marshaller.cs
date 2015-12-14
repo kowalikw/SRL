@@ -28,20 +28,22 @@ namespace SRL.Model.Xml
             using (XmlWriter writer = output.CreateWriter())
                 serializer.Serialize(writer, obj);
 
-            output.Validate(_schemaSet, (o, e) =>
-            {
-                throw new XmlSchemaValidationException();
-            });
-            
+            //TODO fix and reenable validation
+            //output.Validate(_schemaSet, (o, e) =>
+            //{
+            //    throw new XmlSchemaValidationException();
+            //});
+
             return output;
         }
 
         public static T Unmarshall(XDocument doc)
         {
-            doc.Validate(_schemaSet, (o, e) =>
-            {
-                throw new XmlSchemaValidationException();
-            });
+            //TODO fix and reenable validation
+            //doc.Validate(_schemaSet, (o, e) =>
+            //{
+            //    throw new XmlSchemaValidationException();
+            //});
 
             var serializer = new XmlSerializer(typeof(T));
             T output;

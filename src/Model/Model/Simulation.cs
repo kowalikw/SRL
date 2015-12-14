@@ -44,7 +44,9 @@ namespace SRL.Model.Model
                 while (!mapDone || !vehicleDone || !initRotDone
                        || !startpointDone || !endpointDone || !ordersDone)
                 {
-                    reader.ReadStartElement();
+                    
+                    reader.MoveToContent();
+
 
                     if (reader.LocalName == "vmd" && !mapDone)
                     {
@@ -88,11 +90,12 @@ namespace SRL.Model.Model
                             order.ReadXml(reader);
                             Orders.Add(order);
                         }
-
+                        reader.ReadEndElement();
+                        ordersDone = true;
                     }
-
-                    reader.ReadEndElement();
                 }
+
+                reader.MoveToContent();
                 reader.ReadEndElement();
             }
             else

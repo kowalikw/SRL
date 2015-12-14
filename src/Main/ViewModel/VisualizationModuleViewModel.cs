@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using System.IO;
 using System.Xml;
 using Microsoft.Win32;
+using SRL.Model.Xml;
 
 namespace SRL.Main.ViewModel
 {
@@ -57,7 +58,10 @@ namespace SRL.Main.ViewModel
                 orders = _algorithm.GetPath(Map, Vehicle, Startpoint, Endpoint, InitialRotation.Value, 360); //TODO set angle denisty somewhere else
 
                 if (orders != null)
+                {
                     _frames = DivideIntoFrames(orders);
+                    ((RelayCommand)SaveSimulationCommand).OnCanExecuteChanged();
+                }
                 else
                 {
                     //TODO ??
@@ -126,16 +130,55 @@ namespace SRL.Main.ViewModel
             LoadSimulationCommand = new RelayCommand(o =>
             {
                 ResetSimulation();
-                //TODO
+                
+                var simulation = new Simulation();
+
+                var dialog = new OpenFileDialog();
+                dialog.Filter = String.Format("{0} files (*.{1})|*.{1}",
+                "simd".ToUpper(),
+                "simd".ToLower());
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var sr = new StreamReader(dialog.FileName);
+                    var serializer = XmlReader.Create(new StringReader(sr.ReadToEnd()));
+                    simulation.ReadXml(serializer);
+
+                    Vehicle = simulation.Vehicle;
+                    Map = simulation.Map;
+                    Startpoint = simulation.StartPoint;
+                    Endpoint = simulation.EndPoint;
+                    InitialRotation = simulation.InitialVehicleRotation;
+
+                    _frames = DivideIntoFrames(simulation.Orders);
+                    ((RelayCommand)SaveSimulationCommand).OnCanExecuteChanged();
+                }
             });
             SaveSimulationCommand = new RelayCommand(o =>
             {
-                //TODO
+                var dialog = new SaveFileDialog();
+                dialog.Filter = String.Format("{0} files (*.{1})|*.{1}",
+                    "simd".ToUpper(),
+                    "simd".ToLower());
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var simulation = new Simulation()
+                    {
+                        Vehicle = this.Vehicle,
+                        Map = this.Map,
+                        StartPoint = this.Startpoint,
+                        EndPoint = this.Endpoint,
+                        InitialVehicleRotation = InitialRotation.Value,
+                        Orders = this.orders,
+                    };
+
+                    var output = Marshaller<Simulation>.Marshall(simulation);
+                    
+                    File.WriteAllText(dialog.FileName, output.ToString());
+                }
             },
-            c =>
-            {
-                return _frames != null;
-            });
+            c => _frames != null);
 
 
             SetInitialRotation = new RelayCommand(o =>
@@ -184,6 +227,7 @@ namespace SRL.Main.ViewModel
         private void ResetSimulation()
         {
             _frames = null;
+            ((RelayCommand)SaveSimulationCommand).OnCanExecuteChanged();
         }
 
         private void _timer_Tick(object sender, EventArgs e)

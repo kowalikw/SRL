@@ -64,6 +64,8 @@ namespace SRL.Model.Model
                     obstacle.ReadXml(reader);
                     Obstacles.Add(obstacle);
                 }
+
+                reader.ReadEndElement();
             }
             else
                 throw new XmlException();
