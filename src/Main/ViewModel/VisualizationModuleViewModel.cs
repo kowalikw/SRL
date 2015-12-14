@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Input;
 using SRL.Main.Utilities;
 using SRL.Model;
 using SRL.Model.Model;
 using System.Windows.Threading;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Xml;
 using Microsoft.Win32;
+using SRL.Main.Annotations;
 using SRL.Model.Xml;
 
 namespace SRL.Main.ViewModel
 {
-    internal class VisualizationModuleViewModel
+    internal class VisualizationModuleViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ICommand CalculatePathCommand { get; }
 
         public ICommand LoadSimulationCommand { get; }
@@ -61,6 +66,8 @@ namespace SRL.Main.ViewModel
                 {
                     _frames = DivideIntoFrames(orders);
                     ((RelayCommand)SaveSimulationCommand).OnCanExecuteChanged();
+                    OnPropertyChanged(nameof(CurrentFrameIdx));
+                    OnPropertyChanged(nameof(MaxFrameIdx));
                 }
                 else
                 {
@@ -152,6 +159,9 @@ namespace SRL.Main.ViewModel
 
                     _frames = DivideIntoFrames(simulation.Orders);
                     ((RelayCommand)SaveSimulationCommand).OnCanExecuteChanged();
+                    OnPropertyChanged(nameof(CurrentFrameIdx));
+                    OnPropertyChanged(nameof(MaxFrameIdx));
+
                 }
             });
             SaveSimulationCommand = new RelayCommand(o =>
@@ -241,6 +251,8 @@ namespace SRL.Main.ViewModel
             }
             else
                 CurrentFrameIdx++;
+
+            OnPropertyChanged(nameof(CurrentFrameIdx));
         }
 
         private Frame[] DivideIntoFrames(List<Order> orders)
@@ -369,6 +381,14 @@ namespace SRL.Main.ViewModel
             var fArray = frames.ToArray();
             Array.Reverse(fArray);
             return fArray;
+        }
+
+        
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
