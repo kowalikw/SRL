@@ -32,7 +32,6 @@ namespace SRL.Model
             Random r = new Random();
             List<Order> lst = new List<Order>();
             int iterations = r.Next(5) + 2;
-            //int iterations = 0;
             Order o = new Order();
             Vehicle currentState = new Vehicle();
             List<Point> shp = new List<Point>();
@@ -41,8 +40,6 @@ namespace SRL.Model
                 shp.Add(vehicleTemplate.Shape.Vertices[i] + start);
             }
             currentState = new Vehicle(new Polygon(shp), start, vehicleRotation);
-            //o.Rotation = vehicleRotation; o.Destination = start;
-            //lst.Add(o);
             for (int i = 0; i < iterations; i++)
             {
                 bool c = false;
@@ -53,13 +50,20 @@ namespace SRL.Model
                     shp.Clear();
                     y = r.Next((int)map.Height);
                     x = r.Next((int)map.Width);
-                    try
+                    if(-currentState.OrientationOrigin.X + x == 0)
+                    {
+                        if(y>currentState.OrientationOrigin.Y)
+                        {
+                            rotation = Math.PI / 4;
+                        }
+                        else
+                        {
+                            rotation = 3 * Math.PI / 4;
+                        }
+                    }
+                    else
                     {
                         rotation = Math.Atan((-currentState.OrientationOrigin.Y + y) / (-currentState.OrientationOrigin.X + x));
-                    }
-                    catch
-                    {
-                        continue;
                     }
                     
                     if (x < currentState.OrientationOrigin.X)

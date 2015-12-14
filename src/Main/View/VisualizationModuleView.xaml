@@ -30,6 +30,6 @@
                 SnapsToDevicePixels="True"
                 Stretch="Fill"/>
         
-        <Slider Grid.Row="2" Maximum="{Binding MaxFrameIdx}" Value="{Binding CurrentFrameIdx}"/>
+        <Slider Grid.Row="2" Maximum="{Binding MaxFrameIdx}" Value="{Binding CurrentFrameIdx}" Margin="5"/>
     </Grid>
 </Window>
