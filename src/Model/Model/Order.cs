@@ -23,8 +23,10 @@ namespace SRL.Model.Model
             {
                 reader.ReadStartElement();
 
-                while (!rotationDone && !destinationDone)
+                while (!rotationDone || !destinationDone)
                 {
+                    reader.MoveToContent();
+
                     if (reader.LocalName == "rotation" && !rotationDone)
                     {
                         Rotation = reader.ReadElementContentAsDouble();
