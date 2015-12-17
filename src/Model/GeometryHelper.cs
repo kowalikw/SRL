@@ -175,5 +175,11 @@ namespace SRL.Model
 
             return Corner.None;
         }
+
+        public static bool IsCounterClockwiseTurn(Point p1, Point p2, Point p3)
+        {
+            return CrossProduct(p2 - p1, p3 - p1) > 0;
+        }
+        
     }
 }
