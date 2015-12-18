@@ -87,6 +87,11 @@ namespace SRL.Main.View.Control
                 spriteBatch.DrawLine(_context.Endpoint, _context.orders[_context.orders.Count - 1].Destination, Color.Red);
             }
 
+            // TODO: MinkowskiSum
+            if (_context.MinkowskiSum != null)
+                foreach (var polygon in _context.MinkowskiSum)
+                    spriteBatch.DrawPolygon(polygon, Color.Black);
+
             spriteBatch.DrawFrame(_context.CurrentFrame, _context.Vehicle, _context.Map, _context.Startpoint, _context.Endpoint, isVehicleSelected, _context.Vehicle != null ? GeometryHelper.IsPointOnCornerOfRectangleOfPolygon(MousePosition, _context.Vehicle.Shape) : Corner.None);
         }
 

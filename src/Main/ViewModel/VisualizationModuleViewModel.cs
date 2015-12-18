@@ -47,6 +47,8 @@ namespace SRL.Main.ViewModel
         public Point Startpoint { get; set; }
         public Point Endpoint { get; set; }
 
+        public List<Polygon> MinkowskiSum { get; set; } // TODO: Temp?
+
         public List<Order> orders { get; set; } // TODO: Temp to test.
 
         private IAlgorithm _algorithm = new MockAlgorithm();
@@ -228,7 +230,13 @@ namespace SRL.Main.ViewModel
 
             ResumeCommand = new RelayCommand(o =>
             {
-                _timer.Start();
+                //_timer.Start();
+
+                // TODO: MinkowskiSum
+
+                Algorithm algorithm = new Algorithm();
+                MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 1)[0];
+
             });
             PauseCommand = new RelayCommand(o =>
             {

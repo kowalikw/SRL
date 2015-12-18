@@ -8,7 +8,7 @@ using SRL.Main.Utilities;
 
 namespace SRL.Model
 {
-    class Algorithm : IAlgorithm
+    public class Algorithm : IAlgorithm
     {
         List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
@@ -20,8 +20,15 @@ namespace SRL.Model
         /// <param name="map"></param>
         /// <param name="vehicle">znormalizowany pojazd (punkt (0,0) i kąt 0)</param>
         /// <param name="angleDensity"></param>
-        List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
+        public List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
         {
+            // TODO: normalisation
+            List<Point> lst = new List<Point>();
+            for(int i=0; i<vehicle.Shape.VertexCount;i++)
+            {
+                lst.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[i] - vehicle.OrientationOrigin, new Point(0, 0), -vehicle.OrientationAngle));
+            }
+            vehicle = new Vehicle(new Polygon(lst.ToArray()), new Point(0, 0), 0);
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity]; // każdy element tablicy to mapa dla danego obrotu, w każdym obrocie mamy listę przeszkód. każda przeszkoda to lista punktów
             double singleAngle = Math.PI / angleDensity;
             List<List<Point>> triangularObstacles = new List<List<Point>>();
