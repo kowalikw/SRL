@@ -11,7 +11,7 @@ namespace SRL.Model.Model
     {
         public const int MinVerticesCount = 3;
         public const int StartPointRadius = 8;
-        public List<Point> Vertices { get; }
+        public List<Point> Vertices { get; set; }
         public int VertexCount => Vertices.Count;
 
         public Polygon()

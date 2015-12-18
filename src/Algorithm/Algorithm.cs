@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SRL.Model.Model;
+using SRL.Main.Utilities;
 
 namespace SRL.Model
 {
@@ -19,9 +20,9 @@ namespace SRL.Model
         /// <param name="map"></param>
         /// <param name="vehicle">znormalizowany pojazd (punkt (0,0) i kąt 0)</param>
         /// <param name="angleDensity"></param>
-        List<List<Point>>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
+        List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
         {
-            List<List<Point>>[] tableOfObstacles = new List<List<Point>>[angleDensity]; // każdy element tablicy to mapa dla danego obrotu, w każdym obrocie mamy listę przeszkód. każda przeszkoda to lista punktów
+            List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity]; // każdy element tablicy to mapa dla danego obrotu, w każdym obrocie mamy listę przeszkód. każda przeszkoda to lista punktów
             double singleAngle = Math.PI / angleDensity;
             List<List<Point>> triangularObstacles = new List<List<Point>>();
             for(int i=0;i<map.ObstacleCount;i++)
@@ -40,7 +41,7 @@ namespace SRL.Model
                     rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], vehicle.OrientationOrigin, i + Math.PI));
                 }
                 List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
-                List<List<Point>> newObstacles = new List<List<Point>>();
+                List<Polygon> newObstacles = new List<Polygon>();
                 for(int j=0;j<triangularVehicle.Count;j++)
                 {
                     for(int k=0;k<triangularObstacles.Count;k++)
@@ -66,11 +67,24 @@ namespace SRL.Model
 
         List<List<Point>> Triangulate(List<Point> shape)
         {
-            throw new NotImplementedException();
+            Polygon poly = new Polygon(shape.ToArray());
+            List<Point[]> triangles = Triangulation2D.Triangulate(ref poly);
+            List<List<Point>> list = new List<List<Point>>();
+            for(int i=0; i<triangles.Count; i++)
+            {
+                List<Point> tmpList = new List<Point>();
+                for(int j=0;j<triangles[i].Length;j++)
+                {
+                    tmpList.Add(triangles[i][j]);
+                }
+                list.Add(tmpList);
+            }
+            return list;
         }
 
-        List<Point> ConvexHull(List<Point> points)
+        Polygon ConvexHull(List<Point> points)
         {
+            Polygon poly;
             points.Sort((a, b) =>
                 a.X == b.X ? a.Y.CompareTo(b.Y) : a.X.CompareTo(b.X));
             List<Point> U = new List<Point>(), L = new List<Point>();
@@ -92,7 +106,8 @@ namespace SRL.Model
             {
                 U.Add(L[i]);
             }
-            return U;
+            poly = new Polygon(U.ToArray());
+            return poly;
         }
 
     }
