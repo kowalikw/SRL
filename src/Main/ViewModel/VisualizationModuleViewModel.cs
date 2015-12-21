@@ -235,7 +235,7 @@ namespace SRL.Main.ViewModel
                 // TODO: MinkowskiSum
 
                 Algorithm algorithm = new Algorithm();
-                MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 1)[0];
+                MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 360)[0];
 
             });
             PauseCommand = new RelayCommand(o =>

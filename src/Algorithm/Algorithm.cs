@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SRL.Model.Model;
 using SRL.Main.Utilities;
+using System.Threading.Tasks;
 
 namespace SRL.Model
 {
@@ -12,6 +13,10 @@ namespace SRL.Model
     {
         List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
+            /*Polygon poly = new Polygon();
+            poly.Vertices.Add(new Point(0, 0));
+            poly.Vertices.Add(new Point(map.Width, 0));
+            map.Obstacles.Add(poly);*/
             throw new NotImplementedException();
         }
         /// <summary>
@@ -49,13 +54,26 @@ namespace SRL.Model
                 }
                 List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
                 List<Polygon> newObstacles = new List<Polygon>();
-                for(int j=0;j<triangularVehicle.Count;j++)
+                object locker = new object();
+                Parallel.For(0, triangularVehicle.Count, j =>
                 {
-                    for(int k=0;k<triangularObstacles.Count;k++)
+                    for (int k = 0; k < triangularObstacles.Count; k++)
                     {
-                        newObstacles.Add(ConvexHull( ConvexMinkowski(triangularVehicle[j], triangularObstacles[k])));
+                        Polygon poly = ConvexHull(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k]));
+                        lock (locker)
+                        {
+                            newObstacles.Add(poly);
+
+                        }
                     }
-                }
+                });
+                /*for(int j=0;j<triangularVehicle.Count;j++)
+                {
+                    for (int k = 0; k < triangularObstacles.Count; k++)
+                    {
+                        newObstacles.Add(ConvexHull(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k])));
+                    }
+                }*/
                 tableOfObstacles[(int)(i / singleAngle)] = newObstacles;
             }
             return tableOfObstacles;
