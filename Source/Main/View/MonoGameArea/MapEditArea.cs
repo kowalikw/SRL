@@ -58,7 +58,7 @@ namespace SRL.Main.View.MonoGameArea
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
             // Render active segment (potential polygon side).
-            if (_context.UnfinishedPolygon.Count > 0)
+            if (_context.UnfinishedPolygon.Count > 0 && IsMouseOver)
             {
                 Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
                 RgbColor color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
@@ -80,13 +80,13 @@ namespace SRL.Main.View.MonoGameArea
             {
                 foreach (var obstacle in _context.FinishedPolygons)
                     lockBitmap.DrawPolygonAA(obstacle, RenderSize, RegularColor);
-                lockBitmap.DrawPathAA(new Path(_context.UnfinishedPolygon), RenderSize, RegularColor);
+                lockBitmap.DrawPathAA(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor);
             }
             else
             {
                 foreach (var obstacle in _context.FinishedPolygons)
                     lockBitmap.DrawPolygon(obstacle, RenderSize, RegularColor);
-                lockBitmap.DrawPath(new Path(_context.UnfinishedPolygon), RenderSize, RegularColor);
+                lockBitmap.DrawPath(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor);
             }
         }
     }

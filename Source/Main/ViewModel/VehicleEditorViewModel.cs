@@ -1,8 +1,10 @@
 ﻿using System.Windows;
+using FirstFloor.ModernUI.Presentation;
 using GalaSoft.MvvmLight.CommandWpf;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace SRL.Main.ViewModel
 {
@@ -16,8 +18,8 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
-                        VehicleShape.Clear();
                         ShapeDone = false;
+                        VehicleShape.Clear();
                         Pivot = null;
                         Direction = null;
                     });
@@ -37,11 +39,10 @@ namespace SRL.Main.ViewModel
                             Direction = null;
                         else if (Pivot.HasValue)
                             Pivot = null;
-                        else
-                        {
+                        else if (ShapeDone)
                             ShapeDone = false;
+                        else
                             VehicleShape.RemoveLast();
-                        }
                     }, 
                     () => VehicleShape.Count > 0);
                 }
@@ -127,10 +128,24 @@ namespace SRL.Main.ViewModel
 
 
         public ObservableCollectionEx<Point> VehicleShape { get; }
-        public bool ShapeDone { get; private set; }
+
+        public bool ShapeDone
+        {
+            get { return _shapeDone;}
+            set
+            {
+                if (value != _shapeDone)
+                {
+                    _shapeDone = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
         public Point? Pivot { get; private set; }
         public double? Direction { get; private set; }
 
+
+        private bool _shapeDone;
 
         public override bool IsModelValid
         {

@@ -83,7 +83,8 @@ namespace SRL.Main.ViewModel
                             UnfinishedPolygon.AddRange(FinishedPolygons.GetLast().Vertices);
                             FinishedPolygons.RemoveLast();
                         }
-                        UnfinishedPolygon.RemoveLast();
+                        else
+                            UnfinishedPolygon.RemoveLast();
                     }, () =>
                     {
                         return FinishedPolygons.Count > 0 || UnfinishedPolygon.Count > 0;
