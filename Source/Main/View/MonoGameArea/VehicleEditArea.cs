@@ -18,6 +18,7 @@ namespace SRL.Main.View.MonoGameArea
 
         private NotifyCollectionChangedEventHandler _vehicleShapeChangedHandler;
         private PropertyChangedEventHandler _shapeDonePropertyChangedHandler;
+        private PropertyChangedEventHandler _antialiasingPropertyChangedHandler;
 
         private readonly Line _activeLine = new Line();
 
@@ -30,10 +31,15 @@ namespace SRL.Main.View.MonoGameArea
                 if (e.PropertyName == nameof(_context.ShapeDone))
                     RedrawStaticObjectsTexture();
             };
+            _antialiasingPropertyChangedHandler = (o, e) =>
+            {
+                if (e.PropertyName == nameof(_context.AntialiasingEnabled))
+                    RedrawStaticObjectsTexture();
+            };
 
             _context.VehicleShape.CollectionChanged += _vehicleShapeChangedHandler;
             _context.PropertyChanged += _shapeDonePropertyChangedHandler;
-            //TODO antialiasing enabled/disabled event handler
+            _context.PropertyChanged += _antialiasingPropertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -42,6 +48,7 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.VehicleShape.CollectionChanged -= _vehicleShapeChangedHandler;
             _context.PropertyChanged -= _shapeDonePropertyChangedHandler;
+            _context.PropertyChanged -= _antialiasingPropertyChangedHandler;
         }
 
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)

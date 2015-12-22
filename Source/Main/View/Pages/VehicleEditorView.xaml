@@ -15,11 +15,12 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Button Command="{Binding LoadCommand}">$load</Button>
+            <Button>$load</Button>
             <Button Command="{Binding SaveCommand}">$save</Button>
             <Button>$trace</Button>
             <Button Command="{Binding BackCommand}">$back</Button>
             <Button Command="{Binding ResetCommand}">$reset</Button>
+            <ToggleButton IsChecked="{Binding AntialiasingEnabled}">$AA</ToggleButton>
         </StackPanel>
 
         <mga:VehicleEditArea Grid.Column="1"

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
-using SRL.Commons.Utilities;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
@@ -16,6 +16,7 @@ namespace SRL.Main.View.MonoGameArea
         private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
+        private PropertyChangedEventHandler _antialiasingPropertyChangedHandler;
 
         private readonly Line _activeLine = new Line();
 
@@ -24,10 +25,15 @@ namespace SRL.Main.View.MonoGameArea
             base.Initialize();
 
             _collectionChangedHandler = (o, e) => RedrawStaticObjectsTexture();
+            _antialiasingPropertyChangedHandler = (o, e) =>
+            {
+                if (e.PropertyName == nameof(_context.AntialiasingEnabled))
+                    RedrawStaticObjectsTexture();
+            };
 
             _context.FinishedPolygons.CollectionChanged += _collectionChangedHandler;
             _context.UnfinishedPolygon.CollectionChanged += _collectionChangedHandler;
-            //TODO antialiasing enabled/disabled event handler
+            _context.PropertyChanged += _antialiasingPropertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -36,6 +42,7 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.FinishedPolygons.CollectionChanged -= _collectionChangedHandler;
             _context.UnfinishedPolygon.CollectionChanged -= _collectionChangedHandler;
+            _context.PropertyChanged -= _antialiasingPropertyChangedHandler;
         }
 
         protected override void OnMouseUp()
