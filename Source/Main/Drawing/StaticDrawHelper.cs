@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using Microsoft.Xna.Framework.Graphics;
+using SRL.Commons.Model;
+using SRL.Commons.Utilities;
+using SRL.Main.Utilities;
+
+namespace SRL.Main.Drawing
+{
+    internal static class StaticDrawHelper
+    {
+        #region Line
+
+        public static void DrawLine(this LockBitmap lockBitmap, Line line, Size renderSize, RgbColor color)
+        {
+            int aX = (int)line.EndpointA.Denormalize(renderSize).X;
+            int aY = (int)line.EndpointA.Denormalize(renderSize).Y;
+            int bX = (int)line.EndpointB.Denormalize(renderSize).X;
+            int bY = (int)line.EndpointB.Denormalize(renderSize).Y;
+
+            bool steep = Math.Abs(bY - aY) > Math.Abs(bX - aX);
+            if (steep)
+            {
+                MathHelper.Swap(ref aX, ref aY);
+                MathHelper.Swap(ref bX, ref bY);
+            }
+
+            if (aX > bX)
+            {
+                MathHelper.Swap(ref aX, ref bX);
+                MathHelper.Swap(ref aY, ref bY);
+            }
+
+            int dx = bX - aX;
+            int dy = Math.Abs(bY - aY);
+
+            int error = dx / 2;
+            int yStep = (aY < bY) ? 1 : -1;
+            int y = aY;
+
+            int maxX = bX;
+
+            if (steep)
+            {
+                for (int x = aX; x < maxX; x++)
+                {
+                    lockBitmap.SetPixel(y, x, color.ToXnaColor());
+                    error -= dy;
+                    if (error < 0)
+                    {
+                        y += yStep;
+                        error += dx;
+                    }
+                }
+            }
+            else
+            {
+                for (int x = aX; x < maxX; x++)
+                {
+                    lockBitmap.SetPixel(x, y, color.ToXnaColor());
+                    error -= dy;
+                    if (error < 0)
+                    {
+                        y += yStep;
+                        error += dx;
+                    }
+                }
+            }
+        }
+
+        public static void DrawLineAA(this LockBitmap lockBitmap, Line line, Size renderSize, RgbColor color)
+        {
+            int aX = (int)line.EndpointA.Denormalize(renderSize).X;
+            int aY = (int)line.EndpointA.Denormalize(renderSize).Y;
+            int bX = (int)line.EndpointB.Denormalize(renderSize).X;
+            int bY = (int)line.EndpointB.Denormalize(renderSize).Y;
+
+            throw new NotImplementedException(); //TODO
+        }
+
+        #endregion
+
+        #region Path
+
+        public static void DrawPath(this LockBitmap lockBitmap, Path path, Size renderSize, RgbColor color)
+        {
+            for (int i = 1; i < path.Vertices.Count; i++)
+                lockBitmap.DrawLine(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color);
+        }
+
+        public static void DrawPathAA(this LockBitmap lockBitmap, Path path, Size renderSize, RgbColor color)
+        {
+            for (int i = 1; i < path.Vertices.Count; i++)
+                lockBitmap.DrawLineAA(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color);
+        }
+
+        #endregion
+
+        #region Polygon
+
+        public static void DrawPolygon(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, RgbColor color)
+        {
+            for (int i = 1; i < polygon.Vertices.Count; i++)
+                lockBitmap.DrawLine(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color);
+            lockBitmap.DrawLine(new Line(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]), renderSize, color);
+        }
+
+        public static void DrawPolygonAA(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, RgbColor color)
+        {
+            for (int i = 1; i < polygon.Vertices.Count; i++)
+                lockBitmap.DrawLineAA(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color);
+            lockBitmap.DrawLineAA(new Line(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]), renderSize, color);
+        }
+
+        #endregion
+    }
+}
