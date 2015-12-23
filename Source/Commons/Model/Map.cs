@@ -21,6 +21,9 @@ namespace SRL.Commons.Model
         public Map()
         {
             Obstacles = new List<Polygon>();
+            Width = 720; // TODO: Is it good place?
+            Height = 480; // TODO: Is it good place?
+            Type = "map"; // TODO: Is it good place?
         }
 
         public XmlSchema GetSchema()
@@ -63,21 +66,41 @@ namespace SRL.Commons.Model
 
             writer.WriteEndElement();
 
+            writer.WriteStartElement("g");
+
+            writer.WriteStartAttribute("transform");
+            writer.WriteValue("translate(" + Width / 2 + "," + Height / 2 + ") scale(" + Width / 2 + "," + Height / 2 + ")");
+            writer.WriteEndAttribute();
+
             foreach (Polygon polygon in Obstacles)
             {
                 string points = "";
 
                 foreach (Point point in polygon.Vertices)
-                    points += point.X + point.Y + " ";
+                    points += point.X.ToString() + "," + point.Y.ToString() + " ";
 
                 writer.WriteStartElement("polygon");
 
-                
+                writer.WriteStartAttribute("points");
+                writer.WriteValue(points);
+                writer.WriteEndAttribute();
+
+                writer.WriteStartAttribute("stroke");
+                writer.WriteValue("black");
+                writer.WriteEndAttribute();
+
+                writer.WriteStartAttribute("stroke-width");
+                writer.WriteValue("0.01");
+                writer.WriteEndAttribute();
+
+                writer.WriteStartAttribute("fill");
+                writer.WriteValue("white");
+                writer.WriteEndAttribute();
 
                 writer.WriteEndElement();
             }
 
-            //throw new System.NotImplementedException();
+            writer.WriteEndElement();
         }
     }
 }
