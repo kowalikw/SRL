@@ -122,8 +122,8 @@
     <Compile Include="View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MonoGameArea\EditAreaBase.cs" />
     <Compile Include="View\MonoGameArea\MapEditArea.cs" />
+    <Compile Include="View\MonoGameArea\TraceArea.cs" />
     <Compile Include="View\MonoGameArea\VehicleEditArea.cs" />
     <Compile Include="View\Pages\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>

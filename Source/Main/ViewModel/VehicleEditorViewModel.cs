@@ -22,6 +22,12 @@ namespace SRL.Main.ViewModel
                         VehicleShape.Clear();
                         Pivot = null;
                         Direction = null;
+                    }, () =>
+                    {
+                        return VehicleShape.Count > 0
+                        || ShapeDone
+                        || Pivot.HasValue
+                        || Direction.HasValue;
                     });
                 }
                 return _resetCommand;
@@ -43,8 +49,13 @@ namespace SRL.Main.ViewModel
                             ShapeDone = false;
                         else
                             VehicleShape.RemoveLast();
-                    }, 
-                    () => VehicleShape.Count > 0);
+                    }, () =>
+                    {
+                        return VehicleShape.Count > 0
+                        || ShapeDone
+                        || Pivot.HasValue
+                        || Direction.HasValue;
+                    });
                 }
                 return _backCommand;
             }
@@ -86,7 +97,7 @@ namespace SRL.Main.ViewModel
                 if (_finishShapeCommand == null)
                 {
                     _finishShapeCommand = new RelayCommand(
-                        () =>ShapeDone = true, 
+                        () => ShapeDone = true,
                         () => VehicleShape.Count >= 3);
                 }
                 return _finishShapeCommand;
@@ -131,7 +142,7 @@ namespace SRL.Main.ViewModel
 
         public bool ShapeDone
         {
-            get { return _shapeDone;}
+            get { return _shapeDone; }
             set
             {
                 if (value != _shapeDone)
@@ -172,7 +183,7 @@ namespace SRL.Main.ViewModel
             Vehicle vehicle = new Vehicle();
 
             //TODO resize & rotate vehicle
-           
+
             return vehicle;
         }
 

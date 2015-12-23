@@ -65,6 +65,9 @@ namespace SRL.Main.ViewModel
                     {
                         UnfinishedPolygon.Clear();
                         FinishedPolygons.Clear();
+                    }, () =>
+                    {
+                        return FinishedPolygons.Count > 0 || UnfinishedPolygon.Count > 0;
                     });
                 }
                 return _resetCommand;

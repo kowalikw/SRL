@@ -11,7 +11,7 @@ using SRL.Main.ViewModel;
 
 namespace SRL.Main.View.MonoGameArea
 {
-    internal class MapEditArea : EditAreaBase
+    internal class MapEditArea : AreaBase
     {
         private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
 

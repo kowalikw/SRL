@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Utilities;
 using SRL.Main.Drawing;
+using SRL.Main.Utilities;
+using Color = Microsoft.Xna.Framework.Color;
 using Point = System.Windows.Point;
 
 namespace SRL.Main.View.MonoGameArea
@@ -13,12 +16,19 @@ namespace SRL.Main.View.MonoGameArea
     {
         protected const double VertexPullRadius = 8;
 
+        protected static readonly RgbColor RegularColor = new RgbColor(255, 255, 255);
+        protected static readonly RgbColor ActiveColor = new RgbColor(20, 255, 255);
+        protected static readonly RgbColor InvalidColor = new RgbColor(255, 20, 20);
+        protected static readonly RgbColor ValidColor = new RgbColor(20, 255, 20);
+
         private MouseButtonEventHandler _mouseUpHandler;
         private MouseButtonEventHandler _mouseDownHandler;
         private MouseEventHandler _mouseMoveHandler;
         private SizeChangedEventHandler _sizeChangedHandler;
 
         private SpriteBatch _spriteBatch;
+        private Bitmap _bitmapBuffer;
+        protected Texture2D StaticObjectsTexture;
 
         /// <summary>
         /// Non-normalized cursor position (that is, in pixel space) relative to the MonoGameControl control.
@@ -57,15 +67,23 @@ namespace SRL.Main.View.MonoGameArea
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             _spriteBatch.BeginDraw();
-            Render(_spriteBatch, time);
+            _spriteBatch.Draw(StaticObjectsTexture, new Vector2(0, 0), Color.White);
+            RenderDynamicObjects(_spriteBatch, time);
             _spriteBatch.EndDraw();
         }
 
-        protected abstract void Render(SpriteBatch spriteBatch, TimeSpan time);
-        
-        protected virtual void OnMouseUp() { }
-        protected virtual void OnMouseDown() { }
-        protected virtual void OnSizeChanged() { }
+        /// <summary>
+        /// Sets StaticObjectsTexture pixel data based on StaticDrawables list.
+        /// </summary>
+        protected void RedrawStaticObjectsTexture()
+        {
+            _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height);
+            LockBitmap lockBitmap = new LockBitmap(_bitmapBuffer);
+            lockBitmap.LockBits();
+            RedrawStaticObjects(lockBitmap);
+            lockBitmap.UnlockBits();
+            StaticObjectsTexture.SetData(_bitmapBuffer.GetBytes());
+        }
 
         /// <summary>
         /// Says whether current cursor position is close enough to an arbitrary <paramref name="point"/> 
@@ -76,6 +94,19 @@ namespace SRL.Main.View.MonoGameArea
         protected bool IsMousePulledByPoint(Point point)
         {
             return GeometryHelper.GetDistance(MousePosition, point) <= VertexPullRadius;
+        }
+
+        protected abstract void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time);
+        protected abstract void RedrawStaticObjects(LockBitmap lockBitmap);
+
+        protected virtual void OnMouseUp() { }
+        protected virtual void OnMouseDown() { }
+        protected virtual void OnSizeChanged()
+        {
+            _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height);
+            StaticObjectsTexture = new Texture2D(GraphicsDevice, (int)RenderSize.Width, (int)RenderSize.Height);
+
+            RedrawStaticObjectsTexture();
         }
     }
 }

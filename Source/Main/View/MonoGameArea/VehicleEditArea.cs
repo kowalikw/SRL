@@ -12,7 +12,7 @@ using SRL.Main.ViewModel;
 
 namespace SRL.Main.View.MonoGameArea
 {
-    internal class VehicleEditArea : EditAreaBase
+    internal class VehicleEditArea : AreaBase
     {
         private readonly VehicleEditorViewModel _context = SimpleIoc.Default.GetInstance<VehicleEditorViewModel>();
 
