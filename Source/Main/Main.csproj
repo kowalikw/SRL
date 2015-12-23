@@ -95,6 +95,7 @@
     <Compile Include="Drawing\LockBitmap.cs" />
     <Compile Include="Drawing\StaticDrawHelper.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
+    <Compile Include="Utilities\BitmapTracer.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\PointExtensions.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />

@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using SRL.Main.Drawing;
 
 namespace SRL.Main.View.MonoGameArea
 {
-    internal class TraceArea
+    internal class TraceArea : AreaBase
     {
+        protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void RedrawStaticObjects(LockBitmap lockBitmap)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

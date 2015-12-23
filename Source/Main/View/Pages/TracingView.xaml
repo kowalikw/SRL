@@ -1,14 +1,62 @@
 ﻿<UserControl x:Class="SRL.Main.View.Pages.TracingView"
+             ResxExtension.DefaultResxName="SRL.Main.View.Localization.TracingView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="700"
              DataContext="{Binding Source={StaticResource Locator}, Path=Tracing}">
     <Grid Style="{StaticResource ContentRoot}">
-        <Image/>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <Button>$loadbmp</Button>
+                <Button>$savevhc</Button>
+                <Button>$savemap</Button>
+                <ToggleButton IsChecked="{Binding AntialiasingEnabled}">$AA</ToggleButton>
+            </StackPanel>
+
+            <Label Grid.Row="1">$status</Label>
+
+            <Label Grid.Column="1" 
+                   Content="{Resx Key=areaThreshold}"/>
+            <Slider Grid.Column="2"/>
+            <Label Grid.Column="3"/>
+
+            <Label Grid.Row="1" Grid.Column="1" 
+                   Content="{Resx Key=colorThreshold}"/>
+            <Slider Grid.Row="1" Grid.Column="2"/>
+            <Label Grid.Row="1" Grid.Column="3"/>
+        </Grid>
+
+
+        <Image Grid.Row="1"
+               Grid.Column="0"/>
+        <mga:TraceArea Grid.Row="1" 
+                       Grid.Column="1"
+                       SnapsToDevicePixels="True"
+                       Stretch="Fill"/>
     </Grid>
 </UserControl>
