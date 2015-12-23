@@ -17,7 +17,6 @@
         <StackPanel Grid.Column="0">
             <Button>$load</Button>
             <Button Command="{Binding SaveCommand}">$save</Button>
-            <Button>$trace</Button>
             <Button Command="{Binding BackCommand}">$back</Button>
             <Button Command="{Binding ResetCommand}">$reset</Button>
             <ToggleButton IsChecked="{Binding AntialiasingEnabled}">$AA</ToggleButton>

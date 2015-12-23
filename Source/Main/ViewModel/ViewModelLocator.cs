@@ -45,6 +45,7 @@ namespace SRL.Main.ViewModel
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<MapEditorViewModel>();
             SimpleIoc.Default.Register<VehicleEditorViewModel>();
+            SimpleIoc.Default.Register<TracingViewModel>();
         }
 
         public MainViewModel Main
@@ -62,6 +63,10 @@ namespace SRL.Main.ViewModel
         public VehicleEditorViewModel VehicleEditor
         {
             get { return ServiceLocator.Current.GetInstance<VehicleEditorViewModel>(); }
+        }
+        public TracingViewModel Tracing
+        {
+            get { return ServiceLocator.Current.GetInstance<TracingViewModel>(); }
         }
 
         public static void Cleanup()

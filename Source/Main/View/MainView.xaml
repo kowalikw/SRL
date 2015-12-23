@@ -26,6 +26,8 @@
                           Source="/View/Pages/MapEditorView.xaml"/>
                 <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=vehicleEditorDisplayName}"
                           Source="/View/Pages/VehicleEditorView.xaml"/>
+                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=tracingDisplayName}"
+                          Source="/View/Pages/TracingView.xaml"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=runDisplayName}">
