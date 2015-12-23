@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using FirstFloor.ModernUI.Windows.Controls;
-using Infralution.Localization.Wpf;
+﻿using FirstFloor.ModernUI.Windows.Controls;
 
 namespace SRL.Main.View
 {

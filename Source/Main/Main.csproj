@@ -149,6 +149,7 @@
     <Compile Include="View\Pages\VehicleEditorView.xaml.cs">
       <DependentUpon>VehicleEditorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewUriDictionary.cs" />
     <Page Include="View\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

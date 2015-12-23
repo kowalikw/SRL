@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
@@ -100,31 +101,39 @@ namespace SRL.Main.View.MonoGameArea
             }
         }
 
-        protected override void OnMouseUp()
+        protected override void OnMouseUp(MouseButton button)
         {
-            if (!_context.ShapeDone)
+            if (button == MouseButton.Left)
             {
-                if (_context.FinishShapeCommand.CanExecute(null))
+                if (!_context.ShapeDone)
                 {
-                    var denormalizedEndpoint = _context.VehicleShape[0].Denormalize(RenderSize);
-                    if (IsMousePulledByPoint(denormalizedEndpoint))
+                    if (_context.FinishShapeCommand.CanExecute(null))
                     {
-                        _context.FinishShapeCommand.Execute(null);
-                        return;
+                        var denormalizedEndpoint = _context.VehicleShape[0].Denormalize(RenderSize);
+                        if (IsMousePulledByPoint(denormalizedEndpoint))
+                        {
+                            _context.FinishShapeCommand.Execute(null);
+                            return;
+                        }
                     }
-                }
 
-                var normalizedMousePosition = MousePosition.Normalize(RenderSize);
-                if (_context.AddShapeVertexCommand.CanExecute(normalizedMousePosition))
-                    _context.AddShapeVertexCommand.Execute(normalizedMousePosition);
+                    var normalizedMousePosition = MousePosition.Normalize(RenderSize);
+                    if (_context.AddShapeVertexCommand.CanExecute(normalizedMousePosition))
+                        _context.AddShapeVertexCommand.Execute(normalizedMousePosition);
+                }
+                else if (!_context.Pivot.HasValue)
+                {
+                    //TODO
+                }
+                else if (!_context.Direction.HasValue)
+                {
+                    //TODO
+                }
             }
-            else if (!_context.Pivot.HasValue)
+            else if (button == MouseButton.Right)
             {
-                //TODO
-            }
-            else if (!_context.Direction.HasValue)
-            {
-                //TODO
+                if (_context.BackCommand.CanExecute(null))
+                    _context.BackCommand.Execute(null);
             }
         }
     }

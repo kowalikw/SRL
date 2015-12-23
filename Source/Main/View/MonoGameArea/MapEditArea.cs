@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
@@ -45,23 +46,6 @@ namespace SRL.Main.View.MonoGameArea
             _context.PropertyChanged -= _antialiasingPropertyChangedHandler;
         }
 
-        protected override void OnMouseUp()
-        {
-            if (_context.FinishPolygonCommand.CanExecute(null))
-            {
-                var denormalizedEndpoint = _context.UnfinishedPolygon[0].Denormalize(RenderSize);
-                if (IsMousePulledByPoint(denormalizedEndpoint))
-                {
-                    _context.FinishPolygonCommand.Execute(null);
-                    return;
-                }
-            }
-
-            var normalizedMousePosition = MousePosition.Normalize(RenderSize);
-            if (_context.AddVertexCommand.CanExecute(normalizedMousePosition))
-                _context.AddVertexCommand.Execute(normalizedMousePosition);
-        }
-
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
             // Render active segment (potential polygon side).
@@ -94,6 +78,31 @@ namespace SRL.Main.View.MonoGameArea
                 foreach (var obstacle in _context.FinishedPolygons)
                     lockBitmap.DrawPolygon(obstacle, RenderSize, RegularColor);
                 lockBitmap.DrawPath(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor);
+            }
+        }
+
+        protected override void OnMouseUp(MouseButton button)
+        {
+            if (button == MouseButton.Left)
+            {
+                if (_context.FinishPolygonCommand.CanExecute(null))
+                {
+                    var denormalizedEndpoint = _context.UnfinishedPolygon[0].Denormalize(RenderSize);
+                    if (IsMousePulledByPoint(denormalizedEndpoint))
+                    {
+                        _context.FinishPolygonCommand.Execute(null);
+                        return;
+                    }
+                }
+
+                var normalizedMousePosition = MousePosition.Normalize(RenderSize);
+                if (_context.AddVertexCommand.CanExecute(normalizedMousePosition))
+                    _context.AddVertexCommand.Execute(normalizedMousePosition);
+            }
+            else if (button == MouseButton.Right)
+            {
+                if (_context.BackCommand.CanExecute(null))
+                    _context.BackCommand.Execute(null);
             }
         }
     }

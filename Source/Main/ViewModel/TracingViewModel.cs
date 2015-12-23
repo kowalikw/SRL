@@ -3,14 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Microsoft.Win32;
 using SRL.Commons.Model;
+using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 
 namespace SRL.Main.ViewModel
 {
-    public class TracingViewModel
+    public class TracingViewModel : ViewModelBase
     {
         public RelayCommand LoadBitmapCommand
         {
@@ -54,6 +55,7 @@ namespace SRL.Main.ViewModel
                         //TODO
                     }, () =>
                     {
+                        //TODO allow polygon sums?
                         return SelectedPolygonIndices.Count == 1 && _traceTask == null;
                     });
                 }
@@ -88,15 +90,49 @@ namespace SRL.Main.ViewModel
                 return _traceCommand;
             }
         }
+
         public RelayCommand<Point> SelectPolygonCommand
         {
             get
             {
                 if (_selectPolygonCommand == null)
                 {
-                    //TODO
+                    _selectPolygonCommand = new RelayCommand<Point>(point =>
+                    {
+                        for (int i = Polygons.Count - 1; i >= 0; i--)
+                        {
+                            if (GeometryHelper.IsInsidePolygon(point, Polygons[i])
+                               && !SelectedPolygonIndices.Contains(i))
+                            {
+                                SelectedPolygonIndices.Add(i);
+                                return;
+                            }
+                        }
+                    });
                 }
-                return _selectPolygonCommand;;
+                return _selectPolygonCommand; ;
+            }
+        }
+        public RelayCommand<Point> DeselectPolygonCommand
+        {
+            get
+            {
+                if (_deselectPolygonCommand == null)
+                {
+                    _deselectPolygonCommand = new RelayCommand<Point>(point =>
+                    {
+                        for (int i = Polygons.Count - 1; i >= 0; i--)
+                        {
+                            if (GeometryHelper.IsInsidePolygon(point, Polygons[i])
+                               && SelectedPolygonIndices.Contains(i))
+                            {
+                                SelectedPolygonIndices.Remove(i);
+                                return;
+                            }
+                        }
+                    });
+                }
+                return _deselectPolygonCommand; ;
             }
         }
 
@@ -105,10 +141,12 @@ namespace SRL.Main.ViewModel
         private RelayCommand _makeVehicleCommand;
         private RelayCommand _traceCommand;
         private RelayCommand<Point> _selectPolygonCommand;
-        
+        private RelayCommand<Point> _deselectPolygonCommand;
+
 
         public int AreaThreshold { get; set; }
         public int ColorThreshold { get; set; }
+        public bool AntialiasingEnabled { get; set; }
 
 
         public BitmapSource Bitmap { get; private set; }
@@ -117,7 +155,7 @@ namespace SRL.Main.ViewModel
 
 
         private CancellationTokenSource _traceCancellationTokenSource;
-        private Task _traceTask; 
+        private Task _traceTask;
         private BitmapTracer _tracer;
 
 

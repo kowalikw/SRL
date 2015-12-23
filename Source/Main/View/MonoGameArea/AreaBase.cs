@@ -40,8 +40,8 @@ namespace SRL.Main.View.MonoGameArea
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _mouseUpHandler = (o, e) => OnMouseUp();
-            _mouseDownHandler = (o, e) => OnMouseDown();
+            _mouseUpHandler = (o, e) => OnMouseUp(e.ChangedButton);
+            _mouseDownHandler = (o, e) => OnMouseButtonDown(e.ChangedButton);
             _mouseMoveHandler = (o, e) => MousePosition = e.GetPosition((UIElement) o);
             _sizeChangedHandler = (o, e) => OnSizeChanged();
 
@@ -99,8 +99,8 @@ namespace SRL.Main.View.MonoGameArea
         protected abstract void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time);
         protected abstract void RedrawStaticObjects(LockBitmap lockBitmap);
 
-        protected virtual void OnMouseUp() { }
-        protected virtual void OnMouseDown() { }
+        protected virtual void OnMouseUp(MouseButton button) { }
+        protected virtual void OnMouseButtonDown(MouseButton button) { }
         protected virtual void OnSizeChanged()
         {
             _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height);
