@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework.Graphics;
-using SRL.Commons.Model;
-using SRL.Commons.Utilities;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;

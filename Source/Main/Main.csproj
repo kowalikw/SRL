@@ -102,6 +102,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\SimulationViewModel.cs" />
     <Compile Include="ViewModel\TracingViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="View\MonoGameArea\MapEditArea.cs" />
     <Compile Include="View\MonoGameArea\TraceArea.cs" />
     <Compile Include="View\MonoGameArea\VehicleEditArea.cs" />
+    <Compile Include="View\MonoGameArea\VisualizationArea.cs" />
     <Compile Include="View\Pages\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -149,7 +151,7 @@
     <Compile Include="View\Pages\VehicleEditorView.xaml.cs">
       <DependentUpon>VehicleEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ViewUriDictionary.cs" />
+    <Compile Include="View\NavigationConstants.cs" />
     <Page Include="View\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

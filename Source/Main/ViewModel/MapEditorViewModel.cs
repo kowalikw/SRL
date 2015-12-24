@@ -73,7 +73,7 @@ namespace SRL.Main.ViewModel
                 return _resetCommand;
             }
         }
-        public override RelayCommand BackCommand
+        public RelayCommand BackCommand
         {
             get
             {

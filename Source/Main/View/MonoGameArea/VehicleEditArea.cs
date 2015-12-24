@@ -71,8 +71,7 @@ namespace SRL.Main.View.MonoGameArea
 
                 return;
             }
-
-
+            
             if (_context.Direction.HasValue)
             {
                 //TODO draw arrow

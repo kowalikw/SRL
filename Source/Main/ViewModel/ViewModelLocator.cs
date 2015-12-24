@@ -43,6 +43,10 @@ namespace SRL.Main.ViewModel
         {
             get { return ServiceLocator.Current.GetInstance<TracingViewModel>(); }
         }
+        public SimulationViewModel Simulation
+        {
+            get { return ServiceLocator.Current.GetInstance<SimulationViewModel>(); }
+        }
 
         public static void Cleanup()
         {

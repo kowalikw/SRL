@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
@@ -7,11 +8,23 @@ namespace SRL.Main.ViewModel
     public abstract class EditorViewModel<T> : ViewModelBase 
         where T : IXmlSerializable
     {
-        public RelayCommand SaveCommand { get; }
-        public RelayCommand LoadCommand { get; }
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                throw new NotImplementedException(); //TODO
+            }
+        }
+
+        public RelayCommand LoadCommand
+        {
+            get
+            {
+                throw new NotImplementedException(); //TODO
+            }
+        }
 
         public abstract RelayCommand ResetCommand { get; }
-        public abstract RelayCommand BackCommand { get; }
 
         public abstract bool IsModelValid { get; }
         /// <summary>

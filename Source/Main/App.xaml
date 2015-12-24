@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:SRL.Main.ViewModel"
+    xmlns:view="clr-namespace:SRL.Main.View"
     StartupUri="View/MainView.xaml" 
     d1p1:Ignorable="d" >
     <Application.Resources>
