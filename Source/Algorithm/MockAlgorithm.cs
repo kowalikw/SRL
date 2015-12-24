@@ -9,9 +9,9 @@ using SRL.Commons.Utilities;
 
 namespace SRL.Algorithm
 {
-    class MockAlgorithm
+    class MockAlgorithm : IAlgorithm
     {
-        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
+        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
