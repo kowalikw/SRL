@@ -49,5 +49,26 @@ namespace SRL.Commons.Utilities
         {
             return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
         }
+
+        public static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInRadians)
+        {
+            double cosTheta = Math.Cos(angleInRadians);
+            double sinTheta = Math.Sin(angleInRadians);
+            return new Point(
+                    (cosTheta * (pointToRotate.X - centerPoint.X) -
+                    sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
+                    (sinTheta * (pointToRotate.X - centerPoint.X) +
+                    cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y));
+        }
+
+        public static bool IsCounterClockwiseTurn(Point p1, Point p2, Point p3)
+        {
+            return CrossProduct(new Point(p2.X - p1.X, p2.Y - p1.Y), new Point(p3.X - p1.X, p3.Y - p1.Y)) > 0;
+        }
+
+        public static double CrossProduct(Point p1, Point p2)
+        {
+            return p1.X * p2.Y - p2.X * p1.Y;
+        }
     }
 }
