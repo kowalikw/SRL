@@ -12,7 +12,7 @@ namespace SRL.Main.ViewModel
     {
         public MainViewModel()
         {
-            Messenger.Default.Register<GoToPageMessage>(this, msg => SetPage(msg.viewType));
+            Messenger.Default.Register<GoToPageMessage>(this, msg => SetPage(msg.ViewType));
         }
 
         private void SetPage(Type viewType)

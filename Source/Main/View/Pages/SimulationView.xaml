@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Simulation}">
@@ -13,12 +14,14 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <mga:VisualizationArea SnapsToDevicePixels="True"
+                               Stretch="Fill"/>
         
-        
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <DockPanel Grid.Row="1">
             <Button>StartPause</Button>
             <Button>Stop</Button>
             <Button>AA</Button>
-        </StackPanel>
+            <Slider></Slider>
+        </DockPanel>
     </Grid>
 </UserControl>
