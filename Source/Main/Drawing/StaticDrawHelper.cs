@@ -117,5 +117,21 @@ namespace SRL.Main.Drawing
         }
 
         #endregion
+
+        #region Map
+
+        public static void DrawMap(this LockBitmap lockBitmap, Map map, Size renderSize, RgbColor color)
+        {
+            foreach (var obstacle in map.Obstacles)
+                lockBitmap.DrawPolygon(obstacle, renderSize, color);
+        }
+
+        public static void DrawMapAA(this LockBitmap lockBitmap, Map map, Size renderSize, RgbColor color)
+        {
+            foreach (var obstacle in map.Obstacles)
+                lockBitmap.DrawPolygonAA(obstacle, renderSize, color);
+        }
+
+        #endregion
     }
 }

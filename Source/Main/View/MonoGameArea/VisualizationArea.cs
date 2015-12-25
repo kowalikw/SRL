@@ -8,16 +8,19 @@ namespace SRL.Main.View.MonoGameArea
 {
     internal class VisualizationArea : AreaBase
     {
-        private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
+        private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
 
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException(); TODO
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
-            throw new NotImplementedException();
+            if (_context.Map != null)
+                lockBitmap.DrawMap(_context.Map, RenderSize, RegularColor);
+
+            
         }
     }
 }
