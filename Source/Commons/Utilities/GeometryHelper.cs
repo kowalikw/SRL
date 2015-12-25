@@ -11,6 +11,11 @@ namespace SRL.Commons.Utilities
             return pX * qY - qX * pY;
         }
 
+        public static double CrossProduct(Point p1, Point p2)
+        {
+            return p1.X * p2.Y - p2.X * p1.Y;
+        }
+
         private static bool IsInsideRectangle(Point point, Point cornerA, Point cornerB)
         {
             return Math.Min(cornerA.X, cornerB.X) <= point.X
@@ -50,25 +55,22 @@ namespace SRL.Commons.Utilities
             return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
         }
 
-        public static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInRadians)
+        public static Point RotatePoint(Point point, Point pivot, double angle)
         {
-            double cosTheta = Math.Cos(angleInRadians);
-            double sinTheta = Math.Sin(angleInRadians);
+            double cosTheta = Math.Cos(angle);
+            double sinTheta = Math.Sin(angle);
             return new Point(
-                    (cosTheta * (pointToRotate.X - centerPoint.X) -
-                    sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
-                    (sinTheta * (pointToRotate.X - centerPoint.X) +
-                    cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y));
+                    (cosTheta * (point.X - pivot.X) -
+                    sinTheta * (point.Y - pivot.Y) + pivot.X),
+                    (sinTheta * (point.X - pivot.X) +
+                    cosTheta * (point.Y - pivot.Y) + pivot.Y));
         }
 
-        public static bool IsCounterClockwiseTurn(Point p1, Point p2, Point p3)
+        public static bool IsCounterClockwiseTurn(Point pivot, Point init, Point target)
         {
-            return CrossProduct(new Point(p2.X - p1.X, p2.Y - p1.Y), new Point(p3.X - p1.X, p3.Y - p1.Y)) > 0;
-        }
-
-        public static double CrossProduct(Point p1, Point p2)
-        {
-            return p1.X * p2.Y - p2.X * p1.Y;
+            return CrossProduct(
+                new Point(init.X - pivot.X, init.Y - pivot.Y), 
+                new Point(target.X - pivot.X, target.Y - pivot.Y)) > 0;
         }
     }
 }

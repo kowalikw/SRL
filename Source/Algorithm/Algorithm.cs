@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SRL.Commons.Utilities;
 using SRL.Commons.Model;
 using System.Windows;
+using SRL.Commons;
 
 namespace SRL.Algorithm
 {
@@ -19,12 +18,8 @@ namespace SRL.Algorithm
             map.Obstacles.Add(poly);*/
             throw new NotImplementedException();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="map"></param>
-        /// <param name="vehicle">znormalizowany pojazd (punkt (0,0) i kąt 0)</param>
-        /// <param name="angleDensity"></param>
+
+        // vehicle - znormalizowany pojazd (punkt (0,0) i kąt 0)
         public List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
         {
             // TODO: normalisation
@@ -128,6 +123,7 @@ namespace SRL.Algorithm
             poly = new Polygon(U.ToArray());
             return poly;
         }
+
 
     }
 }
