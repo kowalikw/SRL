@@ -1,9 +1,10 @@
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Windows.Navigation;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using SRL.Main.Messages;
 
 namespace SRL.Main.ViewModel
 {
@@ -11,13 +12,13 @@ namespace SRL.Main.ViewModel
     {
         public MainViewModel()
         {
-
+            Messenger.Default.Register<GoToPageMessage>(this, msg => SetPage(msg.viewType));
         }
 
-        private void SetPage<T>() where T : UserControl
+        private void SetPage(Type viewType)
         {
             var uriDictionary = (ResourceDictionary)Application.Current.Resources["UriDictionary"];
-            Uri pageUri = (Uri)uriDictionary[nameof(T)];
+            Uri pageUri = (Uri)uriDictionary[viewType.Name];
 
             IInputElement target = NavigationHelper.FindFrame(NavigationHelper.FrameTop, Application.Current.MainWindow);
             NavigationCommands.GoToPage.Execute(pageUri, target);

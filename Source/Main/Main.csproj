@@ -94,6 +94,7 @@
     <Compile Include="Drawing\DynamicDrawHelper.cs" />
     <Compile Include="Drawing\LockBitmap.cs" />
     <Compile Include="Drawing\StaticDrawHelper.cs" />
+    <Compile Include="Messages\GoToPageMessage.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
     <Compile Include="Utilities\BitmapTracer.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
