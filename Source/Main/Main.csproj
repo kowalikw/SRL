@@ -151,7 +151,10 @@
     <Compile Include="View\Pages\VehicleEditorView.xaml.cs">
       <DependentUpon>VehicleEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NavigationConstants.cs" />
+    <Page Include="UriDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

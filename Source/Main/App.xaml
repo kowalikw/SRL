@@ -9,6 +9,7 @@
     d1p1:Ignorable="d" >
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary x:Key="UriDictionary" Source="UriDictionary.xaml"/>
             <viewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />

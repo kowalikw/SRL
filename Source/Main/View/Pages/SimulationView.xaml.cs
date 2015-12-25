@@ -1,4 +1,9 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Navigation;
+using FirstFloor.ModernUI.Windows.Navigation;
 
 namespace SRL.Main.View.Pages
 {
@@ -11,5 +16,6 @@ namespace SRL.Main.View.Pages
         {
             InitializeComponent();
         }
+
     }
 }

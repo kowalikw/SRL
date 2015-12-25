@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace SRL.Main
 {
@@ -7,5 +8,6 @@ namespace SRL.Main
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

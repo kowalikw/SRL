@@ -21,6 +21,7 @@ namespace SRL.Main.ViewModel
             SimpleIoc.Default.Register<MapEditorViewModel>();
             SimpleIoc.Default.Register<VehicleEditorViewModel>();
             SimpleIoc.Default.Register<TracingViewModel>();
+            SimpleIoc.Default.Register<SimulationViewModel>();
         }
 
         public MainViewModel Main

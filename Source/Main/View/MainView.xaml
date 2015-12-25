@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        xmlns:local="clr-namespace:SRL.Main"
         mc:Ignorable="d"
         Title="MainView" IsTitleVisible="True"
         MinHeight="600" MinWidth="800"
         ContentSource="/View/Pages/HomeView.xaml"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
-    
+
+    <mui:ModernWindow.Resources>
+        <ResourceDictionary Source="../UriDictionary.xaml"/>
+    </mui:ModernWindow.Resources>
+
     <!-- Unfortunately, DefaultResxName attribute does not work within another 
     markup extension (mui namespace). It works in page xamls though, so no 
     worries lads. -->
@@ -17,22 +22,22 @@
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=homeDisplayName}">
             <mui:LinkGroup.Links>
-                <mui:Link Source="/View/Pages/HomeView.xaml"/>
+                <mui:Link Source="{StaticResource HomeView}"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=setupDisplayName}">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=mapEditorDisplayName}"
-                          Source="/View/Pages/MapEditorView.xaml"/>
+                          Source="{StaticResource MapEditorView}"/>
                 <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=vehicleEditorDisplayName}"
-                          Source="/View/Pages/VehicleEditorView.xaml"/>
+                          Source="{StaticResource VehicleEditorView}"/>
                 <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=tracingDisplayName}"
-                          Source="/View/Pages/TracingView.xaml"/>
+                          Source="{StaticResource TracingView}"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=runDisplayName}">
             <mui:LinkGroup.Links>
-                <mui:Link Source="/View/Pages/SimulationView.xaml"/>
+                <mui:Link Source="{StaticResource SimulationView}"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>
