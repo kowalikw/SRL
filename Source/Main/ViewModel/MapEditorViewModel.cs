@@ -78,6 +78,30 @@ namespace SRL.Main.ViewModel
 
                         System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
+                        var dialog = new OpenFileDialog();
+                        dialog.Filter = String.Format("SVG files (*.svg)|*.svg");
+
+                        if (dialog.ShowDialog() == true)
+                        {
+                            XDocument doc = XDocument.Load(dialog.FileName);
+                            var serializer = new XmlSerializer(typeof(Map));
+
+                            Map output;
+
+                            using (XmlReader reader = doc.CreateReader())
+                                output = (Map)serializer.Deserialize(reader);
+
+                            FinishedPolygons.AddRange(output.Obstacles);
+                        }*/
+
+                        
+
+                        // TODO: To tests only
+                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
                         var dialog = new SaveFileDialog();
                         dialog.Filter = String.Format("SVG files (*.svg)|*.svg");
 

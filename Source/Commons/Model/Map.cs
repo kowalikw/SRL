@@ -26,14 +26,46 @@ namespace SRL.Commons.Model
             Type = "map"; // TODO: Is it good place?
         }
 
+        #region IXmlSerializable members
+
+        /// <remarks>
+        /// Must always return null (as specified by MSDN).
+        /// </remarks>
         public XmlSchema GetSchema()
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public void ReadXml(XmlReader reader)
         {
-            throw new System.NotImplementedException();
+            reader.MoveToContent();
+
+            if (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "svg")
+            {
+                reader.MoveToAttribute("width");
+                Width = reader.ReadContentAsInt();
+
+                reader.MoveToAttribute("height");
+                Height = reader.ReadContentAsInt();
+
+                reader.MoveToAttribute("type");
+                Type = reader.ReadContentAsString();
+
+                if (Type != "map") throw new XmlException();
+
+                reader.MoveToContent();
+
+                reader.ReadToDescendant("polygon");
+                while(reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "polygon")
+                {
+                    Polygon obstacle = new Polygon();
+                    obstacle.ReadXml(reader);
+                    Obstacles.Add(obstacle);
+                }
+                reader.ReadEndElement();
+            }
+            else
+                throw new XmlException();
         }
 
         public void WriteXml(XmlWriter writer)
@@ -50,6 +82,7 @@ namespace SRL.Commons.Model
             writer.WriteValue(Type);
             writer.WriteEndAttribute();
 
+            // Background
             writer.WriteStartElement("rect");
 
             writer.WriteStartAttribute("width");
@@ -66,41 +99,19 @@ namespace SRL.Commons.Model
 
             writer.WriteEndElement();
 
+            // Draw obstacles (translate and scale)
             writer.WriteStartElement("g");
 
             writer.WriteStartAttribute("transform");
-            writer.WriteValue("translate(" + Width / 2 + "," + Height / 2 + ") scale(" + Width / 2 + "," + Height / 2 + ")");
+            writer.WriteValue("translate(" + Width / 2 + "," + Height / 2 + ") scale(" + Width / 2 + "," + (-Height / 2) + ")");
             writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Obstacles)
-            {
-                string points = "";
-
-                foreach (Point point in polygon.Vertices)
-                    points += point.X.ToString() + "," + point.Y.ToString() + " ";
-
-                writer.WriteStartElement("polygon");
-
-                writer.WriteStartAttribute("points");
-                writer.WriteValue(points);
-                writer.WriteEndAttribute();
-
-                writer.WriteStartAttribute("stroke");
-                writer.WriteValue("black");
-                writer.WriteEndAttribute();
-
-                writer.WriteStartAttribute("stroke-width");
-                writer.WriteValue("0.01");
-                writer.WriteEndAttribute();
-
-                writer.WriteStartAttribute("fill");
-                writer.WriteValue("white");
-                writer.WriteEndAttribute();
-
-                writer.WriteEndElement();
-            }
+                polygon.WriteXml(writer);
 
             writer.WriteEndElement();
         }
+
+        #endregion
     }
 }
