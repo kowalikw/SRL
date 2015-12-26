@@ -143,20 +143,20 @@ namespace SRL.Main.Drawing
 
             if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
             {
-                Pixels[i] = color.B;
+                Pixels[i] = color.R;
                 Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.R;
+                Pixels[i + 2] = color.B;
                 Pixels[i + 3] = color.A;
             }
             if (Depth == 24) // For 24 bpp set Red, Green and Blue
             {
-                Pixels[i] = color.B;
+                Pixels[i] = color.R;
                 Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.R;
+                Pixels[i + 2] = color.B;
             }
             if (Depth == 8) // For 8 bpp set color value (Red, Green and Blue values are the same)
             {
-                Pixels[i] = color.B;
+                Pixels[i] = color.R;
             }
         }
     }

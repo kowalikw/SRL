@@ -139,6 +139,8 @@ namespace SRL.Main.Drawing
         }
 
         #endregion
+        
+        #region Arrow
 
         public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color)
         {
@@ -148,14 +150,12 @@ namespace SRL.Main.Drawing
             double cosA = Math.Cos(angle);
             double sinA = Math.Sin(angle);
 
-            length *= Math.Sqrt(renderSize.Height*renderSize.Width);
+            length *= Math.Sqrt(renderSize.Height * renderSize.Width);
 
             Point o = origin.Denormalize(renderSize);
             Point t = new Point(
                 o.X + length * cosA,
                 o.Y - length * sinA);
-
-            Debug.WriteLine(cosA + "|" + o + "|" + t);
 
             Point ah1 = new Point(
                 t.X - tipLength * cosA - tipHalfWidth * sinA,
@@ -173,10 +173,6 @@ namespace SRL.Main.Drawing
         {
             throw new NotImplementedException(); //TODO
         }
-
-        #region Arrow
-
-
 
         #endregion
 
@@ -210,6 +206,72 @@ namespace SRL.Main.Drawing
             for (int i = 1; i < polygon.Vertices.Count; i++)
                 spriteBatch.DrawLineAA(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color);
             spriteBatch.DrawLineAA(new Line(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]), renderSize, color);
+        }
+
+        #endregion
+
+        #region Vertex
+
+        public static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Size renderSize, RgbColor color)
+        {
+            // Draw 7x7 dot
+
+            float vX = (float) vertex.Denormalize(renderSize).X;
+            float vY = (float) vertex.Denormalize(renderSize).Y;
+            
+            if (_pixel == null)
+                CreateThePixel(spriteBatch);
+
+            spriteBatch.SetPixel(vX - 1, vY - 3, color);
+            spriteBatch.SetPixel(vX, vY - 3, color);
+            spriteBatch.SetPixel(vX + 1, vY - 3, color);
+            spriteBatch.SetPixel(vX - 2, vY - 2, color);
+            spriteBatch.SetPixel(vX - 1, vY - 2, color);
+            spriteBatch.SetPixel(vX, vY - 2, color);
+            spriteBatch.SetPixel(vX + 1, vY - 2, color);
+            spriteBatch.SetPixel(vX + 2, vY - 2, color);
+            spriteBatch.SetPixel(vX - 3, vY - 1, color);
+            spriteBatch.SetPixel(vX - 2, vY - 1, color);
+            spriteBatch.SetPixel(vX - 1, vY - 1, color);
+            spriteBatch.SetPixel(vX, vY - 1, color);
+            spriteBatch.SetPixel(vX + 1, vY - 1, color);
+            spriteBatch.SetPixel(vX + 2, vY - 1, color);
+            spriteBatch.SetPixel(vX + 3, vY - 1, color);
+            spriteBatch.SetPixel(vX - 3, vY, color);
+            spriteBatch.SetPixel(vX - 2, vY, color);
+            spriteBatch.SetPixel(vX - 1, vY, color);
+            spriteBatch.SetPixel(vX, vY, color);
+            spriteBatch.SetPixel(vX + 1, vY, color);
+            spriteBatch.SetPixel(vX + 2, vY, color);
+            spriteBatch.SetPixel(vX + 3, vY, color);
+            spriteBatch.SetPixel(vX - 3, vY + 1, color);
+            spriteBatch.SetPixel(vX - 2, vY + 1, color);
+            spriteBatch.SetPixel(vX - 1, vY + 1, color);
+            spriteBatch.SetPixel(vX, vY + 1, color);
+            spriteBatch.SetPixel(vX + 1, vY + 1, color);
+            spriteBatch.SetPixel(vX + 2, vY + 1, color);
+            spriteBatch.SetPixel(vX + 3, vY + 1, color);
+            spriteBatch.SetPixel(vX - 2, vY + 2, color);
+            spriteBatch.SetPixel(vX - 1, vY + 2, color);
+            spriteBatch.SetPixel(vX, vY + 2, color);
+            spriteBatch.SetPixel(vX + 1, vY + 2, color);
+            spriteBatch.SetPixel(vX + 2, vY + 2, color);
+            spriteBatch.SetPixel(vX - 1, vY + 3, color);
+            spriteBatch.SetPixel(vX, vY + 3, color);
+            spriteBatch.SetPixel(vX + 1, vY + 3, color);
+        }
+
+        public static void DrawVertexAA(this SpriteBatch spriteBatch, Point vertex, Size renderSize, RgbColor color)
+        {
+            // Draw 7x7 dot
+
+            float vX = (float)vertex.Denormalize(renderSize).X;
+            float vY = (float)vertex.Denormalize(renderSize).Y;
+
+            if (_pixel == null)
+                CreateThePixel(spriteBatch);
+
+            //TODO
         }
 
         #endregion

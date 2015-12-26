@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
@@ -20,8 +21,7 @@ namespace SRL.Main.View.MonoGameArea
         private readonly VehicleEditorViewModel _context = SimpleIoc.Default.GetInstance<VehicleEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _vehicleShapeChangedHandler;
-        private PropertyChangedEventHandler _shapeDonePropertyChangedHandler;
-        private PropertyChangedEventHandler _antialiasingPropertyChangedHandler;
+        private PropertyChangedEventHandler _propertyChangedHandler;
 
         private readonly Line _activeLine = new Line();
 
@@ -29,20 +29,16 @@ namespace SRL.Main.View.MonoGameArea
         {
             base.Initialize();
             _vehicleShapeChangedHandler = (o, e) => RedrawStaticObjectsTexture();
-            _shapeDonePropertyChangedHandler = (o, e) =>
+            _propertyChangedHandler = (o, e) =>
             {
-                if (e.PropertyName == nameof(_context.ShapeDone))
-                    RedrawStaticObjectsTexture();
-            };
-            _antialiasingPropertyChangedHandler = (o, e) =>
-            {
-                if (e.PropertyName == nameof(_context.AntialiasingEnabled))
+                if (e.PropertyName == nameof(_context.ShapeDone)
+                 || e.PropertyName == nameof(_context.AntialiasingEnabled)
+                 || e.PropertyName == nameof(_context.Pivot))
                     RedrawStaticObjectsTexture();
             };
 
             _context.VehicleShape.CollectionChanged += _vehicleShapeChangedHandler;
-            _context.PropertyChanged += _shapeDonePropertyChangedHandler;
-            _context.PropertyChanged += _antialiasingPropertyChangedHandler;
+            _context.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -50,53 +46,73 @@ namespace SRL.Main.View.MonoGameArea
             base.Unitialize();
 
             _context.VehicleShape.CollectionChanged -= _vehicleShapeChangedHandler;
-            _context.PropertyChanged -= _shapeDonePropertyChangedHandler;
-            _context.PropertyChanged -= _antialiasingPropertyChangedHandler;
+            _context.PropertyChanged -= _propertyChangedHandler;
         }
 
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
-            if (!_context.ShapeDone && _context.VehicleShape.Count > 0 & IsMouseOver)
+            Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
+
+            if (!_context.ShapeDone)
             {
-                Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
                 RgbColor color = _context.AddShapeVertexCommand.CanExecute(normalizedMousePosition)
                     ? ValidColor
                     : InvalidColor;
 
-                _activeLine.EndpointA = _context.VehicleShape.GetLast();
-                _activeLine.EndpointB = normalizedMousePosition;
+                if (IsMouseOver && _context.VehicleShape.Count > 0)
+                {
+                    _activeLine.EndpointA = _context.VehicleShape.GetLast();
+                    _activeLine.EndpointB = normalizedMousePosition;
 
-                if (_context.AntialiasingEnabled)
-                    spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
-                else
-                    spriteBatch.DrawLine(_activeLine, RenderSize, color);
-
-                return;
+                    if (_context.AntialiasingEnabled)
+                        spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
+                    else
+                        spriteBatch.DrawLine(_activeLine, RenderSize, color);
+                }
+                else if (_context.VehicleShape.Count == 1)
+                {
+                    if (_context.AntialiasingEnabled)
+                        spriteBatch.DrawVertexAA(_context.VehicleShape.GetLast(), RenderSize, ActiveColor);
+                    else
+                        spriteBatch.DrawVertex(_context.VehicleShape.GetLast(), RenderSize, ActiveColor);
+                }
             }
-
-            if (_context.Direction.HasValue)
+            else if (!_context.Pivot.HasValue)
             {
-                // It is implied that Pivot has value too.
-                if (_context.AntialiasingEnabled)
-                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
-                else
-                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
+                if (IsMouseOver)
+                {
+                    RgbColor color = _context.SetPivotCommand.CanExecute(normalizedMousePosition)
+                        ? ValidColor
+                        : InvalidColor;
 
-                return;
+                    if (_context.AntialiasingEnabled)
+                        spriteBatch.DrawVertexAA(normalizedMousePosition, RenderSize, color);
+                    else
+                        spriteBatch.DrawVertex(normalizedMousePosition, RenderSize, color);
+                }
             }
-
-            if (_context.Pivot.HasValue)
+            else if (!_context.Direction.HasValue)
             {
-                Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
-                double angle = GeometryHelper.GetAngle(_context.Pivot.Value, normalizedMousePosition);
+                if (IsMouseOver)
+                {
+                    double angle = GeometryHelper.GetAngle(_context.Pivot.Value, normalizedMousePosition);
+                    RgbColor color = _context.SetDirectionCommand.CanExecute(angle)
+                        ? ValidColor
+                        : InvalidColor;
 
-                if (_context.AntialiasingEnabled)
-                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, ValidColor);
-                else
-                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, ValidColor);
+                    if (_context.AntialiasingEnabled)
+                        spriteBatch.DrawArrowAA(_context.Pivot.Value, ArrowLength, angle, RenderSize, color);
+                    else
+                        spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, color);
+                }
             }
-
-            //TODO property check order?
+            else
+            {
+                if (_context.AntialiasingEnabled)
+                    spriteBatch.DrawArrowAA(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
+                else
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
+            }
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
@@ -115,6 +131,16 @@ namespace SRL.Main.View.MonoGameArea
                 else
                     lockBitmap.DrawPolygon(new Polygon(_context.VehicleShape), RenderSize, RegularColor);
             }
+
+            if (_context.Pivot.HasValue)
+            {
+                if (_context.AntialiasingEnabled)
+                    lockBitmap.DrawVertexAA(_context.Pivot.Value, RenderSize, RegularColor);
+                else
+                    lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, RegularColor);
+            }
+
+            // Arrow is drawn dynamically only.
         }
 
         protected override void OnMouseUp(MouseButton button)

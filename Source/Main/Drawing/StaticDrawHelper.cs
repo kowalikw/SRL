@@ -133,5 +133,67 @@ namespace SRL.Main.Drawing
         }
 
         #endregion
+
+        #region Vertex
+
+        public static void DrawVertex(this LockBitmap lockBitmap, Point vertex, Size renderSize, RgbColor color)
+        {
+            // Draw 7x7 dot
+
+            int vX = (int)vertex.Denormalize(renderSize).X;
+            int vY = (int)vertex.Denormalize(renderSize).Y;
+
+            var xnaColor = color.ToXnaColor();
+
+            lockBitmap.SetPixel(vX - 1, vY - 3, xnaColor);
+            lockBitmap.SetPixel(vX, vY - 3, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY - 3, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX - 3, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX + 3, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX - 3, vY, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY, xnaColor);
+            lockBitmap.SetPixel(vX, vY, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY, xnaColor);
+            lockBitmap.SetPixel(vX + 3, vY, xnaColor);
+            lockBitmap.SetPixel(vX - 3, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX + 3, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY + 3, xnaColor);
+            lockBitmap.SetPixel(vX, vY + 3, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY + 3, xnaColor);
+        }
+
+        public static void DrawVertexAA(this LockBitmap spriteBatch, Point vertex, Size renderSize, RgbColor color)
+        {
+            // Draw 7x7 dot
+
+            int vX = (int)vertex.Denormalize(renderSize).X;
+            int vY = (int)vertex.Denormalize(renderSize).Y;
+
+            //TODO
+        }
+
+        #endregion
     }
 }

@@ -17,7 +17,7 @@ namespace SRL.Main.View.MonoGameArea
         private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
-        private PropertyChangedEventHandler _antialiasingPropertyChangedHandler;
+        private PropertyChangedEventHandler _propertyChangedHandler;
 
         private readonly Line _activeLine = new Line();
 
@@ -26,7 +26,7 @@ namespace SRL.Main.View.MonoGameArea
             base.Initialize();
 
             _collectionChangedHandler = (o, e) => RedrawStaticObjectsTexture();
-            _antialiasingPropertyChangedHandler = (o, e) =>
+            _propertyChangedHandler = (o, e) =>
             {
                 if (e.PropertyName == nameof(_context.AntialiasingEnabled))
                     RedrawStaticObjectsTexture();
@@ -34,7 +34,7 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.FinishedPolygons.CollectionChanged += _collectionChangedHandler;
             _context.UnfinishedPolygon.CollectionChanged += _collectionChangedHandler;
-            _context.PropertyChanged += _antialiasingPropertyChangedHandler;
+            _context.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -43,15 +43,16 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.FinishedPolygons.CollectionChanged -= _collectionChangedHandler;
             _context.UnfinishedPolygon.CollectionChanged -= _collectionChangedHandler;
-            _context.PropertyChanged -= _antialiasingPropertyChangedHandler;
+            _context.PropertyChanged -= _propertyChangedHandler;
         }
 
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
-            // Render active segment (potential polygon side).
+            Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
+
             if (_context.UnfinishedPolygon.Count > 0 && IsMouseOver)
             {
-                Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
+                
                 RgbColor color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
                     ValidColor : InvalidColor;
 
@@ -62,6 +63,13 @@ namespace SRL.Main.View.MonoGameArea
                     spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
                 else
                     spriteBatch.DrawLine(_activeLine, RenderSize, color);
+            }
+            else if (_context.UnfinishedPolygon.Count == 1)
+            {
+                if (_context.AntialiasingEnabled)
+                    spriteBatch.DrawVertexAA(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor);
+                else
+                    spriteBatch.DrawVertex(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor);
             }
         }
 

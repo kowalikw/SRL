@@ -25,9 +25,9 @@ namespace SRL.Main.ViewModel
                     }, () =>
                     {
                         return VehicleShape.Count > 0
-                        || ShapeDone
-                        || Pivot.HasValue
-                        || Direction.HasValue;
+                            || ShapeDone
+                            || Pivot.HasValue
+                            || Direction.HasValue;
                     });
                 }
                 return _resetCommand;
@@ -152,10 +152,21 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-        public Point? Pivot { get; private set; }
+        public Point? Pivot
+        {
+            get { return _pivot; }
+            private set
+            {
+                if (value != _pivot)
+                {
+                    _pivot = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
         public double? Direction { get; private set; }
 
-
+        private Point? _pivot;
         private bool _shapeDone;
 
         protected override bool IsModelValid
@@ -163,8 +174,8 @@ namespace SRL.Main.ViewModel
             get
             {
                 return ShapeDone
-                  && Pivot.HasValue
-                  && Direction.HasValue;
+                    && Pivot.HasValue
+                    && Direction.HasValue;
             }
         }
         public bool AntialiasingEnabled { get; set; }
