@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
+using SRL.Commons.Utilities;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
@@ -15,6 +15,8 @@ namespace SRL.Main.View.MonoGameArea
 {
     internal class VehicleEditArea : AreaBase
     {
+        private const double ArrowLength = 0.2;
+
         private readonly VehicleEditorViewModel _context = SimpleIoc.Default.GetInstance<VehicleEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _vehicleShapeChangedHandler;
@@ -71,15 +73,30 @@ namespace SRL.Main.View.MonoGameArea
 
                 return;
             }
-            
+
             if (_context.Direction.HasValue)
             {
-                //TODO draw arrow
+                // It is implied that Pivot has value too.
+                if (_context.AntialiasingEnabled)
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
+                else
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
+
+                return;
             }
+
             if (_context.Pivot.HasValue)
             {
-                //TODO draw vertex
+                Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
+                double angle = GeometryHelper.GetAngle(_context.Pivot.Value, normalizedMousePosition);
+
+                if (_context.AntialiasingEnabled)
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, ValidColor);
+                else
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, ValidColor);
             }
+
+            //TODO property check order?
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
@@ -102,6 +119,7 @@ namespace SRL.Main.View.MonoGameArea
 
         protected override void OnMouseUp(MouseButton button)
         {
+            var normalizedMousePosition = MousePosition.Normalize(RenderSize);
             if (button == MouseButton.Left)
             {
                 if (!_context.ShapeDone)
@@ -116,17 +134,20 @@ namespace SRL.Main.View.MonoGameArea
                         }
                     }
 
-                    var normalizedMousePosition = MousePosition.Normalize(RenderSize);
                     if (_context.AddShapeVertexCommand.CanExecute(normalizedMousePosition))
                         _context.AddShapeVertexCommand.Execute(normalizedMousePosition);
                 }
                 else if (!_context.Pivot.HasValue)
                 {
-                    //TODO
+                    if (_context.SetPivotCommand.CanExecute(normalizedMousePosition))
+                        _context.SetPivotCommand.Execute(normalizedMousePosition);
                 }
                 else if (!_context.Direction.HasValue)
                 {
-                    //TODO
+                    double angle = GeometryHelper.GetAngle(_context.Pivot.Value, normalizedMousePosition);
+
+                    if (_context.SetDirectionCommand.CanExecute(angle))
+                        _context.SetDirectionCommand.Execute(angle);
                 }
             }
             else if (button == MouseButton.Right)

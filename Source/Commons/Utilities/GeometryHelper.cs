@@ -26,7 +26,7 @@ namespace SRL.Commons.Utilities
 
         public static bool IsInsidePolygon(Point point, Polygon polygon)
         {
-            throw new NotImplementedException(); //TODO
+            return true;//TODO
         }
 
         public static bool DoSegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
@@ -55,7 +55,17 @@ namespace SRL.Commons.Utilities
             return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
         }
 
-        public static Point RotatePoint(Point point, Point pivot, double angle)
+        public static double GetAngle(Point pivot, Point point)
+        {
+            double angle = Math.Atan((point.Y - pivot.Y) / (point.X - pivot.X));
+
+            if (point.X < pivot.X)
+                angle += Math.PI;
+
+            return angle;
+        }
+
+        public static Point RotatePoint(Point point, Point pivot, double angle) //TODO change parameter order (pivot should be first)
         {
             double cosTheta = Math.Cos(angle);
             double sinTheta = Math.Sin(angle);

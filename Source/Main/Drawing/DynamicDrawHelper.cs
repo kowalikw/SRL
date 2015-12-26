@@ -5,8 +5,10 @@ using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
+using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using MathHelper = SRL.Commons.Utilities.MathHelper;
+using Point = System.Windows.Point;
 
 namespace SRL.Main.Drawing
 {
@@ -57,17 +59,8 @@ namespace SRL.Main.Drawing
             spriteBatch.Draw(_pixel, new Vector2(x, y), color.ToXnaColor(intensity));
         }
 
-        //-------------------------------------------------------------------------------------------------
-
-        #region Line
-
-        public static void DrawLine(this SpriteBatch spriteBatch, Line line, Size renderSize, RgbColor color)
+        private static void BresenhamLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, RgbColor color)
         {
-            float aX = (float)line.EndpointA.Denormalize(renderSize).X;
-            float aY = (float)line.EndpointA.Denormalize(renderSize).Y;
-            float bX = (float)line.EndpointB.Denormalize(renderSize).X;
-            float bY = (float)line.EndpointB.Denormalize(renderSize).Y;
-
             if (_pixel == null)
                 CreateThePixel(spriteBatch);
 
@@ -121,6 +114,19 @@ namespace SRL.Main.Drawing
             }
         }
 
+        //-------------------------------------------------------------------------------------------------
+
+        #region Line
+
+        public static void DrawLine(this SpriteBatch spriteBatch, Line line, Size renderSize, RgbColor color)
+        {
+            float aX = (float)line.EndpointA.Denormalize(renderSize).X;
+            float aY = (float)line.EndpointA.Denormalize(renderSize).Y;
+            float bX = (float)line.EndpointB.Denormalize(renderSize).X;
+            float bY = (float)line.EndpointB.Denormalize(renderSize).Y;
+
+            spriteBatch.BresenhamLine(aX, aY, bX, bY, color);
+        }
 
         public static void DrawLineAA(this SpriteBatch spriteBatch, Line line, Size renderSize, RgbColor color)
         {
@@ -131,6 +137,46 @@ namespace SRL.Main.Drawing
 
             throw new NotImplementedException(); //TODO
         }
+
+        #endregion
+
+        public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color)
+        {
+            const float tipLength = 15;
+            const float tipHalfWidth = 10;
+
+            double cosA = Math.Cos(angle);
+            double sinA = Math.Sin(angle);
+
+            length *= Math.Sqrt(renderSize.Height*renderSize.Width);
+
+            Point o = origin.Denormalize(renderSize);
+            Point t = new Point(
+                o.X + length * cosA,
+                o.Y - length * sinA);
+
+            Debug.WriteLine(cosA + "|" + o + "|" + t);
+
+            Point ah1 = new Point(
+                t.X - tipLength * cosA - tipHalfWidth * sinA,
+                t.Y + tipLength * sinA - tipHalfWidth * cosA);
+            Point ah2 = new Point(
+                t.X - tipLength * cosA + tipHalfWidth * sinA,
+                t.Y + tipLength * sinA + tipHalfWidth * cosA);
+
+            spriteBatch.BresenhamLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
+            spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
+            spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah2.X, (float)ah2.Y, color);
+        }
+
+        public static void DrawArrowAA(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color)
+        {
+            throw new NotImplementedException(); //TODO
+        }
+
+        #region Arrow
+
+
 
         #endregion
 

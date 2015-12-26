@@ -99,8 +99,8 @@
     <Compile Include="Messages\SaveFileDialogMessage.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
     <Compile Include="Utilities\BitmapTracer.cs" />
+    <Compile Include="Utilities\Normalization.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
-    <Compile Include="Utilities\PointExtensions.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />

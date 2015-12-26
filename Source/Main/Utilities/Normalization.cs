@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace SRL.Main.Utilities
 {
-    public static class PointExtensions
+    public static class Normalization
     {
         public static Point Normalize(this Point point, Size renderSize)
         {
