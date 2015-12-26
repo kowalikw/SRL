@@ -176,7 +176,7 @@ namespace SRL.Main.ViewModel
 
         public bool AntialiasingEnabled { get; set; }
 
-        public override bool IsModelValid
+        protected override bool IsModelValid
         {
             get
             {
@@ -204,8 +204,7 @@ namespace SRL.Main.ViewModel
 
 
         private List<Frame> _frames;
-        private List<Order> _orders; 
-
+        private List<Order> _orders;
 
 
         public SimulationViewModel()
@@ -213,7 +212,7 @@ namespace SRL.Main.ViewModel
 
         }
 
-        public override Simulation GetModel()
+        protected override Simulation GetModel()
         {
             if (!IsModelValid)
                 return null;
@@ -229,6 +228,10 @@ namespace SRL.Main.ViewModel
                 Orders = _orders
             };
             return simulation;
+        }
+        protected override bool SetModel(Simulation model)
+        {
+            throw new NotImplementedException(); //TODO
         }
     }
 }

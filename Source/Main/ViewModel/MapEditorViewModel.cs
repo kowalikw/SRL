@@ -107,7 +107,7 @@ namespace SRL.Main.ViewModel
         public ObservableCollectionEx<Point> UnfinishedPolygon { get; }
 
 
-        public override bool IsModelValid => UnfinishedPolygon.Count == 0;
+        protected override bool IsModelValid => UnfinishedPolygon.Count == 0;
         public bool AntialiasingEnabled { get; set; }
 
         public MapEditorViewModel()
@@ -115,8 +115,8 @@ namespace SRL.Main.ViewModel
             FinishedPolygons = new ObservableCollectionEx<Polygon>();
             UnfinishedPolygon = new ObservableCollectionEx<Point>();
         }
-        
-        public override Map GetModel()
+
+        protected override Map GetModel()
         {
             if (!IsModelValid)
                 return null;
@@ -124,6 +124,10 @@ namespace SRL.Main.ViewModel
             Map map = new Map();
             map.Obstacles.AddRange(FinishedPolygons);
             return map;
+        }
+        protected override bool SetModel(Map model)
+        {
+            throw new System.NotImplementedException(); //TODO
         }
     }
 }

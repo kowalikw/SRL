@@ -158,7 +158,7 @@ namespace SRL.Main.ViewModel
 
         private bool _shapeDone;
 
-        public override bool IsModelValid
+        protected override bool IsModelValid
         {
             get
             {
@@ -175,7 +175,7 @@ namespace SRL.Main.ViewModel
             VehicleShape = new ObservableCollectionEx<Point>();
         }
 
-        public override Vehicle GetModel()
+        protected override Vehicle GetModel()
         {
             if (!IsModelValid)
                 return null;
@@ -186,7 +186,9 @@ namespace SRL.Main.ViewModel
 
             return vehicle;
         }
-
-
+        protected override bool SetModel(Vehicle model)
+        {
+            throw new System.NotImplementedException();//TODO
+        }
     }
 }

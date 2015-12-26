@@ -44,7 +44,7 @@
 
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=settingsDisplayName}"
-                  Source="/View/Pages/SettingsView.xaml"/>
+                  Source="{StaticResource SettingsView}"/>
     </mui:ModernWindow.TitleLinks>
     
 </mui:ModernWindow>
