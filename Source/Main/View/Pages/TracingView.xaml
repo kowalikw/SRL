@@ -53,10 +53,11 @@
 
 
         <Image Grid.Row="1"
-               Grid.Column="0"/>
+               Grid.Column="0" 
+               Stretch="Uniform"/>
         <mga:TraceArea Grid.Row="1" 
                        Grid.Column="1"
                        SnapsToDevicePixels="True"
-                       Stretch="Fill"/>
+                       Stretch="Uniform"/>
     </Grid>
 </UserControl>

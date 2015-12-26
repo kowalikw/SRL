@@ -25,7 +25,7 @@
         
         <mga:MapEditArea Grid.Column="1"
                          SnapsToDevicePixels="True"
-                         Stretch="Fill"/>
+                         Stretch="Uniform"/>
     </Grid>
 
 </UserControl>

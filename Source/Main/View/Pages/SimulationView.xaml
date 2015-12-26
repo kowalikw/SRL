@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
 
         <mga:VisualizationArea SnapsToDevicePixels="True"
-                               Stretch="Fill"/>
+                               Stretch="Uniform"/>
         
         <DockPanel Grid.Row="1">
             <Button>StartPause</Button>
