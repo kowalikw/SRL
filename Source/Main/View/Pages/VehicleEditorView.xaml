@@ -15,11 +15,21 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Button>$load</Button>
-            <Button Command="{Binding SaveCommand}">$save</Button>
-            <Button Command="{Binding BackCommand}">$back</Button>
-            <Button Command="{Binding ResetCommand}">$reset</Button>
-            <ToggleButton IsChecked="{Binding AntialiasingEnabled}">$AA</ToggleButton>
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
+            </StackPanel.Resources>
+
+            <Button Command="{Binding LoadCommand}"
+                    Content="{StaticResource LoadFromFileIcon}"/>
+            <Button Command="{Binding SaveCommand}"
+                    Content="{StaticResource SaveToFileIcon}"/>
+            <Button Command="{Binding BackCommand}"
+                    Content="{StaticResource BackIcon}"/>
+            <Button Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetIcon}"/>
+            <ToggleButton IsChecked="{Binding AntialiasingEnabled}"
+                          Content="{StaticResource AntialiasingIcon}"/>
         </StackPanel>
 
         <mga:VehicleEditArea Grid.Column="1"
