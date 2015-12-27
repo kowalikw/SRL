@@ -71,50 +71,6 @@ namespace SRL.Main.ViewModel
                     {
                         UnfinishedPolygon.Clear();
                         FinishedPolygons.Clear();
-
-                        // TODO: To tests only
-                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                        var dialog = new OpenFileDialog();
-                        dialog.Filter = String.Format("SVG files (*.svg)|*.svg");
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            XDocument doc = XDocument.Load(dialog.FileName);
-                            var serializer = new XmlSerializer(typeof(Map));
-
-                            Map output;
-
-                            using (XmlReader reader = doc.CreateReader())
-                                output = (Map)serializer.Deserialize(reader);
-
-                            FinishedPolygons.AddRange(output.Obstacles);
-                        }*/
-
-                        
-
-                        // TODO: To tests only
-                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                        var dialog = new SaveFileDialog();
-                        dialog.Filter = String.Format("SVG files (*.svg)|*.svg");
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            var serializer = new XmlSerializer(typeof(Map));
-                            var output = new XDocument();
-
-                            using (XmlWriter writer = output.CreateWriter())
-                                serializer.Serialize(writer, GetModel());
-
-                            File.WriteAllText(dialog.FileName, output.ToString());
-                        }*/
                     }, () =>
                     {
                         return FinishedPolygons.Count > 0 || UnfinishedPolygon.Count > 0;

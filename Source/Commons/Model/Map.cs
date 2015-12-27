@@ -21,9 +21,6 @@ namespace SRL.Commons.Model
         public Map()
         {
             Obstacles = new List<Polygon>();
-            Width = 720; // TODO: Is it good place?
-            Height = 480; // TODO: Is it good place?
-            Type = "map"; // TODO: Is it good place?
         }
 
         #region IXmlSerializable members
