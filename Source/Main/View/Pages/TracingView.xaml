@@ -32,21 +32,18 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal">
-                <StackPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
-                    <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
-                </StackPanel.Resources>
+
+                <mui:ModernButton IconData="{StaticResource LoadBitmapIcon}" 
+                              Command="{Binding LoadBitmapCommand}"/>
+                <mui:ModernButton IconData="{StaticResource SaveMapIcon}" 
+                              Command="{Binding MakeMapCommand}"/>
+                <mui:ModernButton IconData="{StaticResource SaveVehicleIcon}" 
+                              Command="{Binding MakeVehicleCommand}"/>
+                <mui:ModernButton IconData="{StaticResource TraceIcon}" 
+                              Command="{Binding TraceCommand}"/>
+
+                <CheckBox IsChecked="{Binding AntialiasingEnabled}"/>
                 
-                <Button Command="{Binding LoadBitmapCommand}"
-                        Content="{StaticResource LoadBitmapIcon}"/>
-                <Button Command="{Binding MakeMapCommand}"
-                        Content="{StaticResource SaveMapIcon}"/>
-                <Button Command="{Binding MakeVehicleCommand}"
-                        Content="{StaticResource SaveVehicleIcon}"/>
-                <Button Command="{Binding TraceCommand}"
-                        Content="{StaticResource TraceIcon}"/>
-                <ToggleButton IsChecked="{Binding AntialiasingEnabled}"
-                              Content="{StaticResource AntialiasingIcon}"/>
             </StackPanel>
 
             <Label Grid.Row="1" Grid.Column="0">$status</Label>

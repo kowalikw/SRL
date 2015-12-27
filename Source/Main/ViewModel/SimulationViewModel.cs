@@ -56,10 +56,11 @@ namespace SRL.Main.ViewModel
                 {
                     _startPlaybackCommand = new RelayCommand(() =>
                     {
-
+                        //TODO
+                        SimulationRunning = true;
                     }, () =>
                     {
-                        return false;
+                        return true;
                     });
                 }
                 return _startPlaybackCommand;
@@ -73,10 +74,11 @@ namespace SRL.Main.ViewModel
                 {
                     _stopPlaybackCommand = new RelayCommand(() =>
                     {
-
+                        //TODO
+                        SimulationRunning = false;
                     }, () =>
                     {
-                        return false;
+                        return true;
                     });
                 }
                 return _stopPlaybackCommand;
@@ -90,10 +92,11 @@ namespace SRL.Main.ViewModel
                 {
                     _pausePlaybackCommand = new RelayCommand(() =>
                     {
-                        
+                        //TODO
+                        SimulationRunning = false;
                     }, () =>
                     {
-                        return false;
+                        return true;
                     });
                 }
                 return _pausePlaybackCommand;
@@ -173,6 +176,18 @@ namespace SRL.Main.ViewModel
 
         #endregion
 
+        public bool SimulationRunning
+        {
+            get { return _simulationRunning; }
+            private set
+            {
+                if (_simulationRunning != value)
+                {
+                    _simulationRunning = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public bool AntialiasingEnabled { get; set; }
 
@@ -189,7 +204,7 @@ namespace SRL.Main.ViewModel
                        && _orders != null;
             }
         }
-
+        
 
         public Map Map { get; private set; }
         public Vehicle Vehicle { get; private set; }
@@ -205,6 +220,7 @@ namespace SRL.Main.ViewModel
 
         private List<Frame> _frames;
         private List<Order> _orders;
+        private bool _simulationRunning;
 
 
         public SimulationViewModel()

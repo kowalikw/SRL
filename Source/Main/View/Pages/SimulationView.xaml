@@ -18,25 +18,39 @@
                                Stretch="Uniform"/>
 
         <DockPanel Grid.Row="1" LastChildFill="True">
-            <DockPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
-                <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
-            </DockPanel.Resources>
+
+            <mui:ModernButton>
+                <mui:ModernButton.Style>
+                    <Style TargetType="mui:ModernButton">
+                        <Setter Property="IconData" Value="{StaticResource PlaybackStartIcon}"/>
+                        <Setter Property="Command" Value="{Binding StartPlaybackCommand}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SimulationRunning}" Value="True">
+                                <Setter Property="IconData" Value="{StaticResource PlaybackPauseIcon}"/>
+                                <Setter Property="Command" Value="{Binding PausePlaybackCommand}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mui:ModernButton.Style>
+            </mui:ModernButton>
             
-            <Button Visibility="Collapsed">Start</Button>
-            <Button Visibility="Collapsed">Pause</Button>
-            <Button>Stop</Button>
+            <mui:ModernButton IconData="{StaticResource PlaybackStopIcon}" 
+                              Command="{Binding StopPlaybackCommand}"/>
             
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                <Button Command="{Binding LoadCommand}"
-                        Content="{StaticResource LoadFileIcon}"/>
-                <Button Command="{Binding SaveCommand}"
-                        Content="{StaticResource SaveFileIcon}"/>
-                <Button Command="{Binding LoadMapCommand}"/>
-                <Button Command="{Binding LoadVehicleCommand}"/>
-                <ToggleButton>SetVehiclePosition</ToggleButton>
-                <ToggleButton>SetStartEndPoint</ToggleButton>
-                <ToggleButton>AA</ToggleButton>
+                <mui:ModernButton IconData="{StaticResource LoadIcon}" 
+                              Command="{Binding LoadCommand}"/>
+                <mui:ModernButton IconData="{StaticResource SaveIcon}" 
+                              Command="{Binding SaveCommand}"/>
+                <mui:ModernButton IconData="{StaticResource LoadMapIcon}" 
+                              Command="{Binding LoadMapCommand}"/>
+                <mui:ModernButton IconData="{StaticResource LoadVehicleIcon}" 
+                              Command="{Binding LoadVehicleCommand}"/>
+                
+                <mui:ModernButton IconData="{StaticResource SetUpVehicleIcon}"/>
+                <mui:ModernButton IconData="{StaticResource SetPathEndIcon}"/>
+
+                <CheckBox IsChecked="{Binding AntialiasingEnabled}"/>
             </StackPanel>
             
             <Slider/>

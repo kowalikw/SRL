@@ -16,21 +16,18 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <StackPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
-                <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
-            </StackPanel.Resources>
-            
-            <Button Command="{Binding LoadCommand}"
-                    Content="{StaticResource LoadFileIcon}"/>
-            <Button Command="{Binding SaveCommand}"
-                    Content="{StaticResource SaveFileIcon}"/>
-            <Button Command="{Binding BackCommand}"
-                    Content="{StaticResource BackIcon}"/>
-            <Button Command="{Binding ResetCommand}"
-                    Content="{StaticResource ResetIcon}"/>
-            <ToggleButton IsChecked="{Binding AntialiasingEnabled}"
-                          Content="{StaticResource AntialiasingIcon}"/>
+
+            <mui:ModernButton IconData="{StaticResource LoadIcon}" 
+                              Command="{Binding LoadCommand}"/>
+            <mui:ModernButton IconData="{StaticResource SaveIcon}" 
+                              Command="{Binding SaveCommand}"/>
+            <mui:ModernButton IconData="{StaticResource BackIcon}" 
+                              Command="{Binding BackCommand}"/>
+            <mui:ModernButton IconData="{StaticResource ResetIcon}" 
+                              Command="{Binding ResetCommand}"/>
+
+            <CheckBox IsChecked="{Binding AntialiasingEnabled}"/>
+
         </StackPanel>
         
         <mga:MapEditArea Grid.Column="1"
