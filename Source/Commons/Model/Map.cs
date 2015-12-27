@@ -8,14 +8,8 @@ using System.Xml.Serialization;
 namespace SRL.Commons.Model
 {
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
-    public class Map : IXmlSerializable, ISaveable
+    public class Map : SvgSerializable
     {
-        public int Width { get; set; }
-
-        public int Height { get; set; }
-
-        public string Type { get; set; }
-
         public List<Polygon> Obstacles { get; }
 
         public Map()
@@ -23,17 +17,7 @@ namespace SRL.Commons.Model
             Obstacles = new List<Polygon>();
         }
 
-        #region IXmlSerializable members
-
-        /// <remarks>
-        /// Must always return null (as specified by MSDN).
-        /// </remarks>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
+        public override void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
 
@@ -65,7 +49,7 @@ namespace SRL.Commons.Model
                 throw new XmlException();
         }
 
-        public void WriteXml(XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartAttribute("width");
             writer.WriteValue(Width);
@@ -108,7 +92,5 @@ namespace SRL.Commons.Model
 
             writer.WriteEndElement();
         }
-
-        #endregion
     }
 }

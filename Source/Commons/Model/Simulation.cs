@@ -8,14 +8,8 @@ using System.Xml.Serialization;
 namespace SRL.Commons.Model
 {
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
-    public class Simulation : IXmlSerializable, ISaveable
+    public class Simulation : SvgSerializable
     {
-        public int Width { get; set; }
-
-        public int Height { get; set; }
-
-        public string Type { get; set; }
-
         public Map Map { get; set; }
 
         public Vehicle Vehicle { get; set; }
@@ -30,17 +24,7 @@ namespace SRL.Commons.Model
         
         public List<Order> Orders { get; set; }
 
-        #region IXmlSerializable members
-
-        /// <remarks>
-        /// Must always return null (as specified by MSDN).
-        /// </remarks>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
+        public override void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
 
@@ -154,7 +138,7 @@ namespace SRL.Commons.Model
                 throw new XmlException();
         }
 
-        public void WriteXml(XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartAttribute("xmlns", "xlink", "");
             writer.WriteValue("http://www.w3.org/1999/xlink");
@@ -381,7 +365,5 @@ namespace SRL.Commons.Model
                 order.WriteXml(writer);
             writer.WriteEndElement();
         }
-
-        #endregion
     }
 }

@@ -5,22 +5,14 @@ using System.Xml.Serialization;
 
 namespace SRL.Commons.Model
 {
-    public class Order : IXmlSerializable
+    public class Order : SvgSerializable
     {
         public double Rotation { get; set; }
         public Point Destination { get; set; }
 
         #region IXmlSerializable members
 
-        /// <remarks>
-        /// Must always return null (as specified by MSDN).
-        /// </remarks>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
+        public override void ReadXml(XmlReader reader)
         {
             if (reader.MoveToContent() == XmlNodeType.Element)
             {
@@ -37,7 +29,7 @@ namespace SRL.Commons.Model
                 throw new XmlException();
         }
 
-        public void WriteXml(XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("order");
 
