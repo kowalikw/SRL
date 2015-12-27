@@ -51,7 +51,7 @@ namespace SRL.Main.ViewModel
 
         public List<Order> orders { get; set; } // TODO: Temp to test.
 
-        private IAlgorithm _algorithm = new MockAlgorithm();
+        private IAlgorithm _algorithm = new Algorithm();
 
 
         public VisualizationModuleViewModel()
@@ -235,7 +235,7 @@ namespace SRL.Main.ViewModel
                 // TODO: MinkowskiSum
 
                 Algorithm algorithm = new Algorithm();
-                MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 360)[0];
+                MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 360)[359];
 
             });
             PauseCommand = new RelayCommand(o =>
