@@ -3,6 +3,12 @@ using GalaSoft.MvvmLight.CommandWpf;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
+using Microsoft.Win32;
+using System;
+using System.IO;
+using System.Xml.Serialization;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace SRL.Main.ViewModel
 {

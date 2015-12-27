@@ -46,6 +46,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ISaveable.cs" />
     <Compile Include="Model\Frame.cs" />
     <Compile Include="Model\IAlgorithm.cs" />
     <Compile Include="Model\Line.cs" />
