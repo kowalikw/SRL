@@ -6,7 +6,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="600" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=MapEditor}">
 
     <Grid Style="{StaticResource ContentRoot}">
@@ -16,11 +16,21 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Button>$load</Button>
-            <Button Command="{Binding SaveCommand}">$save</Button>
-            <Button Command="{Binding BackCommand}">$back</Button>
-            <Button Command="{Binding ResetCommand}">$reset</Button>
-            <ToggleButton IsChecked="{Binding AntialiasingEnabled}">$AA</ToggleButton>
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
+            </StackPanel.Resources>
+            
+            <Button Command="{Binding LoadCommand}"
+                    Content="{StaticResource LoadFromFileIcon}"/>
+            <Button Command="{Binding SaveCommand}"
+                    Content="{StaticResource SaveToFileIcon}"/>
+            <Button Command="{Binding BackCommand}"
+                    Content="{StaticResource BackIcon}"/>
+            <Button Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetIcon}"/>
+            <ToggleButton IsChecked="{Binding AntialiasingEnabled}"
+                          Content="{StaticResource AntialiasingIcon}"/>
         </StackPanel>
         
         <mga:MapEditArea Grid.Column="1"

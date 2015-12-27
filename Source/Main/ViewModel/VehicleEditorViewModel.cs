@@ -164,10 +164,22 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-        public double? Direction { get; private set; }
+        public double? Direction
+        {
+            get { return _direction; }
+            private set
+            {
+                if (value != _direction)
+                {
+                    _direction = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         private Point? _pivot;
         private bool _shapeDone;
+        private double? _direction;
 
         protected override bool IsModelValid
         {

@@ -33,7 +33,8 @@ namespace SRL.Main.View.MonoGameArea
             {
                 if (e.PropertyName == nameof(_context.ShapeDone)
                  || e.PropertyName == nameof(_context.AntialiasingEnabled)
-                 || e.PropertyName == nameof(_context.Pivot))
+                 || e.PropertyName == nameof(_context.Pivot)
+                 || e.PropertyName == nameof(_context.Direction))
                     RedrawStaticObjectsTexture();
             };
 
@@ -134,10 +135,12 @@ namespace SRL.Main.View.MonoGameArea
 
             if (_context.Pivot.HasValue)
             {
+                RgbColor color = _context.Direction.HasValue ? RegularColor : ActiveColor;
+
                 if (_context.AntialiasingEnabled)
-                    lockBitmap.DrawVertexAA(_context.Pivot.Value, RenderSize, RegularColor);
+                    lockBitmap.DrawVertexAA(_context.Pivot.Value, RenderSize, color);
                 else
-                    lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, RegularColor);
+                    lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, color);
             }
 
             // Arrow is drawn dynamically only.
