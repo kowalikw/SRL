@@ -16,10 +16,10 @@ namespace SRL.Commons.Model
             if (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "svg")
             {
                 reader.MoveToAttribute("width");
-                Width = reader.ReadContentAsInt();
+                reader.ReadContentAsInt();
 
                 reader.MoveToAttribute("height");
-                Height = reader.ReadContentAsInt();
+                reader.ReadContentAsInt();
 
                 reader.MoveToAttribute("type");
                 Type = reader.ReadContentAsString();
@@ -51,21 +51,7 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             // Background
-            writer.WriteStartElement("rect");
-
-            writer.WriteStartAttribute("width");
-            writer.WriteValue(Width);
-            writer.WriteEndAttribute();
-
-            writer.WriteStartAttribute("height");
-            writer.WriteValue(Height);
-            writer.WriteEndAttribute();
-
-            writer.WriteStartAttribute("fill");
-            writer.WriteValue("rgb(1, 47, 135)");
-            writer.WriteEndAttribute();
-
-            writer.WriteEndElement();
+            WriteBackground(writer);
 
             // Draw vehicle shape (translate and scale)
             writer.WriteStartElement("g");

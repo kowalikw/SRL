@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -7,8 +8,10 @@ namespace SRL.Commons
 {
     public abstract class SvgSerializable : IXmlSerializable
     {
-        protected int Width = 480;
-        protected int Height = 480;
+        protected static readonly int Width = 480;
+        protected static readonly int Height = 480;
+        protected static readonly Color BackgroundFill = Color.FromArgb(1, 47, 135);
+        protected static readonly double StrokeWidth = 3; // only height of scale transform affects stroke.
 
         protected string Type;
 
@@ -17,10 +20,30 @@ namespace SRL.Commons
         /// </remarks>
         public XmlSchema GetSchema()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public abstract void ReadXml(XmlReader reader);
         public abstract void WriteXml(XmlWriter writer);
+
+
+        protected void WriteBackground(XmlWriter writer)
+        {
+            writer.WriteStartElement("rect");
+
+            writer.WriteStartAttribute("width");
+            writer.WriteValue(Width);
+            writer.WriteEndAttribute();
+
+            writer.WriteStartAttribute("height");
+            writer.WriteValue(Height);
+            writer.WriteEndAttribute();
+
+            writer.WriteStartAttribute("fill");
+            writer.WriteValue($"rgb({BackgroundFill.R}, {BackgroundFill.G}, {BackgroundFill.B})");
+            writer.WriteEndAttribute();
+
+            writer.WriteEndElement();
+        }
     }
 }
