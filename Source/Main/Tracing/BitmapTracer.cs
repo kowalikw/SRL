@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows;
 using CsPotrace;
 using SRL.Commons.Model;
+using SRL.Main.Utilities;
 using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
-namespace SRL.Main.Utilities
+namespace SRL.Main.Tracing
 {
     public class BitmapTracer
     {
@@ -45,8 +48,21 @@ namespace SRL.Main.Utilities
                 output.Add(new Polygon(polygonPoints));
             }
 
-            return output;
             //TODO remove enclosed polygons
+            NormalizeOutput(output);
+
+            return output;
+            
+        }
+
+        private void NormalizeOutput(List<Polygon> polygons)
+        {
+            Size size = new Size(_bitmap.Width, _bitmap.Height);
+            foreach (var polygon in polygons)
+            {
+                for (int i = 0; i < polygon.Vertices.Count; i++)
+                    polygon.Vertices[i] = polygon.Vertices[i].Normalize(size);
+            }
         }
     }
 }

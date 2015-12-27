@@ -21,9 +21,9 @@
             </StackPanel.Resources>
 
             <Button Command="{Binding LoadCommand}"
-                    Content="{StaticResource LoadFromFileIcon}"/>
+                    Content="{StaticResource LoadFileIcon}"/>
             <Button Command="{Binding SaveCommand}"
-                    Content="{StaticResource SaveToFileIcon}"/>
+                    Content="{StaticResource SaveFileIcon}"/>
             <Button Command="{Binding BackCommand}"
                     Content="{StaticResource BackIcon}"/>
             <Button Command="{Binding ResetCommand}"

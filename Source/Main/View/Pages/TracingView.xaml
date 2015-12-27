@@ -32,29 +32,49 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal">
-                <Button>$loadbmp</Button>
-                <Button>$savevhc</Button>
-                <Button>$savemap</Button>
-                <ToggleButton IsChecked="{Binding AntialiasingEnabled}">$AA</ToggleButton>
+                <StackPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
+                </StackPanel.Resources>
+                
+                <Button Command="{Binding LoadBitmapCommand}"
+                        Content="{StaticResource LoadBitmapIcon}"/>
+                <Button Command="{Binding MakeMapCommand}"
+                        Content="{StaticResource SaveMapIcon}"/>
+                <Button Command="{Binding MakeVehicleCommand}"
+                        Content="{StaticResource SaveVehicleIcon}"/>
+                <Button Command="{Binding TraceCommand}"
+                        Content="{StaticResource TraceIcon}"/>
+                <ToggleButton IsChecked="{Binding AntialiasingEnabled}"
+                              Content="{StaticResource AntialiasingIcon}"/>
             </StackPanel>
 
-            <Label Grid.Row="1">$status</Label>
+            <Label Grid.Row="1" Grid.Column="0">$status</Label>
 
-            <Label Grid.Column="1" 
+            <Label Grid.Row="0" Grid.Column="1" 
                    Content="{Resx Key=areaThreshold}"/>
-            <Slider Grid.Column="2"/>
-            <Label Grid.Column="3"/>
+            <Slider Grid.Row="0" Grid.Column="2" 
+                    Minimum="0" Maximum="0.1"
+                    Value="{Binding AreaThreshold}"/>
+            <TextBlock Grid.Row="0" Grid.Column="3" 
+                       Width="55"
+                       Text="{Binding AreaThreshold, StringFormat={}{0:P2}}"/>
 
             <Label Grid.Row="1" Grid.Column="1" 
                    Content="{Resx Key=colorThreshold}"/>
-            <Slider Grid.Row="1" Grid.Column="2"/>
-            <Label Grid.Row="1" Grid.Column="3"/>
+            <Slider Grid.Row="1" Grid.Column="2" 
+                    Minimum="0" Maximum="1"
+                    Value="{Binding ColorThreshold}"/>
+            <TextBlock Grid.Row="1" Grid.Column="3" 
+                       Width="55"
+                       Text="{Binding ColorThreshold, StringFormat={}{0:P2}}"/>
         </Grid>
 
 
         <Image Grid.Row="1"
                Grid.Column="0" 
-               Stretch="Uniform"/>
+               Stretch="Uniform"
+               Source="{Binding Bitmap}"/>
         <mga:TraceArea Grid.Row="1" 
                        Grid.Column="1"
                        SnapsToDevicePixels="True"

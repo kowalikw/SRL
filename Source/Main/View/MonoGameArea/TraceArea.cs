@@ -15,14 +15,14 @@ namespace SRL.Main.View.MonoGameArea
         private readonly TracingViewModel _context = SimpleIoc.Default.GetInstance<TracingViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
-        private PropertyChangedEventHandler _antialiasingPropertyChangedHandler;
+        private PropertyChangedEventHandler _propertyChangedHandler;
 
         protected override void Initialize()
         {
             base.Initialize();
 
             _collectionChangedHandler = (o, e) => RedrawStaticObjectsTexture();
-            _antialiasingPropertyChangedHandler = (o, e) =>
+            _propertyChangedHandler = (o, e) =>
             {
                 if (e.PropertyName == nameof(_context.AntialiasingEnabled))
                     RedrawStaticObjectsTexture();
@@ -30,7 +30,7 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.Polygons.CollectionChanged += _collectionChangedHandler;
             _context.SelectedPolygonIndices.CollectionChanged += _collectionChangedHandler;
-            _context.PropertyChanged += _antialiasingPropertyChangedHandler;
+            _context.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -39,7 +39,7 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.Polygons.CollectionChanged -= _collectionChangedHandler;
             _context.SelectedPolygonIndices.CollectionChanged -= _collectionChangedHandler;
-            _context.PropertyChanged -= _antialiasingPropertyChangedHandler;
+            _context.PropertyChanged -= _propertyChangedHandler;
         }
 
 

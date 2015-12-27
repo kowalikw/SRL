@@ -6,7 +6,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=MapEditor}">
 
     <Grid Style="{StaticResource ContentRoot}">
@@ -22,9 +22,9 @@
             </StackPanel.Resources>
             
             <Button Command="{Binding LoadCommand}"
-                    Content="{StaticResource LoadFromFileIcon}"/>
+                    Content="{StaticResource LoadFileIcon}"/>
             <Button Command="{Binding SaveCommand}"
-                    Content="{StaticResource SaveToFileIcon}"/>
+                    Content="{StaticResource SaveFileIcon}"/>
             <Button Command="{Binding BackCommand}"
                     Content="{StaticResource BackIcon}"/>
             <Button Command="{Binding ResetCommand}"

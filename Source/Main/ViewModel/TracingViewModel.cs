@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
+using SRL.Main.Messages;
+using SRL.Main.Tracing;
 using SRL.Main.Utilities;
 
 namespace SRL.Main.ViewModel
@@ -21,7 +27,19 @@ namespace SRL.Main.ViewModel
                 {
                     _loadBitmapCommand = new RelayCommand(() =>
                     {
-                        //TODO
+                        Messenger.Default.Send(new OpenFileDialogMessage
+                        {
+                            Filter = "Raster image files|*.bmp;*.jpg;*.jpeg;*.png",
+                            FilenameCallback = filename =>
+                            {
+                                if (filename == null)
+                                    return;
+
+                                Bitmap = new BitmapImage(new Uri(filename));
+                                _tracer = new BitmapTracer(filename);
+                            }
+
+                        });
                     });
                 }
                 return _loadBitmapCommand;
@@ -74,7 +92,8 @@ namespace SRL.Main.ViewModel
                         _traceCancellationTokenSource = new CancellationTokenSource();
                         _traceTask = new Task(() =>
                         {
-                            var output = _tracer.Trace(AreaThreshold, ColorThreshold);
+                            List<Polygon> output = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
+
                             if (!_traceCancellationTokenSource.Token.IsCancellationRequested)
                             {
                                 Polygons.ReplaceRange(output);
@@ -82,6 +101,7 @@ namespace SRL.Main.ViewModel
                                 _traceTask = null;
                             }
                         });
+                        _traceTask.Start();
                     }, () =>
                     {
                         return _tracer != null;
@@ -144,12 +164,45 @@ namespace SRL.Main.ViewModel
         private RelayCommand<Point> _deselectPolygonCommand;
 
 
-        public int AreaThreshold { get; set; }
-        public int ColorThreshold { get; set; }
+        public double AreaThreshold
+        {
+            get { return _areaThreshold; }
+            set
+            {
+                if (_areaThreshold != value)
+                {
+                    _areaThreshold = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public double ColorThreshold
+        {
+            get { return _colorThreshold; }
+            set
+            {
+                if (_colorThreshold != value)
+                {
+                    _colorThreshold = value;
+                    RaisePropertyChanged();
+
+                }
+            }
+        }
         public bool AntialiasingEnabled { get; set; }
 
-
-        public BitmapSource Bitmap { get; private set; }
+        public BitmapSource Bitmap
+        {
+            get { return _bitmap; }
+            private set
+            {
+                if (_bitmap != value)
+                {
+                    _bitmap = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
         public ObservableCollectionEx<Polygon> Polygons { get; }
         public ObservableCollectionEx<int> SelectedPolygonIndices { get; }
 
@@ -158,11 +211,36 @@ namespace SRL.Main.ViewModel
         private Task _traceTask;
         private BitmapTracer _tracer;
 
+        private BitmapSource _bitmap;
+        private double _areaThreshold;
+        private double _colorThreshold;
+        private int _pixelAreaThreshold;
+        private int _absoluteColorThreshold;
 
         public TracingViewModel()
         {
             Polygons = new ObservableCollectionEx<Polygon>();
             SelectedPolygonIndices = new ObservableCollectionEx<int>();
+
+            PropertyChanged += (o, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(Bitmap):
+                        _absoluteColorThreshold = (int)(255 * ColorThreshold);
+                        _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
+                        break;
+                    case nameof(ColorThreshold):
+                        _absoluteColorThreshold = (int)(255 * ColorThreshold);
+                        break;
+                    case nameof(AreaThreshold):
+                        if (Bitmap != null)
+                            _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
+                        break;
+                }
+            };
+
         }
+
     }
 }
