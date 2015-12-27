@@ -6,7 +6,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="1200"
              DataContext="{Binding Source={StaticResource Locator}, Path=Simulation}">
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.RowDefinitions>
@@ -16,12 +16,30 @@
 
         <mga:VisualizationArea SnapsToDevicePixels="True"
                                Stretch="Uniform"/>
-        
-        <DockPanel Grid.Row="1">
-            <Button>StartPause</Button>
+
+        <DockPanel Grid.Row="1" LastChildFill="True">
+            <DockPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}"/>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource IconToggleButtonStyle}"/>
+            </DockPanel.Resources>
+            
+            <Button Visibility="Collapsed">Start</Button>
+            <Button Visibility="Collapsed">Pause</Button>
             <Button>Stop</Button>
-            <Button>AA</Button>
-            <Slider></Slider>
+            
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Command="{Binding LoadCommand}"
+                        Content="{StaticResource LoadFileIcon}"/>
+                <Button Command="{Binding SaveCommand}"
+                        Content="{StaticResource SaveFileIcon}"/>
+                <Button Command="{Binding LoadMapCommand}"/>
+                <Button Command="{Binding LoadVehicleCommand}"/>
+                <ToggleButton>SetVehiclePosition</ToggleButton>
+                <ToggleButton>SetStartEndPoint</ToggleButton>
+                <ToggleButton>AA</ToggleButton>
+            </StackPanel>
+            
+            <Slider/>
         </DockPanel>
     </Grid>
 </UserControl>
