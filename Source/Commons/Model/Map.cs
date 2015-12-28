@@ -29,11 +29,6 @@ namespace SRL.Commons.Model
                 reader.MoveToAttribute("height");
                 reader.ReadContentAsInt();
 
-                reader.MoveToAttribute("type");
-                Type = reader.ReadContentAsString();
-
-                if (Type != "map") throw new XmlException();
-
                 reader.MoveToContent();
 
                 reader.ReadToDescendant("polygon");

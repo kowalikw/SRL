@@ -114,6 +114,90 @@ namespace SRL.Main.Drawing
             }
         }
 
+        private static void WuLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, RgbColor color)
+        {
+            if (_pixel == null)
+                CreateThePixel(spriteBatch);
+
+            bool steep = Math.Abs(bY - aY) > Math.Abs(bX - aX);
+
+            if (steep)
+            {
+                MathHelper.Swap(ref aX, ref aY);
+                MathHelper.Swap(ref bX, ref bY);
+            }
+
+            if (aX > bX)
+            {
+                MathHelper.Swap(ref aX, ref bX);
+                MathHelper.Swap(ref aY, ref bY);
+            }
+
+            double dx = bX - aX;
+            double dy = bY - aY;
+            double gradient = dy / dx;
+
+            // handle first endpoint
+            double xEnd = Math.Round(aX);
+            double yEnd = aY + gradient * (xEnd - aX);
+            double xGap = MathHelper.Rfpart(aX + 0.5);
+            int xPxl1 = (int)xEnd;
+            int yPxl1 = (int)yEnd;
+            byte intensityTop = (byte)(MathHelper.Rfpart(yEnd) * xGap * 255);
+            byte intensityDown = (byte)(MathHelper.Fpart(yEnd) * xGap * 255);
+
+            if (steep)
+            {
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1 + 1, color, intensityDown);
+            }
+            else
+            {
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1 + 1, color, intensityDown);
+            }
+
+            double intery = yEnd + gradient;
+
+            // handle second endpoint
+            xEnd = Math.Round(bX);
+            yEnd = bY + gradient * (xEnd - bX);
+            xGap = MathHelper.Fpart(bX + 0.5);
+            int xPxl2 = (int)xEnd;
+            int yPxl2 = (int)yEnd;
+            intensityTop = (byte)(MathHelper.Rfpart(yEnd) * xGap * 255);
+            intensityDown = (byte)(MathHelper.Fpart(yEnd) * xGap * 255);
+
+            if (steep)
+            {
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityDown);
+            }
+            else
+            {
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityDown);
+            }
+
+            // main loop
+            for (int x = xPxl1 + 1; x < xPxl2; x++)
+            {
+                intensityTop = (byte)(MathHelper.Rfpart(yEnd) * 255);
+                intensityDown = (byte)(MathHelper.Fpart(yEnd) * 255);
+                if (steep)
+                {
+                    spriteBatch.SetPixel((int)intery, x, color, intensityTop);
+                    spriteBatch.SetPixel((int)intery + 1, x, color, intensityDown);
+                }
+                else
+                {
+                    spriteBatch.SetPixel(x, (int)intery, color, intensityTop);
+                    spriteBatch.SetPixel(x, (int)intery + 1, color, intensityDown);
+                }
+                intery = intery + gradient;
+            }
+        }
+
         //-------------------------------------------------------------------------------------------------
 
         #region Line
@@ -135,7 +219,7 @@ namespace SRL.Main.Drawing
             float bX = (float)line.EndpointB.Denormalize(renderSize).X;
             float bY = (float)line.EndpointB.Denormalize(renderSize).Y;
 
-            throw new NotImplementedException(); //TODO
+            spriteBatch.WuLine(aX, aY, bX, bY, color);
         }
 
         #endregion

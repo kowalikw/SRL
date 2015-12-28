@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace SRL.Commons.Utilities
 {
@@ -9,6 +10,18 @@ namespace SRL.Commons.Utilities
             T temp = lhs;
             lhs = rhs;
             rhs = temp;
+        }
+
+        public static double Rfpart(double val)
+        {
+            return 1 - Fpart(val);
+        }
+
+        public static double Fpart(double val)
+        {
+            if (val < 0)
+                return (float)(1 - (val - Math.Floor(val)));
+            return (float)(val - Math.Floor(val));
         }
     }
 }
