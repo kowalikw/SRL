@@ -243,6 +243,8 @@ namespace SRL.Main.ViewModel
                     Point vertex = new Point(
                         rotatedShape.Vertices[i].X * 0.9 / shrinkFactor,
                         rotatedShape.Vertices[i].Y * 0.9 / shrinkFactor);
+
+                    rotatedShape.Vertices[i] = vertex;
                 }
             }
 
