@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Utilities;

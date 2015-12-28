@@ -16,9 +16,9 @@ namespace SRL.Main.Drawing
             B = b;
         }
 
-        public XnaColor ToXnaColor(byte intensity = byte.MaxValue)
+        public XnaColor ToXnaColor(float intensity = 1)
         {
-            return new XnaColor(R, G, B, intensity);
+            return new XnaColor(R, G, B) * intensity;
         }
 
         public WinColor ToWinColor(byte intensity = byte.MaxValue)

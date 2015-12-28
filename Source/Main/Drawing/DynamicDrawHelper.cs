@@ -54,7 +54,7 @@ namespace SRL.Main.Drawing
         /// <param name="y">The Y coordinate of the pixel.</param>
         /// <param name="color">The color of the pixel.</param>
         /// <param name="intensity">The intensity of the color.</param>
-        private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, RgbColor color, byte intensity = byte.MaxValue)
+        private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, RgbColor color, float intensity = 1)
         {
             spriteBatch.Draw(_pixel, new Vector2(x, y), color.ToXnaColor(intensity));
         }
