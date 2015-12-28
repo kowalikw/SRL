@@ -4,17 +4,44 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:local="clr-namespace:SRL.Main.Utilities"
+             xmlns:lang="clr-namespace:SRL.Main.View.Localization"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Settings}">
+
+    <UserControl.Resources>
+        <local:BoolInverterConverter x:Key="BoolInverterConverter"/>
+        <local:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        <lang:Language x:Key="Language"/>
+    </UserControl.Resources>
+
+
     <Grid Style="{StaticResource ContentRoot}">
-        <!-- TODO: set @SelectedSource -->
-        <mui:ModernTab Layout="List">
-            <mui:ModernTab.Links>
-                <!-- TODO: set @Source -->
-                <mui:Link DisplayName="Language" />
-                <mui:Link DisplayName="Item 2" />
-            </mui:ModernTab.Links>
-        </mui:ModernTab>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" 
+                   Content="{Resx Key=Language}"/>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <RadioButton Content="English" IsChecked="{Binding Path=Language, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static lang:Language.English}}"/>
+            <RadioButton Content="Polski" IsChecked="{Binding Path=Language, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static lang:Language.Polish}}"/>
+        </StackPanel>
+
+        <Label Grid.Row="1" Grid.Column="0" 
+                   Content="{Resx Key=Antialiasing}"/>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <RadioButton Content="{Resx Key=AaEnabled}" IsChecked="{Binding AntialiasingEnabled}"/>
+            <RadioButton Content="{Resx Key=AaDisable}" IsChecked="{Binding AntialiasingEnabled, Converter={StaticResource BoolInverterConverter}}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

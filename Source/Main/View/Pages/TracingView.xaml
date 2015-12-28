@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="700"
              DataContext="{Binding Source={StaticResource Locator}, Path=Tracing}">
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid Style="{StaticResource ContentRoot}" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -42,11 +42,9 @@
                 <mui:ModernButton IconData="{StaticResource TraceIcon}" 
                               Command="{Binding TraceCommand}"/>
 
-                <CheckBox IsChecked="{Binding AntialiasingEnabled}"/>
-                
-            </StackPanel>
 
-            <Label Grid.Row="1" Grid.Column="0">$status</Label>
+
+            </StackPanel>
 
             <Label Grid.Row="0" Grid.Column="1" 
                    Content="{Resx Key=areaThreshold}"/>
@@ -72,6 +70,7 @@
                Grid.Column="0" 
                Stretch="Uniform"
                Source="{Binding Bitmap}"/>
+
         <mga:TraceArea Grid.Row="1" 
                        Grid.Column="1"
                        SnapsToDevicePixels="True"

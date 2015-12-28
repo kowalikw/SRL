@@ -6,22 +6,48 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="1200"
+             d:DesignHeight="400" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Simulation}">
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid Style="{StaticResource ContentRoot}" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <mga:VisualizationArea SnapsToDevicePixels="True"
+        <StackPanel DockPanel.Dock="Right">
+            <mui:ModernButton IconData="{StaticResource LoadIcon}" 
+                              Command="{Binding LoadCommand}"/>
+            <mui:ModernButton Margin="0,0,0,20"
+                              IconData="{StaticResource SaveIcon}" 
+                              Command="{Binding SaveCommand}"/>
+            
+            
+            
+            <mui:ModernButton IconData="{StaticResource LoadMapIcon}" 
+                              Command="{Binding LoadMapCommand}"/>
+            <mui:ModernButton IconData="{StaticResource LoadVehicleIcon}" 
+                              Command="{Binding LoadVehicleCommand}"/>
+
+            <mui:ModernButton IconData="{StaticResource SetUpVehicleIcon}"/>
+            <mui:ModernButton IconData="{StaticResource SetPathEndIcon}"/>
+            <mui:ModernButton IconData="{StaticResource CalculatePathIcon}"/>
+        </StackPanel>
+
+        <mga:VisualizationArea Grid.Row="0" Grid.Column="1" 
+                               Margin="10,0,0,10"
+                               SnapsToDevicePixels="True"
                                Stretch="Uniform"/>
 
-        <DockPanel Grid.Row="1" LastChildFill="True">
+        <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                   LastChildFill="True">
 
-            <mui:ModernButton>
+            <mui:ModernButton IconHeight="18" IconWidth="18">
                 <mui:ModernButton.Style>
-                    <Style TargetType="mui:ModernButton">
+                    <Style BasedOn="{StaticResource {x:Type mui:ModernButton}}" TargetType="mui:ModernButton">
                         <Setter Property="IconData" Value="{StaticResource PlaybackStartIcon}"/>
                         <Setter Property="Command" Value="{Binding StartPlaybackCommand}"/>
                         <Style.Triggers>
@@ -34,26 +60,10 @@
                 </mui:ModernButton.Style>
             </mui:ModernButton>
             
-            <mui:ModernButton IconData="{StaticResource PlaybackStopIcon}" 
+            <mui:ModernButton IconHeight="15" IconWidth="15"
+                              IconData="{StaticResource PlaybackStopIcon}" 
                               Command="{Binding StopPlaybackCommand}"/>
-            
-            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                <mui:ModernButton IconData="{StaticResource LoadIcon}" 
-                              Command="{Binding LoadCommand}"/>
-                <mui:ModernButton IconData="{StaticResource SaveIcon}" 
-                              Command="{Binding SaveCommand}"/>
-                <mui:ModernButton IconData="{StaticResource LoadMapIcon}" 
-                              Command="{Binding LoadMapCommand}"/>
-                <mui:ModernButton IconData="{StaticResource LoadVehicleIcon}" 
-                              Command="{Binding LoadVehicleCommand}"/>
-                
-                <mui:ModernButton IconData="{StaticResource SetUpVehicleIcon}"/>
-                <mui:ModernButton IconData="{StaticResource SetPathEndIcon}"/>
-
-                <CheckBox IsChecked="{Binding AntialiasingEnabled}"/>
-            </StackPanel>
-            
-            <Slider/>
+            <Slider Margin="10" VerticalAlignment="Center"/>
         </DockPanel>
     </Grid>
 </UserControl>

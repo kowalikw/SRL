@@ -20,22 +20,22 @@
     worries lads. -->
 
     <mui:ModernWindow.MenuLinkGroups>
-        <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=homeDisplayName}">
+        <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=homeTab}">
             <mui:LinkGroup.Links>
                 <mui:Link Source="{StaticResource HomeView}"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
-        <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=setupDisplayName}">
+        <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=setupTab}">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=mapEditorDisplayName}"
+                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=mapEditorSubTab}"
                           Source="{StaticResource MapEditorView}"/>
-                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=vehicleEditorDisplayName}"
+                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=vehicleEditorSubTab}"
                           Source="{StaticResource VehicleEditorView}"/>
-                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=tracingDisplayName}"
+                <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=tracingSubTab}"
                           Source="{StaticResource TracingView}"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
-        <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=runDisplayName}">
+        <mui:LinkGroup DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=runTab}">
             <mui:LinkGroup.Links>
                 <mui:Link Source="{StaticResource SimulationView}"/>
             </mui:LinkGroup.Links>
@@ -43,7 +43,7 @@
     </mui:ModernWindow.MenuLinkGroups>
 
     <mui:ModernWindow.TitleLinks>
-        <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=settingsDisplayName}"
+        <mui:Link DisplayName="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=settings}"
                   Source="{StaticResource SettingsView}"/>
     </mui:ModernWindow.TitleLinks>
     

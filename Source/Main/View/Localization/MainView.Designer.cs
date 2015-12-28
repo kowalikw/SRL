@@ -63,36 +63,36 @@ namespace SRL.Main.View.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
-        internal static string homeDisplayName {
+        internal static string homeTab {
             get {
-                return ResourceManager.GetString("homeDisplayName", resourceCulture);
+                return ResourceManager.GetString("homeTab", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Run.
         /// </summary>
-        internal static string runDisplayName {
+        internal static string runTab {
             get {
-                return ResourceManager.GetString("runDisplayName", resourceCulture);
+                return ResourceManager.GetString("runTab", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to settings.
         /// </summary>
-        internal static string settingsDisplayName {
+        internal static string settings {
             get {
-                return ResourceManager.GetString("settingsDisplayName", resourceCulture);
+                return ResourceManager.GetString("settings", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Setup.
         /// </summary>
-        internal static string setupDisplayName {
+        internal static string setupTab {
             get {
-                return ResourceManager.GetString("setupDisplayName", resourceCulture);
+                return ResourceManager.GetString("setupTab", resourceCulture);
             }
         }
     }

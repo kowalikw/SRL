@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="homeDisplayName" xml:space="preserve">
+  <data name="homeTab" xml:space="preserve">
     <value>Home</value>
   </data>
-  <data name="runDisplayName" xml:space="preserve">
+  <data name="runTab" xml:space="preserve">
     <value>Run</value>
   </data>
-  <data name="settingsDisplayName" xml:space="preserve">
+  <data name="settings" xml:space="preserve">
     <value>settings</value>
   </data>
-  <data name="setupDisplayName" xml:space="preserve">
+  <data name="setupTab" xml:space="preserve">
     <value>Setup</value>
   </data>
 </root>

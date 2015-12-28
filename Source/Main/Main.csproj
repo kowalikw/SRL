@@ -66,6 +66,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -97,8 +98,15 @@
     <Compile Include="Messages\GoToPageMessage.cs" />
     <Compile Include="Messages\OpenFileDialogMessage.cs" />
     <Compile Include="Messages\SaveFileDialogMessage.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Tracing\BitmapTracer.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
+    <Compile Include="Utilities\BoolInverterConverter.cs" />
+    <Compile Include="Utilities\EnumToBoolConverter.cs" />
     <Compile Include="Utilities\Normalization.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
@@ -109,6 +117,7 @@
     <Compile Include="ViewModel\TracingViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Localization\Language.cs" />
     <Compile Include="View\MonoGameArea\AreaBase.cs" />
     <Compile Include="View\Localization\HomeView.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -228,6 +237,10 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=MapEditor}">
 
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid Style="{StaticResource ContentRoot}" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -26,11 +26,10 @@
             <mui:ModernButton IconData="{StaticResource ResetIcon}" 
                               Command="{Binding ResetCommand}"/>
 
-            <CheckBox IsChecked="{Binding AntialiasingEnabled}"/>
-
         </StackPanel>
         
         <mga:MapEditArea Grid.Column="1"
+                         Margin="10,0,0,0"
                          SnapsToDevicePixels="True"
                          Stretch="Uniform"/>
     </Grid>
