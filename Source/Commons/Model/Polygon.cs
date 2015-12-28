@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Xml;
 using SRL.Commons.Model.Base;
@@ -34,8 +35,12 @@ namespace SRL.Commons.Model
                     foreach (var pointString in points)
                     {
                         var point = pointString.Split(',');
-                        if(point.Length == 2)
-                            Vertices.Add(new Point(double.Parse(point[0]), double.Parse(point[1])));
+                        if (point.Length == 2)
+                        {
+                            Vertices.Add(new Point(
+                                double.Parse(point[0], CultureInfo.InvariantCulture),
+                                double.Parse(point[1], CultureInfo.InvariantCulture)));
+                        }
                     }
                 }
                 else
