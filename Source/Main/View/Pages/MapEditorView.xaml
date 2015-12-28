@@ -18,13 +18,17 @@
         <StackPanel Grid.Column="0">
 
             <mui:ModernButton IconData="{StaticResource LoadIcon}" 
-                              Command="{Binding LoadCommand}"/>
+                              Command="{Binding LoadCommand}"
+                              ToolTip="{Resx Key=LoadTooltip}"/>
             <mui:ModernButton IconData="{StaticResource SaveIcon}" 
-                              Command="{Binding SaveCommand}"/>
+                              Command="{Binding SaveCommand}"
+                              ToolTip="{Resx Key=SaveTooltip}"/>
             <mui:ModernButton IconData="{StaticResource BackIcon}" 
-                              Command="{Binding BackCommand}"/>
+                              Command="{Binding BackCommand}"
+                              ToolTip="{Resx Key=BackTooltip}"/>
             <mui:ModernButton IconData="{StaticResource ResetIcon}" 
-                              Command="{Binding ResetCommand}"/>
+                              Command="{Binding ResetCommand}"
+                              ToolTip="{Resx Key=ResetTooltip}"/>
 
         </StackPanel>
         
