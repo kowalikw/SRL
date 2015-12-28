@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 
 namespace SRL.Commons.Utilities
@@ -26,7 +27,12 @@ namespace SRL.Commons.Utilities
 
         public static double Clamp(this double value, double min, double max)
         {
-            return value < min ? min : value > max ? max : value;
+            return value < min ? min : (value > max ? max : value);
+        }
+
+        public static double Max(params double[] values)
+        {
+            return values.Max();
         }
     }
 }

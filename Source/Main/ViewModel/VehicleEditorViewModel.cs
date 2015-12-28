@@ -216,53 +216,33 @@ namespace SRL.Main.ViewModel
             double minX = double.MaxValue, minY = double.MaxValue;
             double maxX = double.MinValue, maxY = double.MinValue;
 
-            foreach (var vertex in rotatedShape.Vertices)
+            for (int i = 0; i < rotatedShape.Vertices.Count; i++)
             {
+                Point vertex = new Point(
+                    rotatedShape.Vertices[i].X - Pivot.Value.X,
+                    rotatedShape.Vertices[i].Y - Pivot.Value.Y);
+
                 minX = vertex.X < minX ? vertex.X : minX;
                 minY = vertex.Y < minY ? vertex.Y : minY;
                 maxX = vertex.X > maxX ? vertex.X : maxX;
                 maxY = vertex.Y > maxY ? vertex.Y : maxY;
+
+                rotatedShape.Vertices[i] = vertex;
             }
 
-            double xSpan = maxX - minX;
-            double ySpan = maxY - minY;
+            double shrinkFactor = MathHelper.Max(
+                Math.Abs(minX),
+                Math.Abs(maxX),
+                Math.Abs(minY),
+                Math.Abs(maxY));
 
-            if (xSpan > ySpan)
+            if (shrinkFactor > 1)
             {
                 for (int i = 0; i < rotatedShape.Vertices.Count; i++)
                 {
-                    double newX = rotatedShape.Vertices[i].X - minX;
-                    double newY = rotatedShape.Vertices[i].Y - minY;
-
-                    newX = newX * 2/xSpan;
-                    newY = newY * 2/xSpan;
-
-                    newX = newX - 1;
-                    newY = newY - 1 + (2 - ySpan)/2;
-
-                    newX.Clamp(-1, 1);
-                    newY.Clamp(-1, 1);
-
-                    rotatedShape.Vertices[i] = new Point(newX, newY);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < rotatedShape.Vertices.Count; i++)
-                {
-                    double newX = rotatedShape.Vertices[i].X - minX;
-                    double newY = rotatedShape.Vertices[i].Y - minY;
-
-                    newX = newX * 2 / ySpan;
-                    newY = newY * 2 / ySpan;
-
-                    newX = newX - 1 + (2 - xSpan) / 2;
-                    newY = newY - 1;
-
-                    newX.Clamp(-1, 1);
-                    newY.Clamp(-1, 1);
-
-                    rotatedShape.Vertices[i] = new Point(newX, newY);
+                    Point vertex = new Point(
+                        rotatedShape.Vertices[i].X * 0.9 / shrinkFactor,
+                        rotatedShape.Vertices[i].Y * 0.9 / shrinkFactor);
                 }
             }
 
