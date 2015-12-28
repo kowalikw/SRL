@@ -49,15 +49,16 @@ namespace SRL.Commons.Model
 
         public override void WriteXml(XmlWriter writer)
         {
-            var points = "";
-
-            foreach (Point point in Vertices)
-                points += point.X.ToString() + "," + point.Y.ToString() + " ";
-
             writer.WriteStartElement("polygon");
 
             writer.WriteStartAttribute("points");
-            writer.WriteValue(points);
+            foreach (Point point in Vertices)
+            {
+                writer.WriteValue(point.X);
+                writer.WriteValue(",");
+                writer.WriteValue(point.Y);
+                writer.WriteValue(" ");
+            }
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
