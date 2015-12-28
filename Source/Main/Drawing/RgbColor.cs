@@ -1,5 +1,6 @@
 ﻿using XnaColor = Microsoft.Xna.Framework.Color;
 using WinColor = System.Drawing.Color;
+using Microsoft.Xna.Framework;
 
 namespace SRL.Main.Drawing
 {
@@ -18,7 +19,8 @@ namespace SRL.Main.Drawing
 
         public XnaColor ToXnaColor(float intensity = 1)
         {
-            return new XnaColor(R, G, B) * intensity;
+            //return new XnaColor(R, G, B) * intensity;
+            return new XnaColor(new XnaColor(R, G, B) * intensity, intensity);
         }
 
         public WinColor ToWinColor(byte intensity = byte.MaxValue)
