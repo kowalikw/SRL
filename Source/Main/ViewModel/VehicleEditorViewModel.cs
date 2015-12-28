@@ -256,6 +256,7 @@ namespace SRL.Main.ViewModel
             VehicleShape.ReplaceRange(model.Shape.Vertices);
             if (VehicleShape.Count >= 3) // TODO instead of checking count only, make sure at least 3 vertices are non collinear
             {
+                ShapeDone = true;
                 if (GeometryHelper.IsInsidePolygon(new Point(0, 0), model.Shape))
                 {
                     Pivot = new Point(0, 0);
