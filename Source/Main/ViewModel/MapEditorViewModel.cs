@@ -120,8 +120,6 @@ namespace SRL.Main.ViewModel
         {
             FinishedPolygons = new ObservableCollectionEx<Polygon>();
             UnfinishedPolygon = new ObservableCollectionEx<Point>();
-
-            AntialiasingEnabled = true;
         }
 
         protected override Map GetModel()

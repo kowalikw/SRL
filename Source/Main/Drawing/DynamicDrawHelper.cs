@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
+using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using MathHelper = SRL.Commons.Utilities.MathHelper;
 using Point = System.Windows.Point;
@@ -140,18 +143,18 @@ namespace SRL.Main.Drawing
             double xGap = MathHelper.Rfpart(aX + 0.5);
             int xPxl1 = (int)xEnd;
             int yPxl1 = (int)yEnd;
-            float intensityTop = (float)(MathHelper.Rfpart(yEnd) * xGap);
-            float intensityDown = (float)(MathHelper.Fpart(yEnd) * xGap);
+            byte intensityTop = (byte)(MathHelper.Rfpart(yEnd) * xGap * 255);
+            byte intensityDown = (byte)(MathHelper.Fpart(yEnd) * xGap * 255);
 
             if (steep)
             {
                 spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
-                spriteBatch.SetPixel(yPxl1 + 1, xPxl1, color, intensityDown);
+                spriteBatch.SetPixel(yPxl1, xPxl1 + 1, color, intensityDown);
             }
             else
             {
-                spriteBatch.SetPixel(xPxl1, yPxl1, color, intensityTop);
-                spriteBatch.SetPixel(xPxl1, yPxl1 + 1, color, intensityDown);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1 + 1, color, intensityDown);
             }
 
             double intery = yEnd + gradient;
@@ -162,26 +165,25 @@ namespace SRL.Main.Drawing
             xGap = MathHelper.Fpart(bX + 0.5);
             int xPxl2 = (int)xEnd;
             int yPxl2 = (int)yEnd;
-            intensityTop = (float)(MathHelper.Rfpart(yEnd) * xGap);
-            intensityDown = (float)(MathHelper.Fpart(yEnd) * xGap);
+            intensityTop = (byte)(MathHelper.Rfpart(yEnd) * xGap * 255);
+            intensityDown = (byte)(MathHelper.Fpart(yEnd) * xGap * 255);
 
             if (steep)
             {
-                spriteBatch.SetPixel(yPxl2, xPxl2, color, intensityTop);
-                spriteBatch.SetPixel(yPxl2 + 1, xPxl2, color, intensityDown);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityDown);
             }
             else
             {
-                spriteBatch.SetPixel(xPxl2, yPxl2, color, intensityTop);
-                spriteBatch.SetPixel(xPxl2, yPxl2 + 1, color, intensityDown);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityTop);
+                spriteBatch.SetPixel(yPxl1, xPxl1, color, intensityDown);
             }
 
             // main loop
             for (int x = xPxl1 + 1; x < xPxl2; x++)
             {
-                intensityTop = (float)MathHelper.Rfpart(intery);
-                intensityDown = (float)MathHelper.Fpart(intery);
-
+                intensityTop = (byte)(MathHelper.Rfpart(yEnd) * 255);
+                intensityDown = (byte)(MathHelper.Fpart(yEnd) * 255);
                 if (steep)
                 {
                     spriteBatch.SetPixel((int)intery, x, color, intensityTop);

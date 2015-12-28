@@ -133,7 +133,7 @@ namespace SRL.Main.Drawing
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="color"></param>
-        public void SetPixel(int x, int y, System.Drawing.Color color)
+        public void SetPixel(int x, int y, Color color)
         {
             // Get color components count
             int cCount = Depth / 8;
