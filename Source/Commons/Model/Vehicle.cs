@@ -12,6 +12,8 @@ namespace SRL.Commons.Model
 
         public override void ReadXml(XmlReader reader)
         {
+            Shape = new Polygon();
+
             reader.MoveToContent();
 
             if (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "svg")
@@ -68,7 +70,7 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("r");
-            writer.WriteValue(Height / 2);
+            writer.WriteValue(6);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
