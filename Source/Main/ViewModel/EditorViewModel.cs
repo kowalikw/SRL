@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons;
+using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
 
 namespace SRL.Main.ViewModel
@@ -82,7 +83,7 @@ namespace SRL.Main.ViewModel
         /// </summary>
         /// <param name="model">Model to set; can be incomplete or even erroneous.</param>
         /// <returns>True if it's possible to set <paramref name="model"/>; false otherwise.</returns>
-        protected abstract bool SetModel(T model);
+        protected abstract void SetModel(T model);
 
         private void SaveToFile(T model, string filename)
         {

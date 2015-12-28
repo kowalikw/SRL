@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using SRL.Commons;
 using SRL.Commons.Model;
+using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
 
 namespace SRL.Algorithm

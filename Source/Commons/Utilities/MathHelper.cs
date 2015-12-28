@@ -23,5 +23,10 @@ namespace SRL.Commons.Utilities
                 return (float)(1 - (val - Math.Floor(val)));
             return (float)(val - Math.Floor(val));
         }
+
+        public static double Clamp(this double value, double min, double max)
+        {
+            return value < min ? min : value > max ? max : value;
+        }
     }
 }

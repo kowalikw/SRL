@@ -1,6 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using SRL.Commons.Model.Base;
 
 namespace SRL.Commons.Model
 {

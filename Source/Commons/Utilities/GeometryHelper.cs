@@ -65,7 +65,7 @@ namespace SRL.Commons.Utilities
             return angle;
         }
 
-        public static Point RotatePoint(Point point, Point pivot, double angle) //TODO change parameter order (pivot should be first)
+        public static Point RotatePoint(Point point, Point pivot, double angle) //TODO change parameter order (pivot should be first), add ref to point and remove return value.
         {
             double cosTheta = Math.Cos(angle);
             double sinTheta = Math.Sin(angle);
@@ -76,11 +76,19 @@ namespace SRL.Commons.Utilities
                     cosTheta * (point.Y - pivot.Y) + pivot.Y));
         }
 
+        public static Polygon Rotate(Point pivot, Polygon polygon, double angle)
+        {
+            var output = new Polygon();
+            for (int i = 0; i < polygon.Vertices.Count; i++)
+                output.Vertices.Add(RotatePoint(polygon.Vertices[i], pivot, angle));
+            return output;
+        }
+
         public static bool IsCounterClockwiseTurn(Point pivot, Point init, Point target)
         {
             return CrossProduct(
                 new Point(init.X - pivot.X, init.Y - pivot.Y), 
-                new Point(target.X - pivot.X, target.Y - pivot.Y)) > 0;
+                new Point(target.X - pivot.X, target.Y - pivot.Y)) > 0; // TODO Doesn't return value == 0 mean that no there's no turn? Fix me
         }
     }
 }

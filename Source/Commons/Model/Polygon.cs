@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Xml;
+using SRL.Commons.Model.Base;
 
 namespace SRL.Commons.Model
 {

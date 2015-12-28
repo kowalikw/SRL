@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 
-namespace SRL.Commons.Model
+namespace SRL.Commons.Model.Base
 {
     public interface IAlgorithm
     {

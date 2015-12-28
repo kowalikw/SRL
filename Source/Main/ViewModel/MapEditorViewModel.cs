@@ -125,10 +125,10 @@ namespace SRL.Main.ViewModel
             return map;
         }
 
-        protected override bool SetModel(Map model)
+        protected override void SetModel(Map model)
         {
+            UnfinishedPolygon.Clear();
             FinishedPolygons.ReplaceRange(model.Obstacles);
-            return true;
         }
     }
 }

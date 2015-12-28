@@ -210,13 +210,87 @@ namespace SRL.Main.ViewModel
 
             Vehicle vehicle = new Vehicle();
 
-            //TODO resize & rotate vehicle
+            Polygon shape = new Polygon(VehicleShape);
+            Polygon rotatedShape = GeometryHelper.Rotate(Pivot.Value, shape, -Direction.Value);
 
+            double minX = double.MaxValue, minY = double.MaxValue;
+            double maxX = double.MinValue, maxY = double.MinValue;
+
+            foreach (var vertex in rotatedShape.Vertices)
+            {
+                minX = vertex.X < minX ? vertex.X : minX;
+                minY = vertex.Y < minY ? vertex.Y : minY;
+                maxX = vertex.X > maxX ? vertex.X : maxX;
+                maxY = vertex.Y > maxY ? vertex.Y : maxY;
+            }
+
+            double xSpan = maxX - minX;
+            double ySpan = maxY - minY;
+
+            if (xSpan > ySpan)
+            {
+                for (int i = 0; i < rotatedShape.Vertices.Count; i++)
+                {
+                    double newX = rotatedShape.Vertices[i].X - minX;
+                    double newY = rotatedShape.Vertices[i].Y - minY;
+
+                    newX = newX * 2/xSpan;
+                    newY = newY * 2/xSpan;
+
+                    newX = newX - 1;
+                    newY = newY - 1 + (2 - ySpan)/2;
+
+                    newX.Clamp(-1, 1);
+                    newY.Clamp(-1, 1);
+
+                    rotatedShape.Vertices[i] = new Point(newX, newY);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < rotatedShape.Vertices.Count; i++)
+                {
+                    double newX = rotatedShape.Vertices[i].X - minX;
+                    double newY = rotatedShape.Vertices[i].Y - minY;
+
+                    newX = newX * 2 / ySpan;
+                    newY = newY * 2 / ySpan;
+
+                    newX = newX - 1 + (2 - xSpan) / 2;
+                    newY = newY - 1;
+
+                    newX.Clamp(-1, 1);
+                    newY.Clamp(-1, 1);
+
+                    rotatedShape.Vertices[i] = new Point(newX, newY);
+                }
+            }
+
+            vehicle.Shape = rotatedShape;
             return vehicle;
         }
-        protected override bool SetModel(Vehicle model)
+        protected override void SetModel(Vehicle model)
         {
-            throw new System.NotImplementedException();//TODO
+            VehicleShape.ReplaceRange(model.Shape.Vertices);
+            if (VehicleShape.Count >= 3) // TODO instead of checking count only, make sure at least 3 vertices are non collinear
+            {
+                if (GeometryHelper.IsInsidePolygon(new Point(0, 0), model.Shape))
+                {
+                    Pivot = new Point(0, 0);
+                    Direction = 0;
+                }
+                else
+                {
+                    Pivot = null;
+                    Direction = null;
+                }
+            }
+            else
+            {
+                ShapeDone = false;
+                Pivot = null;
+                Direction = null;
+            }
         }
     }
 }
