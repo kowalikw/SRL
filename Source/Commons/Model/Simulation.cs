@@ -36,11 +36,6 @@ namespace SRL.Commons.Model
                 reader.MoveToAttribute("height");
                 reader.ReadContentAsInt();
 
-                reader.MoveToAttribute("type");
-                Type = reader.ReadContentAsString();
-
-                if (Type != "simulation") throw new XmlException();
-
                 reader.MoveToContent();
 
                 reader.ReadToFollowing("g");
@@ -150,10 +145,6 @@ namespace SRL.Commons.Model
 
             writer.WriteStartAttribute("height");
             writer.WriteValue(Height);
-            writer.WriteEndAttribute();
-
-            writer.WriteStartAttribute("type");
-            writer.WriteValue(Type);
             writer.WriteEndAttribute();
 
             // Background
