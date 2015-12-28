@@ -28,50 +28,6 @@ namespace SRL.Main.ViewModel
                         VehicleShape.Clear();
                         Pivot = null;
                         Direction = null;
-
-                        // TODO: To tests only
-                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                        var dialog = new OpenFileDialog();
-                        dialog.Filter = String.Format("svg files (*.svg)|*.svg");
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            XDocument doc = XDocument.Load(dialog.FileName);
-                            var serializer = new XmlSerializer(typeof(Vehicle));
-
-                            Vehicle output;
-
-                            using (XmlReader reader = doc.CreateReader())
-                                output = (Vehicle)serializer.Deserialize(reader);
-
-                            VehicleShape.AddRange(output.Shape.Vertices);
-                        }*/
-
-
-
-                        // TODO: To tests only
-                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                        var dialog = new SaveFileDialog();
-                        dialog.Filter = String.Format("SVG files (*.svg)|*.svg");
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            var serializer = new XmlSerializer(typeof(Vehicle));
-                            var output = new XDocument();
-
-                            using (XmlWriter writer = output.CreateWriter())
-                                serializer.Serialize(writer, GetModel());
-
-                            File.WriteAllText(dialog.FileName, output.ToString());
-                        }*/
                     }, () =>
                     {
                         return VehicleShape.Count > 0
@@ -240,7 +196,6 @@ namespace SRL.Main.ViewModel
                     && Direction.HasValue;
             }
         }
-        public bool AntialiasingEnabled { get; set; }
 
 
         public VehicleEditorViewModel()

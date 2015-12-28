@@ -188,9 +188,7 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-
-        public bool AntialiasingEnabled { get; set; }
-
+        
         protected override bool IsModelValid
         {
             get
