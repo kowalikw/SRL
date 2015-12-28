@@ -1,14 +1,19 @@
-﻿using System.Xml.Serialization;
+﻿using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using SRL.Commons;
 using SRL.Main.Messages;
 
 namespace SRL.Main.ViewModel
 {
     public abstract class EditorViewModel<T> : ViewModelBase 
-        where T : IXmlSerializable
+        where T : SvgSerializable
     {
+        private const string DialogFilter = "Scalable Vector Graphics (*.svg)|*.svg";
+
         public RelayCommand SaveCommand
         {
             get
@@ -18,9 +23,15 @@ namespace SRL.Main.ViewModel
                     _saveCommand = new RelayCommand(() =>
                     {
                         var msg = new SaveFileDialogMessage();
-                        //TODO
+                        msg.Filter = DialogFilter;
+                        msg.FilenameCallback = filename =>
+                        {
+                            if (filename == null)
+                                return;
+
+                            SaveToFile(GetModel(), filename);
+                        };
                         Messenger.Default.Send(msg);
-                        //TODO
                     }, 
                     () => IsModelValid);
                 }
@@ -36,9 +47,18 @@ namespace SRL.Main.ViewModel
                     _loadCommand = new RelayCommand(() =>
                     {
                         var msg = new OpenFileDialogMessage();
-                        //TODO
+                        msg.Filter = DialogFilter;
+                        msg.FilenameCallback = filename =>
+                        {
+                            if (filename == null)
+                                return;
+
+                            T model = LoadFromFile(filename);
+
+                            if (model != null)
+                                SetModel(model);
+                        };
                         Messenger.Default.Send(msg);
-                        //TODO
                     });
                 }
                 return _loadCommand;
@@ -63,5 +83,27 @@ namespace SRL.Main.ViewModel
         /// <param name="model">Model to set; can be incomplete or even erroneous.</param>
         /// <returns>True if it's possible to set <paramref name="model"/>; false otherwise.</returns>
         protected abstract bool SetModel(T model);
+
+        private void SaveToFile(T model, string filename)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            
+            using (var stream = File.Create(filename))
+                serializer.Serialize(stream,model);
+        }
+
+        private T LoadFromFile(string filename)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+
+            using (var reader = XmlReader.Create(filename))
+            {
+                if (serializer.CanDeserialize(reader))
+                    return (T)serializer.Deserialize(reader); 
+
+                //TODO show dialog
+            }
+            return null;
+        }
     }
 }

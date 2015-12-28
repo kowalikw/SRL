@@ -40,8 +40,8 @@
         <Label Grid.Row="1" Grid.Column="0" 
                    Content="{Resx Key=Antialiasing}"/>
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <RadioButton Content="{Resx Key=AaEnabled}" IsChecked="{Binding AntialiasingEnabled}"/>
-            <RadioButton Content="{Resx Key=AaDisable}" IsChecked="{Binding AntialiasingEnabled, Converter={StaticResource BoolInverterConverter}}"/>
+            <RadioButton Content="{Resx Key=AntialiasingEnabled}" IsChecked="{Binding AntialiasingEnabled}"/>
+            <RadioButton Content="{Resx Key=AntialiasingDisabled}" IsChecked="{Binding AntialiasingEnabled, Converter={StaticResource BoolInverterConverter}}"/>
         </StackPanel>
     </Grid>
 </UserControl>

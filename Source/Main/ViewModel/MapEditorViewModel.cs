@@ -124,9 +124,11 @@ namespace SRL.Main.ViewModel
             map.Obstacles.AddRange(FinishedPolygons);
             return map;
         }
+
         protected override bool SetModel(Map model)
         {
-            throw new System.NotImplementedException(); //TODO
+            FinishedPolygons.ReplaceRange(model.Obstacles);
+            return true;
         }
     }
 }
