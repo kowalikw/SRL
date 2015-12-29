@@ -269,7 +269,29 @@ namespace SRL.Main.Drawing
 
         public static void DrawArrowAA(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color)
         {
-            throw new NotImplementedException(); //TODO
+            const float tipLength = 15;
+            const float tipHalfWidth = 10;
+
+            double cosA = Math.Cos(angle);
+            double sinA = Math.Sin(angle);
+
+            length *= Math.Sqrt(renderSize.Height * renderSize.Width);
+
+            Point o = origin.Denormalize(renderSize);
+            Point t = new Point(
+                o.X + length * cosA,
+                o.Y - length * sinA);
+
+            Point ah1 = new Point(
+                t.X - tipLength * cosA - tipHalfWidth * sinA,
+                t.Y + tipLength * sinA - tipHalfWidth * cosA);
+            Point ah2 = new Point(
+                t.X - tipLength * cosA + tipHalfWidth * sinA,
+                t.Y + tipLength * sinA + tipHalfWidth * cosA);
+
+            spriteBatch.WuLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
+            spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
+            spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah2.X, (float)ah2.Y, color);
         }
 
         #endregion

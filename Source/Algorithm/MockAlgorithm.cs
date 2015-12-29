@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
 
 namespace SRL.Algorithm
 {
-    class MockAlgorithm : IAlgorithm
+    public class MockAlgorithm : IAlgorithm
     {
         List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
