@@ -95,6 +95,7 @@
     <Compile Include="Drawing\DynamicDrawHelper.cs" />
     <Compile Include="Drawing\LockBitmap.cs" />
     <Compile Include="Drawing\StaticDrawHelper.cs" />
+    <Compile Include="Messages\ErrorDialogMessage.cs" />
     <Compile Include="Messages\GoToPageMessage.cs" />
     <Compile Include="Messages\OpenFileDialogMessage.cs" />
     <Compile Include="Messages\SaveFileDialogMessage.cs" />

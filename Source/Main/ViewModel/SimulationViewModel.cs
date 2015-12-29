@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using SRL.Commons.Model;
 
@@ -109,7 +108,10 @@ namespace SRL.Main.ViewModel
             {
                 if (_loadMapCommand == null)
                 {
-                    
+                    _loadMapCommand = new RelayCommand(() =>
+                    {
+                        Map = LoadModel<Map>();
+                    });
                 }
                 return _loadMapCommand;
             }

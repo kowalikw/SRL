@@ -18,6 +18,7 @@ namespace SRL.Main.ViewModel
             Messenger.Default.Register<GoToPageMessage>(this, GoToPageHandler);
             Messenger.Default.Register<SaveFileDialogMessage>(this, SaveFileDialogHandler);
             Messenger.Default.Register<OpenFileDialogMessage>(this, OpenFileDialogHandler);
+            Messenger.Default.Register<ErrorDialogMessage>(this, ErrorDialogHandler);
             //TODO Not sure if navigation belongs in the view-model. Keep it like this until a better idea comes up.
         }
 
@@ -51,5 +52,15 @@ namespace SRL.Main.ViewModel
             else
                 msg.FilenameCallback(null);
         }
+
+        private void ErrorDialogHandler(ErrorDialogMessage msg)
+        {
+            MessageBox.Show(
+                msg.ErrorDescription, 
+                "Error encountered", 
+                MessageBoxButton.OK, 
+                MessageBoxImage.Error);
+        }
+
     }
 }
