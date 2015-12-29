@@ -12,12 +12,12 @@ namespace SRL.Commons.Utilities
             rhs = temp;
         }
 
-        public static double Rfpart(double val)
+        public static float Rfpart(float val)
         {
             return 1 - Fpart(val);
         }
 
-        public static double Fpart(double val)
+        public static float Fpart(float val)
         {
             if (val < 0)
                 return (float)(1 - (val - Math.Floor(val)));

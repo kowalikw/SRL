@@ -110,14 +110,14 @@ namespace SRL.Main.Drawing
                 byte g = Pixels[i + 1];
                 byte r = Pixels[i + 2];
                 byte a = Pixels[i + 3];
-                clr = new Color(r, g, b, a);
+                clr = new Color(b, g, r, a);
             }
             else if (Depth == 24) // For 24 bpp get Red, Green and Blue
             {
                 byte b = Pixels[i];
                 byte g = Pixels[i + 1];
                 byte r = Pixels[i + 2];
-                clr = new Color(r, g, b);
+                clr = new Color(b, g, r);
             }
             else if (Depth == 8) // For 8 bpp get color value (Red, Green and Blue values are the same)
             {
