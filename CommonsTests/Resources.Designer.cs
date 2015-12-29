@@ -71,12 +71,66 @@ namespace CommonsTests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/2000/svg&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;xs:element name=&quot;svg&quot;&gt;
+        ///    &lt;xs:complexType&gt;
+        ///      &lt;xs:sequence&gt;
+        ///        &lt;xs:element name=&quot;rect&quot;&gt;
+        ///          &lt;xs:complexType&gt;
+        ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
+        ///            &lt;xs:attribute name=&quot;height&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MapSchema {
+            get {
+                return ResourceManager.GetString("MapSchema", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema id=&quot;SimulationSchema&quot;
+        ///    targetNamespace=&quot;http://tempuri.org/SimulationSchema.xsd&quot;
+        ///    elementFormDefault=&quot;qualified&quot;
+        ///    xmlns=&quot;http://tempuri.org/SimulationSchema.xsd&quot;
+        ///    xmlns:mstns=&quot;http://tempuri.org/SimulationSchema.xsd&quot;
+        ///    xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;
+        ///&gt;
+        ///&lt;/xs:schema&gt;
+        ///.
+        /// </summary>
+        internal static string SimulationSchema {
+            get {
+                return ResourceManager.GetString("SimulationSchema", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] Vehicle {
             get {
                 object obj = ResourceManager.GetObject("Vehicle", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/2000/svg&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;xs:element name=&quot;svg&quot;&gt;
+        ///    &lt;xs:complexType&gt;
+        ///      &lt;xs:sequence&gt;
+        ///        &lt;xs:element name=&quot;rect&quot;&gt;
+        ///          &lt;xs:complexType&gt;
+        ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
+        ///            &lt;xs:attribute name=&quot;height&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string VehicleSchema {
+            get {
+                return ResourceManager.GetString("VehicleSchema", resourceCulture);
             }
         }
     }

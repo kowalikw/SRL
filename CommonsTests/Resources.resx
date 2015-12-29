@@ -121,7 +121,16 @@
   <data name="Map" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\map.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="MapSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>xmls\xmlschema\mapschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SimulationSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>xmls\xmlschema\simulationschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="Vehicle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\vehicle.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VehicleSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>xmls\xmlschema\vehicleschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
