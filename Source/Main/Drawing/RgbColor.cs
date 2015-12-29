@@ -1,6 +1,5 @@
 ﻿using XnaColor = Microsoft.Xna.Framework.Color;
 using WinColor = System.Drawing.Color;
-using Microsoft.Xna.Framework;
 
 namespace SRL.Main.Drawing
 {
