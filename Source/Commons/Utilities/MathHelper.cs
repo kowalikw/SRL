@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 
 namespace SRL.Commons.Utilities
@@ -22,6 +23,16 @@ namespace SRL.Commons.Utilities
             if (val < 0)
                 return (float)(1 - (val - Math.Floor(val)));
             return (float)(val - Math.Floor(val));
+        }
+
+        public static double Clamp(this double value, double min, double max)
+        {
+            return value < min ? min : (value > max ? max : value);
+        }
+
+        public static double Max(params double[] values)
+        {
+            return values.Max();
         }
     }
 }

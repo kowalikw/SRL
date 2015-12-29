@@ -15,22 +15,15 @@ namespace SRL.Main.View.MonoGameArea
         private readonly TracingViewModel _context = SimpleIoc.Default.GetInstance<TracingViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
-        private PropertyChangedEventHandler _propertyChangedHandler;
 
         protected override void Initialize()
         {
             base.Initialize();
 
             _collectionChangedHandler = (o, e) => RedrawStaticObjectsTexture();
-            _propertyChangedHandler = (o, e) =>
-            {
-                if (e.PropertyName == nameof(_context.AntialiasingEnabled))
-                    RedrawStaticObjectsTexture();
-            };
 
             _context.Polygons.CollectionChanged += _collectionChangedHandler;
             _context.SelectedPolygonIndices.CollectionChanged += _collectionChangedHandler;
-            _context.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -39,7 +32,6 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.Polygons.CollectionChanged -= _collectionChangedHandler;
             _context.SelectedPolygonIndices.CollectionChanged -= _collectionChangedHandler;
-            _context.PropertyChanged -= _propertyChangedHandler;
         }
 
 
@@ -50,7 +42,7 @@ namespace SRL.Main.View.MonoGameArea
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
-            if (_context.AntialiasingEnabled)
+            if (AntialiasingEnabled)
             {
                 for (int i = 0; i < _context.Polygons.Count; i++)
                 {

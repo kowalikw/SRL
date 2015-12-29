@@ -189,7 +189,6 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-        public bool AntialiasingEnabled { get; set; }
 
         public BitmapSource Bitmap
         {

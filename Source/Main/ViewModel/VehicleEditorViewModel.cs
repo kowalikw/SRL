@@ -28,50 +28,6 @@ namespace SRL.Main.ViewModel
                         VehicleShape.Clear();
                         Pivot = null;
                         Direction = null;
-
-                        // TODO: To tests only
-                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                        var dialog = new OpenFileDialog();
-                        dialog.Filter = String.Format("svg files (*.svg)|*.svg");
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            XDocument doc = XDocument.Load(dialog.FileName);
-                            var serializer = new XmlSerializer(typeof(Vehicle));
-
-                            Vehicle output;
-
-                            using (XmlReader reader = doc.CreateReader())
-                                output = (Vehicle)serializer.Deserialize(reader);
-
-                            VehicleShape.AddRange(output.Shape.Vertices);
-                        }*/
-
-
-
-                        // TODO: To tests only
-                        /*System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                        var dialog = new SaveFileDialog();
-                        dialog.Filter = String.Format("SVG files (*.svg)|*.svg");
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            var serializer = new XmlSerializer(typeof(Vehicle));
-                            var output = new XDocument();
-
-                            using (XmlWriter writer = output.CreateWriter())
-                                serializer.Serialize(writer, GetModel());
-
-                            File.WriteAllText(dialog.FileName, output.ToString());
-                        }*/
                     }, () =>
                     {
                         return VehicleShape.Count > 0
@@ -240,7 +196,6 @@ namespace SRL.Main.ViewModel
                     && Direction.HasValue;
             }
         }
-        public bool AntialiasingEnabled { get; set; }
 
 
         public VehicleEditorViewModel()
@@ -255,13 +210,70 @@ namespace SRL.Main.ViewModel
 
             Vehicle vehicle = new Vehicle();
 
-            //TODO resize & rotate vehicle
+            Polygon shape = new Polygon(VehicleShape);
+            Polygon rotatedShape = GeometryHelper.Rotate(Pivot.Value, shape, -Direction.Value);
 
+            double minX = double.MaxValue, minY = double.MaxValue;
+            double maxX = double.MinValue, maxY = double.MinValue;
+
+            for (int i = 0; i < rotatedShape.Vertices.Count; i++)
+            {
+                Point vertex = new Point(
+                    rotatedShape.Vertices[i].X - Pivot.Value.X,
+                    rotatedShape.Vertices[i].Y - Pivot.Value.Y);
+
+                minX = vertex.X < minX ? vertex.X : minX;
+                minY = vertex.Y < minY ? vertex.Y : minY;
+                maxX = vertex.X > maxX ? vertex.X : maxX;
+                maxY = vertex.Y > maxY ? vertex.Y : maxY;
+
+                rotatedShape.Vertices[i] = vertex;
+            }
+
+            double shrinkFactor = MathHelper.Max(
+                Math.Abs(minX),
+                Math.Abs(maxX),
+                Math.Abs(minY),
+                Math.Abs(maxY));
+
+            if (shrinkFactor > 1)
+            {
+                for (int i = 0; i < rotatedShape.Vertices.Count; i++)
+                {
+                    Point vertex = new Point(
+                        rotatedShape.Vertices[i].X * 0.9 / shrinkFactor,
+                        rotatedShape.Vertices[i].Y * 0.9 / shrinkFactor);
+
+                    rotatedShape.Vertices[i] = vertex;
+                }
+            }
+
+            vehicle.Shape = rotatedShape;
             return vehicle;
         }
-        protected override bool SetModel(Vehicle model)
+        protected override void SetModel(Vehicle model)
         {
-            throw new System.NotImplementedException();//TODO
+            VehicleShape.ReplaceRange(model.Shape.Vertices);
+            if (VehicleShape.Count >= 3) // TODO instead of checking count only, make sure at least 3 vertices are non collinear
+            {
+                ShapeDone = true;
+                if (GeometryHelper.IsInsidePolygon(new Point(0, 0), model.Shape))
+                {
+                    Pivot = new Point(0, 0);
+                    Direction = 0;
+                }
+                else
+                {
+                    Pivot = null;
+                    Direction = null;
+                }
+            }
+            else
+            {
+                ShapeDone = false;
+                Pivot = null;
+                Direction = null;
+            }
         }
     }
 }

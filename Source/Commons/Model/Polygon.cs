@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Xml;
+using SRL.Commons.Model.Base;
 
 namespace SRL.Commons.Model
 {
@@ -33,8 +35,12 @@ namespace SRL.Commons.Model
                     foreach (var pointString in points)
                     {
                         var point = pointString.Split(',');
-                        if(point.Length == 2)
-                            Vertices.Add(new Point(double.Parse(point[0]), double.Parse(point[1])));
+                        if (point.Length == 2)
+                        {
+                            Vertices.Add(new Point(
+                                double.Parse(point[0], CultureInfo.InvariantCulture),
+                                double.Parse(point[1], CultureInfo.InvariantCulture)));
+                        }
                     }
                 }
                 else
@@ -48,15 +54,16 @@ namespace SRL.Commons.Model
 
         public override void WriteXml(XmlWriter writer)
         {
-            var points = "";
-
-            foreach (Point point in Vertices)
-                points += point.X.ToString() + "," + point.Y.ToString() + " ";
-
             writer.WriteStartElement("polygon");
 
             writer.WriteStartAttribute("points");
-            writer.WriteValue(points);
+            foreach (Point point in Vertices)
+            {
+                writer.WriteValue(point.X);
+                writer.WriteValue(",");
+                writer.WriteValue(point.Y);
+                writer.WriteValue(" ");
+            }
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
