@@ -32,7 +32,6 @@ namespace SRL.Main.View.MonoGameArea
             _propertyChangedHandler = (o, e) =>
             {
                 if (e.PropertyName == nameof(_context.ShapeDone)
-                 || e.PropertyName == nameof(_context.AntialiasingEnabled)
                  || e.PropertyName == nameof(_context.Pivot)
                  || e.PropertyName == nameof(_context.Direction))
                     RedrawStaticObjectsTexture();
@@ -65,14 +64,14 @@ namespace SRL.Main.View.MonoGameArea
                     _activeLine.EndpointA = _context.VehicleShape.GetLast();
                     _activeLine.EndpointB = normalizedMousePosition;
 
-                    if (_context.AntialiasingEnabled)
+                    if (AntialiasingEnabled)
                         spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
                     else
                         spriteBatch.DrawLine(_activeLine, RenderSize, color);
                 }
                 else if (_context.VehicleShape.Count == 1)
                 {
-                    if (_context.AntialiasingEnabled)
+                    if (AntialiasingEnabled)
                         spriteBatch.DrawVertexAA(_context.VehicleShape.GetLast(), RenderSize, ActiveColor);
                     else
                         spriteBatch.DrawVertex(_context.VehicleShape.GetLast(), RenderSize, ActiveColor);
@@ -86,7 +85,7 @@ namespace SRL.Main.View.MonoGameArea
                         ? ValidColor
                         : InvalidColor;
 
-                    if (_context.AntialiasingEnabled)
+                    if (AntialiasingEnabled)
                         spriteBatch.DrawVertexAA(normalizedMousePosition, RenderSize, color);
                     else
                         spriteBatch.DrawVertex(normalizedMousePosition, RenderSize, color);
@@ -101,7 +100,7 @@ namespace SRL.Main.View.MonoGameArea
                         ? ValidColor
                         : InvalidColor;
 
-                    if (_context.AntialiasingEnabled)
+                    if (AntialiasingEnabled)
                         spriteBatch.DrawArrowAA(_context.Pivot.Value, ArrowLength, angle, RenderSize, color);
                     else
                         spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, color);
@@ -109,7 +108,7 @@ namespace SRL.Main.View.MonoGameArea
             }
             else
             {
-                if (_context.AntialiasingEnabled)
+                if (AntialiasingEnabled)
                     spriteBatch.DrawArrowAA(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
                 else
                     spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
@@ -120,14 +119,14 @@ namespace SRL.Main.View.MonoGameArea
         {
             if (!_context.ShapeDone)
             {
-                if (_context.AntialiasingEnabled)
+                if (AntialiasingEnabled)
                     lockBitmap.DrawPathAA(new Path(_context.VehicleShape), RenderSize, ActiveColor);
                 else
                     lockBitmap.DrawPath(new Path(_context.VehicleShape), RenderSize, ActiveColor);
             }
             else
             {
-                if (_context.AntialiasingEnabled)
+                if (AntialiasingEnabled)
                     lockBitmap.DrawPolygonAA(new Polygon(_context.VehicleShape), RenderSize, RegularColor);
                 else
                     lockBitmap.DrawPolygon(new Polygon(_context.VehicleShape), RenderSize, RegularColor);
@@ -137,7 +136,7 @@ namespace SRL.Main.View.MonoGameArea
             {
                 RgbColor color = _context.Direction.HasValue ? RegularColor : ActiveColor;
 
-                if (_context.AntialiasingEnabled)
+                if (AntialiasingEnabled)
                     lockBitmap.DrawVertexAA(_context.Pivot.Value, RenderSize, color);
                 else
                     lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, color);

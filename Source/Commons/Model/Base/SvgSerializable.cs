@@ -1,10 +1,9 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace SRL.Commons
+namespace SRL.Commons.Model.Base
 {
     public abstract class SvgSerializable : IXmlSerializable
     {

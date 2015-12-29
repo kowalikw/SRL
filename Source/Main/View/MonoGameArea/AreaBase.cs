@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Input;
@@ -21,14 +22,18 @@ namespace SRL.Main.View.MonoGameArea
         protected static readonly RgbColor InvalidColor = new RgbColor(255, 20, 20);
         protected static readonly RgbColor ValidColor = new RgbColor(20, 255, 20);
 
+        protected bool AntialiasingEnabled => Settings.Default.AntialiasingEnabled;
+
         private MouseButtonEventHandler _mouseUpHandler;
         private MouseButtonEventHandler _mouseDownHandler;
         private MouseEventHandler _mouseMoveHandler;
         private SizeChangedEventHandler _sizeChangedHandler;
+        private PropertyChangedEventHandler _propertyChangedHandler;
 
         private SpriteBatch _spriteBatch;
         private Bitmap _bitmapBuffer;
         protected Texture2D StaticObjectsTexture;
+
 
         /// <summary>
         /// Non-normalized cursor position (that is, in pixel space) relative to the MonoGameControl control.
@@ -42,13 +47,19 @@ namespace SRL.Main.View.MonoGameArea
 
             _mouseUpHandler = (o, e) => OnMouseUp(e.ChangedButton);
             _mouseDownHandler = (o, e) => OnMouseButtonDown(e.ChangedButton);
-            _mouseMoveHandler = (o, e) => MousePosition = e.GetPosition((UIElement) o);
+            _mouseMoveHandler = (o, e) => MousePosition = e.GetPosition((UIElement)o);
             _sizeChangedHandler = (o, e) => OnSizeChanged();
+            _propertyChangedHandler = (o, e) =>
+            {
+                if (e.PropertyName == nameof(AntialiasingEnabled))
+                    RedrawStaticObjectsTexture();
+            };
 
             MouseUp += _mouseUpHandler;
             MouseDown += _mouseDownHandler;
             MouseMove += _mouseMoveHandler;
             SizeChanged += _sizeChangedHandler;
+            Settings.Default.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -59,6 +70,7 @@ namespace SRL.Main.View.MonoGameArea
             MouseDown -= _mouseDownHandler;
             MouseMove -= _mouseMoveHandler;
             SizeChanged -= _sizeChangedHandler;
+            Settings.Default.PropertyChanged -= _propertyChangedHandler;
         }
 
         protected sealed override void Render(TimeSpan time)

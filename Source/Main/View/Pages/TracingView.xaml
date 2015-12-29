@@ -34,16 +34,18 @@
             <StackPanel Orientation="Horizontal">
 
                 <mui:ModernButton IconData="{StaticResource LoadBitmapIcon}" 
-                              Command="{Binding LoadBitmapCommand}"/>
+                                  Command="{Binding LoadBitmapCommand}"
+                                  ToolTip="{Resx Key=LoadBitmapTooltip}"/>
                 <mui:ModernButton IconData="{StaticResource SaveMapIcon}" 
-                              Command="{Binding MakeMapCommand}"/>
+                                  Command="{Binding MakeMapCommand}"
+                                  ToolTip="{Resx Key=MakeMapTooltip}"/>
                 <mui:ModernButton IconData="{StaticResource SaveVehicleIcon}" 
-                              Command="{Binding MakeVehicleCommand}"/>
+                                  Command="{Binding MakeVehicleCommand}"
+                                  ToolTip="{Resx Key=MakeVehicleTooltip}"/>
                 <mui:ModernButton IconData="{StaticResource TraceIcon}" 
-                              Command="{Binding TraceCommand}"/>
-
-
-
+                                  Command="{Binding TraceCommand}"
+                                  ToolTip="{Resx Key=TraceTooltip}"/>
+                
             </StackPanel>
 
             <Label Grid.Row="0" Grid.Column="1" 

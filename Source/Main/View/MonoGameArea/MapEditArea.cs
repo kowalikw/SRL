@@ -17,7 +17,6 @@ namespace SRL.Main.View.MonoGameArea
         private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
-        private PropertyChangedEventHandler _propertyChangedHandler;
 
         private readonly Line _activeLine = new Line();
 
@@ -26,15 +25,9 @@ namespace SRL.Main.View.MonoGameArea
             base.Initialize();
 
             _collectionChangedHandler = (o, e) => RedrawStaticObjectsTexture();
-            _propertyChangedHandler = (o, e) =>
-            {
-                if (e.PropertyName == nameof(_context.AntialiasingEnabled))
-                    RedrawStaticObjectsTexture();
-            };
 
             _context.FinishedPolygons.CollectionChanged += _collectionChangedHandler;
             _context.UnfinishedPolygon.CollectionChanged += _collectionChangedHandler;
-            _context.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -43,7 +36,6 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.FinishedPolygons.CollectionChanged -= _collectionChangedHandler;
             _context.UnfinishedPolygon.CollectionChanged -= _collectionChangedHandler;
-            _context.PropertyChanged -= _propertyChangedHandler;
         }
 
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
@@ -59,14 +51,14 @@ namespace SRL.Main.View.MonoGameArea
                 _activeLine.EndpointA = _context.UnfinishedPolygon.GetLast();
                 _activeLine.EndpointB = normalizedMousePosition;
 
-                if (_context.AntialiasingEnabled)
+                if (AntialiasingEnabled)
                     spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
                 else
                     spriteBatch.DrawLine(_activeLine, RenderSize, color);
             }
             else if (_context.UnfinishedPolygon.Count == 1)
             {
-                if (_context.AntialiasingEnabled)
+                if (AntialiasingEnabled)
                     spriteBatch.DrawVertexAA(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor);
                 else
                     spriteBatch.DrawVertex(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor);
@@ -75,7 +67,7 @@ namespace SRL.Main.View.MonoGameArea
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
-            if (_context.AntialiasingEnabled)
+            if (AntialiasingEnabled)
             {
                 foreach (var obstacle in _context.FinishedPolygons)
                     lockBitmap.DrawPolygonAA(obstacle, RenderSize, RegularColor);

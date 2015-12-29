@@ -5,6 +5,7 @@ using SRL.Commons.Utilities;
 using SRL.Commons.Model;
 using System.Windows;
 using SRL.Commons;
+using SRL.Commons.Model.Base;
 
 namespace SRL.Algorithm
 {

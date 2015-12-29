@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
+using SRL.Commons.Model.Base;
 
 namespace SRL.Commons.Model
 {

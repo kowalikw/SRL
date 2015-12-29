@@ -20,21 +20,26 @@
 
         <StackPanel DockPanel.Dock="Right">
             <mui:ModernButton IconData="{StaticResource LoadIcon}" 
-                              Command="{Binding LoadCommand}"/>
+                              Command="{Binding LoadCommand}"
+                              ToolTip="{Resx Key=LoadSimulationTooltip}"/>
             <mui:ModernButton Margin="0,0,0,20"
                               IconData="{StaticResource SaveIcon}" 
-                              Command="{Binding SaveCommand}"/>
-            
-            
+                              Command="{Binding SaveCommand}"
+                              ToolTip="{Resx Key=SaveSimulationTooltip}"/>
             
             <mui:ModernButton IconData="{StaticResource LoadMapIcon}" 
-                              Command="{Binding LoadMapCommand}"/>
+                              Command="{Binding LoadMapCommand}"
+                              ToolTip="{Resx Key=LoadMapTooltip}"/>
             <mui:ModernButton IconData="{StaticResource LoadVehicleIcon}" 
-                              Command="{Binding LoadVehicleCommand}"/>
+                              Command="{Binding LoadVehicleCommand}"
+                              ToolTip="{Resx Key=LoadVehicleTooltip}"/>
 
-            <mui:ModernButton IconData="{StaticResource SetUpVehicleIcon}"/>
-            <mui:ModernButton IconData="{StaticResource SetPathEndIcon}"/>
-            <mui:ModernButton IconData="{StaticResource CalculatePathIcon}"/>
+            <mui:ModernButton IconData="{StaticResource SetUpVehicleIcon}"
+                              ToolTip="{Resx Key=SetUpVehicleTooltip}"/>
+            <mui:ModernButton IconData="{StaticResource SetPathEndIcon}"
+                              ToolTip="{Resx Key=SetPathEndTooltip}"/>
+            <mui:ModernButton IconData="{StaticResource CalculatePathIcon}"
+                              ToolTip="{Resx Key=CalculatePathTooltip}"/>
         </StackPanel>
 
         <mga:VisualizationArea Grid.Row="0" Grid.Column="1" 
@@ -50,10 +55,12 @@
                     <Style BasedOn="{StaticResource {x:Type mui:ModernButton}}" TargetType="mui:ModernButton">
                         <Setter Property="IconData" Value="{StaticResource PlaybackStartIcon}"/>
                         <Setter Property="Command" Value="{Binding StartPlaybackCommand}"/>
+                        <Setter Property="ToolTip" Value="{Resx Key=StartPlaybackTooltip}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SimulationRunning}" Value="True">
                                 <Setter Property="IconData" Value="{StaticResource PlaybackPauseIcon}"/>
                                 <Setter Property="Command" Value="{Binding PausePlaybackCommand}"/>
+                                <Setter Property="ToolTip" Value="{Resx Key=PausePlaybackTooltip}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -62,7 +69,8 @@
             
             <mui:ModernButton IconHeight="15" IconWidth="15"
                               IconData="{StaticResource PlaybackStopIcon}" 
-                              Command="{Binding StopPlaybackCommand}"/>
+                              Command="{Binding StopPlaybackCommand}"
+                              ToolTip="{Resx Key=StopPlaybackTooltip}"/>
             <Slider Margin="10" VerticalAlignment="Center"/>
         </DockPanel>
     </Grid>

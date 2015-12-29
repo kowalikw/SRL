@@ -188,9 +188,7 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-
-        public bool AntialiasingEnabled { get; set; }
-
+        
         protected override bool IsModelValid
         {
             get
@@ -245,7 +243,7 @@ namespace SRL.Main.ViewModel
             };
             return simulation;
         }
-        protected override bool SetModel(Simulation model)
+        protected override void SetModel(Simulation model)
         {
             throw new NotImplementedException(); //TODO
         }
