@@ -9,7 +9,7 @@ namespace CommonsTests
         [TestMethod]
         public void VehicleWriteXmlTest()
         {
-
+            
         }
 
         [TestMethod]
