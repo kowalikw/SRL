@@ -13,11 +13,11 @@
         <xs:element name="g">
           <xs:complexType>
             <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="polygon">
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="polygon">
                 <xs:complexType>
                   <xs:attribute name="points" type="xs:string" use="required" />
                   <xs:attribute name="stroke" type="xs:string" use="required" />
-                  <xs:attribute name="stroke-width" type="xs:decimal" use="required" />
+                  <xs:attribute name="stroke-width" type="xs:double" use="required" />
                   <xs:attribute name="fill" type="xs:string" use="required" />
                 </xs:complexType>
               </xs:element>

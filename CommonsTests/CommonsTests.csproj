@@ -65,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="XMLs\Map.svg" />
+    <Content Include="XMLs\Order.svg" />
+    <Content Include="XMLs\Polygon.svg" />
+    <Content Include="XMLs\Simulation.svg" />
     <Content Include="XMLs\Vehicle.svg" />
   </ItemGroup>
   <ItemGroup>
@@ -77,7 +80,16 @@
     <None Include="XMLs\XmlSchema\MapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="XMLs\XmlSchema\OrderSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="XMLs\XmlSchema\PolygonSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="XMLs\XmlSchema\SimulationSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="XMLs\XmlSchema\SimulationSchemaXlink.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="XMLs\XmlSchema\VehicleSchema.xsd">

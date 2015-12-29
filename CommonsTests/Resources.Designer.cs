@@ -61,12 +61,16 @@ namespace CommonsTests {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;svg width=&quot;480&quot; height=&quot;480&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+        ///  &lt;rect width=&quot;480&quot; height=&quot;480&quot; fill=&quot;rgb(1, 47, 135)&quot; /&gt;
+        ///  &lt;g transform=&quot;translate(240,240) scale(240,-240)&quot;&gt;
+        ///    &lt;polygon points=&quot;-0.54811715481171552,0.20920502092050208 0.7405857740585774,0.32217573221757323 0.55648535564853552,-0.606694560669456 &quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; fill=&quot;white&quot; /&gt;
+        ///    &lt;polygon points=&quot;-0.61087866108786615,-0.32635983263598328 -0.68619246861924688,-0.7615062761506276 0.08368200 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] Map {
+        internal static string Map {
             get {
-                object obj = ResourceManager.GetObject("Map", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("Map", resourceCulture);
             }
         }
         
@@ -89,16 +93,85 @@ namespace CommonsTests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema id=&quot;SimulationSchema&quot;
-        ///    targetNamespace=&quot;http://tempuri.org/SimulationSchema.xsd&quot;
-        ///    elementFormDefault=&quot;qualified&quot;
-        ///    xmlns=&quot;http://tempuri.org/SimulationSchema.xsd&quot;
-        ///    xmlns:mstns=&quot;http://tempuri.org/SimulationSchema.xsd&quot;
-        ///    xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;
-        ///&gt;
-        ///&lt;/xs:schema&gt;
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;order rotation=&quot;0.1&quot; destination=&quot;-0.41667,-0.2083&quot; /&gt;
         ///.
+        /// </summary>
+        internal static string Order {
+            get {
+                return ResourceManager.GetString("Order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;xs:element name=&quot;order&quot;&gt;
+        ///    &lt;xs:complexType&gt;
+        ///      &lt;xs:attribute name=&quot;rotation&quot; type=&quot;xs:double&quot; use=&quot;required&quot; /&gt;
+        ///      &lt;xs:attribute name=&quot;destination&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
+        ///    &lt;/xs:complexType&gt;
+        ///  &lt;/xs:element&gt;
+        ///&lt;/xs:schema&gt;.
+        /// </summary>
+        internal static string OrderSchema {
+            get {
+                return ResourceManager.GetString("OrderSchema", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;polygon points=&quot;-0.54811715481171552,0.20920502092050208 0.7405857740585774,0.32217573221757323 0.55648535564853552,-0.606694560669456 &quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; fill=&quot;white&quot; /&gt;
+        ///.
+        /// </summary>
+        internal static string Polygon {
+            get {
+                return ResourceManager.GetString("Polygon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;xs:element name=&quot;polygon&quot;&gt;
+        ///    &lt;xs:complexType&gt;
+        ///      &lt;xs:attribute name=&quot;points&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
+        ///      &lt;xs:attribute name=&quot;stroke&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
+        ///      &lt;xs:attribute name=&quot;stroke-width&quot; type=&quot;xs:double&quot; use=&quot;required&quot; /&gt;
+        ///      &lt;xs:attribute name=&quot;fill&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
+        ///    &lt;/xs:com [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PolygonSchema {
+            get {
+                return ResourceManager.GetString("PolygonSchema", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;svg xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; width=&quot;480&quot; height=&quot;480&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+        ///  &lt;rect width=&quot;480&quot; height=&quot;480&quot; fill=&quot;rgb(1, 47, 135)&quot; /&gt;
+        ///  &lt;defs&gt;
+        ///    &lt;g id=&quot;map&quot;&gt;
+        ///      &lt;polygon points=&quot;-0.0188087774294671,0.899581589958159 -0.689655172413793,-0.878661087866109 0.247648902821317,-0.866108786610879 &quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; fill=&quot;white&quot; /&gt;
+        ///      &lt;polygon points=&quot;0.366771159874608,0.267782426778243 0.351097178683386,-0.121338912133891 0.821316614420063,-0.1589958 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Simulation {
+            get {
+                return ResourceManager.GetString("Simulation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/2000/svg&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;xs:import namespace=&quot;http://www.w3.org/1999/xlink&quot; /&gt;
+        ///  &lt;xs:element name=&quot;svg&quot;&gt;
+        ///    &lt;xs:complexType&gt;
+        ///      &lt;xs:sequence&gt;
+        ///        &lt;xs:element name=&quot;rect&quot;&gt;
+        ///          &lt;xs:complexType&gt;
+        ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;req [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SimulationSchema {
             get {
@@ -107,12 +180,29 @@ namespace CommonsTests {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;xs:schema xmlns:tns=&quot;http://www.w3.org/1999/xlink&quot; attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/1999/xlink&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;xs:attribute name=&quot;href&quot; type=&quot;xs:string&quot; /&gt;
+        ///&lt;/xs:schema&gt;.
         /// </summary>
-        internal static byte[] Vehicle {
+        internal static string SimulationSchemaXlink {
             get {
-                object obj = ResourceManager.GetObject("Vehicle", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("SimulationSchemaXlink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;svg width=&quot;480&quot; height=&quot;480&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+        ///  &lt;rect width=&quot;480&quot; height=&quot;480&quot; fill=&quot;rgb(1, 47, 135)&quot; /&gt;
+        ///  &lt;g transform=&quot;translate(240,240) scale(240,-240)&quot;&gt;
+        ///    &lt;polygon points=&quot;0.14697853332425609,-0.00075762130579515308 -0.26289459311091157,0.57427694979271182 -0.553063553230448,0.24774216699500878 -0.54813901474277948,-0.20645180582917411 -0.30607900754123418,-0.68640490305039148 &quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; fill=&quot;white&quot; /&gt;
+        ///  &lt;/g&gt;
+        ///  &lt;circle cx=&quot;240 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Vehicle {
+            get {
+                return ResourceManager.GetString("Vehicle", resourceCulture);
             }
         }
         

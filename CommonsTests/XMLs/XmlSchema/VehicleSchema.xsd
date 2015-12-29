@@ -17,7 +17,7 @@
                 <xs:complexType>
                   <xs:attribute name="points" type="xs:string" use="required" />
                   <xs:attribute name="stroke" type="xs:string" use="required" />
-                  <xs:attribute name="stroke-width" type="xs:decimal" use="required" />
+                  <xs:attribute name="stroke-width" type="xs:double" use="required" />
                   <xs:attribute name="fill" type="xs:string" use="required" />
                 </xs:complexType>
               </xs:element>
@@ -25,7 +25,7 @@
             <xs:attribute name="transform" type="xs:string" use="required" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="circle">
+        <xs:element minOccurs="1" maxOccurs="1" name="circle">
           <xs:complexType>
             <xs:attribute name="cx" type="xs:unsignedByte" use="required" />
             <xs:attribute name="cy" type="xs:unsignedByte" use="required" />
