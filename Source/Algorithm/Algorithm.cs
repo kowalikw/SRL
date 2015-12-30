@@ -140,7 +140,12 @@ namespace SRL.Algorithm
                 Order o = new Order();
                 o.Destination = IndexPointAngleList[angle][ind].point;
                 o.Rotation = 2 * Math.PI - angle * singleAngle;
-                if (path[i].From < path[i].To)
+                if (path[i].From > path[i].To)
+                {
+                    if (path[i].To > IndexPointAngleList[0].Count)
+                        o.Rotation *= -1;
+                }
+                else if (path[i].From < path[i].To && path[i].From < IndexPointAngleList[0].Count)
                     o.Rotation *= -1;
                 orders.Add(o);
             }
