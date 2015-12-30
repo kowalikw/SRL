@@ -230,12 +230,12 @@ namespace SRL.Main.ViewModel
 
             ResumeCommand = new RelayCommand(o =>
             {
-                //_timer.Start();
+                _timer.Start();
 
                 // TODO: MinkowskiSum
 
-                Algorithm algorithm = new Algorithm();
-                MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 360)[359];
+                //Algorithm algorithm = new Algorithm();
+                //MinkowskiSum = algorithm.MinkowskiSum(Map, Vehicle, 360)[359];
 
             });
             PauseCommand = new RelayCommand(o =>
