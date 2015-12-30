@@ -11,9 +11,20 @@ namespace SRL.Commons.Utilities
             return pX * qY - qX * pY;
         }
 
-        public static double CrossProduct(Point p1, Point p2)
+        public static double CrossProduct(Point p1, Point p2, Point? pivot = null)
         {
+            if(pivot.HasValue)
+                return (p1.X - pivot.Value.X) * (p2.Y - pivot.Value.Y) - (p2.X - pivot.Value.X) * (p1.Y - pivot.Value.Y);
+
             return p1.X * p2.Y - p2.X * p1.Y;
+        }
+
+        public static double DotProduct(Point p1, Point p2, Point? pivot = null)
+        {
+            if (pivot.HasValue)
+                return (p1.X - pivot.Value.X) * (p2.X - pivot.Value.X) + (p1.Y - pivot.Value.Y) * (p2.Y - pivot.Value.Y);
+
+            return p1.X * p2.X + p1.Y * p2.Y;
         }
 
         private static bool IsInsideRectangle(Point point, Point cornerA, Point cornerB)
@@ -26,7 +37,16 @@ namespace SRL.Commons.Utilities
 
         public static bool IsInsidePolygon(Point point, Polygon polygon)
         {
-            return true;//TODO
+            // If point it's on polygon edge, it's inside of polygon.
+
+            double epsilon = 0.000001;
+
+            double totalAngle = GetAngle(point, polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]);
+                
+            for (int i = 0; i < polygon.Vertices.Count - 1; i++)
+                totalAngle += GetAngle(point, polygon.Vertices[i], polygon.Vertices[i + 1]);
+
+            return Math.Abs(totalAngle) > epsilon;
         }
 
         public static bool DoSegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
@@ -55,12 +75,24 @@ namespace SRL.Commons.Utilities
             return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
         }
 
-        public static double GetAngle(Point pivot, Point point)
+        public static double GetAngle(Point pivot, Point point, Point? additionalPoint = null)
         {
-            double angle = Math.Atan((point.Y - pivot.Y) / (point.X - pivot.X));
+            double angle;
 
-            if (point.X < pivot.X)
-                angle += Math.PI;
+            if(additionalPoint.HasValue)
+            {
+                double dotProduct = DotProduct(point, additionalPoint.Value, pivot);
+                double crossProduct = CrossProduct(point, additionalPoint.Value, pivot);
+
+                angle = Math.Atan2(crossProduct, dotProduct);
+            }
+            else
+            {
+                angle = Math.Atan((point.Y - pivot.Y) / (point.X - pivot.X));
+
+                if (point.X < pivot.X)
+                    angle += Math.PI;
+            }
 
             return angle;
         }
