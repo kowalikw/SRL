@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons", "Source\Commons\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithm", "Source\Algorithm\Algorithm.csproj", "{2F22392D-FE48-4407-8C62-0D8FB182CF52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonsTests", "Source\CommonsTests\CommonsTests.csproj", "{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2F22392D-FE48-4407-8C62-0D8FB182CF52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F22392D-FE48-4407-8C62-0D8FB182CF52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F22392D-FE48-4407-8C62-0D8FB182CF52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

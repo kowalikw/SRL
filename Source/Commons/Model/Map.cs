@@ -9,7 +9,7 @@ using SRL.Commons.Model.Base;
 namespace SRL.Commons.Model
 {
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
-    public class Map : SvgSerializable
+    public class Map : SvgSerializable, IEquatable<Map>
     {
         public List<Polygon> Obstacles { get; }
 
@@ -17,6 +17,8 @@ namespace SRL.Commons.Model
         {
             Obstacles = new List<Polygon>();
         }
+
+        #region IXmlSerializable members
 
         public override void ReadXml(XmlReader reader)
         {
@@ -55,10 +57,6 @@ namespace SRL.Commons.Model
             writer.WriteValue(Height);
             writer.WriteEndAttribute();
 
-            writer.WriteStartAttribute("type");
-            writer.WriteValue(Type);
-            writer.WriteEndAttribute();
-
             // Background
             WriteBackground(writer);
 
@@ -74,5 +72,36 @@ namespace SRL.Commons.Model
 
             writer.WriteEndElement();
         }
+
+        #endregion
+
+        #region IEquatable members
+
+        public bool Equals(Map other)
+        {
+            if(Obstacles.Count == other.Obstacles.Count)
+            {
+                foreach (Polygon polygon in Obstacles)
+                    if (!other.Obstacles.Contains(polygon))
+                        return false;
+                return true;
+            }
+
+            return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Map)
+                return Equals((Map)obj);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        #endregion
     }
 }

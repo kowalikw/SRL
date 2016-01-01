@@ -9,7 +9,7 @@ using SRL.Commons.Model.Base;
 namespace SRL.Commons.Model
 {
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
-    public class Simulation : SvgSerializable
+    public class Simulation : SvgSerializable, IEquatable<Simulation>
     {
         public Map Map { get; set; }
 
@@ -24,6 +24,8 @@ namespace SRL.Commons.Model
         public Point EndPoint { get; set; }
         
         public List<Order> Orders { get; set; }
+
+        #region IXmlSerializable
 
         public override void ReadXml(XmlReader reader)
         {
@@ -174,7 +176,9 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("transform");
-            writer.WriteValue("scale(" + VehicleSize + ")");
+            writer.WriteValue("scale(");
+            writer.WriteValue(VehicleSize);
+            writer.WriteValue(")");
             writer.WriteEndAttribute();
 
             Vehicle.Shape.WriteXml(writer);
@@ -253,15 +257,21 @@ namespace SRL.Commons.Model
             writer.WriteValue("path");
             writer.WriteEndAttribute();
 
-            string points = "M";
+            writer.WriteStartAttribute("d");
             for(int i = 0; i < Orders.Count; i++)
             {
-                if (i != 0) points += "L";
-                points += Orders[i].Destination.X + " " + Orders[i].Destination.Y + " ";
-            }
+                Order order = Orders[i];
 
-            writer.WriteStartAttribute("d");
-            writer.WriteValue(points);
+                if (i == 0)
+                    writer.WriteValue("M");
+                else
+                    writer.WriteValue("L");
+
+                writer.WriteValue(order.Destination.X);
+                writer.WriteValue(" ");
+                writer.WriteValue(order.Destination.Y);
+                writer.WriteValue(" ");
+            }
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
@@ -343,5 +353,37 @@ namespace SRL.Commons.Model
                 order.WriteXml(writer);
             writer.WriteEndElement();
         }
+
+        #endregion
+
+        #region IEquatable members
+
+        public bool Equals(Simulation other)
+        {
+            foreach (Order order in Orders)
+                if (!other.Orders.Contains(order))
+                    return false;
+
+            return Map.Equals(other.Map)
+                && Vehicle.Equals(other.Vehicle)
+                && StartPoint.Equals(other.StartPoint)
+                && EndPoint.Equals(other.EndPoint)
+                && VehicleSize == other.VehicleSize
+                && InitialVehicleRotation == other.InitialVehicleRotation;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Simulation)
+                return Equals((Simulation)obj);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        #endregion
     }
 }

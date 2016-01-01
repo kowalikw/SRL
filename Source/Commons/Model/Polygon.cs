@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Xml;
 using SRL.Commons.Model.Base;
+using System.Xml.Serialization;
 
 namespace SRL.Commons.Model
 {
-    public class Polygon : SvgSerializable
+    [XmlRoot(ElementName = "polygon")]
+    public class Polygon : SvgSerializable, IEquatable<Polygon>
     {
         public List<Point> Vertices { get; }
 
@@ -40,8 +43,8 @@ namespace SRL.Commons.Model
                             Vertices.Add(new Point(
                                 double.Parse(point[0], CultureInfo.InvariantCulture),
                                 double.Parse(point[1], CultureInfo.InvariantCulture)));
-                        }
                     }
+                }
                 }
                 else
                     throw new XmlException();
@@ -79,6 +82,43 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             writer.WriteEndElement();
+        }
+
+        #endregion
+
+        #region IEquatable members
+
+        public bool Equals(Polygon other)
+        {
+            if (Vertices.Count == other.Vertices.Count)
+            {
+                int i;
+                for (i = 0; i < Vertices.Count; i++)
+                {
+                    if (Vertices[i] == other.Vertices[0])
+                        break;
+                }
+                if (i < Vertices.Count)
+                {
+                    for (int j = 0; j < Vertices.Count; j++)
+                        if (Vertices[(i + j) % Vertices.Count] != other.Vertices[j])
+                            return false;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Polygon)
+                return Equals((Polygon)obj);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         #endregion

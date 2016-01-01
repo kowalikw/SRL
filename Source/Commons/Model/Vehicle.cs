@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
@@ -6,9 +7,11 @@ using SRL.Commons.Model.Base;
 namespace SRL.Commons.Model
 {
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
-    public class Vehicle : SvgSerializable
+    public class Vehicle : SvgSerializable, IEquatable<Vehicle>
     {
         public Polygon Shape { get; set; }
+
+        #region IXmlSerializable members
 
         public override void ReadXml(XmlReader reader)
         {
@@ -173,5 +176,28 @@ namespace SRL.Commons.Model
 
             writer.WriteEndElement();
         }
+
+        #endregion
+
+        #region IEquatable members
+
+        public bool Equals(Vehicle other)
+        {
+            return Shape.Equals(other.Shape);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Vehicle)
+                return Equals((Vehicle)obj);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        #endregion
     }
 }
