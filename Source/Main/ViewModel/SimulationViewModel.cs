@@ -310,14 +310,75 @@ namespace SRL.Main.ViewModel
         }
 
 
-        public Map Map { get; private set; }
-        public Vehicle Vehicle { get; private set; }
-        public double? VehicleSize { get; private set; }
-        public double? InitialVehicleRotation { get; private set; }
-        public Point? StartPoint { get; private set; }
-        public Point? EndPoint { get; private set; }
+        public Map Map
+        {
+            get { return _map; }
+            private set
+            {
+                if (_map != value)
+                {
+                    _map = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
-        public Frame CurrentFrame => _frames[CurrentFrameIdx];
+
+        public Vehicle Vehicle
+        {
+            get { return _vehicle; }
+            private set
+            {
+                if (_vehicle != value)
+                {
+                    _vehicle = value;
+                    ActualVehicle
+                }
+            }
+        }
+
+        public double? VehicleSize
+        {
+            get { return _vehicleSize; }
+            private set
+            {
+                _vehicleSize = value;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="Vehicle"/> resized by <see cref="VehicleSize"/> factor.
+        /// </summary>
+        public Vehicle ActualVehicle { get; private set; }
+        public double? InitialVehicleRotation { get; private set; }
+
+        public Point? StartPoint
+        {
+            get { return _startPoint; }
+            private set
+            {
+                if (_startPoint != null)
+                {
+                    _startPoint = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public Point? EndPoint
+        {
+            get { return _endPoint; }
+            private set
+            {
+                if (_endPoint != null)
+                {
+                    _endPoint = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public Frame CurrentFrame => _frames?[CurrentFrameIdx];
         public int CurrentFrameIdx { get; private set; }
         public int MaxFrameIdx => _frames.Count - 1;
 
@@ -327,6 +388,15 @@ namespace SRL.Main.ViewModel
         private List<Order> _orders;
         private bool _simulationRunning;
         private IAlgorithm _algorithm;
+
+
+
+
+        private Map _map;
+        private Point? _startPoint;
+        private Point? _endPoint;
+        private Vehicle _vehicle;
+        private double? _vehicleSize;
 
 
         public SimulationViewModel()
