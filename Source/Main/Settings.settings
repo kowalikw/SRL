@@ -8,5 +8,8 @@
     <Setting Name="Language" Type="SRL.Main.View.Localization.Language" Scope="User">
       <Value Profile="(Default)">English</Value>
     </Setting>
+    <Setting Name="ShowPath" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -42,5 +42,12 @@
             <RadioButton Content="{Resx Key=AntialiasingEnabled}" IsChecked="{Binding AntialiasingEnabled}"/>
             <RadioButton Content="{Resx Key=AntialiasingDisabled}" IsChecked="{Binding AntialiasingEnabled, Converter={StaticResource BoolInverterConverter}}"/>
         </StackPanel>
+
+        <Label Grid.Row="2" Grid.Column="0" 
+                   Content="{Resx Key=ShowPath}"/>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <RadioButton Content="{Resx Key=ShowPathEnabled}" IsChecked="{Binding ShowPath}"/>
+            <RadioButton Content="{Resx Key=ShowPathDisabled}" IsChecked="{Binding ShowPath, Converter={StaticResource BoolInverterConverter}}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

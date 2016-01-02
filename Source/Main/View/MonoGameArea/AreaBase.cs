@@ -52,7 +52,7 @@ namespace SRL.Main.View.MonoGameArea
             _sizeChangedHandler = (o, e) => OnSizeChanged();
             _propertyChangedHandler = (o, e) =>
             {
-                if (e.PropertyName == nameof(AntialiasingEnabled))
+                if (e.PropertyName == nameof(Settings.Default.AntialiasingEnabled))
                     RedrawStaticObjectsTexture();
             };
 

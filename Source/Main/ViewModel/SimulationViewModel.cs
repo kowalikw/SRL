@@ -14,15 +14,10 @@ namespace SRL.Main.ViewModel
     public class SimulationViewModel : EditorViewModel<Simulation>
     {
         private const int FrameChangeInterval = 5;
+        private const int FramesPerRadian = 128;
+        private const double MovePerFrame = 0.003;
 
-        public enum Mode
-        {
-            Normal,
-            StartPointSetup,
-            EndPointSetup,
-            VehicleSetup,
-            SimulationRunning,
-        }
+        #region LeftMenuCommands 
 
         public RelayCommand<Mode> EnterModeCommand
         {
@@ -52,19 +47,14 @@ namespace SRL.Main.ViewModel
                                 return Map != null;
                             case Mode.VehicleSetup:
                                 return StartPoint != null;
-
-                            case Mode.Normal:
-                            case Mode.SimulationRunning:
-                                throw new ArgumentException(null, nameof(mode));
                             default:
-                                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                                throw new ArgumentException(null, nameof(mode));
                         }
                     });
                 }
                 return _enterModeCommand;
             }
         }
-
         public override RelayCommand ResetCommand
         {
             get
@@ -73,21 +63,114 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
+                        EditorMode = Mode.Normal;
                         Map = null;
                         Vehicle = null;
-                        VehicleSize = null;
-                        InitialVehicleRotation = null;
-                        StartPoint = null;
-                        EndPoint = null;
-                        _orders = null;
-                        _frames = null;
-                        EditorMode = Mode.Normal;
+                        Orders = null;
                     });
                 }
                 return _resetCommand;
             }
         }
+        public RelayCommand LoadMapCommand
+        {
+            get
+            {
+                if (_loadMapCommand == null)
+                {
+                    _loadMapCommand = new RelayCommand(() =>
+                    {
+                        EditorMode = Mode.Normal;
+                        Map = LoadModel<Map>();
+                    });
+                }
+                return _loadMapCommand;
+            }
+        }
+        public RelayCommand LoadVehicleCommand
+        {
+            get
+            {
+                if (_loadVehicleCommand == null)
+                {
+                    _loadVehicleCommand = new RelayCommand(() =>
+                    {
+                        EditorMode = Mode.Normal;
+                        Vehicle = LoadModel<Vehicle>();
+                    });
+                }
+                return _loadVehicleCommand;
+            }
+        }
+        public RelayCommand<Point> SetStartPointCommand
+        {
+            get
+            {
+                if (_setStartPointCommand == null)
+                {
+                    _setStartPointCommand = new RelayCommand<Point>(point =>
+                    {
+                        EditorMode = Mode.Normal;
+                        StartPoint = point;
+                        EnterModeCommand.Execute(Mode.VehicleSetup);
+                    }, point =>
+                    {
+                        if (EditorMode != Mode.StartPointSetup || Map == null)
+                            return false;
 
+                        return !IsInsideAnyObstacle(point);
+                    });
+                }
+                return _setStartPointCommand;
+            }
+        }
+        public RelayCommand<Point> SetEndPointCommand
+        {
+            get
+            {
+                if (_setEndPointCommand == null)
+                {
+                    _setEndPointCommand = new RelayCommand<Point>(point =>
+                    {
+                        EditorMode = Mode.Normal;
+                        EndPoint = point;
+                    }, point =>
+                    {
+                        if (EditorMode != Mode.EndPointSetup || Map == null)
+                            return false;
+
+                        return !IsInsideAnyObstacle(point);
+                    });
+                }
+                return _setEndPointCommand;
+            }
+        }
+        public RelayCommand<VehicleSetup> SetInitialVehicleSetup
+        {
+            get
+            {
+                if (_setInitialVehicleSetup == null)
+                {
+                    _setInitialVehicleSetup = new RelayCommand<VehicleSetup>(setup =>
+                    {
+                        EditorMode = Mode.Normal;
+                        VehicleSize = setup.RelativeSize;
+                        InitialVehicleRotation = setup.Rotation;
+
+                    }, setup =>
+                    {
+                        if (EditorMode != Mode.VehicleSetup ||
+                            Map == null ||
+                            Vehicle == null ||
+                            StartPoint == null)
+                            return false;
+
+                        return true; //TODO check if vehicle overlays with any obstacle
+                    });
+                }
+                return _setInitialVehicleSetup;
+            }
+        }
         public RelayCommand CalculatePathCommand
         {
             get
@@ -96,23 +179,50 @@ namespace SRL.Main.ViewModel
                 {
                     _calculatePathCommand = new RelayCommand(() =>
                     {
-                        _orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
-                            InitialVehicleRotation.Value, 360); // TODO angle density as parameter
-                        CalculateFrames(_orders);
+                        EditorMode = Mode.Normal;
 
-                        CurrentFrameIdx = 0;
-                        RaisePropertyChanged(nameof(MaxFrameIdx));
+                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
+                            InitialVehicleRotation.Value, 360); // TODO angle density as parameter
+
+                        _orders = new List<Order>(); //TODO delete
+                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
+                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
+                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
+                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
+                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
+                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
+                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
                     },
                         () =>
                         {
                             return EditorMode == Mode.Normal && Map != null && Vehicle != null && VehicleSize != null &&
                                    InitialVehicleRotation != null && StartPoint != null && EndPoint != null &&
-                                   _orders == null;
+                                   Orders == null;
                         });
                 }
                 return _calculatePathCommand;
             }
         }
+
+
+
+
+        private RelayCommand<Mode> _enterModeCommand;
+        private RelayCommand _resetCommand;
+        private RelayCommand _calculatePathCommand;
+
+
+
+        private RelayCommand _loadMapCommand;
+        private RelayCommand _loadVehicleCommand;
+        private RelayCommand<Point> _setStartPointCommand;
+        private RelayCommand<Point> _setEndPointCommand;
+        private RelayCommand<VehicleSetup> _setInitialVehicleSetup;
+
+        #endregion
+
+
+        #region Playback control commands
 
         public RelayCommand StartPlaybackCommand
         {
@@ -124,12 +234,11 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.SimulationRunning;
                         _simulationTimer.Start();
-                    }, () => { return EditorMode == Mode.Normal && _frames != null; });
+                    }, () => { return EditorMode == Mode.Normal && Orders != null; });
                 }
                 return _startPlaybackCommand;
             }
         }
-
         public RelayCommand StopPlaybackCommand
         {
             get
@@ -146,7 +255,6 @@ namespace SRL.Main.ViewModel
                 return _stopPlaybackCommand;
             }
         }
-
         public RelayCommand PausePlaybackCommand
         {
             get
@@ -163,146 +271,199 @@ namespace SRL.Main.ViewModel
             }
         }
 
-        public RelayCommand LoadMapCommand
-        {
-            get
-            {
-                if (_loadMapCommand == null)
-                {
-                    _loadMapCommand = new RelayCommand(() =>
-                    {
-                        EditorMode = Mode.Normal;
-                        StartPoint = null;
-                        EndPoint = null;
-                        VehicleSize = null;
-                        InitialVehicleRotation = null;
-                        _orders = null;
-                        _frames = null;
-
-                        Map = LoadModel<Map>();
-                    });
-                }
-                return _loadMapCommand;
-            }
-        }
-
-        public RelayCommand LoadVehicleCommand
-        {
-            get
-            {
-                if (_loadVehicleCommand == null)
-                {
-                    _loadVehicleCommand = new RelayCommand(() =>
-                    {
-                        EditorMode = Mode.Normal;
-                        VehicleSize = null;
-                        InitialVehicleRotation = null;
-                        _orders = null;
-                        _frames = null;
-
-                        Vehicle = LoadModel<Vehicle>();
-                    });
-                }
-                return _loadVehicleCommand;
-            }
-        }
-
-        public RelayCommand<Point> SetStartPointCommand
-        {
-            get
-            {
-                if (_setStartPointCommand == null)
-                {
-                    _setStartPointCommand = new RelayCommand<Point>(point =>
-                    {
-                        EditorMode = Mode.Normal;
-                        VehicleSize = null;
-                        InitialVehicleRotation = null;
-                        _orders = null;
-                        _frames = null;
-
-                        StartPoint = point;
-                        EnterModeCommand.Execute(Mode.VehicleSetup);
-                    }, point =>
-                    {
-                        if (EditorMode != Mode.StartPointSetup || Map == null)
-                            return false;
-
-                        return !IsInsideAnyObstacle(point);
-                    });
-                }
-                return _setStartPointCommand;
-            }
-        }
-
-        public RelayCommand<Point> SetEndPointCommand
-        {
-            get
-            {
-                if (_setEndPointCommand == null)
-                {
-                    _setEndPointCommand = new RelayCommand<Point>(point =>
-                    {
-                        EditorMode = Mode.Normal;
-                        _orders = null;
-                        _frames = null;
-
-                        EndPoint = point;
-                    }, point =>
-                    {
-                        if (EditorMode != Mode.EndPointSetup || Map == null)
-                            return false;
-
-                        return !IsInsideAnyObstacle(point);
-                    });
-                }
-                return _setEndPointCommand;
-            }
-        }
-
-        public RelayCommand<VehicleSetup> SetInitialVehicleSetup
-        {
-            get
-            {
-                if (_setInitialVehicleSetup == null)
-                {
-                    _setInitialVehicleSetup = new RelayCommand<VehicleSetup>(setup =>
-                    {
-                        EditorMode = Mode.Normal;
-                        _orders = null;
-                        _frames = null;
-
-                        VehicleSize = setup.RelativeSize;
-                        InitialVehicleRotation = setup.Rotation;
-                    }, setup =>
-                    {
-                        if (EditorMode != Mode.VehicleSetup || Map == null || Vehicle == null || StartPoint == null)
-                            return false;
-
-                        return true; //TODO check if vehicle overlays any obstacle
-                    });
-                }
-                return _setInitialVehicleSetup;
-            }
-        }
-
-        #region Command backing fields
-
-        private RelayCommand<Mode> _enterModeCommand;
-        private RelayCommand _resetCommand;
-        private RelayCommand _calculatePathCommand;
-
         private RelayCommand _startPlaybackCommand;
         private RelayCommand _stopPlaybackCommand;
         private RelayCommand _pausePlaybackCommand;
 
-        private RelayCommand _loadMapCommand;
-        private RelayCommand _loadVehicleCommand;
-        private RelayCommand<Point> _setStartPointCommand;
-        private RelayCommand<Point> _setEndPointCommand;
-        private RelayCommand<VehicleSetup> _setInitialVehicleSetup;
+        #endregion
+
+
+        #region Map & vehicle properties
+
+        public Map Map
+        {
+            get { return _map; }
+            private set
+            {
+                if (_map != value)
+                {
+                    _map = value;
+
+                    StartPoint = null;
+                    EndPoint = null;
+                    Orders = null;
+
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public Point? StartPoint
+        {
+            get { return _startPoint; }
+            private set
+            {
+                if (_startPoint != value)
+                {
+                    _startPoint = value;
+
+                    InitialVehicleRotation = null;
+                    VehicleSize = null;
+                    Orders = null;
+
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public Point? EndPoint
+        {
+            get { return _endPoint; }
+            private set
+            {
+                if (_endPoint != value)
+                {
+                    _endPoint = value;
+
+                    Orders = null;
+
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public Vehicle Vehicle
+        {
+            get { return _vehicle; }
+            private set
+            {
+                if (_vehicle != value)
+                {
+                    _vehicle = value;
+
+                    Orders = null;
+
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public double? VehicleSize
+        {
+            get { return _vehicleSize; }
+            private set
+            {
+                if (_vehicleSize != value)
+                {
+                    _vehicleSize = value;
+
+                    Orders = null;
+
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public double? InitialVehicleRotation
+        {
+            get { return _initialVehicleRotation; }
+            private set
+            {
+                _initialVehicleRotation = value;
+
+                Orders = null;
+            }
+        }
+
+        private Map _map;
+        private Point? _startPoint;
+        private Point? _endPoint;
+        private Vehicle _vehicle;
+        private double? _vehicleSize;
+        private double? _initialVehicleRotation;
 
         #endregion
+
+
+        #region Orders & frames properties
+
+        public List<Order> Orders
+        {
+            get { return _orders; }
+            set
+            {
+                if (_orders != value)
+                {
+                    _orders = value;
+
+                    if (value == null)
+                    {
+                        Path = null;
+
+                        Frames = null;
+                        MaxFrameIdx = -1;
+                        CurrentFrameIdx = 0;
+                    }
+                    else
+                    {
+                        Path = new Path();
+                        Path.Vertices.Add(StartPoint.Value);
+                        Path.Vertices.AddRange(Orders.Select(order => order.Destination));
+
+                        CalculateFrames(value);
+                        MaxFrameIdx = Frames.Count - 1;
+                        CurrentFrameIdx = 0;
+                    }
+
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        private List<Frame> Frames
+        {
+            get; set;
+        }
+        public Frame CurrentFrame => Frames?[CurrentFrameIdx];
+        public int CurrentFrameIdx
+        {
+            get { return _currentFrameIdx; }
+            set
+            {
+                if (_currentFrameIdx != value)
+                {
+                    _currentFrameIdx = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public int MaxFrameIdx
+        {
+            get { return _maxFrameIdx; }
+            set
+            {
+                if (_maxFrameIdx != value)
+                {
+                    _maxFrameIdx = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public Path Path
+        {
+            get { return _path; }
+            private set
+            {
+                if (_path != value)
+                {
+                    _path = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+
+        private List<Order> _orders;
+        private int _currentFrameIdx;
+        private int _maxFrameIdx;
+        private Path _path;
+
+        #endregion
+
 
         public Mode EditorMode
         {
@@ -316,117 +477,27 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-
         protected override bool IsModelValid
         {
             get
             {
                 return Map != null && Vehicle != null && VehicleSize.HasValue && InitialVehicleRotation.HasValue &&
-                       StartPoint.HasValue && EndPoint.HasValue && _orders != null;
+                       StartPoint.HasValue && EndPoint.HasValue && Orders != null;
             }
         }
 
 
-        public Map Map
-        {
-            get { return _map; }
-            private set
-            {
-                if (_map != value)
-                {
-                    _map = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
 
-        public Vehicle Vehicle
-        {
-            get { return _vehicle; }
-            private set
-            {
-                if (_vehicle != value)
-                {
-                    _vehicle = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
+        private IAlgorithm _algorithm;
 
-        public double? VehicleSize
-        {
-            get { return _vehicleSize; }
-            private set
-            {
-                if (_vehicleSize != value)
-                {
-                    _vehicleSize = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public double? InitialVehicleRotation { get; private set; }
-
-        public Point? StartPoint
-        {
-            get { return _startPoint; }
-            private set
-            {
-                if (_startPoint != value)
-                {
-                    _startPoint = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public Point? EndPoint
-        {
-            get { return _endPoint; }
-            private set
-            {
-                if (_endPoint != value)
-                {
-                    _endPoint = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public Frame CurrentFrame => _frames?[CurrentFrameIdx];
-
-        public int CurrentFrameIdx
-        {
-            get { return _currentFrameIdx; }
-            set
-            {
-                if (_currentFrameIdx != value)
-                {
-                    _currentFrameIdx = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public int MaxFrameIdx => _frames?.Count - 1 ?? -1;
 
 
         private readonly DispatcherTimer _simulationTimer;
 
-        private bool _simulationRunning;
 
-        private List<Frame> _frames;
-        private List<Order> _orders;
-        private IAlgorithm _algorithm;
 
-        private Map _map;
-        private Vehicle _vehicle;
-        private Point? _startPoint;
-        private Point? _endPoint;
-        private double? _vehicleSize;
-        private int _currentFrameIdx;
         private Mode _editorMode;
+        
 
 
         public SimulationViewModel()
@@ -459,7 +530,7 @@ namespace SRL.Main.ViewModel
                 InitialVehicleRotation = InitialVehicleRotation.Value,
                 StartPoint = StartPoint.Value,
                 EndPoint = EndPoint.Value,
-                Orders = _orders
+                Orders = Orders
             };
             return simulation;
         }
@@ -472,22 +543,15 @@ namespace SRL.Main.ViewModel
             InitialVehicleRotation = model.InitialVehicleRotation;
             StartPoint = model.StartPoint;
             EndPoint = model.EndPoint;
-            _orders = model.Orders;
+            Orders = model.Orders;
 
-            if (_orders != null)
-                CalculateFrames(_orders);
+            if (Orders != null)
+                CalculateFrames(Orders);
         }
 
         private void CalculateFrames(List<Order> orders) //TODO refactor
         {
-            if (!IsModelValid)
-                return;
-
-            const int partsPerRadian = 128;
-            double radiansPerPart = 1/(double) partsPerRadian;
-
-            double movePerFrame = 0.003;
-
+            double radiansPerPart = 1 / (double)FramesPerRadian;
 
             Stack<Frame> frames = new Stack<Frame>();
             frames.Push(new Frame
@@ -506,20 +570,20 @@ namespace SRL.Main.ViewModel
                 else
                     relativeRotation = orders[o].Rotation - orders[o - 1].Rotation;
 
-                int rotationPartCount = (int) (Math.Abs(relativeRotation)*partsPerRadian);
+                int rotationFrameCount = (int)(Math.Abs(relativeRotation) * FramesPerRadian);
 
                 double currentAngle = frames.Peek().Rotation;
                 Point currentPosition = frames.Peek().Position;
                 double angleChange = relativeRotation > 0 ? radiansPerPart : -radiansPerPart;
 
-                for (int p = 0; p < rotationPartCount - 1; p++)
+                for (int p = 0; p < rotationFrameCount - 1; p++)
                 {
                     currentAngle += angleChange;
 
                     frames.Push(new Frame
                     {
                         Position = currentPosition,
-                        Rotation = currentAngle < 0 ? Math.PI*2 + currentAngle : currentAngle
+                        Rotation = currentAngle < 0 ? Math.PI * 2 + currentAngle : currentAngle
                     });
                 }
 
@@ -536,8 +600,8 @@ namespace SRL.Main.ViewModel
                 double dx = end.X - start.X;
                 double dy = end.Y - start.Y;
 
-                double xStep = dx > 0 ? movePerFrame : -movePerFrame;
-                double yStep = dy > 0 ? movePerFrame : -movePerFrame;
+                double xStep = dx > 0 ? MovePerFrame : -MovePerFrame;
+                double yStep = dy > 0 ? MovePerFrame : -MovePerFrame;
 
                 currentAngle = frames.Peek().Rotation;
                 currentPosition = frames.Peek().Position;
@@ -568,7 +632,7 @@ namespace SRL.Main.ViewModel
                     // Based on Bresenham's line algorithm.
                     if (Math.Abs(dx) > Math.Abs(dy))
                     {
-                        double error = Math.Abs(dx/2) - Math.Abs(dy);
+                        double error = Math.Abs(dx / 2) - Math.Abs(dy);
                         for (double x = xStep, y = 0; Math.Abs(x) <= Math.Abs(dx); x += xStep)
                         {
                             if (error < 0)
@@ -587,7 +651,7 @@ namespace SRL.Main.ViewModel
                     }
                     else
                     {
-                        double error = Math.Abs(dy/2) - Math.Abs(dx);
+                        double error = Math.Abs(dy / 2) - Math.Abs(dx);
                         for (double y = yStep, x = 0; Math.Abs(y) <= Math.Abs(dy); y += yStep)
                         {
                             if (error < 0)
@@ -606,7 +670,7 @@ namespace SRL.Main.ViewModel
                     }
                 }
             }
-            _frames = frames.Reverse().ToList();
+            Frames = frames.Reverse().ToList();
         }
 
         public bool IsInsideAnyObstacle(Point point)
@@ -617,6 +681,15 @@ namespace SRL.Main.ViewModel
                     return true;
             }
             return false;
+        }
+
+        public enum Mode
+        {
+            Normal,
+            StartPointSetup,
+            EndPointSetup,
+            VehicleSetup,
+            SimulationRunning,
         }
     }
 }

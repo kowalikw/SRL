@@ -18,7 +18,10 @@ namespace SRL.Main.View.MonoGameArea
         private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
         private PropertyChangedEventHandler _propertyChangedHandler;
 
+
         private Polygon _resizedVehicleShape;
+
+        protected bool ShowPath => Settings.Default.ShowPath;
 
         protected override void Initialize()
         {
@@ -47,10 +50,14 @@ namespace SRL.Main.View.MonoGameArea
                             _resizedVehicleShape = _context.Vehicle.Shape;
                         }
                         break;
+                    case nameof(Settings.Default.ShowPath):
+                        RedrawStaticObjectsTexture();
+                        break;
                 }
             };
 
             _context.PropertyChanged += _propertyChangedHandler;
+            Settings.Default.PropertyChanged += _propertyChangedHandler;
         }
 
         protected override void Unitialize()
@@ -58,6 +65,7 @@ namespace SRL.Main.View.MonoGameArea
             base.Unitialize();
 
             _context.PropertyChanged -= _propertyChangedHandler;
+            Settings.Default.PropertyChanged -= _propertyChangedHandler;
         }
 
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
@@ -178,6 +186,13 @@ namespace SRL.Main.View.MonoGameArea
                     lockBitmap.DrawMapAA(_context.Map, RenderSize, RegularColor);
                 else
                     lockBitmap.DrawMap(_context.Map, RenderSize, RegularColor);
+            }
+            if (ShowPath && _context.Path != null)
+            {
+                if (AntialiasingEnabled)
+                    lockBitmap.DrawPathAA(_context.Path, RenderSize, ActiveColor); //TODO color
+                else
+                    lockBitmap.DrawPath(_context.Path, RenderSize, ActiveColor); //TODO color
             }
             if (_context.StartPoint != null)
             {

@@ -34,5 +34,18 @@ namespace SRL.Main.ViewModel
                 Settings.Default.Save();
             }
         }
+
+        public bool ShowPath
+        {
+            get
+            {
+                return Settings.Default.ShowPath;
+            }
+            set
+            {
+                Settings.Default.ShowPath = value;
+                Settings.Default.Save();
+            }
+        }
     }
 }
