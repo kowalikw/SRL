@@ -44,24 +44,18 @@ namespace SRL.Main.View.MonoGameArea
 
             if (_context.UnfinishedPolygon.Count > 0 && IsMouseOver)
             {
-                
+
                 RgbColor color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
                     ValidColor : InvalidColor;
 
                 _activeLine.EndpointA = _context.UnfinishedPolygon.GetLast();
                 _activeLine.EndpointB = normalizedMousePosition;
 
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
-                else
-                    spriteBatch.DrawLine(_activeLine, RenderSize, color);
+                spriteBatch.DrawLine(_activeLine, RenderSize, color, AntialiasingEnabled);
             }
             else if (_context.UnfinishedPolygon.Count == 1)
             {
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawVertexAA(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor);
-                else
-                    spriteBatch.DrawVertex(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor);
+                spriteBatch.DrawVertex(_context.UnfinishedPolygon.GetLast(), RenderSize, ActiveColor, AntialiasingEnabled);
             }
         }
 

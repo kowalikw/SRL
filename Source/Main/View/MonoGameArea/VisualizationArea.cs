@@ -65,10 +65,7 @@ namespace SRL.Main.View.MonoGameArea
                 RgbColor color = _context.SetStartPointCommand.CanExecute(normalizedMousePos)
                     ? ValidColor : InvalidColor;
 
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawVertexAA(position, RenderSize, color);
-                else
-                    spriteBatch.DrawVertex(position, RenderSize, color);
+                    spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
             }
             else if (_context.Vehicle != null && _context.StartPoint != null)
             {
@@ -94,10 +91,7 @@ namespace SRL.Main.View.MonoGameArea
                     else
                         color = InvalidColor;
 
-                    if (AntialiasingEnabled)
-                        spriteBatch.DrawArrowAA(origin, normalizedMousePos, RenderSize, ActiveColor);
-                    else
-                        spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor);
+                        spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor, AntialiasingEnabled);
 
                     shape = _context.Vehicle.Shape;
                     shape = GeometryHelper.Resize(shape, setup.RelativeSize);
@@ -115,10 +109,7 @@ namespace SRL.Main.View.MonoGameArea
                 shape = GeometryHelper.Rotate(shape, angle);
                 shape = GeometryHelper.Move(shape, origin.X, origin.Y);
 
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawPolygonAA(shape, RenderSize, color);
-                else
-                    spriteBatch.DrawPolygon(shape, RenderSize, color);
+                    spriteBatch.DrawPolygon(shape, RenderSize, color, AntialiasingEnabled);
             }
 
             if (_context.EditorMode == SimulationViewModel.Mode.EndPointSetup)
@@ -130,10 +121,7 @@ namespace SRL.Main.View.MonoGameArea
                 RgbColor color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
                     ? ValidColor : InvalidColor;
 
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawVertexAA(position, RenderSize, color);
-                else
-                    spriteBatch.DrawVertex(position, RenderSize, color);
+                    spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
             }
         }
 
@@ -145,10 +133,7 @@ namespace SRL.Main.View.MonoGameArea
             Polygon shape = GeometryHelper.Rotate(_resizedVehicleShape, rotation);
             shape = GeometryHelper.Move(shape, position.X, position.Y);
 
-            if (AntialiasingEnabled)
-                spriteBatch.DrawPolygonAA(shape, RenderSize, ActiveColor);
-            else
-                spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor);
+                spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor, AntialiasingEnabled);
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)

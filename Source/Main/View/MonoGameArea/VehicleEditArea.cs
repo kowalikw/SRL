@@ -63,17 +63,11 @@ namespace SRL.Main.View.MonoGameArea
                     _activeLine.EndpointA = _context.VehicleShape.GetLast();
                     _activeLine.EndpointB = normalizedMousePosition;
 
-                    if (AntialiasingEnabled)
-                        spriteBatch.DrawLineAA(_activeLine, RenderSize, color);
-                    else
-                        spriteBatch.DrawLine(_activeLine, RenderSize, color);
+                        spriteBatch.DrawLine(_activeLine, RenderSize, color, AntialiasingEnabled);
                 }
                 else if (_context.VehicleShape.Count == 1)
                 {
-                    if (AntialiasingEnabled)
-                        spriteBatch.DrawVertexAA(_context.VehicleShape.GetLast(), RenderSize, ActiveColor);
-                    else
-                        spriteBatch.DrawVertex(_context.VehicleShape.GetLast(), RenderSize, ActiveColor);
+                        spriteBatch.DrawVertex(_context.VehicleShape.GetLast(), RenderSize, ActiveColor, AntialiasingEnabled);
                 }
             }
             else if (!_context.Pivot.HasValue)
@@ -84,10 +78,7 @@ namespace SRL.Main.View.MonoGameArea
                         ? ValidColor
                         : InvalidColor;
 
-                    if (AntialiasingEnabled)
-                        spriteBatch.DrawVertexAA(normalizedMousePosition, RenderSize, color);
-                    else
-                        spriteBatch.DrawVertex(normalizedMousePosition, RenderSize, color);
+                        spriteBatch.DrawVertex(normalizedMousePosition, RenderSize, color, AntialiasingEnabled);
                 }
             }
             else if (!_context.Direction.HasValue)
@@ -99,18 +90,12 @@ namespace SRL.Main.View.MonoGameArea
                         ? ValidColor
                         : InvalidColor;
 
-                    if (AntialiasingEnabled)
-                        spriteBatch.DrawArrowAA(_context.Pivot.Value, ArrowLength, angle, RenderSize, color);
-                    else
-                        spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, color);
+                        spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, color, AntialiasingEnabled);
                 }
             }
             else
             {
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawArrowAA(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
-                else
-                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor);
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor, AntialiasingEnabled);
             }
         }
 
