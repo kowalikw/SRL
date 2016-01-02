@@ -18,14 +18,6 @@ namespace SRL.Main.Drawing
             A = a;
         }
 
-        public RgbColor(float r, float g, float b, float a = 1)
-        {
-            R = (byte)(r * 255);
-            G = (byte)(g * 255);
-            B = (byte)(b * 255);
-            A = (byte)(a * 255);
-        }
-
         public RgbColor(XnaColor color)
         {
             R = color.R;
@@ -37,6 +29,16 @@ namespace SRL.Main.Drawing
         public XnaColor ToXnaColor(float intensity = 1)
         {
             return new XnaColor(new XnaColor(R, G, B) * intensity, intensity);
+        }
+
+        public WinColor ToWinColor()
+        {
+            return WinColor.FromArgb(A, R, G, B);
+        }
+
+        public WinColor ToWinColor(byte intensity = byte.MaxValue)
+        {
+            return WinColor.FromArgb(intensity, R * intensity / byte.MaxValue, G * intensity / byte.MaxValue, B * intensity / byte.MaxValue);
         }
     }
 }
