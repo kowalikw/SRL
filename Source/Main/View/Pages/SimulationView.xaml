@@ -61,7 +61,7 @@
                         <Setter Property="Command" Value="{Binding StartPlaybackCommand}"/>
                         <Setter Property="ToolTip" Value="{Resx Key=StartPlaybackTooltip}"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SimulationRunning}" Value="True">
+                            <DataTrigger Binding="{Binding EditorMode}" Value="{x:Static sim:SimulationViewModel+Mode.SimulationRunning}">
                                 <Setter Property="IconData" Value="{StaticResource PlaybackPauseIcon}"/>
                                 <Setter Property="Command" Value="{Binding PausePlaybackCommand}"/>
                                 <Setter Property="ToolTip" Value="{Resx Key=PausePlaybackTooltip}"/>
@@ -75,7 +75,7 @@
                               IconData="{StaticResource PlaybackStopIcon}" 
                               Command="{Binding StopPlaybackCommand}"
                               ToolTip="{Resx Key=StopPlaybackTooltip}"/>
-            <Slider Margin="10" VerticalAlignment="Center"/>
+            <Slider Margin="10" VerticalAlignment="Center" Maximum="{Binding MaxFrameIdx}" Value="{Binding CurrentFrameIdx, Mode=TwoWay}"/>
         </DockPanel>
     </Grid>
 </UserControl>

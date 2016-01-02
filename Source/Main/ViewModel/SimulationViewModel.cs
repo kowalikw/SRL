@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
@@ -14,6 +13,8 @@ namespace SRL.Main.ViewModel
 {
     public class SimulationViewModel : EditorViewModel<Simulation>
     {
+        private const int FrameChangeInterval = 5;
+
         public enum Mode
         {
             Normal,
@@ -95,9 +96,19 @@ namespace SRL.Main.ViewModel
                 {
                     _calculatePathCommand = new RelayCommand(() =>
                     {
-                        // algorithm.GetPath TODO
+                        _orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
+                            InitialVehicleRotation.Value, 360); // TODO angle density as parameter
                         CalculateFrames(_orders);
-                    }, () => { return EditorMode == Mode.Normal && Map != null && Vehicle != null && VehicleSize != null && InitialVehicleRotation != null && StartPoint != null && EndPoint != null && _orders == null; });
+
+                        CurrentFrameIdx = 0;
+                        RaisePropertyChanged(nameof(MaxFrameIdx));
+                    },
+                        () =>
+                        {
+                            return EditorMode == Mode.Normal && Map != null && Vehicle != null && VehicleSize != null &&
+                                   InitialVehicleRotation != null && StartPoint != null && EndPoint != null &&
+                                   _orders == null;
+                        });
                 }
                 return _calculatePathCommand;
             }
@@ -249,51 +260,29 @@ namespace SRL.Main.ViewModel
             }
         }
 
-        public RelayCommand<double> SetInitialVehicleRotationCommand
+        public RelayCommand<VehicleSetup> SetInitialVehicleSetup
         {
             get
             {
-                if (_setInitialVehicleRotationCommand == null)
+                if (_setInitialVehicleSetup == null)
                 {
-                    _setInitialVehicleRotationCommand = new RelayCommand<double>(angle =>
+                    _setInitialVehicleSetup = new RelayCommand<VehicleSetup>(setup =>
                     {
+                        EditorMode = Mode.Normal;
                         _orders = null;
                         _frames = null;
 
-                        InitialVehicleRotation = angle;
-                    }, angle =>
+                        VehicleSize = setup.RelativeSize;
+                        InitialVehicleRotation = setup.Rotation;
+                    }, setup =>
                     {
                         if (EditorMode != Mode.VehicleSetup || Map == null || Vehicle == null || StartPoint == null)
-                            return false;
-
-                        return true;
-                    });
-                }
-                return _setInitialVehicleRotationCommand;
-            }
-        }
-
-        public RelayCommand<double> SetVehicleSizeCommand
-        {
-            get
-            {
-                if (_setVehicleSizeCommand == null)
-                {
-                    _setVehicleSizeCommand = new RelayCommand<double>(sizeFactor =>
-                    {
-                        _orders = null;
-                        _frames = null;
-
-                        VehicleSize = sizeFactor;
-                    }, sizeFactor =>
-                    {
-                        if (EditorMode != Mode.VehicleSetup || Map == null || Vehicle == null || StartPoint == null || InitialVehicleRotation == null)
                             return false;
 
                         return true; //TODO check if vehicle overlays any obstacle
                     });
                 }
-                return _setVehicleSizeCommand;
+                return _setInitialVehicleSetup;
             }
         }
 
@@ -311,16 +300,30 @@ namespace SRL.Main.ViewModel
         private RelayCommand _loadVehicleCommand;
         private RelayCommand<Point> _setStartPointCommand;
         private RelayCommand<Point> _setEndPointCommand;
-        private RelayCommand<double> _setInitialVehicleRotationCommand;
-        private RelayCommand<double> _setVehicleSizeCommand;
+        private RelayCommand<VehicleSetup> _setInitialVehicleSetup;
 
         #endregion
 
-        public Mode EditorMode { get; private set; }
+        public Mode EditorMode
+        {
+            get { return _editorMode; }
+            private set
+            {
+                if (_editorMode != value)
+                {
+                    _editorMode = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         protected override bool IsModelValid
         {
-            get { return Map != null && Vehicle != null && VehicleSize.HasValue && InitialVehicleRotation.HasValue && StartPoint.HasValue && EndPoint.HasValue && _orders != null; }
+            get
+            {
+                return Map != null && Vehicle != null && VehicleSize.HasValue && InitialVehicleRotation.HasValue &&
+                       StartPoint.HasValue && EndPoint.HasValue && _orders != null;
+            }
         }
 
 
@@ -350,7 +353,19 @@ namespace SRL.Main.ViewModel
             }
         }
 
-        public double? VehicleSize { get; private set; }
+        public double? VehicleSize
+        {
+            get { return _vehicleSize; }
+            private set
+            {
+                if (_vehicleSize != value)
+                {
+                    _vehicleSize = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         public double? InitialVehicleRotation { get; private set; }
 
         public Point? StartPoint
@@ -380,8 +395,21 @@ namespace SRL.Main.ViewModel
         }
 
         public Frame CurrentFrame => _frames?[CurrentFrameIdx];
-        public int CurrentFrameIdx { get; private set; }
-        public int MaxFrameIdx => _frames.Count - 1;
+
+        public int CurrentFrameIdx
+        {
+            get { return _currentFrameIdx; }
+            set
+            {
+                if (_currentFrameIdx != value)
+                {
+                    _currentFrameIdx = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public int MaxFrameIdx => _frames?.Count - 1 ?? -1;
 
 
         private readonly DispatcherTimer _simulationTimer;
@@ -396,6 +424,9 @@ namespace SRL.Main.ViewModel
         private Vehicle _vehicle;
         private Point? _startPoint;
         private Point? _endPoint;
+        private double? _vehicleSize;
+        private int _currentFrameIdx;
+        private Mode _editorMode;
 
 
         public SimulationViewModel()
@@ -405,7 +436,7 @@ namespace SRL.Main.ViewModel
             _algorithm = new MockAlgorithm(); //TODO change to an actual implementation
 
             _simulationTimer = new DispatcherTimer();
-            _simulationTimer.Interval = new TimeSpan(0, 0, 0, 1);
+            _simulationTimer.Interval = new TimeSpan(0, 0, 0, 0, FrameChangeInterval);
             _simulationTimer.Tick += (o, e) =>
             {
                 if (CurrentFrameIdx == MaxFrameIdx)
@@ -422,7 +453,13 @@ namespace SRL.Main.ViewModel
 
             Simulation simulation = new Simulation()
             {
-                Map = Map, Vehicle = Vehicle, VehicleSize = VehicleSize.Value, InitialVehicleRotation = InitialVehicleRotation.Value, StartPoint = StartPoint.Value, EndPoint = EndPoint.Value, Orders = _orders
+                Map = Map,
+                Vehicle = Vehicle,
+                VehicleSize = VehicleSize.Value,
+                InitialVehicleRotation = InitialVehicleRotation.Value,
+                StartPoint = StartPoint.Value,
+                EndPoint = EndPoint.Value,
+                Orders = _orders
             };
             return simulation;
         }
@@ -449,10 +486,14 @@ namespace SRL.Main.ViewModel
             const int partsPerRadian = 128;
             double radiansPerPart = 1/(double) partsPerRadian;
 
+            double movePerFrame = 0.003;
+
+
             Stack<Frame> frames = new Stack<Frame>();
             frames.Push(new Frame
             {
-                Position = StartPoint.Value, Rotation = InitialVehicleRotation.Value
+                Position = StartPoint.Value,
+                Rotation = InitialVehicleRotation.Value
             });
 
             for (int o = 0; o < orders.Count; o++)
@@ -465,25 +506,27 @@ namespace SRL.Main.ViewModel
                 else
                     relativeRotation = orders[o].Rotation - orders[o - 1].Rotation;
 
-                int partCount = (int) (Math.Abs(relativeRotation)*partsPerRadian);
+                int rotationPartCount = (int) (Math.Abs(relativeRotation)*partsPerRadian);
 
                 double currentAngle = frames.Peek().Rotation;
                 Point currentPosition = frames.Peek().Position;
                 double angleChange = relativeRotation > 0 ? radiansPerPart : -radiansPerPart;
 
-                for (int p = 0; p < partCount - 1; p++)
+                for (int p = 0; p < rotationPartCount - 1; p++)
                 {
                     currentAngle += angleChange;
 
                     frames.Push(new Frame
                     {
-                        Position = currentPosition, Rotation = currentAngle < 0 ? Math.PI*2 + currentAngle : currentAngle
+                        Position = currentPosition,
+                        Rotation = currentAngle < 0 ? Math.PI*2 + currentAngle : currentAngle
                     });
                 }
 
                 frames.Push(new Frame
                 {
-                    Position = currentPosition, Rotation = orders[o].Rotation
+                    Position = currentPosition,
+                    Rotation = orders[o].Rotation
                 });
 
                 // Move frames.
@@ -493,8 +536,8 @@ namespace SRL.Main.ViewModel
                 double dx = end.X - start.X;
                 double dy = end.Y - start.Y;
 
-                double xStep = dx > 0 ? 1 : -1;
-                double yStep = dy > 0 ? 1 : -1;
+                double xStep = dx > 0 ? movePerFrame : -movePerFrame;
+                double yStep = dy > 0 ? movePerFrame : -movePerFrame;
 
                 currentAngle = frames.Peek().Rotation;
                 currentPosition = frames.Peek().Position;
@@ -504,7 +547,8 @@ namespace SRL.Main.ViewModel
                     {
                         frames.Push(new Frame
                         {
-                            Position = new Point(currentPosition.X, currentPosition.Y + y), Rotation = currentAngle,
+                            Position = new Point(currentPosition.X, currentPosition.Y + y),
+                            Rotation = currentAngle,
                         });
                     }
                 }
@@ -514,7 +558,8 @@ namespace SRL.Main.ViewModel
                     {
                         frames.Push(new Frame
                         {
-                            Position = new Point(currentPosition.X + x, currentPosition.Y), Rotation = currentAngle,
+                            Position = new Point(currentPosition.X + x, currentPosition.Y),
+                            Rotation = currentAngle,
                         });
                     }
                 }
@@ -535,7 +580,8 @@ namespace SRL.Main.ViewModel
 
                             frames.Push(new Frame
                             {
-                                Position = new Point(currentPosition.X + x, currentPosition.Y + y), Rotation = currentAngle,
+                                Position = new Point(currentPosition.X + x, currentPosition.Y + y),
+                                Rotation = currentAngle,
                             });
                         }
                     }
@@ -553,7 +599,8 @@ namespace SRL.Main.ViewModel
 
                             frames.Push(new Frame
                             {
-                                Position = new Point(currentPosition.X + x, currentPosition.Y + y), Rotation = currentAngle,
+                                Position = new Point(currentPosition.X + x, currentPosition.Y + y),
+                                Rotation = currentAngle,
                             });
                         }
                     }

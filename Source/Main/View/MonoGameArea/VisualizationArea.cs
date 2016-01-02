@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
@@ -22,7 +23,7 @@ namespace SRL.Main.View.MonoGameArea
         protected override void Initialize()
         {
             base.Initialize();
-
+            
             _propertyChangedHandler = (o, e) =>
             {
                 switch (e.PropertyName)
@@ -34,13 +35,17 @@ namespace SRL.Main.View.MonoGameArea
                         break;
 
                     case nameof(_context.Vehicle):
-                    case nameof(_context.InitialVehicleRotation):
                     case nameof(_context.VehicleSize):
-                        if (_context.InitialVehicleRotation != null &&
-                            _context.VehicleSize != null &&
+                        if (_context.VehicleSize != null &&
                             _context.Vehicle != null)
+                        {
                             _resizedVehicleShape = GeometryHelper.Resize(_context.Vehicle.Shape,
                                 _context.VehicleSize.Value);
+                        }
+                        else if (_context.Vehicle != null)
+                        {
+                            _resizedVehicleShape = _context.Vehicle.Shape;
+                        }
                         break;
                 }
             };
@@ -81,20 +86,6 @@ namespace SRL.Main.View.MonoGameArea
                 else
                     spriteBatch.DrawVertex(position, RenderSize, color);
             }
-            else if (_context.EditorMode == SimulationViewModel.Mode.EndPointSetup)
-            {
-                if (!IsMouseOver)
-                    return;
-
-                Point position = normalizedMousePos;
-                RgbColor color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
-                    ? ValidColor : InvalidColor;
-                
-                if (AntialiasingEnabled)
-                    spriteBatch.DrawVertexAA(position, RenderSize, color);
-                else
-                    spriteBatch.DrawVertex(position, RenderSize, color);
-            }
             else if (_context.Vehicle != null && _context.StartPoint != null)
             {
                 Polygon shape;
@@ -108,10 +99,13 @@ namespace SRL.Main.View.MonoGameArea
                         return;
 
                     angle = GeometryHelper.GetAngle(origin, normalizedMousePos);
-                    double sizeFactor = GeometryHelper.GetDistance(origin, normalizedMousePos);
+                    VehicleSetup setup = new VehicleSetup()
+                    {
+                        RelativeSize = GeometryHelper.GetDistance(origin, normalizedMousePos),
+                        Rotation = angle
+                    };
 
-                    if (_context.SetVehicleSizeCommand.CanExecute(sizeFactor) &&
-                        _context.SetInitialVehicleRotationCommand.CanExecute(angle))
+                    if (_context.SetInitialVehicleSetup.CanExecute(setup))
                         color = ValidColor;
                     else
                         color = InvalidColor;
@@ -122,7 +116,7 @@ namespace SRL.Main.View.MonoGameArea
                         spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor);
 
                     shape = _context.Vehicle.Shape;
-                    shape = GeometryHelper.Resize(shape, sizeFactor);
+                    shape = GeometryHelper.Resize(shape, setup.RelativeSize);
 
                 }
                 else if (_context.InitialVehicleRotation != null && _context.VehicleSize != null)
@@ -142,6 +136,23 @@ namespace SRL.Main.View.MonoGameArea
                 else
                     spriteBatch.DrawPolygon(shape, RenderSize, color);
             }
+
+            if (_context.EditorMode == SimulationViewModel.Mode.EndPointSetup)
+            {
+                if (!IsMouseOver)
+                    return;
+
+                Point position = normalizedMousePos;
+                RgbColor color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
+                    ? ValidColor : InvalidColor;
+
+                if (AntialiasingEnabled)
+                    spriteBatch.DrawVertexAA(position, RenderSize, color);
+                else
+                    spriteBatch.DrawVertex(position, RenderSize, color);
+            }
+
+
         }
 
 
@@ -153,7 +164,10 @@ namespace SRL.Main.View.MonoGameArea
             Polygon shape = GeometryHelper.Rotate(_resizedVehicleShape, rotation);
             shape = GeometryHelper.Move(shape, position.X, position.Y);
 
-            spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor);
+            if (AntialiasingEnabled)
+                spriteBatch.DrawPolygonAA(shape, RenderSize, ActiveColor);
+            else
+                spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor);
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
@@ -200,15 +214,14 @@ namespace SRL.Main.View.MonoGameArea
                 else if (_context.EditorMode == SimulationViewModel.Mode.VehicleSetup)
                 {
                     Point origin = _context.StartPoint.Value;
-                    double angle = GeometryHelper.GetAngle(origin, normalizedMousePos);
-                    double sizeFactor = GeometryHelper.GetDistance(origin, normalizedMousePos);
-
-                    if (_context.SetInitialVehicleRotationCommand.CanExecute(angle) &&
-                        _context.SetVehicleSizeCommand.CanExecute(sizeFactor))
+                    VehicleSetup setup = new VehicleSetup()
                     {
-                        _context.SetInitialVehicleRotationCommand.Execute(angle);
-                        _context.SetVehicleSizeCommand.Execute(sizeFactor);
-                    }
+                        RelativeSize = GeometryHelper.GetDistance(origin, normalizedMousePos),
+                        Rotation = GeometryHelper.GetAngle(origin, normalizedMousePos)
+                    };
+
+                    if (_context.SetInitialVehicleSetup.CanExecute(setup))
+                        _context.SetInitialVehicleSetup.Execute(setup);
                 }
             }
         }
