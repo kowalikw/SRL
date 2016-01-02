@@ -66,7 +66,7 @@ namespace SRL.Main.View.MonoGameArea
                 Color color = _context.SetStartPointCommand.CanExecute(normalizedMousePos)
                     ? ValidColor : InvalidColor;
 
-                    spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
+                spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
             }
             else if (_context.Vehicle != null && _context.StartPoint != null)
             {
@@ -92,7 +92,7 @@ namespace SRL.Main.View.MonoGameArea
                     else
                         color = InvalidColor;
 
-                        spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor, AntialiasingEnabled);
+                    spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor, AntialiasingEnabled);
 
                     shape = _context.Vehicle.Shape;
                     shape = GeometryHelper.Resize(shape, setup.RelativeSize);
@@ -110,7 +110,7 @@ namespace SRL.Main.View.MonoGameArea
                 shape = GeometryHelper.Rotate(shape, angle);
                 shape = GeometryHelper.Move(shape, origin.X, origin.Y);
 
-                    spriteBatch.DrawPolygon(shape, RenderSize, color, AntialiasingEnabled);
+                spriteBatch.DrawPolygon(shape, RenderSize, color, AntialiasingEnabled);
             }
 
             if (_context.EditorMode == SimulationViewModel.Mode.EndPointSetup)
@@ -122,7 +122,7 @@ namespace SRL.Main.View.MonoGameArea
                 Color color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
                     ? ValidColor : InvalidColor;
 
-                    spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
+                spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
             }
         }
 
@@ -134,38 +134,26 @@ namespace SRL.Main.View.MonoGameArea
             Polygon shape = GeometryHelper.Rotate(_resizedVehicleShape, rotation);
             shape = GeometryHelper.Move(shape, position.X, position.Y);
 
-                spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor, AntialiasingEnabled);
+            spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor, AntialiasingEnabled);
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
             if (_context.Map != null)
             {
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawMapAA(_context.Map, RenderSize, RegularColor);
-                else
-                    lockBitmap.DrawMap(_context.Map, RenderSize, RegularColor);
+                lockBitmap.DrawMap(_context.Map, RenderSize, RegularColor, AntialiasingEnabled);
             }
             if (ShowPath && _context.Path != null)
             {
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawPathAA(_context.Path, RenderSize, PathColor);
-                else
-                    lockBitmap.DrawPath(_context.Path, RenderSize, PathColor);
+                lockBitmap.DrawPath(_context.Path, RenderSize, PathColor, AntialiasingEnabled);
             }
             if (_context.StartPoint != null)
             {
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawVertexAA(_context.StartPoint.Value, RenderSize, StartPointColor);
-                else
-                    lockBitmap.DrawVertex(_context.StartPoint.Value, RenderSize, StartPointColor);
+                lockBitmap.DrawVertex(_context.StartPoint.Value, RenderSize, StartPointColor, AntialiasingEnabled);
             }
             if (_context.EndPoint != null)
             {
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawVertexAA(_context.EndPoint.Value, RenderSize, EndPointColor);
-                else
-                    lockBitmap.DrawVertex(_context.EndPoint.Value, RenderSize, EndPointColor);
+                lockBitmap.DrawVertex(_context.EndPoint.Value, RenderSize, EndPointColor, AntialiasingEnabled);
             }
         }
 

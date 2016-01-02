@@ -42,25 +42,12 @@ namespace SRL.Main.View.MonoGameArea
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
-            if (AntialiasingEnabled)
+            for (int i = 0; i < _context.Polygons.Count; i++)
             {
-                for (int i = 0; i < _context.Polygons.Count; i++)
-                {
-                    var color = _context.SelectedPolygonIndices.Contains(i) ? 
-                        ActiveColor : RegularColor;
+                var color = _context.SelectedPolygonIndices.Contains(i) ?
+                    ActiveColor : RegularColor;
 
-                    lockBitmap.DrawPolygonAA(_context.Polygons[i], RenderSize, color);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < _context.Polygons.Count; i++)
-                {
-                    var color = _context.SelectedPolygonIndices.Contains(i) ?
-                        ActiveColor : RegularColor;
-
-                    lockBitmap.DrawPolygon(_context.Polygons[i], RenderSize, color);
-                }
+                lockBitmap.DrawPolygon(_context.Polygons[i], RenderSize, color, AntialiasingEnabled);
             }
         }
 
