@@ -14,6 +14,9 @@ namespace SRL.Main.Drawing
 {
     internal static class DynamicDrawHelper
     {
+        private const float ArrowTipLength = 15;
+        private const float ArrowTipHalfWidth = 10;
+
         private static Texture2D _pixel;
 
         /// <summary>
@@ -242,9 +245,6 @@ namespace SRL.Main.Drawing
 
         public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color)
         {
-            const float tipLength = 15;
-            const float tipHalfWidth = 10;
-
             double cosA = Math.Cos(angle);
             double sinA = Math.Sin(angle);
 
@@ -256,11 +256,11 @@ namespace SRL.Main.Drawing
                 o.Y - length * sinA);
 
             Point ah1 = new Point(
-                t.X - tipLength * cosA - tipHalfWidth * sinA,
-                t.Y + tipLength * sinA - tipHalfWidth * cosA);
+                t.X - ArrowTipLength * cosA - ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA - ArrowTipHalfWidth * cosA);
             Point ah2 = new Point(
-                t.X - tipLength * cosA + tipHalfWidth * sinA,
-                t.Y + tipLength * sinA + tipHalfWidth * cosA);
+                t.X - ArrowTipLength * cosA + ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA + ArrowTipHalfWidth * cosA);
 
             spriteBatch.BresenhamLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
             spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
@@ -269,9 +269,6 @@ namespace SRL.Main.Drawing
 
         public static void DrawArrowAA(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color)
         {
-            const float tipLength = 15;
-            const float tipHalfWidth = 10;
-
             double cosA = Math.Cos(angle);
             double sinA = Math.Sin(angle);
 
@@ -283,11 +280,53 @@ namespace SRL.Main.Drawing
                 o.Y - length * sinA);
 
             Point ah1 = new Point(
-                t.X - tipLength * cosA - tipHalfWidth * sinA,
-                t.Y + tipLength * sinA - tipHalfWidth * cosA);
+                t.X - ArrowTipLength * cosA - ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA - ArrowTipHalfWidth * cosA);
             Point ah2 = new Point(
-                t.X - tipLength * cosA + tipHalfWidth * sinA,
-                t.Y + tipLength * sinA + tipHalfWidth * cosA);
+                t.X - ArrowTipLength * cosA + ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA + ArrowTipHalfWidth * cosA);
+
+            spriteBatch.WuLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
+            spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
+            spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah2.X, (float)ah2.Y, color);
+        }
+
+        public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Size renderSize, RgbColor color)
+        {
+            double angle = GeometryHelper.GetAngle(origin, tip);
+            double cosA = Math.Cos(angle);
+            double sinA = Math.Sin(angle);
+
+            Point o = origin.Denormalize(renderSize);
+            Point t = tip.Denormalize(renderSize);
+
+            Point ah1 = new Point(
+                t.X - ArrowTipLength * cosA - ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA - ArrowTipHalfWidth * cosA);
+            Point ah2 = new Point(
+                t.X - ArrowTipLength * cosA + ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA + ArrowTipHalfWidth * cosA);
+
+            spriteBatch.BresenhamLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
+            spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
+            spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah2.X, (float)ah2.Y, color);
+        }
+
+        public static void DrawArrowAA(this SpriteBatch spriteBatch, Point origin, Point tip, Size renderSize, RgbColor color)
+        {
+            double angle = GeometryHelper.GetAngle(origin, tip);
+            double cosA = Math.Cos(angle);
+            double sinA = Math.Sin(angle);
+
+            Point o = origin.Denormalize(renderSize);
+            Point t = tip.Denormalize(renderSize);
+
+            Point ah1 = new Point(
+                t.X - ArrowTipLength * cosA - ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA - ArrowTipHalfWidth * cosA);
+            Point ah2 = new Point(
+                t.X - ArrowTipLength * cosA + ArrowTipHalfWidth * sinA,
+                t.Y + ArrowTipLength * sinA + ArrowTipHalfWidth * cosA);
 
             spriteBatch.WuLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
             spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);

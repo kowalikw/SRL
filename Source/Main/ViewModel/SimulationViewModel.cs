@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
@@ -13,6 +14,47 @@ namespace SRL.Main.ViewModel
 {
     public class SimulationViewModel : EditorViewModel<Simulation>
     {
+        public enum Mode
+        {
+            Normal,
+            StartPointSetup,
+            EndPointSetup,
+            VehicleSetup,
+            SimulationRunning,
+        }
+
+        public RelayCommand<Mode> EnterModeCommand
+        {
+            get
+            {
+                if (_enterModeCommand == null)
+                {
+                    _enterModeCommand = new RelayCommand<Mode>(mode =>
+                    {
+                        EditorMode = mode;
+                    }, mode =>
+                    {
+                        switch (mode)
+                        {
+                            case Mode.StartPointSetup:
+                                return Map != null;
+                            case Mode.EndPointSetup:
+                                return Map != null;
+                            case Mode.VehicleSetup:
+                                return StartPoint != null;
+
+                            case Mode.Normal:
+                            case Mode.SimulationRunning:
+                                throw new ArgumentException(null, nameof(mode));
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                        }
+                    });
+                }
+                return _enterModeCommand;
+            }
+        }
+
         public override RelayCommand ResetCommand
         {
             get
@@ -29,11 +71,13 @@ namespace SRL.Main.ViewModel
                         EndPoint = null;
                         _orders = null;
                         _frames = null;
+                        EditorMode = Mode.Normal;
                     });
                 }
                 return _resetCommand;
             }
         }
+
         public RelayCommand CalculatePathCommand
         {
             get
@@ -42,10 +86,18 @@ namespace SRL.Main.ViewModel
                 {
                     _calculatePathCommand = new RelayCommand(() =>
                     {
+                        // algorithm.GetPath TODO
                         CalculateFrames(_orders);
                     }, () =>
                     {
-                        return _orders != null;
+                        return EditorMode == Mode.Normal &&
+                               Map != null &&
+                               Vehicle != null &&
+                               VehicleSize != null &&
+                               InitialVehicleRotation != null &&
+                               StartPoint != null &&
+                               EndPoint != null &&
+                               _orders == null;
                     });
                 }
                 return _calculatePathCommand;
@@ -60,15 +112,18 @@ namespace SRL.Main.ViewModel
                 {
                     _startPlaybackCommand = new RelayCommand(() =>
                     {
-                        SimulationRunning = true;
+                        EditorMode = Mode.SimulationRunning;
+                        _simulationTimer.Start();
                     }, () =>
                     {
-                        return _frames != null;
+                        return EditorMode == Mode.Normal &&
+                               _frames != null;
                     });
                 }
                 return _startPlaybackCommand;
             }
         }
+
         public RelayCommand StopPlaybackCommand
         {
             get
@@ -77,16 +132,18 @@ namespace SRL.Main.ViewModel
                 {
                     _stopPlaybackCommand = new RelayCommand(() =>
                     {
-                        SimulationRunning = false;
+                        EditorMode = Mode.Normal;
+                        _simulationTimer.Stop();
                         CurrentFrameIdx = 0;
                     }, () =>
                     {
-                        return SimulationRunning;
+                        return EditorMode == Mode.SimulationRunning;
                     });
                 }
                 return _stopPlaybackCommand;
             }
         }
+
         public RelayCommand PausePlaybackCommand
         {
             get
@@ -95,10 +152,11 @@ namespace SRL.Main.ViewModel
                 {
                     _pausePlaybackCommand = new RelayCommand(() =>
                     {
-                        SimulationRunning = false;
+                        EditorMode = Mode.Normal;
+                        _simulationTimer.Stop();
                     }, () =>
                     {
-                        return SimulationRunning;
+                        return EditorMode == Mode.SimulationRunning;
                     });
                 }
                 return _pausePlaybackCommand;
@@ -113,6 +171,7 @@ namespace SRL.Main.ViewModel
                 {
                     _loadMapCommand = new RelayCommand(() =>
                     {
+                        EditorMode = Mode.Normal;
                         StartPoint = null;
                         EndPoint = null;
                         VehicleSize = null;
@@ -126,6 +185,7 @@ namespace SRL.Main.ViewModel
                 return _loadMapCommand;
             }
         }
+
         public RelayCommand LoadVehicleCommand
         {
             get
@@ -134,6 +194,7 @@ namespace SRL.Main.ViewModel
                 {
                     _loadVehicleCommand = new RelayCommand(() =>
                     {
+                        EditorMode = Mode.Normal;
                         VehicleSize = null;
                         InitialVehicleRotation = null;
                         _orders = null;
@@ -145,6 +206,7 @@ namespace SRL.Main.ViewModel
                 return _loadVehicleCommand;
             }
         }
+
         public RelayCommand<Point> SetStartPointCommand
         {
             get
@@ -153,28 +215,27 @@ namespace SRL.Main.ViewModel
                 {
                     _setStartPointCommand = new RelayCommand<Point>(point =>
                     {
+                        EditorMode = Mode.Normal;
                         VehicleSize = null;
                         InitialVehicleRotation = null;
                         _orders = null;
                         _frames = null;
 
                         StartPoint = point;
+                        EnterModeCommand.Execute(Mode.VehicleSetup);
                     }, point =>
                     {
-                        if (Map == null || Vehicle == null)
+                        if (EditorMode != Mode.StartPointSetup ||
+                            Map == null)
                             return false;
 
-                        foreach (var obstacle in Map.Obstacles)
-                        {
-                            if (GeometryHelper.IsInsidePolygon(point, obstacle))
-                                return false;
-                        }
-                        return true;
+                        return !IsInsideAnyObstacle(point);
                     });
                 }
                 return _setStartPointCommand;
             }
         }
+
         public RelayCommand<Point> SetEndPointCommand
         {
             get
@@ -183,26 +244,24 @@ namespace SRL.Main.ViewModel
                 {
                     _setEndPointCommand = new RelayCommand<Point>(point =>
                     {
+                        EditorMode = Mode.Normal;
                         _orders = null;
                         _frames = null;
 
                         EndPoint = point;
                     }, point =>
                     {
-                        if (Map == null || Vehicle == null)
+                        if (EditorMode != Mode.EndPointSetup ||
+                            Map == null)
                             return false;
 
-                        foreach (var obstacle in Map.Obstacles)
-                        {
-                            if (GeometryHelper.IsInsidePolygon(point, obstacle))
-                                return false;
-                        }
-                        return true;
+                        return !IsInsideAnyObstacle(point);
                     });
                 }
                 return _setEndPointCommand;
             }
         }
+
         public RelayCommand<double> SetInitialVehicleRotationCommand
         {
             get
@@ -217,9 +276,10 @@ namespace SRL.Main.ViewModel
                         InitialVehicleRotation = angle;
                     }, angle =>
                     {
-                        if (Map == null 
-                        || Vehicle == null 
-                        || StartPoint == null)
+                        if (EditorMode != Mode.VehicleSetup ||
+                            Map == null ||
+                            Vehicle == null ||
+                            StartPoint == null)
                             return false;
 
                         return true;
@@ -228,6 +288,7 @@ namespace SRL.Main.ViewModel
                 return _setInitialVehicleRotationCommand;
             }
         }
+
         public RelayCommand<double> SetVehicleSizeCommand
         {
             get
@@ -242,13 +303,14 @@ namespace SRL.Main.ViewModel
                         VehicleSize = sizeFactor;
                     }, sizeFactor =>
                     {
-                        if (Map == null 
-                        || Vehicle == null 
-                        || StartPoint == null 
-                        || InitialVehicleRotation == null)
+                        if (EditorMode != Mode.VehicleSetup ||
+                            Map == null ||
+                            Vehicle == null ||
+                            StartPoint == null ||
+                            InitialVehicleRotation == null)
                             return false;
-
-                        return false; //TODO check if vehicle overlays any obstacle
+                        
+                        return true; //TODO check if vehicle overlays any obstacle
                     });
                 }
                 return _setVehicleSizeCommand;
@@ -257,6 +319,7 @@ namespace SRL.Main.ViewModel
 
         #region Command backing fields
 
+        private RelayCommand<Mode> _enterModeCommand;
         private RelayCommand _resetCommand;
         private RelayCommand _calculatePathCommand;
 
@@ -273,39 +336,18 @@ namespace SRL.Main.ViewModel
 
         #endregion
 
-        public bool SimulationRunning
-        {
-            get { return _simulationRunning; }
-            private set
-            {
-                if (_simulationRunning != value)
-                {
-                    if (value == true)
-                    {
-                        if (CurrentFrameIdx == MaxFrameIdx)
-                            CurrentFrameIdx = 0;
-                        _simulationTimer.Start();
-                    }
-                    else
-                        _simulationTimer.Stop();
-
-                    _simulationRunning = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
+        public Mode EditorMode { get; private set; }
 
         protected override bool IsModelValid
         {
             get
             {
-                return Map != null
-                       && Vehicle != null
-                       && VehicleSize.HasValue
-                       && InitialVehicleRotation.HasValue
-                       && StartPoint.HasValue
-                       && EndPoint.HasValue
-                       && _orders != null;
+                return Map != null &&
+                       Vehicle != null &&
+                       VehicleSize.HasValue &&
+                       InitialVehicleRotation.HasValue &&
+                       StartPoint.HasValue && EndPoint.HasValue &&
+                       _orders != null;
             }
         }
 
@@ -322,8 +364,6 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
-
-
         public Vehicle Vehicle
         {
             get { return _vehicle; }
@@ -332,45 +372,30 @@ namespace SRL.Main.ViewModel
                 if (_vehicle != value)
                 {
                     _vehicle = value;
-                    ActualVehicle
+                    RaisePropertyChanged();
                 }
             }
         }
-
-        public double? VehicleSize
-        {
-            get { return _vehicleSize; }
-            private set
-            {
-                _vehicleSize = value;
-            }
-        }
-
-        /// <summary>
-        /// <see cref="Vehicle"/> resized by <see cref="VehicleSize"/> factor.
-        /// </summary>
-        public Vehicle ActualVehicle { get; private set; }
+        public double? VehicleSize { get; private set; }
         public double? InitialVehicleRotation { get; private set; }
-
         public Point? StartPoint
         {
             get { return _startPoint; }
             private set
             {
-                if (_startPoint != null)
+                if (_startPoint != value)
                 {
                     _startPoint = value;
                     RaisePropertyChanged();
                 }
             }
         }
-
         public Point? EndPoint
         {
             get { return _endPoint; }
             private set
             {
-                if (_endPoint != null)
+                if (_endPoint != value)
                 {
                     _endPoint = value;
                     RaisePropertyChanged();
@@ -384,31 +409,32 @@ namespace SRL.Main.ViewModel
 
 
         private readonly DispatcherTimer _simulationTimer;
+
+        private bool _simulationRunning;
+
         private List<Frame> _frames;
         private List<Order> _orders;
-        private bool _simulationRunning;
         private IAlgorithm _algorithm;
 
-
-
-
         private Map _map;
+        private Vehicle _vehicle;
         private Point? _startPoint;
         private Point? _endPoint;
-        private Vehicle _vehicle;
-        private double? _vehicleSize;
+
 
 
         public SimulationViewModel()
         {
+            EditorMode = Mode.Normal;
+
             _algorithm = new MockAlgorithm(); //TODO change to an actual implementation
 
             _simulationTimer = new DispatcherTimer();
-            _simulationTimer.Interval = new TimeSpan(0,0,0,1);
+            _simulationTimer.Interval = new TimeSpan(0, 0, 0, 1);
             _simulationTimer.Tick += (o, e) =>
             {
                 if (CurrentFrameIdx == MaxFrameIdx)
-                    SimulationRunning = false;
+                    EditorMode = Mode.Normal;
                 else
                     CurrentFrameIdx++;
             };
@@ -431,6 +457,7 @@ namespace SRL.Main.ViewModel
             };
             return simulation;
         }
+
         protected override void SetModel(Simulation model)
         {
             Map = model.Map;
@@ -569,9 +596,18 @@ namespace SRL.Main.ViewModel
                         }
                     }
                 }
-
             }
             _frames = frames.Reverse().ToList();
+        }
+
+        public bool IsInsideAnyObstacle(Point point)
+        {
+            foreach (var obstacle in Map.Obstacles)
+            {
+                if (GeometryHelper.IsInsidePolygon(point, obstacle))
+                    return true;
+            }
+            return false;
         }
     }
 }

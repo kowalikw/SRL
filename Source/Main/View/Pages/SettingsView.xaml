@@ -13,7 +13,6 @@
     <UserControl.Resources>
         <local:BoolInverterConverter x:Key="BoolInverterConverter"/>
         <local:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
-        <lang:Language x:Key="Language"/>
     </UserControl.Resources>
 
 

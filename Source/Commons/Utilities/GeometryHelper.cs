@@ -13,7 +13,7 @@ namespace SRL.Commons.Utilities
 
         public static double CrossProduct(Point p1, Point p2, Point? pivot = null)
         {
-            if(pivot.HasValue)
+            if (pivot.HasValue)
                 return (p1.X - pivot.Value.X) * (p2.Y - pivot.Value.Y) - (p2.X - pivot.Value.X) * (p1.Y - pivot.Value.Y);
 
             return p1.X * p2.Y - p2.X * p1.Y;
@@ -42,7 +42,7 @@ namespace SRL.Commons.Utilities
             double epsilon = 0.000001;
 
             double totalAngle = GetAngle(point, polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]);
-                
+
             for (int i = 0; i < polygon.Vertices.Count - 1; i++)
                 totalAngle += GetAngle(point, polygon.Vertices[i], polygon.Vertices[i + 1]);
 
@@ -75,29 +75,24 @@ namespace SRL.Commons.Utilities
             return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
         }
 
-        public static double GetAngle(Point pivot, Point point, Point? additionalPoint = null)
+        public static double GetAngle(Point pivot, Point point)
         {
-            double angle;
+            double angle = Math.Atan((point.Y - pivot.Y) / (point.X - pivot.X));
 
-            if(additionalPoint.HasValue)
-            {
-                double dotProduct = DotProduct(point, additionalPoint.Value, pivot);
-                double crossProduct = CrossProduct(point, additionalPoint.Value, pivot);
-
-                angle = Math.Atan2(crossProduct, dotProduct);
-            }
-            else
-            {
-                angle = Math.Atan((point.Y - pivot.Y) / (point.X - pivot.X));
-
-                if (point.X < pivot.X)
-                    angle += Math.PI;
-            }
+            if (point.X < pivot.X)
+                angle += Math.PI;
 
             return angle;
         }
 
-        public static Point RotatePoint(Point point, Point pivot, double angle) //TODO change parameter order (pivot should be first), add ref to point and remove return value.
+        public static double GetAngle(Point pivot, Point origin, Point point)
+        {
+            return Math.Atan2(
+                CrossProduct(origin, point, pivot), 
+                DotProduct(origin, point, pivot));
+        }
+
+        public static Point RotatePoint(Point point, Point pivot, double angle)
         {
             double cosTheta = Math.Cos(angle);
             double sinTheta = Math.Sin(angle);
@@ -108,7 +103,7 @@ namespace SRL.Commons.Utilities
                     cosTheta * (point.Y - pivot.Y) + pivot.Y));
         }
 
-        public static Polygon Rotate(Point pivot, Polygon polygon, double angle)
+        public static Polygon Rotate(Point pivot, Polygon polygon, double angle) //TODO change parameter order (pivot should be second), add ref to point and remove return value.
         {
             var output = new Polygon();
             for (int i = 0; i < polygon.Vertices.Count; i++)
@@ -116,11 +111,45 @@ namespace SRL.Commons.Utilities
             return output;
         }
 
+        public static Polygon Rotate(Polygon polygon, double angle)
+        {
+            var output = new Polygon();
+            for (int i = 0; i < polygon.Vertices.Count; i++)
+                output.Vertices.Add(RotatePoint(polygon.Vertices[i], new Point(0, 0), angle));
+            return output;
+        }
+
+        public static Polygon Move(Polygon polygon, double x, double y)
+        {
+            var output = new Polygon();
+            for (int i = 0; i < polygon.Vertices.Count; i++)
+            {
+                output.Vertices.Add(new Point(
+                    polygon.Vertices[i].X + x,
+                    polygon.Vertices[i].Y + y));
+            }
+            return output;
+        }
+
+        public static Polygon Resize(Polygon polygon, double factor)
+        {
+            var output = new Polygon();
+            for (int i = 0; i < polygon.Vertices.Count; i++)
+            {
+                output.Vertices.Add(new Point(
+                    polygon.Vertices[i].X * factor,
+                    polygon.Vertices[i].Y * factor));
+            }
+            return output;
+        }
+
         public static bool IsCounterClockwiseTurn(Point pivot, Point init, Point target)
         {
             return CrossProduct(
-                new Point(init.X - pivot.X, init.Y - pivot.Y), 
+                new Point(init.X - pivot.X, init.Y - pivot.Y),
                 new Point(target.X - pivot.X, target.Y - pivot.Y)) > 0; // TODO Doesn't return value == 0 mean that no there's no turn? Fix me
         }
+
+
     }
 }
