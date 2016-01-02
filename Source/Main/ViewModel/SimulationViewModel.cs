@@ -204,20 +204,15 @@ namespace SRL.Main.ViewModel
             }
         }
 
-
-
-
+        
         private RelayCommand<Mode> _enterModeCommand;
         private RelayCommand _resetCommand;
-        private RelayCommand _calculatePathCommand;
-
-
-
         private RelayCommand _loadMapCommand;
         private RelayCommand _loadVehicleCommand;
         private RelayCommand<Point> _setStartPointCommand;
         private RelayCommand<Point> _setEndPointCommand;
         private RelayCommand<VehicleSetup> _setInitialVehicleSetup;
+        private RelayCommand _calculatePathCommand;
 
         #endregion
 
@@ -232,6 +227,8 @@ namespace SRL.Main.ViewModel
                 {
                     _startPlaybackCommand = new RelayCommand(() =>
                     {
+                        if (CurrentFrameIdx == MaxFrameIdx)
+                            CurrentFrameIdx = 0;
                         EditorMode = Mode.SimulationRunning;
                         _simulationTimer.Start();
                     }, () => { return EditorMode == Mode.Normal && Orders != null; });
@@ -250,7 +247,10 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
                         _simulationTimer.Stop();
                         CurrentFrameIdx = 0;
-                    }, () => { return EditorMode == Mode.SimulationRunning; });
+                    }, () =>
+                    {
+                        return CurrentFrameIdx != 0 || EditorMode == Mode.SimulationRunning;
+                    });
                 }
                 return _stopPlaybackCommand;
             }

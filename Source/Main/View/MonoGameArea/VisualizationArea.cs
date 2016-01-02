@@ -15,6 +15,10 @@ namespace SRL.Main.View.MonoGameArea
 {
     internal class VisualizationArea : AreaBase
     {
+        protected static readonly RgbColor StartPointColor = new RgbColor(20, 20, 255);
+        protected static readonly RgbColor EndPointColor = StartPointColor;
+        protected static readonly RgbColor PathColor = new RgbColor(20, 20, 255);
+
         private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
 
         protected bool ShowPath => Settings.Default.ShowPath;
@@ -159,23 +163,23 @@ namespace SRL.Main.View.MonoGameArea
             if (ShowPath && _context.Path != null)
             {
                 if (AntialiasingEnabled)
-                    lockBitmap.DrawPathAA(_context.Path, RenderSize, ActiveColor); //TODO color
+                    lockBitmap.DrawPathAA(_context.Path, RenderSize, PathColor);
                 else
-                    lockBitmap.DrawPath(_context.Path, RenderSize, ActiveColor); //TODO color
+                    lockBitmap.DrawPath(_context.Path, RenderSize, PathColor);
             }
             if (_context.StartPoint != null)
             {
                 if (AntialiasingEnabled)
-                    lockBitmap.DrawVertexAA(_context.StartPoint.Value, RenderSize, SpecialColor);
+                    lockBitmap.DrawVertexAA(_context.StartPoint.Value, RenderSize, StartPointColor);
                 else
-                    lockBitmap.DrawVertex(_context.StartPoint.Value, RenderSize, SpecialColor);
+                    lockBitmap.DrawVertex(_context.StartPoint.Value, RenderSize, StartPointColor);
             }
             if (_context.EndPoint != null)
             {
                 if (AntialiasingEnabled)
-                    lockBitmap.DrawVertexAA(_context.EndPoint.Value, RenderSize, SpecialColor);
+                    lockBitmap.DrawVertexAA(_context.EndPoint.Value, RenderSize, EndPointColor);
                 else
-                    lockBitmap.DrawVertex(_context.EndPoint.Value, RenderSize, SpecialColor);
+                    lockBitmap.DrawVertex(_context.EndPoint.Value, RenderSize, EndPointColor);
             }
         }
 
