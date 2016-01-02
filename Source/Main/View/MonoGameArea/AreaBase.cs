@@ -21,6 +21,7 @@ namespace SRL.Main.View.MonoGameArea
         protected static readonly RgbColor ActiveColor = new RgbColor(255, 255, 20);
         protected static readonly RgbColor InvalidColor = new RgbColor(255, 20, 20);
         protected static readonly RgbColor ValidColor = new RgbColor(20, 255, 20);
+        protected static readonly RgbColor SpecialColor = new RgbColor(20, 20, 255);
 
         protected bool AntialiasingEnabled => Settings.Default.AntialiasingEnabled;
 

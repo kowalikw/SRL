@@ -31,6 +31,15 @@ namespace SRL.Main.ViewModel
                 {
                     _enterModeCommand = new RelayCommand<Mode>(mode =>
                     {
+                        switch (mode)
+                        {
+                            case Mode.StartPointSetup:
+                                StartPoint = null;
+                                break;
+                            case Mode.EndPointSetup:
+                                EndPoint = null;
+                                break;
+                        }
                         EditorMode = mode;
                     }, mode =>
                     {
@@ -88,17 +97,7 @@ namespace SRL.Main.ViewModel
                     {
                         // algorithm.GetPath TODO
                         CalculateFrames(_orders);
-                    }, () =>
-                    {
-                        return EditorMode == Mode.Normal &&
-                               Map != null &&
-                               Vehicle != null &&
-                               VehicleSize != null &&
-                               InitialVehicleRotation != null &&
-                               StartPoint != null &&
-                               EndPoint != null &&
-                               _orders == null;
-                    });
+                    }, () => { return EditorMode == Mode.Normal && Map != null && Vehicle != null && VehicleSize != null && InitialVehicleRotation != null && StartPoint != null && EndPoint != null && _orders == null; });
                 }
                 return _calculatePathCommand;
             }
@@ -114,11 +113,7 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.SimulationRunning;
                         _simulationTimer.Start();
-                    }, () =>
-                    {
-                        return EditorMode == Mode.Normal &&
-                               _frames != null;
-                    });
+                    }, () => { return EditorMode == Mode.Normal && _frames != null; });
                 }
                 return _startPlaybackCommand;
             }
@@ -135,10 +130,7 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
                         _simulationTimer.Stop();
                         CurrentFrameIdx = 0;
-                    }, () =>
-                    {
-                        return EditorMode == Mode.SimulationRunning;
-                    });
+                    }, () => { return EditorMode == Mode.SimulationRunning; });
                 }
                 return _stopPlaybackCommand;
             }
@@ -154,10 +146,7 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
                         _simulationTimer.Stop();
-                    }, () =>
-                    {
-                        return EditorMode == Mode.SimulationRunning;
-                    });
+                    }, () => { return EditorMode == Mode.SimulationRunning; });
                 }
                 return _pausePlaybackCommand;
             }
@@ -225,8 +214,7 @@ namespace SRL.Main.ViewModel
                         EnterModeCommand.Execute(Mode.VehicleSetup);
                     }, point =>
                     {
-                        if (EditorMode != Mode.StartPointSetup ||
-                            Map == null)
+                        if (EditorMode != Mode.StartPointSetup || Map == null)
                             return false;
 
                         return !IsInsideAnyObstacle(point);
@@ -251,8 +239,7 @@ namespace SRL.Main.ViewModel
                         EndPoint = point;
                     }, point =>
                     {
-                        if (EditorMode != Mode.EndPointSetup ||
-                            Map == null)
+                        if (EditorMode != Mode.EndPointSetup || Map == null)
                             return false;
 
                         return !IsInsideAnyObstacle(point);
@@ -276,10 +263,7 @@ namespace SRL.Main.ViewModel
                         InitialVehicleRotation = angle;
                     }, angle =>
                     {
-                        if (EditorMode != Mode.VehicleSetup ||
-                            Map == null ||
-                            Vehicle == null ||
-                            StartPoint == null)
+                        if (EditorMode != Mode.VehicleSetup || Map == null || Vehicle == null || StartPoint == null)
                             return false;
 
                         return true;
@@ -303,13 +287,9 @@ namespace SRL.Main.ViewModel
                         VehicleSize = sizeFactor;
                     }, sizeFactor =>
                     {
-                        if (EditorMode != Mode.VehicleSetup ||
-                            Map == null ||
-                            Vehicle == null ||
-                            StartPoint == null ||
-                            InitialVehicleRotation == null)
+                        if (EditorMode != Mode.VehicleSetup || Map == null || Vehicle == null || StartPoint == null || InitialVehicleRotation == null)
                             return false;
-                        
+
                         return true; //TODO check if vehicle overlays any obstacle
                     });
                 }
@@ -340,15 +320,7 @@ namespace SRL.Main.ViewModel
 
         protected override bool IsModelValid
         {
-            get
-            {
-                return Map != null &&
-                       Vehicle != null &&
-                       VehicleSize.HasValue &&
-                       InitialVehicleRotation.HasValue &&
-                       StartPoint.HasValue && EndPoint.HasValue &&
-                       _orders != null;
-            }
+            get { return Map != null && Vehicle != null && VehicleSize.HasValue && InitialVehicleRotation.HasValue && StartPoint.HasValue && EndPoint.HasValue && _orders != null; }
         }
 
 
@@ -364,6 +336,7 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+
         public Vehicle Vehicle
         {
             get { return _vehicle; }
@@ -376,8 +349,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+
         public double? VehicleSize { get; private set; }
         public double? InitialVehicleRotation { get; private set; }
+
         public Point? StartPoint
         {
             get { return _startPoint; }
@@ -390,6 +365,7 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+
         public Point? EndPoint
         {
             get { return _endPoint; }
@@ -422,7 +398,6 @@ namespace SRL.Main.ViewModel
         private Point? _endPoint;
 
 
-
         public SimulationViewModel()
         {
             EditorMode = Mode.Normal;
@@ -447,13 +422,7 @@ namespace SRL.Main.ViewModel
 
             Simulation simulation = new Simulation()
             {
-                Map = Map,
-                Vehicle = Vehicle,
-                VehicleSize = VehicleSize.Value,
-                InitialVehicleRotation = InitialVehicleRotation.Value,
-                StartPoint = StartPoint.Value,
-                EndPoint = EndPoint.Value,
-                Orders = _orders
+                Map = Map, Vehicle = Vehicle, VehicleSize = VehicleSize.Value, InitialVehicleRotation = InitialVehicleRotation.Value, StartPoint = StartPoint.Value, EndPoint = EndPoint.Value, Orders = _orders
             };
             return simulation;
         }
@@ -478,13 +447,12 @@ namespace SRL.Main.ViewModel
                 return;
 
             const int partsPerRadian = 128;
-            double radiansPerPart = 1 / (double)partsPerRadian;
+            double radiansPerPart = 1/(double) partsPerRadian;
 
             Stack<Frame> frames = new Stack<Frame>();
             frames.Push(new Frame
             {
-                Position = StartPoint.Value,
-                Rotation = InitialVehicleRotation.Value
+                Position = StartPoint.Value, Rotation = InitialVehicleRotation.Value
             });
 
             for (int o = 0; o < orders.Count; o++)
@@ -497,7 +465,7 @@ namespace SRL.Main.ViewModel
                 else
                     relativeRotation = orders[o].Rotation - orders[o - 1].Rotation;
 
-                int partCount = (int)(Math.Abs(relativeRotation) * partsPerRadian);
+                int partCount = (int) (Math.Abs(relativeRotation)*partsPerRadian);
 
                 double currentAngle = frames.Peek().Rotation;
                 Point currentPosition = frames.Peek().Position;
@@ -509,15 +477,13 @@ namespace SRL.Main.ViewModel
 
                     frames.Push(new Frame
                     {
-                        Position = currentPosition,
-                        Rotation = currentAngle < 0 ? Math.PI * 2 + currentAngle : currentAngle
+                        Position = currentPosition, Rotation = currentAngle < 0 ? Math.PI*2 + currentAngle : currentAngle
                     });
                 }
 
                 frames.Push(new Frame
                 {
-                    Position = currentPosition,
-                    Rotation = orders[o].Rotation
+                    Position = currentPosition, Rotation = orders[o].Rotation
                 });
 
                 // Move frames.
@@ -538,8 +504,7 @@ namespace SRL.Main.ViewModel
                     {
                         frames.Push(new Frame
                         {
-                            Position = new Point(currentPosition.X, currentPosition.Y + y),
-                            Rotation = currentAngle,
+                            Position = new Point(currentPosition.X, currentPosition.Y + y), Rotation = currentAngle,
                         });
                     }
                 }
@@ -549,8 +514,7 @@ namespace SRL.Main.ViewModel
                     {
                         frames.Push(new Frame
                         {
-                            Position = new Point(currentPosition.X + x, currentPosition.Y),
-                            Rotation = currentAngle,
+                            Position = new Point(currentPosition.X + x, currentPosition.Y), Rotation = currentAngle,
                         });
                     }
                 }
@@ -559,7 +523,7 @@ namespace SRL.Main.ViewModel
                     // Based on Bresenham's line algorithm.
                     if (Math.Abs(dx) > Math.Abs(dy))
                     {
-                        double error = Math.Abs(dx / 2) - Math.Abs(dy);
+                        double error = Math.Abs(dx/2) - Math.Abs(dy);
                         for (double x = xStep, y = 0; Math.Abs(x) <= Math.Abs(dx); x += xStep)
                         {
                             if (error < 0)
@@ -571,14 +535,13 @@ namespace SRL.Main.ViewModel
 
                             frames.Push(new Frame
                             {
-                                Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = currentAngle,
+                                Position = new Point(currentPosition.X + x, currentPosition.Y + y), Rotation = currentAngle,
                             });
                         }
                     }
                     else
                     {
-                        double error = Math.Abs(dy / 2) - Math.Abs(dx);
+                        double error = Math.Abs(dy/2) - Math.Abs(dx);
                         for (double y = yStep, x = 0; Math.Abs(y) <= Math.Abs(dy); y += yStep)
                         {
                             if (error < 0)
@@ -590,8 +553,7 @@ namespace SRL.Main.ViewModel
 
                             frames.Push(new Frame
                             {
-                                Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = currentAngle,
+                                Position = new Point(currentPosition.X + x, currentPosition.Y + y), Rotation = currentAngle,
                             });
                         }
                     }
