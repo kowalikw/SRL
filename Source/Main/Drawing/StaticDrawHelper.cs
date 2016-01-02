@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
+using Microsoft.Xna.Framework;
 using SRL.Commons.Model;
-using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
+using MathHelper = SRL.Commons.Utilities.MathHelper;
+using Point = System.Windows.Point;
 
 namespace SRL.Main.Drawing
 {
@@ -49,10 +51,10 @@ namespace SRL.Main.Drawing
             var pixel3Color = BlendColors(color, new RgbColor(bitmap.GetPixel(x, y + 1)));
             var pixel4Color = BlendColors(color, new RgbColor(bitmap.GetPixel(x + 1, y + 1)));
 
-            bitmap.SetPixel(x, y, ColorAmendment(pixel1Color, amendmentAA).ToWinColor());
-            bitmap.SetPixel(x + 1, y, ColorAmendment(pixel2Color, amendmentAA).ToWinColor());
-            bitmap.SetPixel(x, y + 1, ColorAmendment(pixel3Color, amendmentAA).ToWinColor());
-            bitmap.SetPixel(x + 1, y + 1, ColorAmendment(pixel4Color, amendmentAA).ToWinColor());
+            bitmap.SetPixel(x, y, ColorAmendment(pixel1Color, amendmentAA).ToXnaColor());
+            bitmap.SetPixel(x + 1, y, ColorAmendment(pixel2Color, amendmentAA).ToXnaColor());
+            bitmap.SetPixel(x, y + 1, ColorAmendment(pixel3Color, amendmentAA).ToXnaColor());
+            bitmap.SetPixel(x + 1, y + 1, ColorAmendment(pixel4Color, amendmentAA).ToXnaColor());
         }
 
         #region Line
@@ -267,45 +269,45 @@ namespace SRL.Main.Drawing
             int vX = (int)vertex.Denormalize(renderSize).X;
             int vY = (int)vertex.Denormalize(renderSize).Y;
 
-            var winColor = color.ToWinColor();
+            var xnaColor = color.ToXnaColor();
 
-            lockBitmap.SetPixel(vX - 1, vY - 3, winColor);
-            lockBitmap.SetPixel(vX, vY - 3, winColor);
-            lockBitmap.SetPixel(vX + 1, vY - 3, winColor);
-            lockBitmap.SetPixel(vX - 2, vY - 2, winColor);
-            lockBitmap.SetPixel(vX - 1, vY - 2, winColor);
-            lockBitmap.SetPixel(vX, vY - 2, winColor);
-            lockBitmap.SetPixel(vX + 1, vY - 2, winColor);
-            lockBitmap.SetPixel(vX + 2, vY - 2, winColor);
-            lockBitmap.SetPixel(vX - 3, vY - 1, winColor);
-            lockBitmap.SetPixel(vX - 2, vY - 1, winColor);
-            lockBitmap.SetPixel(vX - 1, vY - 1, winColor);
-            lockBitmap.SetPixel(vX, vY - 1, winColor);
-            lockBitmap.SetPixel(vX + 1, vY - 1, winColor);
-            lockBitmap.SetPixel(vX + 2, vY - 1, winColor);
-            lockBitmap.SetPixel(vX + 3, vY - 1, winColor);
-            lockBitmap.SetPixel(vX - 3, vY, winColor);
-            lockBitmap.SetPixel(vX - 2, vY, winColor);
-            lockBitmap.SetPixel(vX - 1, vY, winColor);
-            lockBitmap.SetPixel(vX, vY, winColor);
-            lockBitmap.SetPixel(vX + 1, vY, winColor);
-            lockBitmap.SetPixel(vX + 2, vY, winColor);
-            lockBitmap.SetPixel(vX + 3, vY, winColor);
-            lockBitmap.SetPixel(vX - 3, vY + 1, winColor);
-            lockBitmap.SetPixel(vX - 2, vY + 1, winColor);
-            lockBitmap.SetPixel(vX - 1, vY + 1, winColor);
-            lockBitmap.SetPixel(vX, vY + 1, winColor);
-            lockBitmap.SetPixel(vX + 1, vY + 1, winColor);
-            lockBitmap.SetPixel(vX + 2, vY + 1, winColor);
-            lockBitmap.SetPixel(vX + 3, vY + 1, winColor);
-            lockBitmap.SetPixel(vX - 2, vY + 2, winColor);
-            lockBitmap.SetPixel(vX - 1, vY + 2, winColor);
-            lockBitmap.SetPixel(vX, vY + 2, winColor);
-            lockBitmap.SetPixel(vX + 1, vY + 2, winColor);
-            lockBitmap.SetPixel(vX + 2, vY + 2, winColor);
-            lockBitmap.SetPixel(vX - 1, vY + 3, winColor);
-            lockBitmap.SetPixel(vX, vY + 3, winColor);
-            lockBitmap.SetPixel(vX + 1, vY + 3, winColor);
+            lockBitmap.SetPixel(vX - 1, vY - 3, xnaColor);
+            lockBitmap.SetPixel(vX, vY - 3, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY - 3, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY - 2, xnaColor);
+            lockBitmap.SetPixel(vX - 3, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX + 3, vY - 1, xnaColor);
+            lockBitmap.SetPixel(vX - 3, vY, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY, xnaColor);
+            lockBitmap.SetPixel(vX, vY, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY, xnaColor);
+            lockBitmap.SetPixel(vX + 3, vY, xnaColor);
+            lockBitmap.SetPixel(vX - 3, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX + 3, vY + 1, xnaColor);
+            lockBitmap.SetPixel(vX - 2, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX + 2, vY + 2, xnaColor);
+            lockBitmap.SetPixel(vX - 1, vY + 3, xnaColor);
+            lockBitmap.SetPixel(vX, vY + 3, xnaColor);
+            lockBitmap.SetPixel(vX + 1, vY + 3, xnaColor);
         }
 
         public static void DrawVertexAA(this LockBitmap spriteBatch, Point vertex, Size renderSize, RgbColor color)
