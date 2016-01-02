@@ -13,9 +13,9 @@ namespace SRL.Main.ViewModel
 {
     public class SimulationViewModel : EditorViewModel<Simulation>
     {
-        private const int FrameChangeInterval = 5;
+        private const int FrameChangeInterval = 3;
         private const int FramesPerRadian = 128;
-        private const double MovePerFrame = 0.003;
+        private const double MovePerFrame = 0.002;
 
         #region LeftMenuCommands 
 
@@ -401,9 +401,10 @@ namespace SRL.Main.ViewModel
                     }
                     else
                     {
-                        Path = new Path();
-                        Path.Vertices.Add(StartPoint.Value);
-                        Path.Vertices.AddRange(Orders.Select(order => order.Destination));
+                        var pathVertices = new List<Point>();
+                        pathVertices.Add(StartPoint.Value);
+                        pathVertices.AddRange(Orders.Select(order => order.Destination));
+                        Path = new Path(pathVertices);
 
                         CalculateFrames(value);
                         MaxFrameIdx = Frames.Count - 1;
@@ -574,6 +575,7 @@ namespace SRL.Main.ViewModel
 
                 double currentAngle = frames.Peek().Rotation;
                 Point currentPosition = frames.Peek().Position;
+
                 double angleChange = relativeRotation > 0 ? radiansPerPart : -radiansPerPart;
 
                 for (int p = 0; p < rotationFrameCount - 1; p++)
@@ -605,7 +607,8 @@ namespace SRL.Main.ViewModel
 
                 currentAngle = frames.Peek().Rotation;
                 currentPosition = frames.Peek().Position;
-                if (Math.Abs(dx) < 0.5)
+
+                if (Math.Abs(dx) < Math.Abs(xStep) / 2)
                 {
                     for (double y = yStep; Math.Abs(y) <= Math.Abs(dy); y += yStep)
                     {
@@ -616,7 +619,7 @@ namespace SRL.Main.ViewModel
                         });
                     }
                 }
-                else if (Math.Abs(dy) < 0.5)
+                else if (Math.Abs(dy) < Math.Abs(yStep) / 2)
                 {
                     for (double x = xStep; Math.Abs(x) <= Math.Abs(dx); x += xStep)
                     {

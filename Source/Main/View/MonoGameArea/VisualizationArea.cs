@@ -16,45 +16,19 @@ namespace SRL.Main.View.MonoGameArea
     internal class VisualizationArea : AreaBase
     {
         private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
-        private PropertyChangedEventHandler _propertyChangedHandler;
-
-
-        private Polygon _resizedVehicleShape;
 
         protected bool ShowPath => Settings.Default.ShowPath;
+
+
+        private PropertyChangedEventHandler _propertyChangedHandler;
+        private Polygon _resizedVehicleShape;
+
 
         protected override void Initialize()
         {
             base.Initialize();
-            
-            _propertyChangedHandler = (o, e) =>
-            {
-                switch (e.PropertyName)
-                {
-                    case nameof(_context.Map):
-                    case nameof(_context.StartPoint):
-                    case nameof(_context.EndPoint):
-                        RedrawStaticObjectsTexture();
-                        break;
 
-                    case nameof(_context.Vehicle):
-                    case nameof(_context.VehicleSize):
-                        if (_context.VehicleSize != null &&
-                            _context.Vehicle != null)
-                        {
-                            _resizedVehicleShape = GeometryHelper.Resize(_context.Vehicle.Shape,
-                                _context.VehicleSize.Value);
-                        }
-                        else if (_context.Vehicle != null)
-                        {
-                            _resizedVehicleShape = _context.Vehicle.Shape;
-                        }
-                        break;
-                    case nameof(Settings.Default.ShowPath):
-                        RedrawStaticObjectsTexture();
-                        break;
-                }
-            };
+            _propertyChangedHandler = (o, e) => HandlePropertyChange(e.PropertyName);
 
             _context.PropertyChanged += _propertyChangedHandler;
             Settings.Default.PropertyChanged += _propertyChangedHandler;
@@ -75,8 +49,6 @@ namespace SRL.Main.View.MonoGameArea
                 RenderFrame(spriteBatch, time);
                 return;
             }
-
-            // We assume that simulation is not ready.
 
             Point normalizedMousePos = MousePosition.Normalize(RenderSize);
 
@@ -159,10 +131,7 @@ namespace SRL.Main.View.MonoGameArea
                 else
                     spriteBatch.DrawVertex(position, RenderSize, color);
             }
-
-
         }
-
 
         private void RenderFrame(SpriteBatch spriteBatch, TimeSpan time)
         {
@@ -238,6 +207,27 @@ namespace SRL.Main.View.MonoGameArea
                     if (_context.SetInitialVehicleSetup.CanExecute(setup))
                         _context.SetInitialVehicleSetup.Execute(setup);
                 }
+            }
+        }
+
+        private void HandlePropertyChange(string propertyName)
+        {
+            if (propertyName == nameof(_context.Map) ||
+                propertyName == nameof(_context.StartPoint) ||
+                propertyName == nameof(_context.EndPoint) ||
+                propertyName == nameof(_context.Path) ||
+                propertyName == nameof(Settings.Default.ShowPath))
+            {
+                RedrawStaticObjectsTexture();
+            }
+            else if (propertyName == nameof(_context.Vehicle) ||
+                     propertyName == nameof(_context.VehicleSize) ||
+                     _context.Vehicle != null)
+            {
+                if (_context.VehicleSize == null)
+                    _resizedVehicleShape = _context.Vehicle.Shape;
+                else
+                    _resizedVehicleShape = GeometryHelper.Resize(_context.Vehicle.Shape, _context.VehicleSize.Value);
             }
         }
     }
