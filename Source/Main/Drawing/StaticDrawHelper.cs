@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Windows;
+using Microsoft.Xna.Framework;
 using SRL.Commons.Model;
-using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
+using MathHelper = SRL.Commons.Utilities.MathHelper;
+using Point = System.Windows.Point;
 
 namespace SRL.Main.Drawing
 {
     internal static class StaticDrawHelper
     {
-        private static RgbColor BlendColors(RgbColor color1, RgbColor color2)
+        private static Color BlendColors(Color color1, Color color2)
         {
             float rgbMaxValue = 255.0f;
             float color1Intensity = color1.A / rgbMaxValue;
@@ -19,20 +21,20 @@ namespace SRL.Main.Drawing
             float g = color1.G / rgbMaxValue * color1Intensity + color2.G / rgbMaxValue * color2Intensity * (1 - color1Intensity);
             float r = color1.R / rgbMaxValue * color1Intensity + color2.R / rgbMaxValue * color2Intensity * (1 - color1Intensity);
 
-            return new RgbColor(r, g, b, a);
+            return new Color(r, g, b, a);
         }
 
-        private static RgbColor ColorAmendment(RgbColor color, int amendment = 0)
+        private static Color ColorAmendment(Color color, int amendment = 0)
         {
             byte R = (byte)(color.R < byte.MaxValue - amendment ? color.R + amendment : byte.MaxValue);
             byte G = (byte)(color.G < byte.MaxValue - amendment ? color.G + amendment : byte.MaxValue);
             byte B = (byte)(color.B < byte.MaxValue - amendment ? color.B + amendment : byte.MaxValue);
             byte A = color.A;
 
-            return new RgbColor(R, G, B, A);
+            return new Color(R, G, B, A);
         }
 
-        private static void SetBigPixel(this LockBitmap bitmap, int x, int y, RgbColor color, float intensity = 1)
+        private static void SetBigPixel(this LockBitmap bitmap, int x, int y, Color color, float intensity = 1)
         {
             color.A = (byte)(intensity * byte.MaxValue);
 
@@ -45,20 +47,20 @@ namespace SRL.Main.Drawing
             if (x < 0) x = 0;
             if (y < 0) y = 0;
 
-            var pixel1Color = BlendColors(color, new RgbColor(bitmap.GetPixel(x, y)));
-            var pixel2Color = BlendColors(color, new RgbColor(bitmap.GetPixel(x + 1, y)));
-            var pixel3Color = BlendColors(color, new RgbColor(bitmap.GetPixel(x, y + 1)));
-            var pixel4Color = BlendColors(color, new RgbColor(bitmap.GetPixel(x + 1, y + 1)));
+            var pixel1Color = BlendColors(color, bitmap.GetPixel(x, y));
+            var pixel2Color = BlendColors(color, bitmap.GetPixel(x + 1, y));
+            var pixel3Color = BlendColors(color, bitmap.GetPixel(x, y + 1));
+            var pixel4Color = BlendColors(color, bitmap.GetPixel(x + 1, y + 1));
 
-            bitmap.SetPixel(x, y, ColorAmendment(pixel1Color, amendmentAA).ToXnaColor());
-            bitmap.SetPixel(x + 1, y, ColorAmendment(pixel2Color, amendmentAA).ToXnaColor());
-            bitmap.SetPixel(x, y + 1, ColorAmendment(pixel3Color, amendmentAA).ToXnaColor());
-            bitmap.SetPixel(x + 1, y + 1, ColorAmendment(pixel4Color, amendmentAA).ToXnaColor());
+            bitmap.SetPixel(x, y, ColorAmendment(pixel1Color, amendmentAA));
+            bitmap.SetPixel(x + 1, y, ColorAmendment(pixel2Color, amendmentAA));
+            bitmap.SetPixel(x, y + 1, ColorAmendment(pixel3Color, amendmentAA));
+            bitmap.SetPixel(x + 1, y + 1, ColorAmendment(pixel4Color, amendmentAA));
         }
 
         #region Line
 
-        public static void DrawLine(this LockBitmap lockBitmap, Line line, Size renderSize, RgbColor color)
+        public static void DrawLine(this LockBitmap lockBitmap, Line line, Size renderSize, Color color)
         {
             int aX = (int)line.EndpointA.Denormalize(renderSize).X;
             int aY = (int)line.EndpointA.Denormalize(renderSize).Y;
@@ -116,7 +118,7 @@ namespace SRL.Main.Drawing
             }
         }
 
-        public static void DrawLineAA(this LockBitmap lockBitmap, Line line, Size renderSize, RgbColor color)
+        public static void DrawLineAA(this LockBitmap lockBitmap, Line line, Size renderSize, Color color)
         {
             int aX = (int)line.EndpointA.Denormalize(renderSize).X;
             int aY = (int)line.EndpointA.Denormalize(renderSize).Y;
@@ -211,13 +213,13 @@ namespace SRL.Main.Drawing
 
         #region Path
 
-        public static void DrawPath(this LockBitmap lockBitmap, Path path, Size renderSize, RgbColor color)
+        public static void DrawPath(this LockBitmap lockBitmap, Path path, Size renderSize, Color color)
         {
             for (int i = 1; i < path.Vertices.Count; i++)
                 lockBitmap.DrawLine(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color);
         }
 
-        public static void DrawPathAA(this LockBitmap lockBitmap, Path path, Size renderSize, RgbColor color)
+        public static void DrawPathAA(this LockBitmap lockBitmap, Path path, Size renderSize, Color color)
         {
             for (int i = 1; i < path.Vertices.Count; i++)
                 lockBitmap.DrawLineAA(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color);
@@ -227,14 +229,14 @@ namespace SRL.Main.Drawing
 
         #region Polygon
 
-        public static void DrawPolygon(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, RgbColor color)
+        public static void DrawPolygon(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, Color color)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
                 lockBitmap.DrawLine(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color);
             lockBitmap.DrawLine(new Line(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]), renderSize, color);
         }
 
-        public static void DrawPolygonAA(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, RgbColor color)
+        public static void DrawPolygonAA(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, Color color)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
                 lockBitmap.DrawLineAA(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color);
@@ -245,13 +247,13 @@ namespace SRL.Main.Drawing
 
         #region Map
 
-        public static void DrawMap(this LockBitmap lockBitmap, Map map, Size renderSize, RgbColor color)
+        public static void DrawMap(this LockBitmap lockBitmap, Map map, Size renderSize, Color color)
         {
             foreach (var obstacle in map.Obstacles)
                 lockBitmap.DrawPolygon(obstacle, renderSize, color);
         }
 
-        public static void DrawMapAA(this LockBitmap lockBitmap, Map map, Size renderSize, RgbColor color)
+        public static void DrawMapAA(this LockBitmap lockBitmap, Map map, Size renderSize, Color color)
         {
             foreach (var obstacle in map.Obstacles)
                 lockBitmap.DrawPolygonAA(obstacle, renderSize, color);
@@ -261,14 +263,14 @@ namespace SRL.Main.Drawing
 
         #region Vertex
 
-        public static void DrawVertex(this LockBitmap lockBitmap, Point vertex, Size renderSize, RgbColor color)
+        public static void DrawVertex(this LockBitmap lockBitmap, Point vertex, Size renderSize, Color color)
         {
             // Draw 7x7 dot
 
             int vX = (int)vertex.Denormalize(renderSize).X;
             int vY = (int)vertex.Denormalize(renderSize).Y;
 
-            var xnaColor = color.ToXnaColor();
+            var xnaColor = new Color(color.R, color.G, color.B);
 
             lockBitmap.SetPixel(vX - 1, vY - 3, xnaColor);
             lockBitmap.SetPixel(vX, vY - 3, xnaColor);
@@ -309,7 +311,7 @@ namespace SRL.Main.Drawing
             lockBitmap.SetPixel(vX + 1, vY + 3, xnaColor);
         }
 
-        public static void DrawVertexAA(this LockBitmap spriteBatch, Point vertex, Size renderSize, RgbColor color)
+        public static void DrawVertexAA(this LockBitmap spriteBatch, Point vertex, Size renderSize, Color color)
         {
             // Draw 7x7 dot
 

@@ -1,23 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
+using Point = System.Windows.Point;
 
 namespace SRL.Main.View.MonoGameArea
 {
     internal class VisualizationArea : AreaBase
     {
-        protected static readonly RgbColor StartPointColor = new RgbColor(20, 20, 255);
-        protected static readonly RgbColor EndPointColor = StartPointColor;
-        protected static readonly RgbColor PathColor = new RgbColor(20, 20, 255);
+        protected static readonly Color StartPointColor = new Color(20, 20, 255);
+        protected static readonly Color EndPointColor = StartPointColor;
+        protected static readonly Color PathColor = new Color(20, 20, 255);
 
         private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
 
@@ -62,7 +63,7 @@ namespace SRL.Main.View.MonoGameArea
                     return;
 
                 Point position = normalizedMousePos;
-                RgbColor color = _context.SetStartPointCommand.CanExecute(normalizedMousePos)
+                Color color = _context.SetStartPointCommand.CanExecute(normalizedMousePos)
                     ? ValidColor : InvalidColor;
 
                     spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
@@ -71,7 +72,7 @@ namespace SRL.Main.View.MonoGameArea
             {
                 Polygon shape;
                 Point origin = _context.StartPoint.Value;
-                RgbColor color;
+                Color color;
                 double angle;
 
                 if (_context.EditorMode == SimulationViewModel.Mode.VehicleSetup)
@@ -118,7 +119,7 @@ namespace SRL.Main.View.MonoGameArea
                     return;
 
                 Point position = normalizedMousePos;
-                RgbColor color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
+                Color color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
                     ? ValidColor : InvalidColor;
 
                     spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);

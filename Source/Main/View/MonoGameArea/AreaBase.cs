@@ -17,10 +17,10 @@ namespace SRL.Main.View.MonoGameArea
     {
         protected const double VertexPullRadius = 8;
 
-        protected static readonly RgbColor RegularColor = new RgbColor(255, 255, 255);
-        protected static readonly RgbColor ActiveColor = new RgbColor(255, 255, 20);
-        protected static readonly RgbColor InvalidColor = new RgbColor(255, 20, 20);
-        protected static readonly RgbColor ValidColor = new RgbColor(20, 255, 20);
+        protected static readonly Color RegularColor = new Color(255, 255, 255);
+        protected static readonly Color ActiveColor = new Color(255, 255, 20);
+        protected static readonly Color InvalidColor = new Color(255, 20, 20);
+        protected static readonly Color ValidColor = new Color(20, 255, 20);
 
         protected bool AntialiasingEnabled => Settings.Default.AntialiasingEnabled;
 

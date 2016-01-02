@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
+using Point = System.Windows.Point;
 
 namespace SRL.Main.View.MonoGameArea
 {
@@ -45,7 +46,7 @@ namespace SRL.Main.View.MonoGameArea
             if (_context.UnfinishedPolygon.Count > 0 && IsMouseOver)
             {
 
-                RgbColor color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
+                Color color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
                     ValidColor : InvalidColor;
 
                 _activeLine.EndpointA = _context.UnfinishedPolygon.GetLast();

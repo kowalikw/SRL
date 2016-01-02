@@ -55,12 +55,12 @@ namespace SRL.Main.Drawing
         /// <param name="y">The Y coordinate of the pixel.</param>
         /// <param name="color">The color of the pixel.</param>
         /// <param name="intensity">The intensity of the color.</param>
-        private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, RgbColor color, float intensity = 1)
+        private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, Color color, float intensity = 1)
         {
-            spriteBatch.Draw(_pixel, new Vector2(x, y), color.ToXnaColor(intensity));
+            spriteBatch.Draw(_pixel, new Vector2(x, y), color * intensity);
         }
 
-        private static void SetBigPixel(this SpriteBatch spriteBatch, float x, float y, RgbColor color, float intensity = 1)
+        private static void SetBigPixel(this SpriteBatch spriteBatch, float x, float y, Color color, float intensity = 1)
         {
             spriteBatch.SetPixel(x, y, color, intensity);
             spriteBatch.SetPixel(x + 1, y, color, intensity);
@@ -68,7 +68,7 @@ namespace SRL.Main.Drawing
             spriteBatch.SetPixel(x + 1, y + 1, color, intensity);
         }
 
-        private static void BresenhamLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, RgbColor color)
+        private static void BresenhamLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, Color color)
         {
             if (_pixel == null)
                 CreateThePixel(spriteBatch);
@@ -124,7 +124,7 @@ namespace SRL.Main.Drawing
             }
         }
 
-        private static void WuLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, RgbColor color)
+        private static void WuLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, Color color)
         {
             if (_pixel == null)
                 CreateThePixel(spriteBatch);
@@ -217,7 +217,7 @@ namespace SRL.Main.Drawing
 
         #region Line
 
-        public static void DrawLine(this SpriteBatch spriteBatch, Line line, Size renderSize, RgbColor color, bool antialiasing)
+        public static void DrawLine(this SpriteBatch spriteBatch, Line line, Size renderSize, Color color, bool antialiasing)
         {
             float aX = (float)line.EndpointA.Denormalize(renderSize).X;
             float aY = (float)line.EndpointA.Denormalize(renderSize).Y;
@@ -234,7 +234,7 @@ namespace SRL.Main.Drawing
         
         #region Arrow
 
-        public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, RgbColor color, bool antialiasing)
+        public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, Color color, bool antialiasing)
         {
             double cosA = Math.Cos(angle);
             double sinA = Math.Sin(angle);
@@ -267,7 +267,7 @@ namespace SRL.Main.Drawing
             }
         }
 
-        public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Size renderSize, RgbColor color, bool antialiasing)
+        public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Size renderSize, Color color, bool antialiasing)
         {
             double angle = GeometryHelper.GetAngle(origin, tip);
             double cosA = Math.Cos(angle);
@@ -301,7 +301,7 @@ namespace SRL.Main.Drawing
 
         #region Path
 
-        public static void DrawPath(this SpriteBatch spriteBatch, Path path, Size renderSize, RgbColor color, bool antialiasing)
+        public static void DrawPath(this SpriteBatch spriteBatch, Path path, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < path.Vertices.Count; i++)
                 spriteBatch.DrawLine(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color, antialiasing);
@@ -311,7 +311,7 @@ namespace SRL.Main.Drawing
 
         #region Polygon
 
-        public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Size renderSize, RgbColor color, bool antialiasing)
+        public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
                 spriteBatch.DrawLine(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color, antialiasing);
@@ -322,7 +322,7 @@ namespace SRL.Main.Drawing
 
         #region Vertex
 
-        public static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Size renderSize, RgbColor color, bool antialiasing)
+        public static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Size renderSize, Color color, bool antialiasing)
         {
             // Draw 7x7 dot
 

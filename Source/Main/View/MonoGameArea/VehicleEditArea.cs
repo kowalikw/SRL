@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
+using Point = System.Windows.Point;
 
 namespace SRL.Main.View.MonoGameArea
 {
@@ -54,7 +55,7 @@ namespace SRL.Main.View.MonoGameArea
 
             if (!_context.ShapeDone)
             {
-                RgbColor color = _context.AddShapeVertexCommand.CanExecute(normalizedMousePosition)
+                Color color = _context.AddShapeVertexCommand.CanExecute(normalizedMousePosition)
                     ? ValidColor
                     : InvalidColor;
 
@@ -74,7 +75,7 @@ namespace SRL.Main.View.MonoGameArea
             {
                 if (IsMouseOver)
                 {
-                    RgbColor color = _context.SetPivotCommand.CanExecute(normalizedMousePosition)
+                    Color color = _context.SetPivotCommand.CanExecute(normalizedMousePosition)
                         ? ValidColor
                         : InvalidColor;
 
@@ -86,7 +87,7 @@ namespace SRL.Main.View.MonoGameArea
                 if (IsMouseOver)
                 {
                     double angle = GeometryHelper.GetAngle(_context.Pivot.Value, normalizedMousePosition);
-                    RgbColor color = _context.SetDirectionCommand.CanExecute(angle)
+                    Color color = _context.SetDirectionCommand.CanExecute(angle)
                         ? ValidColor
                         : InvalidColor;
 
@@ -118,7 +119,7 @@ namespace SRL.Main.View.MonoGameArea
 
             if (_context.Pivot.HasValue)
             {
-                RgbColor color = _context.Direction.HasValue ? RegularColor : ActiveColor;
+                Color color = _context.Direction.HasValue ? RegularColor : ActiveColor;
 
                 if (AntialiasingEnabled)
                     lockBitmap.DrawVertexAA(_context.Pivot.Value, RenderSize, color);
