@@ -17,6 +17,7 @@ namespace SRL.Main.ViewModel
         private const int FramesPerRadian = 128;
         private const double MovePerFrame = 0.002;
 
+
         #region LeftMenuCommands 
 
         public RelayCommand<Mode> EnterModeCommand
@@ -118,7 +119,7 @@ namespace SRL.Main.ViewModel
                         if (EditorMode != Mode.StartPointSetup || Map == null)
                             return false;
 
-                        return !IsInsideAnyObstacle(point);
+                        return !IsInsideObstacle(point);
                     });
                 }
                 return _setStartPointCommand;
@@ -139,7 +140,7 @@ namespace SRL.Main.ViewModel
                         if (EditorMode != Mode.EndPointSetup || Map == null)
                             return false;
 
-                        return !IsInsideAnyObstacle(point);
+                        return !IsInsideObstacle(point);
                     });
                 }
                 return _setEndPointCommand;
@@ -478,27 +479,19 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        private Mode _editorMode;
+
         protected override bool IsModelValid
         {
             get
             {
-                return Map != null && Vehicle != null && VehicleSize.HasValue && InitialVehicleRotation.HasValue &&
-                       StartPoint.HasValue && EndPoint.HasValue && Orders != null;
+                return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null &&
+                       InitialVehicleRotation != null && Orders != null;
             }
         }
 
-
-
-        private IAlgorithm _algorithm;
-
-
-
         private readonly DispatcherTimer _simulationTimer;
-
-
-
-        private Mode _editorMode;
-        
+        private IAlgorithm _algorithm;
 
 
         public SimulationViewModel()
@@ -550,7 +543,17 @@ namespace SRL.Main.ViewModel
                 CalculateFrames(Orders);
         }
 
-        private void CalculateFrames(List<Order> orders) //TODO refactor
+        public bool IsInsideObstacle(Point point)
+        {
+            foreach (var obstacle in Map.Obstacles)
+            {
+                if (GeometryHelper.IsInsidePolygon(point, obstacle))
+                    return true;
+            }
+            return false;
+        }
+
+        private void CalculateFrames(List<Order> orders)
         {
             double radiansPerPart = 1 / (double)FramesPerRadian;
 
@@ -674,16 +677,6 @@ namespace SRL.Main.ViewModel
                 }
             }
             Frames = frames.Reverse().ToList();
-        }
-
-        public bool IsInsideAnyObstacle(Point point)
-        {
-            foreach (var obstacle in Map.Obstacles)
-            {
-                if (GeometryHelper.IsInsidePolygon(point, obstacle))
-                    return true;
-            }
-            return false;
         }
 
         public enum Mode
