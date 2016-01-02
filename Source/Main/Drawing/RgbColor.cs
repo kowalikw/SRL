@@ -1,5 +1,4 @@
 ﻿using XnaColor = Microsoft.Xna.Framework.Color;
-using WinColor = System.Drawing.Color;
 
 namespace SRL.Main.Drawing
 {
@@ -18,6 +17,14 @@ namespace SRL.Main.Drawing
             A = a;
         }
 
+        public RgbColor(float r, float g, float b, float a = 1)
+        {
+            R = (byte)(r * byte.MaxValue);
+            G = (byte)(g * byte.MaxValue);
+            B = (byte)(b * byte.MaxValue);
+            A = (byte)(a * byte.MaxValue);
+        }
+
         public RgbColor(XnaColor color)
         {
             R = color.R;
@@ -26,19 +33,15 @@ namespace SRL.Main.Drawing
             A = color.A;
         }
 
+        public XnaColor ToXnaColor()
+        {
+            return new XnaColor(R, G, B, A);
+        }
+
+
         public XnaColor ToXnaColor(float intensity = 1)
         {
             return new XnaColor(new XnaColor(R, G, B) * intensity, intensity);
-        }
-
-        public WinColor ToWinColor()
-        {
-            return WinColor.FromArgb(A, R, G, B);
-        }
-
-        public WinColor ToWinColor(byte intensity = byte.MaxValue)
-        {
-            return WinColor.FromArgb(intensity, R * intensity / byte.MaxValue, G * intensity / byte.MaxValue, B * intensity / byte.MaxValue);
         }
     }
 }
