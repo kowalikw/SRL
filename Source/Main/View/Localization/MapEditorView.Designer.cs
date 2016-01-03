@@ -59,5 +59,41 @@ namespace SRL.Main.View.Localization {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo.
+        /// </summary>
+        internal static string BackTooltip {
+            get {
+                return ResourceManager.GetString("BackTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load map.
+        /// </summary>
+        internal static string LoadTooltip {
+            get {
+                return ResourceManager.GetString("LoadTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string ResetTooltip {
+            get {
+                return ResourceManager.GetString("ResetTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save map.
+        /// </summary>
+        internal static string SaveTooltip {
+            get {
+                return ResourceManager.GetString("SaveTooltip", resourceCulture);
+            }
+        }
     }
 }
