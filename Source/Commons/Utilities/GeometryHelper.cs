@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using SRL.Commons.Model;
 
@@ -150,6 +151,15 @@ namespace SRL.Commons.Utilities
                 new Point(target.X - pivot.X, target.Y - pivot.Y)) > 0; // TODO Doesn't return value == 0 mean that no there's no turn? Fix me
         }
 
+        public static bool IsIntersected(Polygon subject, IEnumerable<Polygon> polygons)
+        {
+            return false; //TODO
+        }
+
+        public static bool IsEnclosed(Polygon subject, Polygon enclosure)
+        {
+            return false; //TODO
+        }
 
     }
 }
