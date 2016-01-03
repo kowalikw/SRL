@@ -55,17 +55,17 @@ namespace SRL.Main.Drawing
         /// <param name="y">The Y coordinate of the pixel.</param>
         /// <param name="color">The color of the pixel.</param>
         /// <param name="intensity">The intensity of the color.</param>
-        private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, Color color, float intensity = 1)
+        private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, Color color)
         {
-            spriteBatch.Draw(_pixel, new Vector2(x, y), color * intensity);
+            spriteBatch.Draw(_pixel, new Vector2(x, y), color);
         }
 
-        private static void SetBigPixel(this SpriteBatch spriteBatch, float x, float y, Color color, float intensity = 1)
+        private static void SetBigPixel(this SpriteBatch spriteBatch, float x, float y, Color color)
         {
-            spriteBatch.SetPixel(x, y, color, intensity);
-            spriteBatch.SetPixel(x + 1, y, color, intensity);
-            spriteBatch.SetPixel(x, y + 1, color, intensity);
-            spriteBatch.SetPixel(x + 1, y + 1, color, intensity);
+            spriteBatch.SetPixel(x, y, color);
+            spriteBatch.SetPixel(x + 1, y, color);
+            spriteBatch.SetPixel(x, y + 1, color);
+            spriteBatch.SetPixel(x + 1, y + 1, color);
         }
 
         private static void BresenhamLine(this SpriteBatch spriteBatch, float aX, float aY, float bX, float bY, Color color)
@@ -160,13 +160,13 @@ namespace SRL.Main.Drawing
 
             if (steep)
             {
-                spriteBatch.SetBigPixel(yPxl1, xPxl1, color, intensityTop);
-                spriteBatch.SetBigPixel(yPxl1 + 1, xPxl1, color, intensityDown);
+                spriteBatch.SetBigPixel(yPxl1, xPxl1, color * intensityTop);
+                spriteBatch.SetBigPixel(yPxl1 + 1, xPxl1, color * intensityDown);
             }
             else
             {
-                spriteBatch.SetBigPixel(xPxl1, yPxl1, color, intensityTop);
-                spriteBatch.SetBigPixel(xPxl1, yPxl1 + 1, color, intensityDown);
+                spriteBatch.SetBigPixel(xPxl1, yPxl1, color * intensityTop);
+                spriteBatch.SetBigPixel(xPxl1, yPxl1 + 1, color * intensityDown);
             }
 
             float intery = yEnd + gradient;
@@ -184,13 +184,13 @@ namespace SRL.Main.Drawing
 
             if (steep)
             {
-                spriteBatch.SetBigPixel(yPxl2, xPxl2, color, intensityTop);
-                spriteBatch.SetBigPixel(yPxl2 + 1, xPxl2, color, intensityDown);
+                spriteBatch.SetBigPixel(yPxl2, xPxl2, color * intensityTop);
+                spriteBatch.SetBigPixel(yPxl2 + 1, xPxl2, color * intensityDown);
             }
             else
             {
-                spriteBatch.SetBigPixel(xPxl2, yPxl2, color, intensityTop);
-                spriteBatch.SetBigPixel(xPxl2, yPxl2 + 1, color, intensityDown);
+                spriteBatch.SetBigPixel(xPxl2, yPxl2, color * intensityTop);
+                spriteBatch.SetBigPixel(xPxl2, yPxl2 + 1, color * intensityDown);
             }
 
             // Main loop
@@ -201,13 +201,13 @@ namespace SRL.Main.Drawing
 
                 if (steep)
                 {
-                    spriteBatch.SetBigPixel((int)intery, x, color, intensityTop);
-                    spriteBatch.SetBigPixel((int)intery + 1, x, color, intensityDown);
+                    spriteBatch.SetBigPixel((int)intery, x, color * intensityTop);
+                    spriteBatch.SetBigPixel((int)intery + 1, x, color * intensityDown);
                 }
                 else
                 {
-                    spriteBatch.SetBigPixel(x, (int)intery, color, intensityTop);
-                    spriteBatch.SetBigPixel(x, (int)intery + 1, color, intensityDown);
+                    spriteBatch.SetBigPixel(x, (int)intery, color * intensityTop);
+                    spriteBatch.SetBigPixel(x, (int)intery + 1, color * intensityDown);
                 }
                 intery = intery + gradient;
             }
@@ -334,51 +334,51 @@ namespace SRL.Main.Drawing
 
             if (antialiasing)
             {
-                spriteBatch.SetPixel(vX - 2, vY - 3, color, 0.255f);
-                spriteBatch.SetPixel(vX - 1, vY - 3, color, 0.863f);
-                spriteBatch.SetPixel(vX, vY - 3, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY - 3, color, 0.863f);
-                spriteBatch.SetPixel(vX + 2, vY - 3, color, 0.255f);
-                spriteBatch.SetPixel(vX - 3, vY - 2, color, 0.255f);
-                spriteBatch.SetPixel(vX - 2, vY - 2, color, 1);
-                spriteBatch.SetPixel(vX - 1, vY - 2, color, 1);
-                spriteBatch.SetPixel(vX, vY - 2, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY - 2, color, 1);
-                spriteBatch.SetPixel(vX + 2, vY - 2, color, 1);
-                spriteBatch.SetPixel(vX + 3, vY - 2, color, 0.255f);
-                spriteBatch.SetPixel(vX - 3, vY - 1, color, 0.863f);
-                spriteBatch.SetPixel(vX - 2, vY - 1, color, 1);
-                spriteBatch.SetPixel(vX - 1, vY - 1, color, 1);
-                spriteBatch.SetPixel(vX, vY - 1, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY - 1, color, 1);
-                spriteBatch.SetPixel(vX + 2, vY - 1, color, 1);
-                spriteBatch.SetPixel(vX + 3, vY - 1, color, 0.863f);
-                spriteBatch.SetPixel(vX - 3, vY, color, 1);
-                spriteBatch.SetPixel(vX - 2, vY, color, 1);
-                spriteBatch.SetPixel(vX - 1, vY, color, 1);
-                spriteBatch.SetPixel(vX, vY, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY, color, 1);
-                spriteBatch.SetPixel(vX + 2, vY, color, 1);
-                spriteBatch.SetPixel(vX + 3, vY, color, 1);
-                spriteBatch.SetPixel(vX - 3, vY + 1, color, 0.863f);
-                spriteBatch.SetPixel(vX - 2, vY + 1, color, 1);
-                spriteBatch.SetPixel(vX - 1, vY + 1, color, 1);
-                spriteBatch.SetPixel(vX, vY + 1, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY + 1, color, 1);
-                spriteBatch.SetPixel(vX + 2, vY + 1, color, 1);
-                spriteBatch.SetPixel(vX + 3, vY + 1, color, 0.863f);
-                spriteBatch.SetPixel(vX - 3, vY + 2, color, 0.255f);
-                spriteBatch.SetPixel(vX - 2, vY + 2, color, 1);
-                spriteBatch.SetPixel(vX - 1, vY + 2, color, 1);
-                spriteBatch.SetPixel(vX, vY + 2, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY + 2, color, 1);
-                spriteBatch.SetPixel(vX + 2, vY + 2, color, 1);
-                spriteBatch.SetPixel(vX + 3, vY + 2, color, 0.255f);
-                spriteBatch.SetPixel(vX - 2, vY + 3, color, 0.255f);
-                spriteBatch.SetPixel(vX - 1, vY + 3, color, 0.863f);
-                spriteBatch.SetPixel(vX, vY + 3, color, 1);
-                spriteBatch.SetPixel(vX + 1, vY + 3, color, 0.863f);
-                spriteBatch.SetPixel(vX + 2, vY + 3, color, 0.255f);
+                spriteBatch.SetPixel(vX - 2, vY - 3, color * 0.255f);
+                spriteBatch.SetPixel(vX - 1, vY - 3, color * 0.863f);
+                spriteBatch.SetPixel(vX, vY - 3, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY - 3, color * 0.863f);
+                spriteBatch.SetPixel(vX + 2, vY - 3, color * 0.255f);
+                spriteBatch.SetPixel(vX - 3, vY - 2, color * 0.255f);
+                spriteBatch.SetPixel(vX - 2, vY - 2, color * 1);
+                spriteBatch.SetPixel(vX - 1, vY - 2, color * 1);
+                spriteBatch.SetPixel(vX, vY - 2, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY - 2, color * 1);
+                spriteBatch.SetPixel(vX + 2, vY - 2, color * 1);
+                spriteBatch.SetPixel(vX + 3, vY - 2, color * 0.255f);
+                spriteBatch.SetPixel(vX - 3, vY - 1, color * 0.863f);
+                spriteBatch.SetPixel(vX - 2, vY - 1, color * 1);
+                spriteBatch.SetPixel(vX - 1, vY - 1, color * 1);
+                spriteBatch.SetPixel(vX, vY - 1, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY - 1, color * 1);
+                spriteBatch.SetPixel(vX + 2, vY - 1, color * 1);
+                spriteBatch.SetPixel(vX + 3, vY - 1, color * 0.863f);
+                spriteBatch.SetPixel(vX - 3, vY, color * 1);
+                spriteBatch.SetPixel(vX - 2, vY, color * 1);
+                spriteBatch.SetPixel(vX - 1, vY, color * 1);
+                spriteBatch.SetPixel(vX, vY, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY, color * 1);
+                spriteBatch.SetPixel(vX + 2, vY, color * 1);
+                spriteBatch.SetPixel(vX + 3, vY, color * 1);
+                spriteBatch.SetPixel(vX - 3, vY + 1, color * 0.863f);
+                spriteBatch.SetPixel(vX - 2, vY + 1, color * 1);
+                spriteBatch.SetPixel(vX - 1, vY + 1, color * 1);
+                spriteBatch.SetPixel(vX, vY + 1, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY + 1, color * 1);
+                spriteBatch.SetPixel(vX + 2, vY + 1, color * 1);
+                spriteBatch.SetPixel(vX + 3, vY + 1, color * 0.863f);
+                spriteBatch.SetPixel(vX - 3, vY + 2, color * 0.255f);
+                spriteBatch.SetPixel(vX - 2, vY + 2, color * 1);
+                spriteBatch.SetPixel(vX - 1, vY + 2, color * 1);
+                spriteBatch.SetPixel(vX, vY + 2, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY + 2, color * 1);
+                spriteBatch.SetPixel(vX + 2, vY + 2, color * 1);
+                spriteBatch.SetPixel(vX + 3, vY + 2, color * 0.255f);
+                spriteBatch.SetPixel(vX - 2, vY + 3, color * 0.255f);
+                spriteBatch.SetPixel(vX - 1, vY + 3, color * 0.863f);
+                spriteBatch.SetPixel(vX, vY + 3, color * 1);
+                spriteBatch.SetPixel(vX + 1, vY + 3, color * 0.863f);
+                spriteBatch.SetPixel(vX + 2, vY + 3, color * 0.255f);
             }
             else
             {
