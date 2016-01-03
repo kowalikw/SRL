@@ -156,7 +156,7 @@ namespace SRL.Main.ViewModel
                             StartPoint == null)
                             return false;
 
-                        return true; //TODO check if vehicle overlays with any obstacle
+                        return GeometryHelper.IsIntersected(Vehicle.Shape, Map.Obstacles);
                     });
                 }
                 return _setInitialVehicleSetup;
