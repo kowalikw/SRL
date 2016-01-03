@@ -28,22 +28,12 @@ namespace SRL.Main.ViewModel
                 {
                     _enterModeCommand = new RelayCommand<Mode>(mode =>
                     {
-                        switch (mode)
-                        {
-                            case Mode.StartPointSetup:
-                                StartPoint = null;
-                                break;
-                            case Mode.EndPointSetup:
-                                EndPoint = null;
-                                break;
-                        }
                         EditorMode = mode;
                     }, mode =>
                     {
                         switch (mode)
                         {
                             case Mode.StartPointSetup:
-                                return Map != null;
                             case Mode.EndPointSetup:
                                 return Map != null;
                             case Mode.VehicleSetup:
@@ -222,7 +212,6 @@ namespace SRL.Main.ViewModel
                         if (CurrentFrameIdx == MaxFrameIdx)
                             CurrentFrameIdx = 0;
                         EditorMode = Mode.SimulationRunning;
-                        _simulationTimer.Start();
                     }, () => { return EditorMode == Mode.Normal && Orders != null; });
                 }
                 return _startPlaybackCommand;
@@ -237,7 +226,6 @@ namespace SRL.Main.ViewModel
                     _stopPlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                        _simulationTimer.Stop();
                         CurrentFrameIdx = 0;
                     }, () =>
                     {
@@ -256,7 +244,6 @@ namespace SRL.Main.ViewModel
                     _pausePlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                        _simulationTimer.Stop();
                     }, () => { return EditorMode == Mode.SimulationRunning; });
                 }
                 return _pausePlaybackCommand;
@@ -466,19 +453,30 @@ namespace SRL.Main.ViewModel
                 if (_editorMode != value)
                 {
                     _editorMode = value;
+
+                    _simulationTimer.Stop();
+                    switch (value)
+                    {
+                        case Mode.StartPointSetup:
+                            StartPoint = null;
+                            break;
+                        case Mode.EndPointSetup:
+                            EndPoint = null;
+                            break;
+                        case Mode.SimulationRunning:
+                            _simulationTimer.Start();
+                            break;
+                    }
                     RaisePropertyChanged();
                 }
             }
         }
+
         private Mode _editorMode;
 
         protected override bool IsModelValid
         {
-            get
-            {
-                return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null &&
-                       InitialVehicleRotation != null && Orders != null;
-            }
+            get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
         }
 
         private readonly DispatcherTimer _simulationTimer;
@@ -511,10 +509,10 @@ namespace SRL.Main.ViewModel
             {
                 Map = Map,
                 Vehicle = Vehicle,
-                VehicleSize = VehicleSize.Value,
-                InitialVehicleRotation = InitialVehicleRotation.Value,
                 StartPoint = StartPoint.Value,
                 EndPoint = EndPoint.Value,
+                VehicleSize = VehicleSize.Value,
+                InitialVehicleRotation = InitialVehicleRotation.Value,
                 Orders = Orders
             };
             return simulation;

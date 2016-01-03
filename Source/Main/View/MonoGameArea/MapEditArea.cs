@@ -62,18 +62,9 @@ namespace SRL.Main.View.MonoGameArea
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
-            if (AntialiasingEnabled)
-            {
-                foreach (var obstacle in _context.FinishedPolygons)
-                    lockBitmap.DrawPolygonAA(obstacle, RenderSize, RegularColor);
-                lockBitmap.DrawPathAA(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor);
-            }
-            else
-            {
-                foreach (var obstacle in _context.FinishedPolygons)
-                    lockBitmap.DrawPolygon(obstacle, RenderSize, RegularColor);
-                lockBitmap.DrawPath(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor);
-            }
+            foreach (var obstacle in _context.FinishedPolygons)
+                lockBitmap.DrawPolygon(obstacle, RenderSize, RegularColor, AntialiasingEnabled);
+            lockBitmap.DrawPath(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor, AntialiasingEnabled);
         }
 
         protected override void OnMouseUp(MouseButton button)

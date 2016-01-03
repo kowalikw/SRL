@@ -104,27 +104,18 @@ namespace SRL.Main.View.MonoGameArea
         {
             if (!_context.ShapeDone)
             {
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawPathAA(new Path(_context.VehicleShape), RenderSize, ActiveColor);
-                else
-                    lockBitmap.DrawPath(new Path(_context.VehicleShape), RenderSize, ActiveColor);
+                    lockBitmap.DrawPath(new Path(_context.VehicleShape), RenderSize, ActiveColor, AntialiasingEnabled);
             }
             else
             {
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawPolygonAA(new Polygon(_context.VehicleShape), RenderSize, RegularColor);
-                else
-                    lockBitmap.DrawPolygon(new Polygon(_context.VehicleShape), RenderSize, RegularColor);
+                    lockBitmap.DrawPolygon(new Polygon(_context.VehicleShape), RenderSize, RegularColor, AntialiasingEnabled);
             }
 
             if (_context.Pivot.HasValue)
             {
                 Color color = _context.Direction.HasValue ? RegularColor : ActiveColor;
 
-                if (AntialiasingEnabled)
-                    lockBitmap.DrawVertexAA(_context.Pivot.Value, RenderSize, color);
-                else
-                    lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, color);
+                    lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, color, AntialiasingEnabled);
             }
 
             // Arrow is drawn dynamically only.
