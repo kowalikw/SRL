@@ -21,19 +21,21 @@ namespace SRL.Algorithm
             public int index;
             public int obstacle;
         }
-        public List<Order> GetPath(Map InputMap, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
+        List<Order> IAlgorithm.GetPath(Map InputMap, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
         {
             Map map = new Map();
             int maxDiff = 15;
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-1, 1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(1, -1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2,-1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1,-2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2,1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1,2) }));
             List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
             IGraph graph;
             List<Point> triangleTemplate = new List<Point>();
+            for (int i = 0; i < InputMap.Obstacles.Count; i++)
+                map.Obstacles.Add(InputMap.Obstacles[i]);
             List<Polygon>[] currentMap = MinkowskiSum(map, vehicle, angleDensity);
             int index = 0;
             triangleTemplate.Add(new Point(0, 0));
@@ -51,6 +53,16 @@ namespace SRL.Algorithm
                 ip.point = start;
                 ip.obstacle = -1;
                 IndexPointAngleList[i].Add(ip);
+                /*for (int k=0;k<currentMap[i].Count;k++)
+                {
+                    foreach (Point p in currentMap[i][k].Vertices)
+                    {
+                        ip.point = p;
+                        ip.index = index++;
+                        ip.obstacle = k;
+                        IndexPointAngleList[i].Add(ip);
+                    }
+                }*/
                 int k = 0;
                 foreach (Polygon poly in currentMap[i])
                 {
@@ -79,6 +91,11 @@ namespace SRL.Algorithm
                         bool addEdge = true;
                         if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle]))
                         {
+                            /*if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0)
+                            {
+                                if (GeometryHelper.IsInsidePolygon(new Point((IndexPointAngleList[angle][i].point.X + IndexPointAngleList[angle][j].point.X) / 2, (IndexPointAngleList[angle][i].point.Y + IndexPointAngleList[angle][j].point.Y) / 2), currentMap[angle][IndexPointAngleList[angle][i].obstacle]))
+                                    addEdge = false;
+                            }*/
                             if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0)
                             {
                                 for (int obstacle = 0; obstacle < currentMap[angle].Count; obstacle++)
@@ -100,16 +117,6 @@ namespace SRL.Algorithm
                 {
                     for (int j = 0; j < IndexPointAngleList[(angle + 1) % angleDensity].Count; j++)
                     {
-                        /*for(int k =0;k<currentMap[angle].Count;k++)
-                        {
-                            if (GeometryHelper.IsPointInPolygon(IndexPointAngleList[angle][i].point, currentMap[angle][k]))
-                                continue;
-                        }
-                        for (int k = 0; k < currentMap[(angle+1)%angleDensity].Count; k++)
-                        {
-                            if (GeometryHelper.IsPointInPolygon(IndexPointAngleList[(angle + 1) % angleDensity][j].point, currentMap[(angle + 1) % angleDensity][k]))
-                                continue;
-                        }*/
                         if (GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) <= maxDiff)
                         {
                             graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[(angle + 1) % angleDensity][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 1);
@@ -160,9 +167,8 @@ namespace SRL.Algorithm
         /// <param name="angleDensity"></param>
         public List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
         {
-            // TODO: normalisation
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity]; // każdy element tablicy to mapa dla danego obrotu, w każdym obrocie mamy listę przeszkód. każda przeszkoda to lista punktów
-            double singleAngle = Math.PI / angleDensity;
+            double singleAngle = 2 * Math.PI / angleDensity;
             List<List<Point>> triangularObstacles = new List<List<Point>>();
             for (int i = 0; i < map.Obstacles.Count; i++)
             {
@@ -172,12 +178,12 @@ namespace SRL.Algorithm
                     triangularObstacles.Add(triangles[j]);
                 }
             }
-            for (double i = 0; i < Math.PI; i += singleAngle) // indeks w tablicy = i/singleangle
+            for (int i = 0; i < angleDensity; i += 1) // indeks w tablicy = i/singleangle
             {
                 List<Point> rotatedVehicle = new List<Point>();
                 for (int j = 0; j < vehicle.Shape.Vertices.Count; j++)
                 {
-                    rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], new Point(0,0), i + Math.PI));
+                    rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], new Point(0,0), i * singleAngle + Math.PI));
                 }
                 List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
                 List<Polygon> newObstacles = new List<Polygon>();
@@ -201,8 +207,15 @@ namespace SRL.Algorithm
                         newObstacles.Add(ConvexHull(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k])));
                     }
                 }*/
-                tableOfObstacles[(int)(i / singleAngle)] = newObstacles;
+                tableOfObstacles[i] = newObstacles;
+
+
             }
+            for (int i = 0; i < tableOfObstacles.Length; i++)
+            {
+                tableOfObstacles[i] = MergePolygons(tableOfObstacles[i]);
+            }
+            
             return tableOfObstacles;
         }
 
@@ -295,7 +308,7 @@ namespace SRL.Algorithm
         }
         List<Polygon> MergePolygons(List<Polygon> polygons)
         {
-            long multiply = long.MaxValue / 2;
+            long multiply = long.MaxValue / 10;
             if (polygons == null)
                 return null;
             List<Polygon> polys = new List<Polygon>();
@@ -318,7 +331,7 @@ namespace SRL.Algorithm
                 {
                     List<Point> tmpPoly = new List<Point>();
                     for (int i = 0; i < p.Count; i++)
-                        tmpPoly.Add(new Point(p[i].X / multiply, p[i].Y / multiply));
+                        tmpPoly.Add(new Point((double)p[i].X / (double)multiply, (double)p[i].Y / (double)multiply));
                     polys.Add(new Polygon(tmpPoly));
                 }
             }
