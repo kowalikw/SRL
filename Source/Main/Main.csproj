@@ -117,7 +117,62 @@
     <Compile Include="ViewModel\TracingViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Localization\HomeView.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HomeView.pl.resx</DependentUpon>
+    </Compile>
     <Compile Include="View\Localization\Language.cs" />
+    <Compile Include="View\Localization\MapEditorView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapEditorView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\MapEditorView.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapEditorView.pl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\SettingsView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SettingsView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\SettingsView.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SettingsView.pl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\SimulationView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SimulationView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\SimulationView.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SimulationView.pl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\TracingView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TracingView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\TracingView.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TracingView.pl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\VehicleEditorView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VehicleEditorView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Localization\VehicleEditorView.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VehicleEditorView.pl.resx</DependentUpon>
+    </Compile>
     <Compile Include="View\MonoGameArea\AreaBase.cs" />
     <Compile Include="View\Localization\HomeView.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -222,7 +277,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>HomeView.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Localization\HomeView.pl.resx" />
+    <EmbeddedResource Include="View\Localization\HomeView.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HomeView.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\Localization\MainView.pl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MainView.pl.Designer.cs</LastGenOutput>
@@ -230,6 +288,46 @@
     <EmbeddedResource Include="View\Localization\MainView.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MainView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\MapEditorView.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MapEditorView.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\MapEditorView.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MapEditorView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\SettingsView.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SettingsView.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\SettingsView.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SettingsView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\SimulationView.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimulationView.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\SimulationView.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimulationView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\TracingView.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TracingView.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\TracingView.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TracingView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\VehicleEditorView.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VehicleEditorView.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\VehicleEditorView.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VehicleEditorView.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
