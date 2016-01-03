@@ -95,7 +95,7 @@ namespace SRL.Main.Drawing
             return new Color(b, g, r, a);
         }
 
-        public void SetPixel(int x, int y, Color color, bool blend = true)
+        public void SetPixel(int x, int y, Color color)
         {
             if (x < 0 || x >= Width)
                 return;
@@ -109,20 +109,10 @@ namespace SRL.Main.Drawing
             // Get start index of the specified pixel.
             int i = (y * Width + x) * cCount;
 
-            if (blend)
-            {
-                Pixels[i] = BlendChannel(color.R, Pixels[i], color.A);
-                Pixels[i + 1] = BlendChannel(color.G, Pixels[i + 1], color.A);
-                Pixels[i + 2] = BlendChannel(color.B, Pixels[i + 2], color.A);
-                Pixels[i + 3] = BlendChannel(color.A, Pixels[i + 3], color.A);
-            }
-            else
-            {
-                Pixels[i] = color.R;
-                Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.B;
-                Pixels[i + 3] = color.A;
-            }
+            Pixels[i] = BlendChannel(color.R, Pixels[i], color.A);
+            Pixels[i + 1] = BlendChannel(color.G, Pixels[i + 1], color.A);
+            Pixels[i + 2] = BlendChannel(color.B, Pixels[i + 2], color.A);
+            Pixels[i + 3] = BlendChannel(color.A, Pixels[i + 3], color.A);
         }
     }
 }

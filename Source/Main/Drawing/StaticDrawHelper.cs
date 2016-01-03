@@ -10,12 +10,12 @@ namespace SRL.Main.Drawing
 {
     internal static class StaticDrawHelper
     {
-        private static void SetBigPixel(this LockBitmap bitmap, int x, int y, Color color, float intensity = 1)
+        private static void SetBigPixel(this LockBitmap bitmap, int x, int y, Color color)
         {
-            bitmap.SetPixel(x, y, color * intensity);
-            bitmap.SetPixel(x + 1, y, color * intensity);
-            bitmap.SetPixel(x, y + 1, color * intensity);
-            bitmap.SetPixel(x + 1, y + 1, color * intensity);
+            bitmap.SetPixel(x, y, color);
+            bitmap.SetPixel(x + 1, y, color);
+            bitmap.SetPixel(x, y + 1, color);
+            bitmap.SetPixel(x + 1, y + 1, color);
         }
 
         private static void BresenhamLine(this LockBitmap lockBitmap, int aX, int aY, int bX, int bY, Color color)
@@ -104,13 +104,13 @@ namespace SRL.Main.Drawing
 
             if (steep)
             {
-                lockBitmap.SetBigPixel(yPxl1, xPxl1, color, intensityTop);
-                lockBitmap.SetBigPixel(yPxl1 + 1, xPxl1, color, intensityDown);
+                lockBitmap.SetBigPixel(yPxl1, xPxl1, color * intensityTop);
+                lockBitmap.SetBigPixel(yPxl1 + 1, xPxl1, color * intensityDown);
             }
             else
             {
-                lockBitmap.SetBigPixel(xPxl1, yPxl1, color, intensityTop);
-                lockBitmap.SetBigPixel(xPxl1, yPxl1 + 1, color, intensityDown);
+                lockBitmap.SetBigPixel(xPxl1, yPxl1, color * intensityTop);
+                lockBitmap.SetBigPixel(xPxl1, yPxl1 + 1, color * intensityDown);
             }
 
             float intery = yEnd + gradient;
@@ -128,13 +128,13 @@ namespace SRL.Main.Drawing
 
             if (steep)
             {
-                lockBitmap.SetBigPixel(yPxl2, xPxl2, color, intensityTop);
-                lockBitmap.SetBigPixel(yPxl2 + 1, xPxl2, color, intensityDown);
+                lockBitmap.SetBigPixel(yPxl2, xPxl2, color * intensityTop);
+                lockBitmap.SetBigPixel(yPxl2 + 1, xPxl2, color * intensityDown);
             }
             else
             {
-                lockBitmap.SetBigPixel(xPxl2, yPxl2, color, intensityTop);
-                lockBitmap.SetBigPixel(xPxl2, yPxl2 + 1, color, intensityDown);
+                lockBitmap.SetBigPixel(xPxl2, yPxl2, color * intensityTop);
+                lockBitmap.SetBigPixel(xPxl2, yPxl2 + 1, color * intensityDown);
             }
 
             // Main loop
@@ -145,13 +145,13 @@ namespace SRL.Main.Drawing
 
                 if (steep)
                 {
-                    lockBitmap.SetBigPixel((int)intery, x, color, intensityTop);
-                    lockBitmap.SetBigPixel((int)intery + 1, x, color, intensityDown);
+                    lockBitmap.SetBigPixel((int)intery, x, color * intensityTop);
+                    lockBitmap.SetBigPixel((int)intery + 1, x, color * intensityDown);
                 }
                 else
                 {
-                    lockBitmap.SetBigPixel(x, (int)intery, color, intensityTop);
-                    lockBitmap.SetBigPixel(x, (int)intery + 1, color, intensityDown);
+                    lockBitmap.SetBigPixel(x, (int)intery, color * intensityTop);
+                    lockBitmap.SetBigPixel(x, (int)intery + 1, color * intensityDown);
                 }
                 intery = intery + gradient;
             }
@@ -159,7 +159,7 @@ namespace SRL.Main.Drawing
 
         //-------------------------------------------------------------------------------------------------
 
-            #region Line
+        #region Line
 
         public static void DrawLine(this LockBitmap lockBitmap, Line line, Size renderSize, Color color, bool antialiasing)
         {
