@@ -533,10 +533,10 @@ namespace SRL.Main.ViewModel
         {
             Map = model.Map;
             Vehicle = model.Vehicle;
-            VehicleSize = model.VehicleSize;
-            InitialVehicleRotation = model.InitialVehicleRotation;
             StartPoint = model.StartPoint;
             EndPoint = model.EndPoint;
+            VehicleSize = model.VehicleSize;
+            InitialVehicleRotation = model.InitialVehicleRotation;
             Orders = model.Orders;
 
             if (Orders != null)
