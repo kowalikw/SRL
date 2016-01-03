@@ -153,12 +153,26 @@ namespace SRL.Commons.Utilities
 
         public static bool IsIntersected(Polygon subject, IEnumerable<Polygon> polygons)
         {
-            return false; //TODO
+            foreach (Polygon polygon in polygons)
+                for (int i = 0; i < polygon.Vertices.Count; i++)
+                    for (int j = 0; j < subject.Vertices.Count; j++)
+                        if (DoSegmentsIntersect(
+                            polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.Vertices.Count],
+                            subject.Vertices[j], subject.Vertices[(j + 1) % subject.Vertices.Count]))
+                            return true;
+
+            return false;
         }
 
         public static bool IsEnclosed(Polygon subject, Polygon enclosure)
         {
-            return false; //TODO
+            bool enclosed = false;
+
+            for (int i = 0; i < subject.Vertices.Count; i++)
+                if (!IsInsidePolygon(subject.Vertices[i], enclosure))
+                    return false;
+
+            return enclosed;
         }
 
     }

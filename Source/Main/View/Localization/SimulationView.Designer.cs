@@ -59,5 +59,95 @@ namespace SRL.Main.View.Localization {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate path.
+        /// </summary>
+        internal static string CalculatePathTooltip {
+            get {
+                return ResourceManager.GetString("CalculatePathTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load map.
+        /// </summary>
+        internal static string LoadMapTooltip {
+            get {
+                return ResourceManager.GetString("LoadMapTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load simulation.
+        /// </summary>
+        internal static string LoadSimulationTooltip {
+            get {
+                return ResourceManager.GetString("LoadSimulationTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load vehicle.
+        /// </summary>
+        internal static string LoadVehicleTooltip {
+            get {
+                return ResourceManager.GetString("LoadVehicleTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause simulation.
+        /// </summary>
+        internal static string PausePlaybackTooltip {
+            get {
+                return ResourceManager.GetString("PausePlaybackTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save simulation.
+        /// </summary>
+        internal static string SaveSimulationTooltip {
+            get {
+                return ResourceManager.GetString("SaveSimulationTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set target point.
+        /// </summary>
+        internal static string SetPathEndTooltip {
+            get {
+                return ResourceManager.GetString("SetPathEndTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put the vehicle on the map.
+        /// </summary>
+        internal static string SetUpVehicleTooltip {
+            get {
+                return ResourceManager.GetString("SetUpVehicleTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start/Resume simulation.
+        /// </summary>
+        internal static string StartPlaybackTooltip {
+            get {
+                return ResourceManager.GetString("StartPlaybackTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop simulation.
+        /// </summary>
+        internal static string StopPlaybackTooltip {
+            get {
+                return ResourceManager.GetString("StopPlaybackTooltip", resourceCulture);
+            }
+        }
     }
 }

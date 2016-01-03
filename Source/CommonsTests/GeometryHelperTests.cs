@@ -11,6 +11,15 @@ namespace CommonsTests
     public class GeometryHelperTests
     {
         [TestMethod]
+        public void DoSegmentsIntersectTest()
+        {
+            var expected = false;
+            var actual = GeometryHelper.DoSegmentsIntersect(new Point(0, 0), new Point(0, 1), new Point(0, 0), new Point(1, 0));
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void IsInsidePolygonTestTrue()
         {
             Polygon polygon = new Polygon(new List<Point>()

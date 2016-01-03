@@ -59,5 +59,59 @@ namespace SRL.Main.View.Localization {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Area threshold.
+        /// </summary>
+        internal static string areaThreshold {
+            get {
+                return ResourceManager.GetString("areaThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color threshold.
+        /// </summary>
+        internal static string colorThreshold {
+            get {
+                return ResourceManager.GetString("colorThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load image.
+        /// </summary>
+        internal static string LoadBitmapTooltip {
+            get {
+                return ResourceManager.GetString("LoadBitmapTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make map.
+        /// </summary>
+        internal static string MakeMapTooltip {
+            get {
+                return ResourceManager.GetString("MakeMapTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make vehicle.
+        /// </summary>
+        internal static string MakeVehicleTooltip {
+            get {
+                return ResourceManager.GetString("MakeVehicleTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trace image.
+        /// </summary>
+        internal static string TraceTooltip {
+            get {
+                return ResourceManager.GetString("TraceTooltip", resourceCulture);
+            }
+        }
     }
 }

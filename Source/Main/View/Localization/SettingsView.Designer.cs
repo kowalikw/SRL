@@ -59,5 +59,86 @@ namespace SRL.Main.View.Localization {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Antialiasing.
+        /// </summary>
+        internal static string Antialiasing {
+            get {
+                return ResourceManager.GetString("Antialiasing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        internal static string AntialiasingDisabled {
+            get {
+                return ResourceManager.GetString("AntialiasingDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        internal static string AntialiasingEnabled {
+            get {
+                return ResourceManager.GetString("AntialiasingEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string LanguageEnglish {
+            get {
+                return ResourceManager.GetString("LanguageEnglish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Polish.
+        /// </summary>
+        internal static string LanguagePolish {
+            get {
+                return ResourceManager.GetString("LanguagePolish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show path.
+        /// </summary>
+        internal static string ShowPath {
+            get {
+                return ResourceManager.GetString("ShowPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        internal static string ShowPathDisabled {
+            get {
+                return ResourceManager.GetString("ShowPathDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        internal static string ShowPathEnabled {
+            get {
+                return ResourceManager.GetString("ShowPathEnabled", resourceCulture);
+            }
+        }
     }
 }
