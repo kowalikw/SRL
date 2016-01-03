@@ -2,6 +2,7 @@
 using System.Windows;
 using Microsoft.Xna.Framework;
 using SRL.Commons.Model;
+using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using MathHelper = SRL.Commons.Utilities.MathHelper;
 using Point = System.Windows.Point;
@@ -39,13 +40,6 @@ namespace SRL.Main.Drawing
             color.A = (byte)(intensity * byte.MaxValue);
 
             int amendmentAA = 16; // wyznaczone empirycznie
-
-            // TODO: Check it.
-            //while (x > (int)RenderSize.Width - 2) x--;
-            //while (y > (int)RenderSize.Height - 2) y--;
-
-            if (x < 0) x = 0;
-            if (y < 0) y = 0;
 
             var pixel1Color = BlendColors(color, bitmap.GetPixel(x, y));
             var pixel2Color = BlendColors(color, bitmap.GetPixel(x + 1, y));
