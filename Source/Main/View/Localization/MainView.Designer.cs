@@ -70,6 +70,15 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Map editor.
+        /// </summary>
+        internal static string mapEditorSubTab {
+            get {
+                return ResourceManager.GetString("mapEditorSubTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run.
         /// </summary>
         internal static string runTab {
@@ -93,6 +102,24 @@ namespace SRL.Main.View.Localization {
         internal static string setupTab {
             get {
                 return ResourceManager.GetString("setupTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image tracer.
+        /// </summary>
+        internal static string tracingSubTab {
+            get {
+                return ResourceManager.GetString("tracingSubTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle editor.
+        /// </summary>
+        internal static string vehicleEditorSubTab {
+            get {
+                return ResourceManager.GetString("vehicleEditorSubTab", resourceCulture);
             }
         }
     }
