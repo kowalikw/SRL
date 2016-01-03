@@ -19,20 +19,13 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid ColumnSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="0" Grid.Column="0" 
+                   Grid.ColumnSpan="2"
+                   Margin="0,0,0,5"
+                   LastChildFill="True">
 
-            <StackPanel Orientation="Horizontal">
-
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,10,0">
                 <mui:ModernButton IconData="{StaticResource LoadBitmapIcon}" 
                                   Command="{Binding LoadBitmapCommand}"
                                   ToolTip="{Resx Key=LoadBitmapTooltip}"/>
@@ -45,36 +38,63 @@
                 <mui:ModernButton IconData="{StaticResource TraceIcon}" 
                                   Command="{Binding TraceCommand}"
                                   ToolTip="{Resx Key=TraceTooltip}"/>
-
             </StackPanel>
 
-            <Label Grid.Row="0" Grid.Column="1" 
-                   Content="{Resx Key=areaThreshold}"/>
-            <Slider Grid.Row="0" Grid.Column="2" 
-                    Minimum="0" Maximum="0.1"
-                    Value="{Binding AreaThreshold}"/>
-            <TextBlock Grid.Row="0" Grid.Column="3" 
-                       Width="55"
-                       Text="{Binding AreaThreshold, StringFormat={}{0:P2}}"/>
+            <Grid ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/> <!-- spacing -->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="1" Grid.Column="1" 
-                   Content="{Resx Key=colorThreshold}"/>
-            <Slider Grid.Row="1" Grid.Column="2" 
-                    Minimum="0" Maximum="1"
-                    Value="{Binding ColorThreshold}"/>
-            <TextBlock Grid.Row="1" Grid.Column="3" 
-                       Width="55"
-                       Text="{Binding ColorThreshold, StringFormat={}{0:P2}}"/>
-        </Grid>
+                <Label Grid.Row="0" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Content="{Resx Key=areaThreshold}"/>
+                <Slider Grid.Row="0" Grid.Column="1"
+                        Minimum="0" Maximum="0.1"
+                        VerticalAlignment="Center"
+                        Value="{Binding AreaThreshold}"/>
+                <TextBlock Grid.Row="0" Grid.Column="2"
+                           Width="55"
+                           VerticalAlignment="Center" 
+                           TextAlignment="Center"
+                           Text="{Binding AreaThreshold, StringFormat={}{0:P2}}"/>
+
+                <Label Grid.Row="2" Grid.Column="0"
+                       Margin="0,0,5,0"
+                       VerticalAlignment="Center"
+                       Content="{Resx Key=colorThreshold}"/>
+                <Slider Grid.Row="2" Grid.Column="1"
+                        Minimum="0" Maximum="1"
+                        VerticalAlignment="Center"
+                        Value="{Binding ColorThreshold}"/>
+                <TextBlock Grid.Row="2" Grid.Column="2"
+                           Width="55"
+                           VerticalAlignment="Center" 
+                           TextAlignment="Center"
+                           Text="{Binding ColorThreshold, StringFormat={}{0:P2}}"/>
+
+            </Grid>
+
+        </DockPanel>
 
         <Image Grid.Row="1"
                Grid.Column="0" 
                Stretch="Uniform"
                Source="{Binding Bitmap}"/>
 
-        <mga:TraceArea Grid.Row="1" 
-                       Grid.Column="1"
+        <mga:TraceArea Grid.Row="1" Grid.Column="1"
                        SnapsToDevicePixels="True"
                        Stretch="Uniform"/>
+
+        <mui:ModernProgressRing Grid.Row="1" Grid.Column="1"
+                                Width="80" Height="80"
+                                IsActive="{Binding OngoingTracing}" Foreground="White"/>
     </Grid>
 </UserControl>

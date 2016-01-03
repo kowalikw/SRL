@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
@@ -37,9 +38,14 @@ namespace SRL.Main.ViewModel
 
                                 Bitmap = new BitmapImage(new Uri(filename));
                                 _tracer = new BitmapTracer(filename);
+                                Polygons.Clear();
+                                SelectedPolygonIndices.Clear();
                             }
 
                         });
+                    }, () =>
+                    {
+                        return !OngoingTracing;
                     });
                 }
                 return _loadBitmapCommand;
@@ -56,7 +62,7 @@ namespace SRL.Main.ViewModel
                         //TODO
                     }, () =>
                     {
-                        return _traceTask == null;
+                        return !OngoingTracing;
                     });
                 }
                 return _makeMapCommand;
@@ -74,7 +80,7 @@ namespace SRL.Main.ViewModel
                     }, () =>
                     {
                         //TODO allow polygon sums?
-                        return SelectedPolygonIndices.Count == 1 && _traceTask == null;
+                        return SelectedPolygonIndices.Count == 1 && !OngoingTracing;
                     });
                 }
                 return _makeVehicleCommand;
@@ -90,21 +96,22 @@ namespace SRL.Main.ViewModel
                     {
                         _traceCancellationTokenSource?.Cancel();
                         _traceCancellationTokenSource = new CancellationTokenSource();
-                        _traceTask = new Task(() =>
+                        TraceTask = new Task(() =>
                         {
                             List<Polygon> output = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
 
                             if (!_traceCancellationTokenSource.Token.IsCancellationRequested)
                             {
                                 Polygons.ReplaceRange(output);
-                                SelectedPolygonIndices.Clear();
-                                _traceTask = null;
+                                TraceTask = null;
                             }
                         });
-                        _traceTask.Start();
+                        Polygons.Clear();
+                        SelectedPolygonIndices.Clear();
+                        TraceTask.Start();
                     }, () =>
                     {
-                        return _tracer != null && _traceTask == null;
+                        return _tracer != null && !OngoingTracing;
                     });
                 }
                 return _traceCommand;
@@ -190,6 +197,8 @@ namespace SRL.Main.ViewModel
             }
         }
 
+
+
         public BitmapSource Bitmap
         {
             get { return _bitmap; }
@@ -207,14 +216,40 @@ namespace SRL.Main.ViewModel
 
 
         private CancellationTokenSource _traceCancellationTokenSource;
-        private Task _traceTask;
+
+        public bool OngoingTracing
+        {
+            get { return _ongoingTracing; }
+            private set
+            {
+                if (_ongoingTracing != value)
+                {
+                    _ongoingTracing = value;
+                    RaisePropertyChanged();
+                    Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
+                }
+            }
+        }
+        private Task TraceTask
+        {
+            get { return _traceTask; }
+            set
+            {
+                _traceTask = value;
+                OngoingTracing = _traceTask != null;
+            }
+        }
+
         private BitmapTracer _tracer;
+        private Task _traceTask;
 
         private BitmapSource _bitmap;
         private double _areaThreshold;
         private double _colorThreshold;
         private int _pixelAreaThreshold;
         private int _absoluteColorThreshold;
+        private bool _ongoingTracing;
+
 
         public TracingViewModel()
         {
