@@ -49,6 +49,7 @@ namespace SRL.Main.Tracing
             }
 
             //TODO remove enclosed polygons
+
             NormalizeOutput(output);
 
             return output;
@@ -57,11 +58,26 @@ namespace SRL.Main.Tracing
 
         private void NormalizeOutput(List<Polygon> polygons)
         {
-            Size size = new Size(_bitmap.Width, _bitmap.Height);
+            bool heightShrink = _bitmap.Width > _bitmap.Height;
+            double shrinkFactor = heightShrink 
+                ? (double)_bitmap.Height / _bitmap.Width 
+                : (double)_bitmap.Width / _bitmap.Height;
+
+            Size bitmapSize = new Size(_bitmap.Width, _bitmap.Height);
             foreach (var polygon in polygons)
             {
                 for (int i = 0; i < polygon.Vertices.Count; i++)
-                    polygon.Vertices[i] = polygon.Vertices[i].Normalize(size);
+                {
+                    Point normalized = polygon.Vertices[i].Normalize(bitmapSize);
+                    Point shrinked;
+
+                    if (heightShrink)
+                        shrinked = new Point(normalized.X, normalized.Y * shrinkFactor);
+                    else
+                        shrinked = new Point(normalized.X * shrinkFactor, normalized.Y);
+
+                    polygon.Vertices[i] = shrinked;
+                }
             }
         }
     }
