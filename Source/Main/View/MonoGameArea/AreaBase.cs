@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
@@ -89,7 +90,7 @@ namespace SRL.Main.View.MonoGameArea
         /// </summary>
         protected void RedrawStaticObjectsTexture()
         {
-            _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height);
+            _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height, PixelFormat.Format32bppArgb);
             LockBitmap lockBitmap = new LockBitmap(_bitmapBuffer);
             lockBitmap.LockBits();
             RedrawStaticObjects(lockBitmap);

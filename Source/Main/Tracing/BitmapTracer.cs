@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using CsPotrace;
 using SRL.Commons.Model;
+using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
@@ -47,22 +49,55 @@ namespace SRL.Main.Tracing
 
                 output.Add(new Polygon(polygonPoints));
             }
-
-            //TODO remove enclosed polygons
+            
+            RemoveEnclosedPolygons(ref output);
             NormalizeOutput(output);
 
             return output;
-            
         }
 
         private void NormalizeOutput(List<Polygon> polygons)
         {
-            Size size = new Size(_bitmap.Width, _bitmap.Height);
+            bool heightShrink = _bitmap.Width > _bitmap.Height;
+            double shrinkFactor = heightShrink 
+                ? (double)_bitmap.Height / _bitmap.Width 
+                : (double)_bitmap.Width / _bitmap.Height;
+
+            Size bitmapSize = new Size(_bitmap.Width, _bitmap.Height);
             foreach (var polygon in polygons)
             {
                 for (int i = 0; i < polygon.Vertices.Count; i++)
-                    polygon.Vertices[i] = polygon.Vertices[i].Normalize(size);
+                {
+                    Point normalized = polygon.Vertices[i].Normalize(bitmapSize);
+                    Point shrinked;
+
+                    if (heightShrink)
+                        shrinked = new Point(normalized.X, normalized.Y * shrinkFactor);
+                    else
+                        shrinked = new Point(normalized.X * shrinkFactor, normalized.Y);
+
+                    polygon.Vertices[i] = shrinked;
+                }
             }
+        }
+
+        private void RemoveEnclosedPolygons(ref List<Polygon> polygons)
+        {
+            bool[] enclosed = new bool[polygons.Count];
+
+            for (int i = 0; i < polygons.Count; i++)
+            {
+                for (int j = i + 1; j < polygons.Count; j++)
+                {
+                    if (enclosed[j])
+                        continue;
+
+                    if (GeometryHelper.IsEnclosed(polygons[j], polygons[i]))
+                        enclosed[j] = true;
+                }
+            }
+            
+            polygons = (List<Polygon>)polygons.Where((polygon, i) => !enclosed[i]);
         }
     }
 }

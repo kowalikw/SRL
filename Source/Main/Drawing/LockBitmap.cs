@@ -1,25 +1,32 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using SRL.Commons.Utilities;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace SRL.Main.Drawing
 {
     public class LockBitmap
     {
-        Bitmap source = null;
-        IntPtr Iptr = IntPtr.Zero;
-        BitmapData bitmapData = null;
+        public const int Depth = 32;
 
         public byte[] Pixels { get; set; }
-        public int Depth { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
+
+        private readonly Bitmap _source;
+        private IntPtr _iptr = IntPtr.Zero;
+        private BitmapData _bitmapData;
+
         public LockBitmap(Bitmap source)
         {
-            this.source = source;
+            if (source.PixelFormat != PixelFormat.Format32bppArgb)
+                throw new ArgumentException("Source bitmap must have 32 bpp depth.");
+
+            _source = source;
         }
 
         /// <summary>
@@ -27,137 +34,85 @@ namespace SRL.Main.Drawing
         /// </summary>
         public void LockBits()
         {
-            try
-            {
-                // Get width and height of bitmap
-                Width = source.Width;
-                Height = source.Height;
+            // Get width and height of bitmap.
+            Width = _source.Width;
+            Height = _source.Height;
 
-                // get total locked pixels count
-                int pixelCount = Width * Height;
+            // Get total locked pixels count.
+            int pixelCount = Width * Height;
 
-                // Create rectangle to lock
-                Rectangle rect = new Rectangle(0, 0, Width, Height);
+            // Create rectangle to lock.
+            Rectangle rect = new Rectangle(0, 0, Width, Height);
 
-                // get source bitmap pixel format size
-                Depth = Image.GetPixelFormatSize(source.PixelFormat);
-                
-                // Check if bpp (Bits Per Pixel) is 8, 24, or 32
-                if (Depth != 8 && Depth != 24 && Depth != 32)
-                {
-                    throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
-                }
+            // Lock bitmap and return bitmap data.
+            _bitmapData = _source.LockBits(rect, ImageLockMode.ReadWrite,
+                _source.PixelFormat);
 
-                // Lock bitmap and return bitmap data
-                bitmapData = source.LockBits(rect, ImageLockMode.ReadWrite,
-                                             source.PixelFormat);
+            // Create byte array to copy pixel values.
+            const int step = Depth / 8;
+            Pixels = new byte[pixelCount * step];
+            _iptr = _bitmapData.Scan0;
 
-                // Create byte array to copy pixel values
-                int step = Depth / 8;
-                Pixels = new byte[pixelCount * step];
-                Iptr = bitmapData.Scan0;
-
-                // Copy data from pointer to array
-                Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            // Copy data from pointer to array.
+            Marshal.Copy(_iptr, Pixels, 0, Pixels.Length);
         }
 
         /// <summary>
-        /// Unlock bitmap data
+        /// Unlock bitmap data.
         /// </summary>
         public void UnlockBits()
         {
-            try
-            {
-                // Copy data from byte array to pointer
-                Marshal.Copy(Pixels, 0, Iptr, Pixels.Length);
+            // Copy data from byte array to pointer.
+            Marshal.Copy(Pixels, 0, _iptr, Pixels.Length);
 
-                // Unlock bitmap data
-                source.UnlockBits(bitmapData);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            // Unlock bitmap data.
+            _source.UnlockBits(_bitmapData);
         }
 
-        /// <summary>
-        /// Get the color of the specified pixel
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        private static byte BlendChannel(byte src, byte dest, byte srcAlpha)
+        {
+            return (byte)((src * byte.MaxValue + dest * (byte.MaxValue - srcAlpha)) / byte.MaxValue);
+        }
+
         public Color GetPixel(int x, int y)
         {
             Color clr = Color.Transparent;
 
-            // Get color components count
+            // Get color components count.
             int cCount = Depth / 8;
 
-            // Get start index of the specified pixel
-            int i = ((y * Width) + x) * cCount;
+            // Get start index of the specified pixel.
+            int i = (y * Width + x) * cCount;
 
             if (i > Pixels.Length - cCount)
                 throw new IndexOutOfRangeException();
 
-            if (Depth == 32) // For 32 bpp get Red, Green, Blue and Alpha
-            {
-                byte b = Pixels[i];
-                byte g = Pixels[i + 1];
-                byte r = Pixels[i + 2];
-                byte a = Pixels[i + 3];
-                clr = new Color(b, g, r, a);
-            }
-            else if (Depth == 24) // For 24 bpp get Red, Green and Blue
-            {
-                byte b = Pixels[i];
-                byte g = Pixels[i + 1];
-                byte r = Pixels[i + 2];
-                clr = new Color(b, g, r);
-            }
-            else if (Depth == 8) // For 8 bpp get color value (Red, Green and Blue values are the same)
-            {
-                byte c = Pixels[i];
-                clr = new Color(c, c, c);
-            }
-            return clr;
+            byte b = Pixels[i];
+            byte g = Pixels[i + 1];
+            byte r = Pixels[i + 2];
+            byte a = Pixels[i + 3];
+
+            return new Color(b, g, r, a);
         }
 
-        /// <summary>
-        /// Set the color of the specified pixel
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="color"></param>
         public void SetPixel(int x, int y, Color color)
         {
-            // Get color components count
-            int cCount = Depth / 8;
+            if (x < 0 || x >= Width)
+                return;
 
-            // Get start index of the specified pixel
-            int i = ((y * Width) + x) * cCount;
+            if (y < 0 || y >= Height)
+                return;
 
-            if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
-            {
-                Pixels[i] = color.R;
-                Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.B;
-                Pixels[i + 3] = color.A;
-            }
-            if (Depth == 24) // For 24 bpp set Red, Green and Blue
-            {
-                Pixels[i] = color.R;
-                Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.B;
-            }
-            if (Depth == 8) // For 8 bpp set color value (Red, Green and Blue values are the same)
-            {
-                Pixels[i] = color.R;
-            }
+            // Get color components count.
+            const int cCount = Depth / 8;
+
+            // Get start index of the specified pixel.
+            int i = (y * Width + x) * cCount;
+
+            Pixels[i] = BlendChannel(color.R, Pixels[i], color.A);
+            Pixels[i + 1] = BlendChannel(color.G, Pixels[i + 1], color.A);
+            Pixels[i + 2] = BlendChannel(color.B, Pixels[i + 2], color.A);
+            Pixels[i + 3] = BlendChannel(color.A, Pixels[i + 3], color.A);
         }
     }
 }

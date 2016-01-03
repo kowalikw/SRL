@@ -104,7 +104,7 @@ namespace SRL.Main.ViewModel
                         _traceTask.Start();
                     }, () =>
                     {
-                        return _tracer != null;
+                        return _tracer != null && _traceTask == null;
                     });
                 }
                 return _traceCommand;

@@ -30,6 +30,11 @@ namespace SRL.Commons.Utilities
             return value < min ? min : (value > max ? max : value);
         }
 
+        public static int Clamp(this int value, int min, int max)
+        {
+            return value < min ? min : (value > max ? max : value);
+        }
+
         public static double Max(params double[] values)
         {
             return values.Max();
