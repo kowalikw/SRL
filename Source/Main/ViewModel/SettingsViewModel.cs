@@ -1,5 +1,9 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using Infralution.Localization.Wpf;
 using SRL.Main.View.Localization;
@@ -30,7 +34,8 @@ namespace SRL.Main.ViewModel
             set
             {
                 Settings.Default.Language = value;
-                CultureManager.UICulture = value.GetCultureInfo();
+                CultureInfo cultureInfo = value.GetCultureInfo();
+             //   CultureManager.UICulture = cultureInfo; //TODO solve this issue
                 Settings.Default.Save();
             }
         }

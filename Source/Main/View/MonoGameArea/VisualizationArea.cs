@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework;
@@ -16,9 +15,10 @@ namespace SRL.Main.View.MonoGameArea
 {
     internal class VisualizationArea : AreaBase
     {
-        protected static readonly Color StartPointColor = new Color(20, 20, 255);
+        protected static readonly Color StartPointColor = new Color(200, 0, 200);
         protected static readonly Color EndPointColor = StartPointColor;
-        protected static readonly Color PathColor = new Color(20, 20, 255);
+        protected static readonly Color PathColor = new Color(174, 221, 247);
+        protected static readonly Color VehicleColor = ActiveColor;
 
         private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
 
@@ -101,7 +101,7 @@ namespace SRL.Main.View.MonoGameArea
                 else if (_context.InitialVehicleRotation != null && _context.VehicleSize != null)
                 {
                     angle = _context.InitialVehicleRotation.Value;
-                    color = RegularColor;
+                    color = VehicleColor;
                     shape = _resizedVehicleShape;
                 }
                 else
@@ -134,7 +134,7 @@ namespace SRL.Main.View.MonoGameArea
             Polygon shape = GeometryHelper.Rotate(_resizedVehicleShape, rotation);
             shape = GeometryHelper.Move(shape, position.X, position.Y);
 
-            spriteBatch.DrawPolygon(shape, RenderSize, ActiveColor, AntialiasingEnabled);
+            spriteBatch.DrawPolygon(shape, RenderSize, VehicleColor, AntialiasingEnabled);
         }
 
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)

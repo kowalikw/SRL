@@ -43,7 +43,8 @@
             <Grid ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="2"/> <!-- spacing -->
+                    <RowDefinition Height="2"/>
+                    <!-- spacing -->
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -84,10 +85,17 @@
 
         </DockPanel>
 
-        <Image Grid.Row="1"
-               Grid.Column="0" 
-               Stretch="Uniform"
-               Source="{Binding Bitmap}"/>
+
+
+        <Viewbox Stretch="Uniform" Grid.Row="1" Grid.Column="0">
+            <Border Background="#FFF0F0F0" BorderBrush="#FFF0F0F0" BorderThickness="10" 
+                    Height="1000" Width="1000">
+                <Image Stretch="Uniform"
+                       Source="{Binding Bitmap}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+            </Border>
+        </Viewbox>
 
         <mga:TraceArea Grid.Row="1" Grid.Column="1"
                        SnapsToDevicePixels="True"
@@ -95,6 +103,6 @@
 
         <mui:ModernProgressRing Grid.Row="1" Grid.Column="1"
                                 Width="80" Height="80"
-                                IsActive="{Binding OngoingTracing}" Foreground="White"/>
+                                IsActive="{Binding OngoingTracing}" Foreground="Black"/>
     </Grid>
 </UserControl>
