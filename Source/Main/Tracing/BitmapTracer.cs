@@ -92,12 +92,10 @@ namespace SRL.Main.Tracing
                     if (enclosed[j])
                         continue;
 
-                    if (GeometryHelper.IsEnclosed(polygons[j], polygons[i]))
-                        enclosed[j] = true;
+                    enclosed[j] = GeometryHelper.IsEnclosed(polygons[j], polygons[i]);
                 }
             }
-            
-            polygons = (List<Polygon>)polygons.Where((polygon, i) => !enclosed[i]);
+            polygons = new List<Polygon>(polygons.SkipWhile((polygon, i) => enclosed[i]));
         }
     }
 }

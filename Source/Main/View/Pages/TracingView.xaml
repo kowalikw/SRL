@@ -45,7 +45,7 @@
                 <mui:ModernButton IconData="{StaticResource TraceIcon}" 
                                   Command="{Binding TraceCommand}"
                                   ToolTip="{Resx Key=TraceTooltip}"/>
-                
+
             </StackPanel>
 
             <Label Grid.Row="0" Grid.Column="1" 
@@ -66,7 +66,6 @@
                        Width="55"
                        Text="{Binding ColorThreshold, StringFormat={}{0:P2}}"/>
         </Grid>
-
 
         <Image Grid.Row="1"
                Grid.Column="0" 
