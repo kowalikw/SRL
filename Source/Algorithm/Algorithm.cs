@@ -21,7 +21,7 @@ namespace SRL.Algorithm
             public int index;
             public int obstacle;
         }
-        List<Order> IAlgorithm.GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleRotation, int angleDensity, double vehicleSize)
+        public List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation, int angleDensity)
         {
             List<Point> lst = new List<Point>();
             for(int i=0;i<InputVehicle.Shape.Vertices.Count;i++)

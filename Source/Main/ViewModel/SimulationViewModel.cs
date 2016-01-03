@@ -181,17 +181,8 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
 
-                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
+                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value
                             InitialVehicleRotation.Value, 360); // TODO angle density as parameter
-
-                        _orders = new List<Order>(); //TODO delete
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
                     },
                         () =>
                         {
