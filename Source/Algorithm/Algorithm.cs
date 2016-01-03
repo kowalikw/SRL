@@ -21,16 +21,23 @@ namespace SRL.Algorithm
             public int index;
             public int obstacle;
         }
-        List<Order> IAlgorithm.GetPath(Map InputMap, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
+        List<Order> IAlgorithm.GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleRotation, int angleDensity, double vehicleSize)
         {
+            List<Point> lst = new List<Point>();
+            for(int i=0;i<InputVehicle.Shape.Vertices.Count;i++)
+            {
+                lst.Add(new Point(InputVehicle.Shape.Vertices[i].X * vehicleSize, InputVehicle.Shape.Vertices[i].Y * vehicleSize));
+            }
+            Vehicle vehicle = new Vehicle();
+            vehicle.Shape = new Polygon(lst);
             Map map = new Map();
             int maxDiff = 15;
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2,-1) }));
+            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2,-1) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1,-2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2,1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1,2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1,2) }));*/
             List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
             IGraph graph;
             List<Point> triangleTemplate = new List<Point>();
@@ -178,13 +185,14 @@ namespace SRL.Algorithm
                     triangularObstacles.Add(triangles[j]);
                 }
             }
-            for (int i = 0; i < angleDensity; i += 1) // indeks w tablicy = i/singleangle
+            for (int i = 0; i < angleDensity; i ++)
             {
                 List<Point> rotatedVehicle = new List<Point>();
                 for (int j = 0; j < vehicle.Shape.Vertices.Count; j++)
                 {
                     rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], new Point(0,0), i * singleAngle + Math.PI));
                 }
+                
                 List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
                 List<Polygon> newObstacles = new List<Polygon>();
                 object locker = new object();
@@ -193,6 +201,7 @@ namespace SRL.Algorithm
                     for (int k = 0; k < triangularObstacles.Count; k++)
                     {
                         Polygon poly = ConvexHull(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k]));
+                        //Polygon poly = new Polygon(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k]));
                         lock (locker)
                         {
                             newObstacles.Add(poly);
@@ -225,7 +234,7 @@ namespace SRL.Algorithm
             for (int i = 0; i < polygon1.Count; i++)
             {
                 for (int j = 0; j < polygon2.Count; j++)
-                    list.Add(new Point(polygon1[i].X + polygon2[j].X, polygon1[i].Y + polygon2[i].Y));
+                    list.Add(new Point(polygon1[i].X + polygon2[j].X, polygon1[i].Y + polygon2[j].Y));
             }
             return list;
         }
@@ -294,6 +303,8 @@ namespace SRL.Algorithm
         }
         bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles)
         {
+            if (Math.Abs(p1.X) > 1 || Math.Abs(p1.Y) > 1 || Math.Abs(p2.X) > 1 || Math.Abs(p2.Y) > 1)
+                return false;
             foreach (Polygon obstacle in obstacles)
             {
                 for (int i = 0; i < obstacle.Vertices.Count; i++)
