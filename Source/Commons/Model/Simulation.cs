@@ -22,7 +22,7 @@ namespace SRL.Commons.Model
         public Point StartPoint { get; set; }
 
         public Point EndPoint { get; set; }
-        
+
         public List<Order> Orders { get; set; }
 
         #region IXmlSerializable
@@ -120,6 +120,12 @@ namespace SRL.Commons.Model
                 reader.ReadToFollowing("vehicleSize");
                 reader.MoveToContent();
                 VehicleSize = reader.ReadElementContentAsDouble();
+
+                if (reader.NodeType != XmlNodeType.Element || reader.Name != "vehicleInitialRotation")
+                {
+                    reader.ReadToFollowing("vehicleInitialRotation");
+                    reader.MoveToContent();
+                }
                 InitialVehicleRotation = reader.ReadElementContentAsDouble();
 
                 if (Orders == null) Orders = new List<Order>();
@@ -258,15 +264,17 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("d");
-            for(int i = 0; i < Orders.Count; i++)
+            writer.WriteValue("M");
+            writer.WriteValue(StartPoint.X);
+            writer.WriteValue(" ");
+            writer.WriteValue(StartPoint.Y);
+            writer.WriteValue(" ");
+
+            for (int i = 0; i < Orders.Count; i++)
             {
                 Order order = Orders[i];
 
-                if (i == 0)
-                    writer.WriteValue("M");
-                else
-                    writer.WriteValue("L");
-
+                writer.WriteValue("L");
                 writer.WriteValue(order.Destination.X);
                 writer.WriteValue(" ");
                 writer.WriteValue(order.Destination.Y);

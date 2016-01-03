@@ -184,15 +184,6 @@ namespace SRL.Main.ViewModel
 
                         Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
                             InitialVehicleRotation.Value, 360); // TODO angle density as parameter
-
-                        _orders = new List<Order>(); //TODO delete
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 1), Rotation = -0.5 });
-                        _orders.Add(new Order() { Destination = new Point(0, 0), Rotation = 0.5 });
                     },
                         () =>
                         {
@@ -205,7 +196,7 @@ namespace SRL.Main.ViewModel
             }
         }
 
-        
+
         private RelayCommand<Mode> _enterModeCommand;
         private RelayCommand _resetCommand;
         private RelayCommand _loadMapCommand;
@@ -533,10 +524,10 @@ namespace SRL.Main.ViewModel
         {
             Map = model.Map;
             Vehicle = model.Vehicle;
-            VehicleSize = model.VehicleSize;
-            InitialVehicleRotation = model.InitialVehicleRotation;
             StartPoint = model.StartPoint;
             EndPoint = model.EndPoint;
+            VehicleSize = model.VehicleSize;
+            InitialVehicleRotation = model.InitialVehicleRotation;
             Orders = model.Orders;
 
             if (Orders != null)
