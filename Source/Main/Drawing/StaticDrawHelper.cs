@@ -2,7 +2,6 @@
 using System.Windows;
 using Microsoft.Xna.Framework;
 using SRL.Commons.Model;
-using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using MathHelper = SRL.Commons.Utilities.MathHelper;
 using Point = System.Windows.Point;
@@ -11,45 +10,12 @@ namespace SRL.Main.Drawing
 {
     internal static class StaticDrawHelper
     {
-        private static Color BlendColors(Color color1, Color color2)
-        {
-            float rgbMaxValue = 255.0f;
-            float color1Intensity = color1.A / rgbMaxValue;
-            float color2Intensity = color2.A / rgbMaxValue;
-
-            float a = color1Intensity + color2Intensity * (1 - color1Intensity);
-            float b = color1.B / rgbMaxValue * color1Intensity + color2.B / rgbMaxValue * color2Intensity * (1 - color1Intensity);
-            float g = color1.G / rgbMaxValue * color1Intensity + color2.G / rgbMaxValue * color2Intensity * (1 - color1Intensity);
-            float r = color1.R / rgbMaxValue * color1Intensity + color2.R / rgbMaxValue * color2Intensity * (1 - color1Intensity);
-
-            return new Color(r, g, b, a);
-        }
-
-        private static Color ColorAmendment(Color color, int amendment = 0)
-        {
-            byte R = (byte)(color.R < byte.MaxValue - amendment ? color.R + amendment : byte.MaxValue);
-            byte G = (byte)(color.G < byte.MaxValue - amendment ? color.G + amendment : byte.MaxValue);
-            byte B = (byte)(color.B < byte.MaxValue - amendment ? color.B + amendment : byte.MaxValue);
-            byte A = color.A;
-
-            return new Color(R, G, B, A);
-        }
-
         private static void SetBigPixel(this LockBitmap bitmap, int x, int y, Color color, float intensity = 1)
         {
-            color.A = (byte)(intensity * byte.MaxValue);
-
-            int amendmentAA = 16; // wyznaczone empirycznie
-
-            var pixel1Color = BlendColors(color, bitmap.GetPixel(x, y));
-            var pixel2Color = BlendColors(color, bitmap.GetPixel(x + 1, y));
-            var pixel3Color = BlendColors(color, bitmap.GetPixel(x, y + 1));
-            var pixel4Color = BlendColors(color, bitmap.GetPixel(x + 1, y + 1));
-
-            bitmap.SetPixel(x, y, ColorAmendment(pixel1Color, amendmentAA));
-            bitmap.SetPixel(x + 1, y, ColorAmendment(pixel2Color, amendmentAA));
-            bitmap.SetPixel(x, y + 1, ColorAmendment(pixel3Color, amendmentAA));
-            bitmap.SetPixel(x + 1, y + 1, ColorAmendment(pixel4Color, amendmentAA));
+            bitmap.SetPixel(x, y, color * intensity);
+            bitmap.SetPixel(x + 1, y, color * intensity);
+            bitmap.SetPixel(x, y + 1, color * intensity);
+            bitmap.SetPixel(x + 1, y + 1, color * intensity);
         }
 
         private static void BresenhamLine(this LockBitmap lockBitmap, int aX, int aY, int bX, int bY, Color color)
