@@ -166,13 +166,14 @@ namespace SRL.Commons.Utilities
 
         public static bool IsEnclosed(Polygon subject, Polygon enclosure)
         {
-            bool enclosed = false;
-
             for (int i = 0; i < subject.Vertices.Count; i++)
                 if (!IsInsidePolygon(subject.Vertices[i], enclosure))
                     return false;
 
-            return enclosed;
+            if (IsIntersected(subject, new List<Polygon>() { enclosure }))
+                return false;
+
+            return true;
         }
 
     }
