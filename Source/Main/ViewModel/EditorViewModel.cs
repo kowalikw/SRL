@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
+using System.Xml.Linq;
 
 namespace SRL.Main.ViewModel
 {
@@ -79,9 +80,12 @@ namespace SRL.Main.ViewModel
         private static void SaveModelToFile<R>(R model, string filename)
         {
             var serializer = new XmlSerializer(typeof(R));
+            var output = new XDocument();
 
-            using (var stream = File.Create(filename))
-                serializer.Serialize(stream, model);
+            using (XmlWriter writer = output.CreateWriter())
+                serializer.Serialize(writer, model);
+
+            output.Save(filename);
         }
 
         private static R LoadModelFromFile<R>(string filename)
