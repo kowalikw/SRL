@@ -62,6 +62,9 @@ namespace SRL.Main.Drawing
 
         private static void SetBigPixel(this SpriteBatch spriteBatch, float x, float y, Color color)
         {
+            if (x < 0 || y < 0)
+                return;
+
             spriteBatch.SetPixel(x, y, color);
             spriteBatch.SetPixel(x + 1, y, color);
             spriteBatch.SetPixel(x, y + 1, color);
@@ -196,8 +199,13 @@ namespace SRL.Main.Drawing
             // Main loop
             for (float x = xPxl1 + 1; x < xPxl2; x++)
             {
+                intery = intery + gradient;
+
                 intensityTop = MathHelper.Rfpart(intery);
                 intensityDown = MathHelper.Fpart(intery);
+
+                if (x < 0) continue;
+                if (intery < 0) continue;
 
                 if (steep)
                 {
@@ -209,7 +217,6 @@ namespace SRL.Main.Drawing
                     spriteBatch.SetBigPixel(x, (int)intery, color * intensityTop);
                     spriteBatch.SetBigPixel(x, (int)intery + 1, color * intensityDown);
                 }
-                intery = intery + gradient;
             }
         }
 

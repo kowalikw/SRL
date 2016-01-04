@@ -65,6 +65,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="GeometryHelperTests.cs" />
+    <Compile Include="MathHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="XMLs\Map.svg" />
