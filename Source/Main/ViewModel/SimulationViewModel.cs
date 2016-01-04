@@ -156,7 +156,11 @@ namespace SRL.Main.ViewModel
                             StartPoint == null)
                             return false;
 
-                        return GeometryHelper.IsIntersected(Vehicle.Shape, Map.Obstacles);
+                        Polygon shape = GeometryHelper.Resize(Vehicle.Shape, setup.RelativeSize);
+                        shape = GeometryHelper.Rotate(shape, setup.Rotation);
+                        shape = GeometryHelper.Move(shape, StartPoint.Value.X, StartPoint.Value.Y);
+
+                        return !GeometryHelper.IsIntersected(shape, Map.Obstacles);
                     });
                 }
                 return _setInitialVehicleSetup;

@@ -62,7 +62,7 @@ namespace SRL.Main.ViewModel
                     {
                         var argMsg = new SetModelMessage<Map>(new Map());
                         argMsg.Model.Obstacles.AddRange(
-                            Polygons.TakeWhile((polygon, i) => SelectedPolygonIndices.Contains(i)));
+                            Polygons.Where((polygon, i) => SelectedPolygonIndices.Contains(i)));
 
                         var gotoMsg = new GoToPageMessage(typeof(MapEditorView));
 

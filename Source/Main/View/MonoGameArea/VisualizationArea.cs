@@ -81,7 +81,7 @@ namespace SRL.Main.View.MonoGameArea
                         return;
 
                     angle = GeometryHelper.GetAngle(origin, normalizedMousePos);
-                    VehicleSetup setup = new VehicleSetup()
+                    VehicleSetup setup = new VehicleSetup
                     {
                         RelativeSize = GeometryHelper.GetDistance(origin, normalizedMousePos),
                         Rotation = angle

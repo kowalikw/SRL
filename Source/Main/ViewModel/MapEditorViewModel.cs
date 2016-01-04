@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -130,8 +132,31 @@ namespace SRL.Main.ViewModel
 
         public override void SetEditedModel(Map model)
         {
+            var obstacles = model.Obstacles;
+            RemoveEnclosedPolygons(obstacles);
+
             UnfinishedPolygon.Clear();
-            FinishedPolygons.ReplaceRange(model.Obstacles);
+            FinishedPolygons.ReplaceRange(obstacles);
+        }
+
+        private void RemoveEnclosedPolygons(List<Polygon> polygons)
+        {
+            bool[] enclosed = new bool[polygons.Count];
+
+            for (int i = 0; i < polygons.Count; i++)
+            {
+                for (int j = i + 1; j < polygons.Count; j++)
+                {
+                    if (enclosed[j])
+                        continue;
+
+                    enclosed[j] = GeometryHelper.IsEnclosed(polygons[j], polygons[i]);
+                }
+            }
+
+            var nonEnclosedPolygons = new List<Polygon>(polygons.Where((polygon, i) => !enclosed[i]));
+            polygons.Clear();
+            polygons.AddRange(nonEnclosedPolygons);
         }
     }
 }
