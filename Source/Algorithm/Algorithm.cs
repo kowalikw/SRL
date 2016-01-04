@@ -34,11 +34,11 @@ namespace SRL.Algorithm
             double maxDiff = 0.01;
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
-            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1, -2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2, 1) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1, 2) }));
-            */List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
+            List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
             IGraph graph;
             List<Point> triangleTemplate = new List<Point>();
             for (int i = 0; i < InputMap.Obstacles.Count; i++)
@@ -177,6 +177,7 @@ namespace SRL.Algorithm
 
                 if ((o.Rotation < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) || (o.Rotation > Math.Abs(orders[orders.Count - 1].Rotation + (2 * Math.PI)) % (2 * Math.PI) && orders[orders.Count - 1].Rotation == 0)))
                     o.Rotation -= (2 * Math.PI);
+                
                 
                 orders.Add(o);
             }
