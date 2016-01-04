@@ -34,11 +34,11 @@ namespace SRL.Algorithm
             double maxDiff = 0.01;
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
+            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1, -2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2, 1) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1, 2) }));
-            List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
+            */List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
             IGraph graph;
             List<Point> triangleTemplate = new List<Point>();
             for (int i = 0; i < InputMap.Obstacles.Count; i++)
@@ -108,7 +108,7 @@ namespace SRL.Algorithm
                                 for (int obstacle = 0; obstacle < currentMap[angle].Count; obstacle++)
                                     if (currentMap[angle][obstacle].Vertices.Contains(IndexPointAngleList[angle][i].point))
                                     {
-                                        for(int k = 0;k< currentMap[angle][obstacle].Vertices.Count;k++)
+                                        for (int k = 0; k < currentMap[angle][obstacle].Vertices.Count; k++)
                                         {
                                             if (currentMap[angle][obstacle].Vertices[k] == IndexPointAngleList[angle][i].point)
                                                 if (currentMap[angle][obstacle].Vertices[(k + 1) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point || currentMap[angle][obstacle].Vertices[(k - 1 + currentMap[angle][obstacle].Vertices.Count) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point)
@@ -155,7 +155,7 @@ namespace SRL.Algorithm
             if (path == null)
                 return null;
             List<Order> orders = new List<Order>();
-
+            orders.Add(new Order() { Destination = start, Rotation = vehicleRotation});
             for (int i = 0; i < path.Length - 1; i++)
             {
                 int angle = 0;
@@ -166,21 +166,24 @@ namespace SRL.Algorithm
                     ind++;
                 Order o = new Order();
                 o.Destination = IndexPointAngleList[angle][ind].point;
-                o.Rotation = -2 * Math.PI +angle * singleAngle;
+                o.Rotation = angle * singleAngle;
 
-                orders.Add(o);
-                if (path[i].From > path[i].To)
+                if(o.Rotation == (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
                 {
-                    //if (path[i].From <= IndexPointAngleList[0].Count)
-                        //o.Rotation -= (2 * Math.PI);
+                    o.Rotation = (orders[orders.Count - 1].Rotation);
+                    orders.Add(o);
+                    continue;
                 }
-                //else if (path[i].From > path[i].To && path[i].From < IndexPointAngleList[0].Count)
-                    //o.Rotation -= (2 * Math.PI);
+
+                if ((o.Rotation < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) || (o.Rotation > Math.Abs(orders[orders.Count - 1].Rotation + (2 * Math.PI)) % (2 * Math.PI) && orders[orders.Count - 1].Rotation == 0)))
+                    o.Rotation -= (2 * Math.PI);
+                
+                orders.Add(o);
             }
             List<Order> os = new List<Order>();
             os.Add(orders[0]);
             orders.RemoveAt(0);
-            while(orders.Count>0)
+            while (orders.Count > 0)
             {
                 while (orders[0].Destination == os[os.Count - 1].Destination)
                 {
