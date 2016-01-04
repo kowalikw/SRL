@@ -123,7 +123,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HomeView.pl.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\Localization\Language.cs" />
     <Compile Include="View\Localization\MapEditorView.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

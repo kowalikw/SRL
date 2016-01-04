@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace SRL.Main.View.Localization
+namespace SRL.Commons
 {
     public enum Language
     {

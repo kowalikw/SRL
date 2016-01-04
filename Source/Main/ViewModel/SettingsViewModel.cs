@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using Infralution.Localization.Wpf;
+using SRL.Commons;
 using SRL.Main.View.Localization;
 
 namespace SRL.Main.ViewModel

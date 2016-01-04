@@ -11,12 +11,22 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation, int angleDensity)
+        List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation)
         {
             /*Polygon poly = new Polygon();
             poly.Vertices.Add(new Point(0, 0));
             poly.Vertices.Add(new Point(map.Width, 0));
             map.Obstacles.Add(poly);*/
+            throw new NotImplementedException();
+        }
+
+        public List<AlgorithmOption> GetOptions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetOptions(List<AlgorithmOption> options)
+        {
             throw new NotImplementedException();
         }
 
@@ -126,5 +136,9 @@ namespace SRL.Algorithm
         }
 
 
+        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation)
+        {
+            return GetPath(map, vehicle, start, end, vehicleRotation);
+        }
     }
 }
