@@ -577,19 +577,19 @@ namespace SRL.Main.ViewModel
                 if (targetAngle < 0)
                     targetAngle += 2 * Math.PI;
 
-                if (orders[o].Rotation >= 0) // CW turn
+                if (orders[o].Rotation >= 0) // CCW turn
                 {
                     if (targetAngle > originAngle)
                         relativeRotation = targetAngle - originAngle;
                     else
                         relativeRotation = 2 * Math.PI - originAngle + targetAngle;
                 }
-                else // CCW turn
+                else // CW turn
                 {
                     if (targetAngle > originAngle)
-                        relativeRotation = targetAngle - originAngle;
-                    else
                         relativeRotation = targetAngle - originAngle - 2*Math.PI;
+                    else
+                        relativeRotation = targetAngle - originAngle;
                 }
 
                 int rotationFrameCount = (int)(Math.Abs(relativeRotation) * FramesPerRadian);
