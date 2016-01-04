@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -43,6 +44,31 @@ namespace SRL.Commons.Model.Base
             writer.WriteEndAttribute();
 
             writer.WriteEndElement();
+        }
+
+        public static void Serialize<R>(R model, string filename)
+            where R : SvgSerializable
+        {
+            var serializer = new XmlSerializer(typeof(R));
+            var output = new XDocument();
+
+            using (XmlWriter writer = output.CreateWriter())
+                serializer.Serialize(writer, model);
+
+            output.Save(filename);
+        }
+
+        public static R Deserialize<R>(string filename)
+            where R : SvgSerializable
+        {
+            var serializer = new XmlSerializer(typeof(R));
+
+            using (var reader = XmlReader.Create(filename))
+            {
+                if (serializer.CanDeserialize(reader))
+                    return (R)serializer.Deserialize(reader);
+            }
+            return null;
         }
     }
 }

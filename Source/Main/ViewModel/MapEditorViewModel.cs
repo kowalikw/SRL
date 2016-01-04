@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
+using SRL.Main.Messages;
 using SRL.Main.Utilities;
 
 namespace SRL.Main.ViewModel
@@ -107,7 +110,7 @@ namespace SRL.Main.ViewModel
         public ObservableCollectionEx<Point> UnfinishedPolygon { get; }
 
 
-        protected override bool IsModelValid => UnfinishedPolygon.Count == 0;
+        protected override bool IsEditedModelValid => UnfinishedPolygon.Count == 0;
 
         public MapEditorViewModel()
         {
@@ -115,9 +118,9 @@ namespace SRL.Main.ViewModel
             UnfinishedPolygon = new ObservableCollectionEx<Point>();
         }
 
-        protected override Map GetModel()
+        public override Map GetEditedModel()
         {
-            if (!IsModelValid)
+            if (!IsEditedModelValid)
                 return null;
 
             Map map = new Map();
@@ -125,7 +128,7 @@ namespace SRL.Main.ViewModel
             return map;
         }
 
-        protected override void SetModel(Map model)
+        public override void SetEditedModel(Map model)
         {
             UnfinishedPolygon.Clear();
             FinishedPolygons.ReplaceRange(model.Obstacles);

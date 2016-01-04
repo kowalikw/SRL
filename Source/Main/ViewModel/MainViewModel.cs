@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Windows.Navigation;
@@ -26,7 +24,7 @@ namespace SRL.Main.ViewModel
         {
             var uriDictionary = (ResourceDictionary)Application.Current.Resources["UriDictionary"];
             Uri pageUri = (Uri)uriDictionary[msg.ViewType.Name];
-
+            
             IInputElement target = NavigationHelper.FindFrame(NavigationHelper.FrameTop, Application.Current.MainWindow);
             NavigationCommands.GoToPage.Execute(pageUri, target);
         }

@@ -72,7 +72,7 @@ namespace SRL.Main.ViewModel
                     _loadMapCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                        Map = LoadModel<Map>();
+                        Map = LoadModelViaDialog<Map>();
                     });
                 }
                 return _loadMapCommand;
@@ -87,7 +87,7 @@ namespace SRL.Main.ViewModel
                     _loadVehicleCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                        Vehicle = LoadModel<Vehicle>();
+                        Vehicle = LoadModelViaDialog<Vehicle>();
                     });
                 }
                 return _loadVehicleCommand;
@@ -474,7 +474,7 @@ namespace SRL.Main.ViewModel
 
         private Mode _editorMode;
 
-        protected override bool IsModelValid
+        protected override bool IsEditedModelValid
         {
             get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
         }
@@ -500,9 +500,9 @@ namespace SRL.Main.ViewModel
             };
         }
 
-        protected override Simulation GetModel()
+        public override Simulation GetEditedModel()
         {
-            if (!IsModelValid)
+            if (!IsEditedModelValid)
                 return null;
 
             Simulation simulation = new Simulation()
@@ -518,7 +518,7 @@ namespace SRL.Main.ViewModel
             return simulation;
         }
 
-        protected override void SetModel(Simulation model)
+        public override void SetEditedModel(Simulation model)
         {
             Map = model.Map;
             Vehicle = model.Vehicle;
