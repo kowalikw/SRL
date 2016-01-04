@@ -557,34 +557,60 @@ namespace SRL.Main.ViewModel
             {
                 // Rotation frames.
                 double relativeRotation;
+                Point originPosition = frames.Peek().Position;
 
-                if (o == 0)
-                    relativeRotation = orders[o].Rotation - InitialVehicleRotation.Value;
-                else
-                    relativeRotation = orders[o].Rotation - orders[o - 1].Rotation;
+                double originAngle = frames.Peek().Rotation;
+
+                if (Math.Abs(originAngle) > 2 * Math.PI)
+                    originAngle %= 2 * Math.PI;
+                if (originAngle < 0)
+                    originAngle += 2 * Math.PI;
+
+                double targetAngle = orders[o].Rotation;
+
+                if (Math.Abs(targetAngle) > 2 * Math.PI)
+                    targetAngle %= 2 * Math.PI;
+                if (targetAngle < 0)
+                    targetAngle += 2 * Math.PI;
+
+                if (orders[o].Rotation >= 0) // CW turn
+                {
+                    if (targetAngle > originAngle)
+                        relativeRotation = targetAngle - originAngle;
+                    else
+                        relativeRotation = 2 * Math.PI - originAngle + targetAngle;
+                }
+                else // CCW turn
+                {
+                    if (targetAngle > originAngle)
+                        relativeRotation = targetAngle - originAngle;
+                    else
+                        relativeRotation = targetAngle - originAngle - 2*Math.PI;
+                }
 
                 int rotationFrameCount = (int)(Math.Abs(relativeRotation) * FramesPerRadian);
-
-                double currentAngle = frames.Peek().Rotation;
-                Point currentPosition = frames.Peek().Position;
-
-                double angleChange = relativeRotation > 0 ? radiansPerPart : -radiansPerPart;
+                double frameAngleChange = relativeRotation >= 0 ? radiansPerPart : -radiansPerPart;
 
                 for (int p = 0; p < rotationFrameCount - 1; p++)
                 {
-                    currentAngle += angleChange;
+                    originAngle += frameAngleChange;
+
+                    if (Math.Abs(originAngle) > 2 * Math.PI)
+                        originAngle %= 2 * Math.PI;
+                    if (originAngle < 0)
+                        originAngle += 2 * Math.PI;
 
                     frames.Push(new Frame
                     {
-                        Position = currentPosition,
-                        Rotation = currentAngle < 0 ? Math.PI * 2 + currentAngle : currentAngle
+                        Position = originPosition,
+                        Rotation = originAngle,
                     });
                 }
 
                 frames.Push(new Frame
                 {
-                    Position = currentPosition,
-                    Rotation = orders[o].Rotation
+                    Position = originPosition,
+                    Rotation = targetAngle,
                 });
 
                 // Move frames.
@@ -597,8 +623,8 @@ namespace SRL.Main.ViewModel
                 double xStep = dx > 0 ? MovePerFrame : -MovePerFrame;
                 double yStep = dy > 0 ? MovePerFrame : -MovePerFrame;
 
-                currentAngle = frames.Peek().Rotation;
-                currentPosition = frames.Peek().Position;
+                originAngle = frames.Peek().Rotation;
+                originPosition = frames.Peek().Position;
 
                 if (Math.Abs(dx) < Math.Abs(xStep) / 2)
                 {
@@ -606,8 +632,8 @@ namespace SRL.Main.ViewModel
                     {
                         frames.Push(new Frame
                         {
-                            Position = new Point(currentPosition.X, currentPosition.Y + y),
-                            Rotation = currentAngle,
+                            Position = new Point(originPosition.X, originPosition.Y + y),
+                            Rotation = originAngle,
                         });
                     }
                 }
@@ -617,8 +643,8 @@ namespace SRL.Main.ViewModel
                     {
                         frames.Push(new Frame
                         {
-                            Position = new Point(currentPosition.X + x, currentPosition.Y),
-                            Rotation = currentAngle,
+                            Position = new Point(originPosition.X + x, originPosition.Y),
+                            Rotation = originAngle,
                         });
                     }
                 }
@@ -639,8 +665,8 @@ namespace SRL.Main.ViewModel
 
                             frames.Push(new Frame
                             {
-                                Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = currentAngle,
+                                Position = new Point(originPosition.X + x, originPosition.Y + y),
+                                Rotation = originAngle,
                             });
                         }
                     }
@@ -658,8 +684,8 @@ namespace SRL.Main.ViewModel
 
                             frames.Push(new Frame
                             {
-                                Position = new Point(currentPosition.X + x, currentPosition.Y + y),
-                                Rotation = currentAngle,
+                                Position = new Point(originPosition.X + x, originPosition.Y + y),
+                                Rotation = originAngle,
                             });
                         }
                     }
