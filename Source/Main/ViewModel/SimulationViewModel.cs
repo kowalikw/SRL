@@ -172,7 +172,7 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
 
-                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
+                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
                             InitialVehicleRotation.Value, 360); // TODO angle density as parameter
                     },
                         () =>
@@ -487,7 +487,7 @@ namespace SRL.Main.ViewModel
         {
             EditorMode = Mode.Normal;
 
-            _algorithm = new MockAlgorithm(); //TODO change to an actual implementation
+            _algorithm = new Algorithm.Algorithm(); //TODO change to an actual implementation
 
             _simulationTimer = new DispatcherTimer();
             _simulationTimer.Interval = new TimeSpan(0, 0, 0, 0, FrameChangeInterval);
