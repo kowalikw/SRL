@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using FirstFloor.ModernUI.Windows.Controls;
 using FirstFloor.ModernUI.Windows.Navigation;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
@@ -53,11 +54,7 @@ namespace SRL.Main.ViewModel
 
         private void ErrorDialogHandler(ErrorDialogMessage msg)
         {
-            MessageBox.Show(
-                msg.ErrorDescription, 
-                "Error encountered", 
-                MessageBoxButton.OK, 
-                MessageBoxImage.Error);
+            ModernDialog.ShowMessage(msg.ErrorDescription, "Error", MessageBoxButton.OK); //TODO dialog title UICulture dependant
         }
 
     }

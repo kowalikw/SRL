@@ -92,23 +92,27 @@ namespace SRL.Main.ViewModel
         protected static R LoadModelViaDialog<R>()
             where R : SvgSerializable
         {
+            bool invalidFile = false;
             R output = null;
 
             var msg = new OpenFileDialogMessage();
             msg.Filter = DialogFilter;
             msg.FilenameCallback = filename =>
             {
-                if (filename == null)
+                if (filename == null) // Dialog cancelled.
                     return;
 
-                output = SvgSerializable.Deserialize<R>(filename);
+                if (SvgSerializable.CanDeserialize<R>(filename))
+                    output = SvgSerializable.Deserialize<R>(filename);
+                else
+                    invalidFile = true;
             };
             Messenger.Default.Send(msg);
 
-            if (output == null)
+            if (invalidFile)
             {
                 var errorMsg = new ErrorDialogMessage();
-                errorMsg.ErrorDescription = $"Selected doesn't contain {typeof(R)} object."; //TODO Put error description in resources. Make polish version too.
+                errorMsg.ErrorDescription = $"The file doesn't contain {typeof(R).Name} object."; //TODO Put error description in resources. Make polish version too.
                 Messenger.Default.Send(errorMsg);
             }
 
