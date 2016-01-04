@@ -28,7 +28,7 @@ namespace SRL.Commons.Utilities
             return p1.X * p2.X + p1.Y * p2.Y;
         }
 
-        private static bool IsInsideRectangle(Point point, Point cornerA, Point cornerB)
+        public static bool IsInsideRectangle(Point point, Point cornerA, Point cornerB)
         {
             return Math.Min(cornerA.X, cornerB.X) <= point.X
                 && point.X <= Math.Max(cornerA.X, cornerB.X)

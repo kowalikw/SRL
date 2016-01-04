@@ -1,0 +1,246 @@
+\documentclass{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[UTF8]{inputenc}
+\usepackage[polish]{babel}
+
+\usepackage{enumitem}
+\usepackage{tabulary}
+\usepackage{multirow}
+%\usepackage{array}
+\usepackage{graphicx}
+\usepackage{colortbl}
+
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection} %break after every section
+
+\definecolor{hlinecolor}{gray}{0.8}
+
+\newcommand{\pielat}{\small{\textsf{MP}}}
+\newcommand{\kowalik}{\small{\textsf{WK}}}
+\newcommand{\miskiewicz}{\small{\textsf{KM}}}
+\newcommand{\everyone}{\small{\textsf{ALL}}}
+
+\begin{document}
+\title{\textbf{Projekt Zespołowy}\\dokumentacja wstępna}
+\author{Wojciech Kowalik, Konrad Miśkiewicz, Mateusz Pielat}
+\maketitle
+
+
+\section{Opis projektu}
+
+Projekt ma na celu stworzenie aplikacji symulującej ruch pojazdu w labiryncie. Pojazd omija przeszkody poruszając się do przodu i wykonując skręty w miejscu. Aplikacja będzie podzielona na kilka podstawowych modułów, które razem umożliwią przygotowanie i przeprowadzenie symulacji.
+
+Pierwszy z modułów będzie umożliwiać wczytywanie i przetwarzanie plików graficznych przedstawiających proste wielokąty. Plik taki będzie odpowiednio konwertowany do postaci wektorowej, dzięki czemu możliwe będzie wykorzystanie go w symulacji jako pojazd lub przeszkoda do ominięcia. W przypadku pojazdu, użytkownik będzie musiał dodatkowo zdefiniować kierunek i zwrot wielokąta.
+
+Kolejny moduł będzie udostępniać narzędzie do tworzenia pojazdów i map kursorem bezpośrednio w interfejsie aplikacji. Będzie się to odbywać poprzez dodawanie kolejnych punktów wielokąta kursorem. Podobnie jak wyżej, w przypadku pojazdu konieczne będzie określenie jego przodu. Tworzenie mapy polegać będzie natomiast na stworzeniu kilku takich wielokątów na określonym obszarze.
+
+Po wczytaniu przygotowanego pojazdu i mapy użytkownik będzie mógł zdefiniować punkt startowy i końcowy dla trasy na której chciałby zasymulować ruch pojazdu. Wykorzystywany tutaj moduł symulowania ruchu obliczy najbardziej optymalną drogę lub stwierdzi, że dla danych ustawień takowa nie istnieje. Już po rozpoczęciu symulacji użytkownik będzie mógł ją pauzować, zmieniać prędkość animacji oraz swobodnie śledzić jej przebieg przy pomocy suwaka. Sam algorytm będzie oparty na przeszukiwaniu grafów, zaś wizualizacją w 2D zajmie się jeden z dostępnych silników graficznych.
+
+Ponadto, użytkownik będzie miał możliwość zapisania tak wygenerowanej symulacji w celu jej szybkiego odtworzenia w przyszłości.
+
+
+
+\section{Słownik pojęć}
+
+\begin{description}
+  \item[System] - wszystkie moduły aplikacji poza modułem użytkownika.
+  \item[Algorytm] - algorytm wyszukiwania ścieżki dla danego pojazdu i danej mapy.
+  \item[Bitmapa] - plik graficzny przedstawiający kształty geometryczne; trasowany jako pojazd lub mapa do reprezentacji wektorowej.
+  \item[Pojazd] - wielokąt symulujący pojazd, który posiada przód i tył, z możliwością obrotu w miejscu.
+  \item[Użytkownik] - osoba korzystająca z aplikacji.
+  \item[Mapa] - zbiór wielokątów symulujący przeszkody, których powinien unikać pojazd
+  \item[Trasa] - wyznaczona przez system droga pomiędzy punktami wskazanymi przez użytkownika, którą powinien przebyć pojazd.
+  \item[Wizualizacja] - animacja poruszającego się pojazdu, którą system przedstawia użytkownikowi jako wynik działania algorytmu.
+  \item[Rysowanie ciągłe] - rysowanie, polegające na wyrysowywaniu linii za kursorem przy wciśniętym lewym przycisku myszy.
+  \item[Plik graficzny] - zdjęcie/bitmapa przedstawiające jednoznacznie pewną reprezentację mapy lub pojazdu.
+  \item[Mock-up algorytmu] - narzędzie udające algorytm, które generuje losową listę rozkazów
+  \item[Mock-up interfejsu] - komplet widoków okien, który zostanie użyty w dalszym rozwoju aplikacji. Nie zawiera funkcjonalności.
+\end{description}
+
+\section{User stories}
+
+Poniższe scenariusze opisują możliwe przypadki użycia aplikacji z punktu widzenia użytkownika. Każdy scenariusz dotyczy poprawnego wykorzystania danego modułu.
+
+\subsubsection{Scenariusz ręcznego tworzenia pojazdu:}
+\begin{enumerate}
+  \item Użytkownik otwiera okno tworzenia pojazdu.
+  \item Użytkownik wyznacza punkty stanowiące wierzchołki wielokąta opisującego pojazd.
+  \item Użytkownik wyznacza oś i zwrot pojazdu.
+  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
+\end{enumerate}
+
+\subsubsection{Scenariusz ręcznego tworzenia mapy:}
+\begin{enumerate}
+  \item Użytkownik otwiera okno tworzenia mapy.
+  \item Użytkownik wyznacza punkty stanowiące wierzchołki przeszkód mapy.
+  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
+\end{enumerate}
+
+\subsubsection{Scenariusz tworzenia pojazdu z pliku graficznego:}
+\begin{enumerate}
+  \item Użytkownik wczytuje plik graficzny.
+  \item Użytkownik dobiera parametry trasowania.
+  \item System trasuje plik graficzny do postaci wektorowej.
+  \item Użytkownik wyznacza oś i zwrot pojazdu.
+  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
+\end{enumerate}
+
+\subsubsection{Scenariusz tworzenia mapy z pliku graficznego:}
+\begin{enumerate}
+  \item Użytkownik wczytuje plik graficzny.
+  \item Użytkownik dobiera parametry trasowania.
+  \item System trasuje plik graficzny do postaci wektorowej.
+  \item Użytkownik zatwierdza projekt, a system zapisuje go do postaci wektorowej.
+\end{enumerate}
+
+\subsubsection{Scenariusz symulacji algorytmu:}
+\begin{enumerate}
+  \item Użytkownik wczytuje pojazd.
+  \item Użytkownik wczytuje mapę.
+  \item Użytkownik wskazuje początek i koniec trasy.
+  \item Użytkownik rozpoczyna symulację.
+  \item System przedstawia wizualizację, jeżeli takowa jest możliwa.
+\end{enumerate}
+
+
+\section{Wymagania funkcjonalne}
+
+\subsubsection{Moduł wizualizacji}
+\begin{itemize}
+  \item System powinien umożliwiać wczytywanie uprzednio zapisanych w odpowiednim formacie map i pojazdów.
+  \item System powinien umożliwiać ustawienie początku i końca trasy pojazdu.
+  \item System powinien umożliwiać ustawienie prędkości animacji ruchu pojazdu.
+  \item System powinien umożliwiać pauzowanie trwającej wizualizacji.
+  \item System powinien umożliwiać przejście suwakiem do dowolnego momentu symulacji.
+  \item System powinien umożliwiać zapisywanie wygenerowanej symulacji.
+\end{itemize}
+
+\subsubsection{Moduł rysowania pojazdów i map}
+\begin{itemize}
+  \item System powinien umożliwiać rysowanie wielokątów reprezentujących pojazdy lub przeszkody omijane przez pojazd.
+  \item System powinien zamykać wielokąt, jeżeli użytkownik nie zamknie go sam.
+  \item System powinien umożliwiać zapisywanie narysowanych pojazdów/map do postaci wektorowej.
+\end{itemize}
+
+\subsubsection{Moduł generowania pojazdów i map z plików graficznych}
+\begin{itemize}
+  \item System powinien umożliwiać wczytanie pliku graficznego w jednym z dozwolonych formatów.
+  \item System powinien umożliwiać dobór parametrów trasowania.
+  \item System powinien wyświetlać użytkownikowi wynik trasowania dla aktualnie dobranych parametrów.
+  \item System powinien umożliwiać zapisywanie wygenerowanych pojazdów/map do postaci wektorowej.
+\end{itemize}
+
+\subsubsection{Moduł algorytmu}
+\begin{itemize}
+  \item System powinien znajdować ścieżkę między punktem startowym a punktem końcowym dla danego pojazdu z uwzględnieniem przeszkód.
+  \item System powinien eksportować wynik obliczeń do listy rozkazów.
+\end{itemize}
+
+
+\section{Wymagania niefunkcjonalne}
+
+\begin{itemize}
+  \item Aplikacja powinna poprawnie działać na systemach operacyjnych z rodziny \textit{Windows}.
+  \item System powinien poinformować użytkownika, gdy przeprowadzenie symulacji jest niemożliwe.
+  \item Dozwolone formaty dla plików graficznych: \textbf{bmp}, \textbf{jpeg}, \textbf{png}, \textbf{gif}.
+  \item Rysowanie pojazdów i map nie powinno odbywać się poprzez rysowanie ciągłe, a raczej poprzez dodawanie kolejnych punktów do wielokątów.
+  \item Podczas rysowania wielokątów ich krawędzie nie mogą się przecinać. 
+  \item System powinien dać się łatwo tłumaczyć na różne języki:
+  \begin{itemize}
+    \item Powinien mieć wbudowany język polski i angielski.
+    \item Dodanie nowego języka powinno ograniczać się do zmian w pliku konfiguracyjnym.
+  \end{itemize}
+\end{itemize}
+
+
+\section{Metodologia pracy}
+
+Aplikacja będzie tworzona zgodnie z modelem przyrostowym (ang. \textit{incremental development}). Zakłada on realizację jedynie pewnej części systemu w każdym kolejnym `cyklu pracy. Poszczególne porcje funkcjonalności powinny być spójne, aby możliwe było przetestowanie i dostarczenie ich w wersji finalnej klientowi.
+
+\subsection{Uzasadnienie wyboru}
+
+Preferencja modelu przyrostowego nad modelem kaskadowym wynika ze struktury naszej aplikacji. Można ją podzielić na wiele odrębnych modułów działających (do pewnego stopnia) oddzielnie i niezależnie od siebie. Ponadto, ta metodologia zakłada brak konieczności definiowania z góry szczegółowych wymagań poszczególnych części systemu, dzięki czemu proces tworzenia jest bardziej elastyczny niż w przypadku modelu kaskadowego.
+
+\section{Harmonogram pracy}
+\setlist{nosep}
+\begin{tabulary}{\textwidth}{cp{0.8\textwidth}c}
+  \arrayrulecolor{hlinecolor}\hline
+ 
+  %-------------------------------------------------------------
+  \hline
+  & & \parbox[t]{2mm}{\multirow{13}{*}{\rotatebox[origin=c]{-90}{17.11.15}}} \\ 
+  \multicolumn{2}{l}{\textbf{Architektura systemu}} & \\ 
+  
+  \kowalik & repozytorium i struktura katalogów & \\
+  \miskiewicz & przygotowanie diagramu klas & \\
+  \everyone & zdefiniowanie reprezentacji pojazdu i mapy & \\
+  \everyone & zdefiniowanie reprezentacji rozkazów ruchu pojazdu & \\
+
+  %-------------------------------------------------------------
+  \\ \multicolumn{2}{l}{\textbf{Interfejs graficzny}} & \\
+  
+  \pielat & przygotowanie mock-up poszczególnych okien interfejsu & \\
+  \miskiewicz & implementacja interakcji pomiędzy oknami & \\
+  
+  %-------------------------------------------------------------
+  \\ \multicolumn{2}{l}{\textbf{Tworzenie pojazdów i map}} & \\
+  
+  \miskiewicz & serializacja i deserializacja do XML & \\
+  \kowalik & tworzenie pojazdów i przeszkód przy pomocy kursora & \\
+  \hline
+  \pielat & selekcja trasowanych grafik rastrowych pod względem rozszerzeń i treści & \parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{-90}{01.12.15}}}\\
+  \pielat & trasowanie z użyciem wybranej biblioteki; wyświetlanie efektu użytkownikowi dla odpowiednio dobranych parametrów trasowania & \\
+  \hline
+
+  %-------------------------------------------------------------
+   & & \parbox[t]{2mm}{\multirow{11}{*}{\rotatebox[origin=c]{-90}{15.12.15}}} \\
+  \multicolumn{2}{l}{\textbf{Mock-up algorytmu}} & \\
+  
+  \miskiewicz & losowe generowanie tras & \\
+  \miskiewicz & eksport trasy do listy rozkazów & \\
+  
+  %-------------------------------------------------------------
+  \\ \multicolumn{2}{l}{\textbf{Wizualizacja}} & \\
+  
+  \kowalik & tworzenie przeszkód i pojazdu na mapie & \\
+  \kowalik & ustawianie początku i końca trasy & \\
+  \pielat & animacja ruchu na podstawie rozkazów & \\
+  \miskiewicz & selekcja trasowanych grafik rastrowych pod względem rozszerzeń i treści & \\
+  \pielat & implementacja suwaka osi czasu wizualizacji & \\
+  \hline
+  
+  %-------------------------------------------------------------
+  & & \parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{-90}{12.01.16}}} \\ 
+  \multicolumn{2}{l}{\textbf{Algorytm}} & \\
+  
+  \everyone & opracowanie koncepcji algorytmu wyszukiwania drogi & \\
+  \everyone & implementacja algorytmu wyszukiwania drogi & \\
+  \everyone & eksport i mapowanie wyników obliczeń do listy rozkazów & \\
+  \hline
+
+\end{tabulary}\\\\
+\everyone \space - zadania przydzielone dla wszystkich\\
+\kowalik \space - zadania przydzielone dla Wojciecha Kowalika\\
+\miskiewicz \space - zadania przydzielone dla Konrada Miśkiewicza\\
+\pielat \space - zadania przydzielone dla Mateusza Pielata
+
+
+\section{Kamienie milowe}
+
+Każdy kamień milowy stanowi oddzielny, funkcjonalny moduł systemu. Wszystkie z nich kończą się testami i dokumentacją.
+
+\setlist{}
+
+\begin{enumerate}
+  \item \textbf{Moduł tworzenia map i pojazdów przez użytkownika}\par 
+  Zostanie stworzony interfejs użytkownika oraz możliwe będzie ręczne tworzenie map i pojazdów z wykorzystaniem wbudowanego edytora i zapisywanie ich do formatu wektorowego
+  \item \textbf{Moduł wczytywania map i pojazdów z plików graficznych}\par
+  Możliwe będzie wczytywanie pojazdów i map z plików graficznych oraz eksportowanie ich do formatu wektorowego
+  \item \textbf{Moduł wizualizacji ruchu}\par
+  Użytkownik może wybierać pojazd, mapę oraz zaznaczać początek i koniec trasy. Mock-up algorytmu wygeneruje losową trasę dla pojazdu, która zostanie przedstawiona użytkownikowi. Użytkownik będzie miał możliwość ustawienia prędkości symulacji, pauzy oraz przejścia w czasie suwakiem.
+  \item \textbf{Moduł algorytmu wyszukiwania drogi}\par
+  Zaimplementowany zostanie algorytm wyznaczania drogi, który zastąpi wcześniejszy mock-up. Wszystkie moduły aplikacji zostaną ze sobą zintegrowane.
+\end{enumerate}
+
+\end{document}

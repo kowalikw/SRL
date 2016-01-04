@@ -1,0 +1,14 @@
+\select@language {polish}
+\contentsline {section}{\numberline {1}Streszczenie}{3}
+\contentsline {section}{\numberline {2}Przygotowanie modu\IeC {\l }u}{4}
+\contentsline {subsection}{\numberline {2.1}Wymagania funkcjonalne modu\IeC {\l }u}{4}
+\contentsline {subsection}{\numberline {2.2}Przyk\IeC {\l }ady reprezentacji mapy i pojazdu w XML}{5}
+\contentsline {subsubsection}{\numberline {2.2.1}Reprezentacja mapy}{5}
+\contentsline {subsubsection}{\numberline {2.2.2}Reprezentacja pojazdu}{5}
+\contentsline {subsection}{\numberline {2.3}Dozwolone formaty plik\IeC {\'o}w graficznych}{6}
+\contentsline {section}{\numberline {3}Zmiany w architekturze systemu}{7}
+\contentsline {section}{\numberline {4}Trasowanie pliku graficznego}{8}
+\contentsline {subsection}{\numberline {4.1}Biblioteka}{8}
+\contentsline {subsection}{\numberline {4.2}Wrapper}{8}
+\contentsline {section}{\numberline {5}Dzia\IeC {\l }anie modu\IeC {\l }u}{9}
+\contentsline {section}{\numberline {6}Testy}{12}
