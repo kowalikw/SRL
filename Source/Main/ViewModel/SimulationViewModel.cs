@@ -577,45 +577,48 @@ namespace SRL.Main.ViewModel
                 if (targetAngle < 0)
                     targetAngle += 2 * Math.PI;
 
-                if (orders[o].Rotation >= 0) // CCW turn
+                if (originAngle != targetAngle) // Purposeful comparison of floating point numbers without epsilon.
                 {
-                    if (targetAngle > originAngle)
-                        relativeRotation = targetAngle - originAngle;
-                    else
-                        relativeRotation = 2 * Math.PI - originAngle + targetAngle;
-                }
-                else // CW turn
-                {
-                    if (targetAngle > originAngle)
-                        relativeRotation = targetAngle - originAngle - 2*Math.PI;
-                    else
-                        relativeRotation = targetAngle - originAngle;
-                }
+                    if (orders[o].Rotation >= 0) // CCW turn
+                    {
+                        if (targetAngle > originAngle)
+                            relativeRotation = targetAngle - originAngle;
+                        else
+                            relativeRotation = 2 * Math.PI - originAngle + targetAngle;
+                    }
+                    else // CW turn
+                    {
+                        if (targetAngle > originAngle)
+                            relativeRotation = targetAngle - originAngle - 2 * Math.PI;
+                        else
+                            relativeRotation = targetAngle - originAngle;
+                    }
 
-                int rotationFrameCount = (int)(Math.Abs(relativeRotation) * FramesPerRadian);
-                double frameAngleChange = relativeRotation >= 0 ? radiansPerPart : -radiansPerPart;
+                    int rotationFrameCount = (int)(Math.Abs(relativeRotation) * FramesPerRadian);
+                    double frameAngleChange = relativeRotation >= 0 ? radiansPerPart : -radiansPerPart;
 
-                for (int p = 0; p < rotationFrameCount - 1; p++)
-                {
-                    originAngle += frameAngleChange;
+                    for (int p = 0; p < rotationFrameCount - 1; p++)
+                    {
+                        originAngle += frameAngleChange;
 
-                    if (Math.Abs(originAngle) > 2 * Math.PI)
-                        originAngle %= 2 * Math.PI;
-                    if (originAngle < 0)
-                        originAngle += 2 * Math.PI;
+                        if (Math.Abs(originAngle) > 2 * Math.PI)
+                            originAngle %= 2 * Math.PI;
+                        if (originAngle < 0)
+                            originAngle += 2 * Math.PI;
+
+                        frames.Push(new Frame
+                        {
+                            Position = originPosition,
+                            Rotation = originAngle,
+                        });
+                    }
 
                     frames.Push(new Frame
                     {
                         Position = originPosition,
-                        Rotation = originAngle,
+                        Rotation = targetAngle,
                     });
                 }
-
-                frames.Push(new Frame
-                {
-                    Position = originPosition,
-                    Rotation = targetAngle,
-                });
 
                 // Move frames.
                 Point targetPosition = orders[o].Destination;
@@ -625,7 +628,7 @@ namespace SRL.Main.ViewModel
 
                 double xStep = dx > 0 ? MovePerFrame : -MovePerFrame;
                 double yStep = dy > 0 ? MovePerFrame : -MovePerFrame;
-                
+
                 originPosition = frames.Peek().Position;
 
                 if (Math.Abs(dx) < Math.Abs(xStep) / 2)
