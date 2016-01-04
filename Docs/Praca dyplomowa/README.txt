@@ -1,0 +1,2 @@
+TexMaker
+ISO-8859-2

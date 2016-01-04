@@ -140,8 +140,13 @@ namespace SRL.Main.Drawing
             // Main loop
             for (int x = xPxl1 + 1; x < xPxl2; x++)
             {
+                intery = intery + gradient;
+
                 intensityTop = MathHelper.Rfpart(intery);
                 intensityDown = MathHelper.Fpart(intery);
+
+                if (x < 0) continue;
+                if (intery < 0) continue;
 
                 if (steep)
                 {
@@ -153,7 +158,6 @@ namespace SRL.Main.Drawing
                     lockBitmap.SetBigPixel(x, (int)intery, color * intensityTop);
                     lockBitmap.SetBigPixel(x, (int)intery + 1, color * intensityDown);
                 }
-                intery = intery + gradient;
             }
         }
 

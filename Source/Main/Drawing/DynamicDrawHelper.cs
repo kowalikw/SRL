@@ -62,9 +62,6 @@ namespace SRL.Main.Drawing
 
         private static void SetBigPixel(this SpriteBatch spriteBatch, float x, float y, Color color)
         {
-            if (x < 0 || y < 0)
-                return;
-
             spriteBatch.SetPixel(x, y, color);
             spriteBatch.SetPixel(x + 1, y, color);
             spriteBatch.SetPixel(x, y + 1, color);
