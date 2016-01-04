@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -35,7 +36,14 @@ namespace SRL.Main.ViewModel
             {
                 Settings.Default.Language = value;
                 CultureInfo cultureInfo = value.GetCultureInfo();
-             //   CultureManager.UICulture = cultureInfo; //TODO solve this issue
+                try
+                {
+                    CultureManager.UICulture = cultureInfo;
+                }
+                catch (TargetInvocationException)
+                {
+                    //TODO Investigate the problem.
+                }
                 Settings.Default.Save();
             }
         }
