@@ -96,6 +96,7 @@
     <Compile Include="Drawing\StaticDrawHelper.cs" />
     <Compile Include="Messages\ErrorDialogMessage.cs" />
     <Compile Include="Messages\GoToPageMessage.cs" />
+    <Compile Include="Messages\SetModelMessage.cs" />
     <Compile Include="Messages\OpenFileDialogMessage.cs" />
     <Compile Include="Messages\SaveFileDialogMessage.cs" />
     <Compile Include="Settings.Designer.cs">

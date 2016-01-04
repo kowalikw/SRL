@@ -72,7 +72,7 @@ namespace SRL.Main.ViewModel
                     _loadMapCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                        Map = LoadModel<Map>();
+                        Map = LoadModelViaDialog<Map>();
                     });
                 }
                 return _loadMapCommand;
@@ -87,7 +87,7 @@ namespace SRL.Main.ViewModel
                     _loadVehicleCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                        Vehicle = LoadModel<Vehicle>();
+                        Vehicle = LoadModelViaDialog<Vehicle>();
                     });
                 }
                 return _loadVehicleCommand;
@@ -156,7 +156,11 @@ namespace SRL.Main.ViewModel
                             StartPoint == null)
                             return false;
 
-                        return GeometryHelper.IsIntersected(Vehicle.Shape, Map.Obstacles);
+                        Polygon shape = GeometryHelper.Resize(Vehicle.Shape, setup.RelativeSize);
+                        shape = GeometryHelper.Rotate(shape, setup.Rotation);
+                        shape = GeometryHelper.Move(shape, StartPoint.Value.X, StartPoint.Value.Y);
+
+                        return !GeometryHelper.IsIntersected(shape, Map.Obstacles);
                     });
                 }
                 return _setInitialVehicleSetup;
@@ -474,7 +478,7 @@ namespace SRL.Main.ViewModel
 
         private Mode _editorMode;
 
-        protected override bool IsModelValid
+        protected override bool IsEditedModelValid
         {
             get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
         }
@@ -500,9 +504,9 @@ namespace SRL.Main.ViewModel
             };
         }
 
-        protected override Simulation GetModel()
+        public override Simulation GetEditedModel()
         {
-            if (!IsModelValid)
+            if (!IsEditedModelValid)
                 return null;
 
             Simulation simulation = new Simulation()
@@ -518,7 +522,7 @@ namespace SRL.Main.ViewModel
             return simulation;
         }
 
-        protected override void SetModel(Simulation model)
+        public override void SetEditedModel(Simulation model)
         {
             Map = model.Map;
             Vehicle = model.Vehicle;
@@ -573,19 +577,19 @@ namespace SRL.Main.ViewModel
                 if (targetAngle < 0)
                     targetAngle += 2 * Math.PI;
 
-                if (orders[o].Rotation >= 0) // CW turn
+                if (orders[o].Rotation >= 0) // CCW turn
                 {
                     if (targetAngle > originAngle)
                         relativeRotation = targetAngle - originAngle;
                     else
                         relativeRotation = 2 * Math.PI - originAngle + targetAngle;
                 }
-                else // CCW turn
+                else // CW turn
                 {
                     if (targetAngle > originAngle)
-                        relativeRotation = targetAngle - originAngle;
-                    else
                         relativeRotation = targetAngle - originAngle - 2*Math.PI;
+                    else
+                        relativeRotation = targetAngle - originAngle;
                 }
 
                 int rotationFrameCount = (int)(Math.Abs(relativeRotation) * FramesPerRadian);
