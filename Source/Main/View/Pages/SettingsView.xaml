@@ -5,15 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:local="clr-namespace:SRL.Main.Utilities"
+             xmlns:util="clr-namespace:SRL.Main.Utilities"
              xmlns:lang="clr-namespace:SRL.Main.View.Localization"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Settings}">
 
     <UserControl.Resources>
-        <local:BoolInverterConverter x:Key="BoolInverterConverter"/>
-        <local:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        <util:BoolInverterConverter x:Key="BoolInverterConverter"/>
+        <util:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
     </UserControl.Resources>
 
 
