@@ -14,8 +14,8 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-        
-            struct IPoint
+
+        struct IPoint
         {
             public Point point;
             public int index;
@@ -24,20 +24,20 @@ namespace SRL.Algorithm
         public List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation, int angleDensity)
         {
             List<Point> lst = new List<Point>();
-            for(int i=0;i<InputVehicle.Shape.Vertices.Count;i++)
+            for (int i = 0; i < InputVehicle.Shape.Vertices.Count; i++)
             {
                 lst.Add(new Point(InputVehicle.Shape.Vertices[i].X * vehicleSize, InputVehicle.Shape.Vertices[i].Y * vehicleSize));
             }
             Vehicle vehicle = new Vehicle();
             vehicle.Shape = new Polygon(lst);
             Map map = new Map();
-            double maxDiff = 0.0005;
+            double maxDiff = 0.01;
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2,-1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1,-2) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2,1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1,2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1, -2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2, 1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1, 2) }));
             List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
             IGraph graph;
             List<Point> triangleTemplate = new List<Point>();
@@ -106,12 +106,24 @@ namespace SRL.Algorithm
                             if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0)
                             {
                                 for (int obstacle = 0; obstacle < currentMap[angle].Count; obstacle++)
-                                    if (GeometryHelper.IsInsidePolygon(new Point((IndexPointAngleList[angle][i].point.X + IndexPointAngleList[angle][j].point.X) / 2, (IndexPointAngleList[angle][i].point.Y + IndexPointAngleList[angle][j].point.Y) / 2), currentMap[angle][obstacle]))
-                                        addEdge = false;
+                                    if (currentMap[angle][obstacle].Vertices.Contains(IndexPointAngleList[angle][i].point))
+                                    {
+                                        for(int k = 0;k< currentMap[angle][obstacle].Vertices.Count;k++)
+                                        {
+                                            if (currentMap[angle][obstacle].Vertices[k] == IndexPointAngleList[angle][i].point)
+                                                if (currentMap[angle][obstacle].Vertices[(k + 1) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point || currentMap[angle][obstacle].Vertices[(k - 1 + currentMap[angle][obstacle].Vertices.Count) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point)
+                                                    break;
+                                        }
+                                        if (GeometryHelper.IsInsidePolygon(new Point((IndexPointAngleList[angle][i].point.X + IndexPointAngleList[angle][j].point.X) / 2, (IndexPointAngleList[angle][i].point.Y + IndexPointAngleList[angle][j].point.Y) / 2), currentMap[angle][obstacle]))
+                                        {
+                                            addEdge = false;
+                                            break;
+                                        }
+                                    }
                             }
                             if (addEdge)
                             {
-                                //if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
+                                if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
                                     graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
                             }
                         }
@@ -124,10 +136,10 @@ namespace SRL.Algorithm
                 {
                     for (int j = 0; j < IndexPointAngleList[(angle + 1) % angleDensity].Count; j++)
                     {
-                        if (GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) <= maxDiff)
+                        if (GeometryHelper.GetDistance(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) <= maxDiff)
                         {
-                            graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[(angle + 1) % angleDensity][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 10);
-                            graph.AddEdge(IndexPointAngleList[(angle + 1) % angleDensity][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 10);
+                            graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[(angle + 1) % angleDensity][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 50);
+                            graph.AddEdge(IndexPointAngleList[(angle + 1) % angleDensity][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 50);
                         }
                     }
                 }
@@ -146,24 +158,6 @@ namespace SRL.Algorithm
 
             for (int i = 0; i < path.Length - 1; i++)
             {
-                /*int angle = 0;
-                while (path[i].To > IndexPointAngleList[angle][IndexPointAngleList[angle].Count - 1].index)
-                    angle++;
-                int ind = 0;
-                while (IndexPointAngleList[angle][ind].index != path[i].To)
-                    ind++;
-                Order o = new Order();
-                o.Destination = IndexPointAngleList[angle][ind].point;
-                o.Rotation = 2 * Math.PI - angle * singleAngle;
-                if (path[i].From > path[i].To)
-                {
-                    if (path[i].To > IndexPointAngleList[0].Count)
-                        o.Rotation *= -1;
-                }
-                else if (path[i].From < path[i].To && path[i].From < IndexPointAngleList[0].Count)
-                    o.Rotation *= -1;
-                o.Rotation *= -1;
-                orders.Add(o);*/
                 int angle = 0;
                 while (path[i].To > IndexPointAngleList[angle][IndexPointAngleList[angle].Count - 1].index)
                     angle++;
@@ -172,19 +166,33 @@ namespace SRL.Algorithm
                     ind++;
                 Order o = new Order();
                 o.Destination = IndexPointAngleList[angle][ind].point;
-                o.Rotation = 2 * Math.PI - angle * singleAngle;
+                o.Rotation = -2 * Math.PI +angle * singleAngle;
+
+                orders.Add(o);
                 if (path[i].From > path[i].To)
                 {
-                    if (path[i].From >= IndexPointAngleList[0].Count)
-                        o.Rotation *= -1;
+                    //if (path[i].From <= IndexPointAngleList[0].Count)
+                        //o.Rotation -= (2 * Math.PI);
                 }
-                else if (path[i].From < path[i].To && path[i].From < IndexPointAngleList[0].Count)
-                    o.Rotation *= -1;
-                o.Rotation *= -1;
-                orders.Add(o);
+                //else if (path[i].From > path[i].To && path[i].From < IndexPointAngleList[0].Count)
+                    //o.Rotation -= (2 * Math.PI);
+            }
+            List<Order> os = new List<Order>();
+            os.Add(orders[0]);
+            orders.RemoveAt(0);
+            while(orders.Count>0)
+            {
+                while (orders[0].Destination == os[os.Count - 1].Destination)
+                {
+                    //os[os.Count - 1].Rotation = orders[0].Rotation;
+                    orders.RemoveAt(0);
+                }
+                os.Add(orders[0]);
+                orders.RemoveAt(0);
 
             }
-            return orders;
+            os.RemoveAt(0);
+            return os;
         }
 
 
@@ -201,14 +209,14 @@ namespace SRL.Algorithm
                     triangularObstacles.Add(triangles[j]);
                 }
             }
-            for (int i = 0; i < angleDensity; i ++)
+            for (int i = 0; i < angleDensity; i++)
             {
                 List<Point> rotatedVehicle = new List<Point>();
                 for (int j = 0; j < vehicle.Shape.Vertices.Count; j++)
                 {
-                    rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], new Point(0,0), i * singleAngle + Math.PI));
+                    rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], new Point(0, 0), i * singleAngle + Math.PI));
                 }
-                
+
                 List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
                 List<Polygon> newObstacles = new List<Polygon>();
                 object locker = new object();
@@ -232,7 +240,7 @@ namespace SRL.Algorithm
             {
                 tableOfObstacles[i] = MergePolygons(tableOfObstacles[i]);
             }
-            
+
             return tableOfObstacles;
         }
 
