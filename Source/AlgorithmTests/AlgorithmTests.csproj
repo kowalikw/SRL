@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}</ProjectGuid>
+    <ProjectGuid>{1C028724-C18A-41AA-8BDC-6280716C1947}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommonsTests</RootNamespace>
-    <AssemblyName>CommonsTests</AssemblyName>
+    <RootNamespace>AlgorithmTests</RootNamespace>
+    <AssemblyName>AlgorithmTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,11 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml.Serialization" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -57,54 +52,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ModelTests.cs" />
+    <Compile Include="MockAlgorithmTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="GeometryHelperTests.cs" />
-    <Compile Include="MathHelperTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="XMLs\Map.svg" />
-    <Content Include="XMLs\Order.svg" />
-    <Content Include="XMLs\Polygon.svg" />
-    <Content Include="XMLs\Simulation.svg" />
-    <Content Include="XMLs\Vehicle.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="XMLs\XmlSchema\MapSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\OrderSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\PolygonSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\SimulationSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\SimulationSchemaXlink.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\VehicleSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Commons\Commons.csproj">
-      <Project>{18079ba2-f5c7-48e2-b56c-624e225d1b37}</Project>
-      <Name>Commons</Name>
-    </ProjectReference>
+    <Compile Include="AlgorithmTests.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
