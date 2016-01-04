@@ -19,7 +19,7 @@ namespace SRL.Commons.Model
 
         public ValueType Type { get; set; }
 
-        public object DefaultValue { get; set; }
+        public object Value { get; set; }
         public object MinValue { get; set; }
         public object MaxValue { get; set; }
 
