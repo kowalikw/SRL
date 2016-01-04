@@ -614,16 +614,14 @@ namespace SRL.Main.ViewModel
                 });
 
                 // Move frames.
-                Point start = o == 0 ? StartPoint.Value : orders[o - 1].Destination;
-                Point end = orders[o].Destination;
+                Point targetPosition = orders[o].Destination;
 
-                double dx = end.X - start.X;
-                double dy = end.Y - start.Y;
+                double dx = targetPosition.X - originPosition.X;
+                double dy = targetPosition.Y - originPosition.Y;
 
                 double xStep = dx > 0 ? MovePerFrame : -MovePerFrame;
                 double yStep = dy > 0 ? MovePerFrame : -MovePerFrame;
-
-                originAngle = frames.Peek().Rotation;
+                
                 originPosition = frames.Peek().Position;
 
                 if (Math.Abs(dx) < Math.Abs(xStep) / 2)
@@ -633,7 +631,7 @@ namespace SRL.Main.ViewModel
                         frames.Push(new Frame
                         {
                             Position = new Point(originPosition.X, originPosition.Y + y),
-                            Rotation = originAngle,
+                            Rotation = targetAngle
                         });
                     }
                 }
@@ -644,7 +642,7 @@ namespace SRL.Main.ViewModel
                         frames.Push(new Frame
                         {
                             Position = new Point(originPosition.X + x, originPosition.Y),
-                            Rotation = originAngle,
+                            Rotation = targetAngle,
                         });
                     }
                 }
@@ -666,7 +664,7 @@ namespace SRL.Main.ViewModel
                             frames.Push(new Frame
                             {
                                 Position = new Point(originPosition.X + x, originPosition.Y + y),
-                                Rotation = originAngle,
+                                Rotation = targetAngle,
                             });
                         }
                     }
@@ -685,11 +683,18 @@ namespace SRL.Main.ViewModel
                             frames.Push(new Frame
                             {
                                 Position = new Point(originPosition.X + x, originPosition.Y + y),
-                                Rotation = originAngle,
+                                Rotation = targetAngle,
                             });
                         }
                     }
                 }
+
+                frames.Push(new Frame
+                {
+                    Position = targetPosition,
+                    Rotation = targetAngle,
+                });
+
             }
             Frames = frames.Reverse().ToList();
         }
