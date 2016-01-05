@@ -6,7 +6,7 @@ using GalaSoft.MvvmLight;
 
 namespace SRL.Commons.Model
 {
-    public class AlgorithmOption : ObservableObject, IDataErrorInfo
+    public class Option : ObservableObject, IDataErrorInfo
     {
         public enum ValueType
         {

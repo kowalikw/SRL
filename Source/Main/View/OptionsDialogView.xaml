@@ -7,6 +7,7 @@
                   xmlns:util="clr-namespace:SRL.Main.Utilities"
                   xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
                   xmlns:settings="clr-namespace:SRL.Main"
+                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                   mc:Ignorable="d" 
                   d:DesignWidth="400" d:DesignHeight="300"
                   Title="Options">
@@ -17,6 +18,10 @@
         <converters:DictionaryValueConverter x:Key="DictionaryValueConverter"/>
         <converters:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <converters:IntToStringConverter x:Key="IntToStringConverter"/>
+
+        <Style x:Key="OptionContainerStyle" TargetType="Grid">
+            <Setter Property="Height" Value="30"/>
+        </Style>
 
         <TextBlock x:Key="OptionLabel" x:Shared="False" Margin="0,0,20,0">
             <TextBlock.Text>
@@ -33,15 +38,11 @@
             </TextBlock.ToolTip>
         </TextBlock>
 
-        <Style x:Key="OptionContainerStyle" TargetType="Grid">
-            <Setter Property="Height" Value="30"/>
-        </Style>
-
         <DataTemplate x:Key="BooleanOptionTemplate">
             <Grid Style="{StaticResource OptionContainerStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Column1"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition SharedSizeGroup="OptionLabelColumn"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
                 
                 <ContentPresenter Content="{StaticResource OptionLabel}"/>
@@ -55,10 +56,9 @@
         <DataTemplate x:Key="DoubleOptionControl">
             <Grid Style="{StaticResource OptionContainerStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Column1"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition SharedSizeGroup="OptionLabelColumn"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                
                 
                 <ContentPresenter Content="{StaticResource OptionLabel}"/>
                 <TextBox Grid.Column="1"
@@ -71,8 +71,8 @@
         <DataTemplate x:Key="IntegerOptionControl">
             <Grid Style="{StaticResource OptionContainerStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Column1"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition SharedSizeGroup="OptionLabelColumn"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
                 
                 <ContentPresenter Content="{StaticResource OptionLabel}"/>

@@ -7,7 +7,7 @@ namespace SRL.Commons.Model.Base
     {
         List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation);
 
-        List<AlgorithmOption> GetOptions();
-        void SetOptions(List<AlgorithmOption> options);
+        List<Option> GetOptions();
+        void SetOptions(List<Option> options);
     }
 }

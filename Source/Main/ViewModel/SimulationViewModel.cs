@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -181,16 +182,21 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
 
-                        List<AlgorithmOption> options = _algorithm.GetOptions();
+                        List<Option> options = _algorithm.GetOptions();
                         ShowOptionsDialog(options);
                         _algorithm.SetOptions(options);
-                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value);
+
+                        CalculatingPath = true;
+                        new Task(() =>
+                        {
+                            Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value);
+                            CalculatingPath = false;
+                        }).Start();
                     },
                         () =>
                         {
-                            return EditorMode == Mode.Normal && Map != null && Vehicle != null && VehicleSize != null &&
-                                   InitialVehicleRotation != null && StartPoint != null && EndPoint != null &&
-                                   Orders == null;
+                            return !CalculatingPath && Map != null && Vehicle != null && VehicleSize != null &&
+                                   InitialVehicleRotation != null && StartPoint != null && EndPoint != null;
                         });
                 }
                 return _calculatePathCommand;
@@ -485,6 +491,12 @@ namespace SRL.Main.ViewModel
 
         private Mode _editorMode;
 
+
+        public bool CalculatingPath
+        {
+            get { return _calculatingPath; }
+            private set { Set(ref _calculatingPath, value); }
+        }
         protected override bool IsEditedModelValid
         {
             get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
@@ -492,6 +504,7 @@ namespace SRL.Main.ViewModel
 
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
+        private bool _calculatingPath;
 
 
         public SimulationViewModel()
@@ -713,7 +726,7 @@ namespace SRL.Main.ViewModel
             Frames = frames.Reverse().ToList();
         }
 
-        private void ShowOptionsDialog(List<AlgorithmOption> options)
+        private void ShowOptionsDialog(List<Option> options)
         {
             OptionsDialogView dialog = new OptionsDialogView(options);
 

@@ -356,7 +356,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModel\Base\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algorithm\Algorithm.csproj">
       <Project>{2F22392D-FE48-4407-8C62-0D8FB182CF52}</Project>

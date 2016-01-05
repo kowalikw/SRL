@@ -22,12 +22,12 @@ namespace SRL.Algorithm
             return GenerateRandomOrders(map, vehicle, start, end, vehicleRotation);
         }
 
-        public List<AlgorithmOption> GetOptions()
+        public List<Option> GetOptions()
         {
             throw new NotImplementedException();
         }
 
-        public void SetOptions(List<AlgorithmOption> options)
+        public void SetOptions(List<Option> options)
         {
             throw new NotImplementedException();
         }

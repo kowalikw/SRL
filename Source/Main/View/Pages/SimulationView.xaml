@@ -28,7 +28,7 @@
                               IconData="{StaticResource SaveIcon}" 
                               Command="{Binding SaveCommand}"
                               ToolTip="{Resx Key=SaveSimulationTooltip}"/>
-            
+
             <mui:ModernButton IconData="{StaticResource LoadMapIcon}" 
                               Command="{Binding LoadMapCommand}"
                               ToolTip="{Resx Key=LoadMapTooltip}"/>
@@ -46,11 +46,6 @@
                               Command="{Binding CalculatePathCommand}"
                               ToolTip="{Resx Key=CalculatePathTooltip}"/>
         </StackPanel>
-
-        <mga:VisualizationArea Grid.Row="0" Grid.Column="1" 
-                               Margin="10,0,0,10"
-                               SnapsToDevicePixels="True"
-                               Stretch="Uniform"/>
 
         <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                    LastChildFill="True">
@@ -78,5 +73,15 @@
                               ToolTip="{Resx Key=StopPlaybackTooltip}"/>
             <Slider Margin="10" VerticalAlignment="Center" Maximum="{Binding MaxFrameIdx}" Value="{Binding CurrentFrameIdx, Mode=TwoWay}"/>
         </DockPanel>
+
+        <mga:VisualizationArea Grid.Row="0" Grid.Column="1" 
+                               Margin="10,0,0,10"
+                               SnapsToDevicePixels="True"
+                               Stretch="Uniform"/>
+
+        <mui:ModernProgressRing Grid.Row="0" Grid.Column="1"
+                                Width="80" Height="80"
+                                IsActive="{Binding CalculatingPath}" Foreground="Black"/>
+        
     </Grid>
 </UserControl>

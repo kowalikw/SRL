@@ -9,18 +9,18 @@ namespace SRL.Main.Utilities
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            AlgorithmOption option = item as AlgorithmOption;
+            Option option = item as Option;
 
             if (option == null)
                 return null;
 
             switch (option.Type)
             {
-                case AlgorithmOption.ValueType.Integer:
+                case Option.ValueType.Integer:
                     return IntegerOptionTemplate;
-                case AlgorithmOption.ValueType.Double:
+                case Option.ValueType.Double:
                     return DoubleOptionTemplate;
-                case AlgorithmOption.ValueType.Boolean:
+                case Option.ValueType.Boolean:
                     return BooleanOptionTemplate;
                 default:
                     throw new ArgumentOutOfRangeException();

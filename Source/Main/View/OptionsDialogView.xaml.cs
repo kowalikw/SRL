@@ -15,13 +15,13 @@ namespace SRL.Main.View
 
 
 
-        public List<AlgorithmOption> Result => new List<AlgorithmOption>(_viewModel.Options);
+        public List<Option> Result => new List<Option>(_viewModel.Options);
 
         private OptionsDialogViewModel _viewModel;
 
 
 
-        public OptionsDialogView(List<AlgorithmOption> options)
+        public OptionsDialogView(List<Option> options)
         {
             InitializeComponent();
             _viewModel = new OptionsDialogViewModel(options);

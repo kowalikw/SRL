@@ -14,8 +14,8 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-        private List<AlgorithmOption> OptionTemplates;
-        private List<AlgorithmOption> CurrentOptions;
+        private List<Option> OptionTemplates;
+        private List<Option> CurrentOptions;
 
         struct IndexPoint // pomocnicza struktura do unifikacji indeksu wierzcholkow grafu i punktow na mapie
         {
@@ -34,7 +34,7 @@ namespace SRL.Algorithm
 
 
             // wczytanie opcji
-            foreach(AlgorithmOption option in CurrentOptions)
+            foreach(Option option in CurrentOptions)
             {
                 switch(option.Names[Language.English])
                 {
@@ -269,14 +269,14 @@ namespace SRL.Algorithm
         
         private void GenerateOptions()
         {
-            CurrentOptions = new List<AlgorithmOption>();
-            OptionTemplates = new List<AlgorithmOption>();
+            CurrentOptions = new List<Option>();
+            OptionTemplates = new List<Option>();
 
             // ANGLEDENSITY
-            AlgorithmOption angleDensity = new AlgorithmOption();
+            Option angleDensity = new Option();
             Dictionary<Language, string> angleDensityName = new Dictionary<Language, string>();
             Dictionary<Language, string> angleDensityToolTip = new Dictionary<Language, string>();
-            angleDensity.Type = AlgorithmOption.ValueType.Integer;
+            angleDensity.Type = Option.ValueType.Integer;
             angleDensity.Value = 360;
             angleDensity.MinValue = 3;
             angleDensity.MaxValue = null;
@@ -291,8 +291,8 @@ namespace SRL.Algorithm
             // MAXDIFF
             Dictionary<Language, string> maxDiffName = new Dictionary<Language, string>();
             Dictionary<Language, string> maxDiffToolTip = new Dictionary<Language, string>();
-            AlgorithmOption maxDiff = new AlgorithmOption();
-            maxDiff.Type = AlgorithmOption.ValueType.Double;
+            Option maxDiff = new Option();
+            maxDiff.Type = Option.ValueType.Double;
             maxDiff.Value = 0.01d;
             maxDiff.MinValue = 0d;
             maxDiff.MaxValue = 1d;
@@ -308,8 +308,8 @@ namespace SRL.Algorithm
             // TURNEDGEWEIGHT
             Dictionary<Language, string> turnEdgeWeightName = new Dictionary<Language, string>();
             Dictionary<Language, string> turnEdgeWeightToolTip = new Dictionary<Language, string>();
-            AlgorithmOption turnEdgeWeight = new AlgorithmOption();
-            turnEdgeWeight.Type = AlgorithmOption.ValueType.Integer;
+            Option turnEdgeWeight = new Option();
+            turnEdgeWeight.Type = Option.ValueType.Integer;
             turnEdgeWeight.MinValue = 0;
             turnEdgeWeight.MaxValue = 100;
             turnEdgeWeight.Value = 10;
@@ -324,8 +324,8 @@ namespace SRL.Algorithm
             // MOVEBACKWARDS
             Dictionary<Language, string> moveBackwardsName = new Dictionary<Language, string>();
             Dictionary<Language, string> moveBackwardsToolTip = new Dictionary<Language, string>();
-            AlgorithmOption moveBackwards = new AlgorithmOption();
-            moveBackwards.Type = AlgorithmOption.ValueType.Boolean;
+            Option moveBackwards = new Option();
+            moveBackwards.Type = Option.ValueType.Boolean;
             moveBackwards.MaxValue = null;
             moveBackwards.MinValue = null;
             moveBackwards.Value = false;
@@ -340,8 +340,8 @@ namespace SRL.Algorithm
             // ANYDIRECTION
             Dictionary<Language, string> anyDirectionName = new Dictionary<Language, string>();
             Dictionary<Language, string> anyDirectionToolTip = new Dictionary<Language, string>();
-            AlgorithmOption anyDirection = new AlgorithmOption();
-            anyDirection.Type = AlgorithmOption.ValueType.Boolean;
+            Option anyDirection = new Option();
+            anyDirection.Type = Option.ValueType.Boolean;
             anyDirection.MaxValue = null;
             anyDirection.MinValue = null;
             anyDirection.Value = false;
@@ -356,7 +356,7 @@ namespace SRL.Algorithm
             
             for (int i = 0; i < OptionTemplates.Count; i++)
             {
-                AlgorithmOption o = new AlgorithmOption();
+                Option o = new Option();
                 o.Type = OptionTemplates[i].Type;
                 o.MaxValue = OptionTemplates[i].MaxValue;
                 o.MinValue = OptionTemplates[i].MinValue;
@@ -538,12 +538,12 @@ namespace SRL.Algorithm
             return polys;
         }
 
-        public List<AlgorithmOption> GetOptions()
+        public List<Option> GetOptions()
         {
-            List<AlgorithmOption> options = new List<AlgorithmOption>();
+            List<Option> options = new List<Option>();
             for(int i=0;i<OptionTemplates.Count;i++)
             {
-                AlgorithmOption o = new AlgorithmOption();
+                Option o = new Option();
                 o.Type = OptionTemplates[i].Type;
                 o.MaxValue = OptionTemplates[i].MaxValue;
                 o.MinValue = OptionTemplates[i].MinValue;
@@ -555,7 +555,7 @@ namespace SRL.Algorithm
             return options;
         }
 
-        public void SetOptions(List<AlgorithmOption> options)
+        public void SetOptions(List<Option> options)
         {
             CurrentOptions = options;
         }

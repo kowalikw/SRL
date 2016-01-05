@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Language.cs" />
-    <Compile Include="Model\AlgorithmOption.cs" />
+    <Compile Include="Model\Option.cs" />
     <Compile Include="Model\Base\IAlgorithm.cs" />
     <Compile Include="Model\Base\SvgSerializable.cs" />
     <Compile Include="Model\Frame.cs" />
