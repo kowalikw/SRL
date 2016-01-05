@@ -79,6 +79,9 @@ namespace SRL.Main.ViewModel
                         ShapeDone = false;
                     }, vertex =>
                     {
+                        if (VehicleShape.Count > 0 && VehicleShape.GetLast() == vertex)
+                            return false;
+
                         if (VehicleShape.Count <= 2)
                             return true;
 
