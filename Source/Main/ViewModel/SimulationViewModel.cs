@@ -184,7 +184,7 @@ namespace SRL.Main.ViewModel
                         List<AlgorithmOption> options = _algorithm.GetOptions();
                         ShowOptionsDialog(options);
                         _algorithm.SetOptions(options);
-                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, InitialVehicleRotation.Value);
+                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value);
                     },
                         () =>
                         {

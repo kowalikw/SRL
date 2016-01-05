@@ -9,7 +9,7 @@ namespace SRL.Algorithm
 {
     public class MockAlgorithm : IAlgorithm
     {
-        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation)
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
