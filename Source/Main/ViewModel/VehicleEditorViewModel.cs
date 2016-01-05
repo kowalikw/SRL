@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
+using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel
 {

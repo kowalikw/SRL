@@ -1,18 +1,12 @@
-﻿using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using SRL.Commons;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
-using System.Xml.Linq;
-using SRL.Commons.Model;
 
-namespace SRL.Main.ViewModel
+namespace SRL.Main.ViewModel.Base
 {
-    public abstract class EditorViewModel<T> : ViewModelBase
+    public abstract class EditorViewModel<T> : ViewModel
         where T : SvgSerializable
     {
         protected const string DialogFilter = "Scalable Vector Graphics (*.svg)|*.svg";

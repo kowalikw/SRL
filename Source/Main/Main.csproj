@@ -115,7 +115,8 @@
     <Compile Include="Utilities\Normalization.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\OptionControlTemplateSelector.cs" />
-    <Compile Include="ViewModel\EditorViewModel.cs" />
+    <Compile Include="ViewModel\Base\EditorViewModel.cs" />
+    <Compile Include="ViewModel\Base\ViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
     <Compile Include="ViewModel\OptionsDialogViewModel.cs" />
@@ -356,9 +357,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\Base\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Algorithm\Algorithm.csproj">
       <Project>{2F22392D-FE48-4407-8C62-0D8FB182CF52}</Project>

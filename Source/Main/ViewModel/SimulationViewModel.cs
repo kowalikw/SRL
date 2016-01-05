@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
-using FirstFloor.ModernUI.Windows.Controls;
 using GalaSoft.MvvmLight.CommandWpf;
-using SRL.Algorithm;
-using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
 using SRL.Main.View;
+using SRL.Main.ViewModel.Base;
 using Frame = SRL.Commons.Model.Frame;
 
 namespace SRL.Main.ViewModel
@@ -37,6 +34,9 @@ namespace SRL.Main.ViewModel
                         EditorMode = mode;
                     }, mode =>
                     {
+                        if (CalculatingPath)
+                            return false;
+
                         switch (mode)
                         {
                             case Mode.StartPointSetup:
@@ -64,7 +64,7 @@ namespace SRL.Main.ViewModel
                         Map = null;
                         Vehicle = null;
                         Orders = null;
-                    });
+                    }, () => !CalculatingPath);
                 }
                 return _resetCommand;
             }
@@ -79,7 +79,7 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
                         Map = LoadModelViaDialog<Map>();
-                    });
+                    }, () => !CalculatingPath);
                 }
                 return _loadMapCommand;
             }
@@ -94,7 +94,7 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
                         Vehicle = LoadModelViaDialog<Vehicle>();
-                    });
+                    }, () => !CalculatingPath);
                 }
                 return _loadVehicleCommand;
             }
@@ -112,7 +112,7 @@ namespace SRL.Main.ViewModel
                         EnterModeCommand.Execute(Mode.VehicleSetup);
                     }, point =>
                     {
-                        if (EditorMode != Mode.StartPointSetup || Map == null)
+                        if (EditorMode != Mode.StartPointSetup || CalculatingPath || Map == null)
                             return false;
 
                         return !IsInsideObstacle(point);
@@ -133,7 +133,7 @@ namespace SRL.Main.ViewModel
                         EndPoint = point;
                     }, point =>
                     {
-                        if (EditorMode != Mode.EndPointSetup || Map == null)
+                        if (EditorMode != Mode.EndPointSetup || CalculatingPath || Map == null)
                             return false;
 
                         return !IsInsideObstacle(point);
@@ -157,6 +157,7 @@ namespace SRL.Main.ViewModel
                     }, setup =>
                     {
                         if (EditorMode != Mode.VehicleSetup ||
+                            CalculatingPath ||
                             Map == null ||
                             Vehicle == null ||
                             StartPoint == null)
@@ -228,7 +229,7 @@ namespace SRL.Main.ViewModel
                     {
                         if (CurrentFrameIdx == MaxFrameIdx)
                             CurrentFrameIdx = 0;
-                        EditorMode = Mode.SimulationRunning;
+                        SimulationRunning = true;
                     }, () => { return EditorMode == Mode.Normal && Orders != null; });
                 }
                 return _startPlaybackCommand;
@@ -246,7 +247,7 @@ namespace SRL.Main.ViewModel
                         CurrentFrameIdx = 0;
                     }, () =>
                     {
-                        return CurrentFrameIdx != 0 || EditorMode == Mode.SimulationRunning;
+                        return CurrentFrameIdx != 0 || SimulationRunning;
                     });
                 }
                 return _stopPlaybackCommand;
@@ -261,7 +262,7 @@ namespace SRL.Main.ViewModel
                     _pausePlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                    }, () => { return EditorMode == Mode.SimulationRunning; });
+                    }, () => { return SimulationRunning; });
                 }
                 return _pausePlaybackCommand;
             }
@@ -471,7 +472,6 @@ namespace SRL.Main.ViewModel
                 {
                     _editorMode = value;
 
-                    _simulationTimer.Stop();
                     switch (value)
                     {
                         case Mode.StartPointSetup:
@@ -479,9 +479,6 @@ namespace SRL.Main.ViewModel
                             break;
                         case Mode.EndPointSetup:
                             EndPoint = null;
-                            break;
-                        case Mode.SimulationRunning:
-                            _simulationTimer.Start();
                             break;
                     }
                     RaisePropertyChanged();
@@ -491,11 +488,27 @@ namespace SRL.Main.ViewModel
 
         private Mode _editorMode;
 
+        public bool SimulationRunning
+        {
+            get { return _simulationRunning; }
+            set
+            {
+                Set(ref _simulationRunning, value);
 
+                if (value)
+                    _simulationTimer.Start();
+                else
+                    _simulationTimer.Stop();
+            }
+        }
         public bool CalculatingPath
         {
             get { return _calculatingPath; }
-            private set { Set(ref _calculatingPath, value); }
+            private set
+            {
+                Set(ref _calculatingPath, value);
+                RaiseRequerySuggested();
+            }
         }
         protected override bool IsEditedModelValid
         {
@@ -504,7 +517,9 @@ namespace SRL.Main.ViewModel
 
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
+
         private bool _calculatingPath;
+        private bool _simulationRunning;
 
 
         public SimulationViewModel()
@@ -743,7 +758,6 @@ namespace SRL.Main.ViewModel
             StartPointSetup,
             EndPointSetup,
             VehicleSetup,
-            SimulationRunning,
         }
     }
 }

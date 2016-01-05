@@ -57,7 +57,7 @@
                         <Setter Property="Command" Value="{Binding StartPlaybackCommand}"/>
                         <Setter Property="ToolTip" Value="{Resx Key=StartPlaybackTooltip}"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding EditorMode}" Value="{x:Static sim:SimulationViewModel+Mode.SimulationRunning}">
+                            <DataTrigger Binding="{Binding SimulationRunning}" Value="true">
                                 <Setter Property="IconData" Value="{StaticResource PlaybackPauseIcon}"/>
                                 <Setter Property="Command" Value="{Binding PausePlaybackCommand}"/>
                                 <Setter Property="ToolTip" Value="{Resx Key=PausePlaybackTooltip}"/>

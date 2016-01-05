@@ -19,7 +19,7 @@ using SRL.Main.View.Pages;
 
 namespace SRL.Main.ViewModel
 {
-    public class TracingViewModel : ViewModelBase
+    public class TracingViewModel : Base.ViewModel
     {
         public RelayCommand LoadBitmapCommand
         {
@@ -240,7 +240,7 @@ namespace SRL.Main.ViewModel
                 {
                     _ongoingTracing = value;
                     RaisePropertyChanged();
-                    Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
+                    RaiseRequerySuggested();
                 }
             }
         }
