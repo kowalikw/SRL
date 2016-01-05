@@ -17,7 +17,7 @@ namespace SRL.Algorithm
         private List<AlgorithmOption> OptionTemplates;
         private List<AlgorithmOption> CurrentOptions;
 
-        struct IPoint
+        struct IndexPoint // pomocnicza struktura do unifikacji indeksu wierzcholkow grafu i punktow na mapie
         {
             public Point point;
             public int index;
@@ -25,10 +25,15 @@ namespace SRL.Algorithm
         }
         List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
         {
+            // wartości domyślne do zmiany w opcjach
             int turnEdgeWeight = 10;
             double maxDiff = 0.01;
             int angleDensity = 360;
+            bool backwards = true;
+            bool allDirections = true;
 
+
+            // wczytanie opcji
             foreach(AlgorithmOption option in CurrentOptions)
             {
                 switch(option.Names[Language.English])
@@ -42,55 +47,66 @@ namespace SRL.Algorithm
                     case "Graph edge weight for turns":
                         turnEdgeWeight = (int)option.Value;
                         break;
+                    case "Allow reverse":
+                        backwards = (bool)option.Value;
+                        break;
+                    case "Allow vehicle to move in any direction":
+                        allDirections = (bool)option.Value;
+                        break;
                 }
             }
 
-            List<Point> lst = new List<Point>();
+
+            // zmiana rozmiaru pojazdu na faktyczny
+            List <Point> lst = new List<Point>();
             for (int i = 0; i < InputVehicle.Shape.Vertices.Count; i++)
             {
                 lst.Add(new Point(InputVehicle.Shape.Vertices[i].X * vehicleSize, InputVehicle.Shape.Vertices[i].Y * vehicleSize));
             }
             Vehicle vehicle = new Vehicle();
             vehicle.Shape = new Polygon(lst);
+
+            // kopia mapy i ewentualne dodanie granic mapy (wielkość przeszkód może być do zmiany, ale dla tych jest ok)
             Map map = new Map();
             double singleAngle = 2 * Math.PI / angleDensity;
-            List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, -2), new Point(-1, -2) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(1, -1), new Point(2, -1), new Point(2, 1) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1), new Point(-1, 1), new Point(-1, 2), new Point(1, 2) }));
-            List<IPoint>[] IndexPointAngleList = new List<IPoint>[angleDensity];
-            IGraph graph;
-            List<Point> triangleTemplate = new List<Point>();
+            List<List<IndexPoint>>[] iPointObstacles = new List<List<IndexPoint>>[angleDensity];
+            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -2), new Point(-1, 2), new Point(-2, 2), new Point(-2, -2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-2, -1), new Point(2, -1), new Point(2, -2), new Point(-2, -2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 2), new Point(1, -2), new Point(2, -2), new Point(2, 2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(2, 1), new Point(-2, 1), new Point(-2, 2), new Point(2, 2) }));
+            */List<IndexPoint>[] IndexPointAngleList = new List<IndexPoint>[angleDensity];
             for (int i = 0; i < InputMap.Obstacles.Count; i++)
                 map.Obstacles.Add(InputMap.Obstacles[i]);
+
+            // Obliczenie sum minkowskiego
             List<Polygon>[] currentMap = MinkowskiSum(map, vehicle, angleDensity);
-            int index = 0;
+
+            // Stworzenie trójkąta do badania współliniowości
+            List<Point> triangleTemplate = new List<Point>();
             triangleTemplate.Add(new Point(0, 0));
             triangleTemplate.Add(new Point(4, 4 * Math.Tan(singleAngle / 2)));
             triangleTemplate.Add(new Point(4, -4 * Math.Tan(singleAngle / 2)));
             Polygon triangle = new Polygon(triangleTemplate);
+
+            // Odnalezienie indeksu kąta dla początkowego położenia
+            int startingIndex = (int)(((vehicleRotation + 2 * Math.PI)% ( 2 * Math.PI))/ singleAngle);
+            
+
+            // Przypisanie indeksu każdemu wierzchołkowi z sumy minkowskiego
+            int index = 0;
             for (int i = 0; i < angleDensity; i++)
             {
-                IndexPointAngleList[i] = new List<IPoint>();
+                if (i == startingIndex)
+                    startingIndex = index; // Zapisanie indeksu punktu startowego
+                IndexPointAngleList[i] = new List<IndexPoint>();
                 int vertices = 2;
                 for (int j = 0; j < currentMap[i].Count; j++)
                     vertices += currentMap[i][j].Vertices.Count;
-                IPoint ip = new IPoint();
+                IndexPoint ip = new IndexPoint();
                 ip.index = index++;
                 ip.point = start;
                 ip.obstacle = -1;
                 IndexPointAngleList[i].Add(ip);
-                /*for (int k=0;k<currentMap[i].Count;k++)
-                {
-                    foreach (Point p in currentMap[i][k].Vertices)
-                    {
-                        ip.point = p;
-                        ip.index = index++;
-                        ip.obstacle = k;
-                        IndexPointAngleList[i].Add(ip);
-                    }
-                }*/
                 int k = 0;
                 foreach (Polygon poly in currentMap[i])
                 {
@@ -108,33 +124,34 @@ namespace SRL.Algorithm
                 ip.obstacle = -1;
                 IndexPointAngleList[i].Add(ip);
             }
-            graph = new AdjacencyListsGraph<HashTableAdjacencyList>(true, index + 1);
+
+            // Stworzenie grafu o ilości wierzchołków równej sumie wszystkich dotychczasowych + 1 (połączenie wszystkich końców z wierzchołkiem akceptującym)
+            IGraph graph = new AdjacencyListsGraph<HashTableAdjacencyList>(true, index + 1);
+
+            // Tworzenie grafów warstwowych (wszystko od razu na jednym grafie)
             for (int angle = 0; angle < angleDensity; angle++)
             {
                 for (int i = 0; i < IndexPointAngleList[angle].Count; i++)
                 {
                     for (int j = 0; j < IndexPointAngleList[angle].Count; j++)
                     {
-                        if (i == j) continue;
+                        if (i == j) continue; // Nie akceptujemy krawędzi w miejscu bez obrotu
                         bool addEdge = true;
-                        if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle]))
+                        if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle])) // Przecięcia z przeszkodami
                         {
-                            /*if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0)
+                            if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0) // Jeśli punkty należą do tej samej przeszkody i nie przecinają krawędzi to sprawdzam, czy ta krawędź nie przechodzi przez środek tej przeszkody
                             {
-                                if (GeometryHelper.IsInsidePolygon(new Point((IndexPointAngleList[angle][i].point.X + IndexPointAngleList[angle][j].point.X) / 2, (IndexPointAngleList[angle][i].point.Y + IndexPointAngleList[angle][j].point.Y) / 2), currentMap[angle][IndexPointAngleList[angle][i].obstacle]))
-                                    addEdge = false;
-                            }*/
-                            if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0)
-                            {
-                                for (int obstacle = 0; obstacle < currentMap[angle].Count; obstacle++)
+                                for (int obstacle = 0; obstacle < currentMap[angle].Count; obstacle++) // Szukam przeszkody zawierającej te punkty
                                     if (currentMap[angle][obstacle].Vertices.Contains(IndexPointAngleList[angle][i].point))
                                     {
-                                        for (int k = 0; k < currentMap[angle][obstacle].Vertices.Count; k++)
+                                        for (int k = 0; k < currentMap[angle][obstacle].Vertices.Count; k++) // Szukam indeksu wierzchołka w danej przeszkodzie
                                         {
                                             if (currentMap[angle][obstacle].Vertices[k] == IndexPointAngleList[angle][i].point)
+                                                // Sprawdzam, czy dane wierzchołki są kolejnymi (czy pojazd poruszać się będzie wzdłuż krawędzi)
                                                 if (currentMap[angle][obstacle].Vertices[(k + 1) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point || currentMap[angle][obstacle].Vertices[(k - 1 + currentMap[angle][obstacle].Vertices.Count) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point)
-                                                    break;
+                                                    break; // Jeśli tak, to nie sprawdzam waruknu, czy środek odcinka jest wewnątrz przeszkody
                                         }
+                                        // Jeśli nie sąsiadują ze sobą, sprawdzam, czy nie przechodzi przez przeszkodę
                                         if (GeometryHelper.IsInsidePolygon(new Point((IndexPointAngleList[angle][i].point.X + IndexPointAngleList[angle][j].point.X) / 2, (IndexPointAngleList[angle][i].point.Y + IndexPointAngleList[angle][j].point.Y) / 2), currentMap[angle][obstacle]))
                                         {
                                             addEdge = false;
@@ -144,13 +161,28 @@ namespace SRL.Algorithm
                             }
                             if (addEdge)
                             {
-                                if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
+                                // Warunek z opcji. Jeśli pozwalamy na wszystkie kierunki, nie wchodzimy w tego ifa
+                                if (!allDirections)
+                                {
+                                    // Jeśli punkt znajduje się wewnątrz trójkąta obróconego o dany kąt przypiętego w pierwszym punkcie to można połączyć
+                                    if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
+                                    {
+                                        graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
+                                        // Jeśli pozwalamy na jazdę na wstecznym, możemy dać krawędź powrotną
+                                        if (backwards)
+                                            graph.AddEdge(new Edge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
+                                    }
+                                }
+                                // Jeśli poruszamy się w dowolnym kierunku, dodajemy wszystkie krawędzie spełniające poprzednie warunki, pomijając współliniowość
+                                else
                                     graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
                             }
                         }
                     }
                 }
             }
+
+            // Dodajemy krawędzie obrotu
             for (int angle = 0; angle < angleDensity; angle++)
             {
                 for (int i = 0; i < IndexPointAngleList[angle].Count; i++)
@@ -165,16 +197,22 @@ namespace SRL.Algorithm
                     }
                 }
             }
+
+            // Dodajemy krawędzie do punktu akceptującego
             for (int i = 0; i < IndexPointAngleList.Length; i++)
             {
                 if (IndexPointAngleList[i][IndexPointAngleList[i].Count - 1].obstacle == -1 && IndexPointAngleList[i][IndexPointAngleList[i].Count - 1].point == end)
                     graph.AddEdge(IndexPointAngleList[i][IndexPointAngleList[i].Count - 1].index, index, 0);
             }
 
+            // Puszczenie grafowego AStara
             Edge[] path;
-            AStarGraphExtender.AStar(graph, 0, graph.VerticesCount - 1, out path);
+            AStarGraphExtender.AStar(graph, startingIndex, graph.VerticesCount - 1, out path);
             if (path == null)
                 return null;
+
+            // Przepisanie wyników wyszukiwania.
+            // TODO: poprawki związane z kątami
             List<Order> orders = new List<Order>();
             orders.Add(new Order() { Destination = start, Rotation = vehicleRotation });
             for (int i = 0; i < path.Length - 1; i++)
@@ -202,6 +240,8 @@ namespace SRL.Algorithm
 
                 orders.Add(o);
             }
+
+            // Weryfikacja poprzedniej listy i usunięcie powtarzających się punktów
             List<Order> os = new List<Order>();
             os.Add(orders[0]);
             orders.RemoveAt(0);
@@ -231,13 +271,14 @@ namespace SRL.Algorithm
         {
             CurrentOptions = new List<AlgorithmOption>();
             OptionTemplates = new List<AlgorithmOption>();
+
             // ANGLEDENSITY
             AlgorithmOption angleDensity = new AlgorithmOption();
             Dictionary<Language, string> angleDensityName = new Dictionary<Language, string>();
             Dictionary<Language, string> angleDensityToolTip = new Dictionary<Language, string>();
             angleDensity.Type = AlgorithmOption.ValueType.Integer;
             angleDensity.Value = 360;
-            angleDensity.MinValue = 1;
+            angleDensity.MinValue = 3;
             angleDensity.MaxValue = null;
             angleDensityName.Add(Language.English, "Angle density");
             angleDensityName.Add(Language.Polish, "Gęstość kątów");
