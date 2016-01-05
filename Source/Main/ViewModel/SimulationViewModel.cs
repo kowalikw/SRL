@@ -76,34 +76,8 @@ namespace SRL.Main.ViewModel
                 {
                     _loadMapCommand = new RelayCommand(() =>
                     {
-                        //EditorMode = Mode.Normal;
-                        //Map = LoadModelViaDialog<Map>();
-
-                        //TODO temporary!!
-                        var aopt1 = new AlgorithmOption();
-                        aopt1.Names = new Dictionary<Language, string>() { {Language.English, "English bool"}, {Language.Polish, "Polski bool"} };
-                        aopt1.Tooltips = new Dictionary<Language, string>() { { Language.English, "English tt" }, { Language.Polish, "Polski tt" } };
-                        aopt1.Type = AlgorithmOption.ValueType.Boolean;
-                        aopt1.Value = true;
-
-                        var aopt2 = new AlgorithmOption();
-                        aopt2.Names = new Dictionary<Language, string>() { { Language.English, "English angle" }, { Language.Polish, "Polski kat" } };
-                        aopt2.Tooltips = new Dictionary<Language, string>() { { Language.English, "English tt" }, { Language.Polish, "Polski tt" } };
-                        aopt2.Type = AlgorithmOption.ValueType.Double;
-                        aopt2.MinValue = 0d;
-                        aopt2.MaxValue = 360d;
-                        aopt2.Value = 180d;
-
-                        var aopt3 = new AlgorithmOption();
-                        aopt3.Names = new Dictionary<Language, string>() { { Language.English, "English int" }, { Language.Polish, "Polski int" } };
-                        aopt3.Tooltips = new Dictionary<Language, string>() { { Language.English, "English tt" }, { Language.Polish, "Polski tt" } };
-                        aopt3.Type = AlgorithmOption.ValueType.Integer;
-                        aopt3.Value = 1337;
-
-                        ShowOptionsDialog(new List<AlgorithmOption>()
-                        {
-                            aopt1, aopt2, aopt3
-                        });
+                        EditorMode = Mode.Normal;
+                        Map = LoadModelViaDialog<Map>();
                     });
                 }
                 return _loadMapCommand;
@@ -207,8 +181,10 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
 
-                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
-                            InitialVehicleRotation.Value); // TODO angle density as parameter
+                        List<AlgorithmOption> options = _algorithm.GetOptions();
+                        ShowOptionsDialog(options);
+                        _algorithm.SetOptions(options);
+                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, InitialVehicleRotation.Value);
                     },
                         () =>
                         {
@@ -522,7 +498,7 @@ namespace SRL.Main.ViewModel
         {
             EditorMode = Mode.Normal;
 
-            _algorithm = new MockAlgorithm(); //TODO change to an actual implementation
+            _algorithm = new Algorithm.Algorithm(); //TODO change to an actual implementation
 
             _simulationTimer = new DispatcherTimer();
             _simulationTimer.Interval = new TimeSpan(0, 0, 0, 0, FrameChangeInterval);
@@ -739,11 +715,13 @@ namespace SRL.Main.ViewModel
 
         private void ShowOptionsDialog(List<AlgorithmOption> options)
         {
-            OptionsDialogView dialogView = new OptionsDialogView(options);
+            OptionsDialogView dialog = new OptionsDialogView(options);
 
-            dialogView.ShowDialog();
-
-
+            if (dialog.ShowDialog() == true)
+            {
+                options.Clear();
+                options.AddRange(dialog.Result);
+            }
         }
 
         public enum Mode

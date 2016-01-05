@@ -4,11 +4,8 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-                  xmlns:viewModel="clr-namespace:SRL.Main.ViewModel"
-                  xmlns:model="clr-namespace:SRL.Commons.Model;assembly=SRL.Commons"
                   xmlns:util="clr-namespace:SRL.Main.Utilities"
                   xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
-                  xmlns:properties="clr-namespace:SRL.Main.Properties"
                   xmlns:settings="clr-namespace:SRL.Main"
                   mc:Ignorable="d" 
                   d:DesignWidth="400" d:DesignHeight="300"
@@ -95,7 +92,5 @@
     <ScrollViewer Margin="10" Grid.IsSharedSizeScope="True">
         <ItemsControl ItemsSource="{Binding Options}" ItemTemplateSelector="{StaticResource OptionControlTemplateSelector}"/>
     </ScrollViewer>
-
-    
 
 </mui:ModernDialog>
