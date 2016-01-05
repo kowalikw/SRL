@@ -5,8 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:util="clr-namespace:SRL.Main.Utilities"
-             xmlns:lang="clr-namespace:SRL.Main.View.Localization"
              xmlns:commons="clr-namespace:SRL.Commons;assembly=SRL.Commons"
              xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
              mc:Ignorable="d" 

@@ -58,7 +58,7 @@ namespace SRL.Commons.Model
                             return $"The maximum value is {MaxValue}."; //TODO localization
                     }
                 }
-                return string.Empty;
+                return null;
             }
         }
 
@@ -66,12 +66,13 @@ namespace SRL.Commons.Model
         {
             get
             {
-                if (this[nameof(Value)] != String.Empty)
+                if (this[nameof(Value)] != null)
                     return "Invalid value."; //TODO localization
 
-                return string.Empty;
+                return null;
             }
         }
-        
+
+        public bool IsValid => Error == null;
     }
 }

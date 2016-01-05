@@ -5,19 +5,97 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
                   xmlns:viewModel="clr-namespace:SRL.Main.ViewModel"
+                  xmlns:model="clr-namespace:SRL.Commons.Model;assembly=SRL.Commons"
+                  xmlns:util="clr-namespace:SRL.Main.Utilities"
+                  xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
+                  xmlns:properties="clr-namespace:SRL.Main.Properties"
+                  xmlns:settings="clr-namespace:SRL.Main"
                   mc:Ignorable="d" 
                   d:DesignWidth="400" d:DesignHeight="300"
                   Title="Options">
+    
     <!-- TODO Window title Resx localization -->
 
-    <ScrollViewer Margin="10">
-        <Grid Name="Grid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
+    <mui:ModernDialog.Resources>
+        <converters:DictionaryValueConverter x:Key="DictionaryValueConverter"/>
+        <converters:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+        <converters:IntToStringConverter x:Key="IntToStringConverter"/>
+
+        <TextBlock x:Key="OptionLabel" x:Shared="False" Margin="0,0,20,0">
+            <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource DictionaryValueConverter}">
+                    <Binding Path="Names"/>
+                    <Binding Source="{x:Static settings:Settings.Default}" Path="Language"/>
+                </MultiBinding>
+            </TextBlock.Text>
+            <TextBlock.ToolTip>
+                <MultiBinding Converter="{StaticResource DictionaryValueConverter}">
+                    <Binding Path="Tooltips"/>
+                    <Binding Source="{x:Static settings:Settings.Default}" Path="Language"/>
+                </MultiBinding>
+            </TextBlock.ToolTip>
+        </TextBlock>
+
+        <Style x:Key="OptionContainerStyle" TargetType="Grid">
+            <Setter Property="Height" Value="30"/>
+        </Style>
+
+        <DataTemplate x:Key="BooleanOptionTemplate">
+            <Grid Style="{StaticResource OptionContainerStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Column1"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <ContentPresenter Content="{StaticResource OptionLabel}"/>
+                <CheckBox Grid.Column="1" 
+                          VerticalAlignment="Top"
+                          Validation.Error="OnError"
+                          IsChecked="{Binding Value, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DoubleOptionControl">
+            <Grid Style="{StaticResource OptionContainerStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Column1"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                
+                <ContentPresenter Content="{StaticResource OptionLabel}"/>
+                <TextBox Grid.Column="1"
+                         VerticalAlignment="Top"
+                         Validation.Error="OnError"
+                         Text="{Binding Value, Converter={StaticResource DoubleToStringConverter}, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="IntegerOptionControl">
+            <Grid Style="{StaticResource OptionContainerStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Column1"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <ContentPresenter Content="{StaticResource OptionLabel}"/>
+                <TextBox Grid.Column="1" 
+                         VerticalAlignment="Top"
+                         Validation.Error="OnError"
+                         Text="{Binding Value, Converter={StaticResource IntToStringConverter}, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+            </Grid>
+        </DataTemplate>
+
+        <util:OptionControlTemplateSelector x:Key="OptionControlTemplateSelector"
+                                            BooleanOptionTemplate="{StaticResource BooleanOptionTemplate}"
+                                            IntegerOptionTemplate="{StaticResource IntegerOptionControl}"
+                                            DoubleOptionTemplate="{StaticResource DoubleOptionControl}"/>
+    </mui:ModernDialog.Resources>
+
+    <ScrollViewer Margin="10" Grid.IsSharedSizeScope="True">
+        <ItemsControl ItemsSource="{Binding Options}" ItemTemplateSelector="{StaticResource OptionControlTemplateSelector}"/>
     </ScrollViewer>
 
+    
 
 </mui:ModernDialog>
