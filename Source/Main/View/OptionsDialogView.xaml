@@ -1,0 +1,23 @@
+﻿<mui:ModernDialog x:Class="SRL.Main.View.OptionsDialogView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                  xmlns:viewModel="clr-namespace:SRL.Main.ViewModel"
+                  mc:Ignorable="d" 
+                  d:DesignWidth="400" d:DesignHeight="300"
+                  Title="Options">
+    <!-- TODO Window title Resx localization -->
+
+    <ScrollViewer Margin="10">
+        <Grid Name="Grid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </ScrollViewer>
+
+
+</mui:ModernDialog>

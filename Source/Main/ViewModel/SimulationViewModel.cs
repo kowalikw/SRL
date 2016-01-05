@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
+using FirstFloor.ModernUI.Windows.Controls;
 using GalaSoft.MvvmLight.CommandWpf;
 using SRL.Algorithm;
+using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
+using SRL.Main.View;
+using Frame = SRL.Commons.Model.Frame;
 
 namespace SRL.Main.ViewModel
 {
@@ -71,8 +76,34 @@ namespace SRL.Main.ViewModel
                 {
                     _loadMapCommand = new RelayCommand(() =>
                     {
-                        EditorMode = Mode.Normal;
-                        Map = LoadModelViaDialog<Map>();
+                        //EditorMode = Mode.Normal;
+                        //Map = LoadModelViaDialog<Map>();
+
+                        //TODO temporary!!
+                        var aopt1 = new AlgorithmOption();
+                        aopt1.Names = new Dictionary<Language, string>() { {Language.English, "English bool"}, {Language.Polish, "Polski bool"} };
+                        aopt1.Tooltips = new Dictionary<Language, string>() { { Language.English, "English tt" }, { Language.Polish, "Polski tt" } };
+                        aopt1.Type = AlgorithmOption.ValueType.Boolean;
+                        aopt1.Value = true;
+
+                        var aopt2 = new AlgorithmOption();
+                        aopt2.Names = new Dictionary<Language, string>() { { Language.English, "English angle" }, { Language.Polish, "Polski kat" } };
+                        aopt2.Tooltips = new Dictionary<Language, string>() { { Language.English, "English tt" }, { Language.Polish, "Polski tt" } };
+                        aopt2.Type = AlgorithmOption.ValueType.Double;
+                        aopt2.MinValue = 0d;
+                        aopt2.MaxValue = 360d;
+                        aopt2.Value = 180d;
+
+                        var aopt3 = new AlgorithmOption();
+                        aopt3.Names = new Dictionary<Language, string>() { { Language.English, "English int" }, { Language.Polish, "Polski int" } };
+                        aopt3.Tooltips = new Dictionary<Language, string>() { { Language.English, "English tt" }, { Language.Polish, "Polski tt" } };
+                        aopt3.Type = AlgorithmOption.ValueType.Integer;
+                        aopt3.Value = 1337;
+
+                        ShowOptionsDialog(new List<AlgorithmOption>()
+                        {
+                            aopt1, aopt2, aopt3
+                        });
                     });
                 }
                 return _loadMapCommand;
@@ -704,6 +735,15 @@ namespace SRL.Main.ViewModel
 
             }
             Frames = frames.Reverse().ToList();
+        }
+
+        private void ShowOptionsDialog(List<AlgorithmOption> options)
+        {
+            OptionsDialogView dialogView = new OptionsDialogView(options);
+
+            dialogView.ShowDialog();
+
+
         }
 
         public enum Mode
