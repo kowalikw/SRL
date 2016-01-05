@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -59,10 +60,25 @@ namespace SRL.Commons.Model.Base
 
         public static bool CanDeserialize<R>(string filename)
         {
+            bool canDeserialize = true;
+
+            XmlSchemaSet schemaSet = new XmlSchemaSet();
+            if(typeof(R) == typeof(Map))
+                schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.MapSchema)));
+            else if(typeof(R) == typeof(Vehicle))
+                schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.VehicleSchema)));
+            else if(typeof(R) == typeof(Simulation))
+            {
+                schemaSet.Add("http://www.w3.org/1999/xlink", XmlReader.Create(new StringReader(Resources.SimulationSchemaXlink)));
+                schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.SimulationSchema)));
+            }
+
+            XDocument.Load(filename).Validate(schemaSet, (o, e) => { canDeserialize = false; });
+
             var serializer = new XmlSerializer(typeof(R));
 
             using (var reader = XmlReader.Create(filename))
-                return serializer.CanDeserialize(reader);
+                return canDeserialize && serializer.CanDeserialize(reader);
         }
 
         public static R Deserialize<R>(string filename)
