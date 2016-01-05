@@ -9,7 +9,7 @@ namespace SRL.Algorithm
 {
     public class MockAlgorithm : IAlgorithm
     {
-        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation, int angleDensity)
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
@@ -21,6 +21,17 @@ namespace SRL.Algorithm
 
             return GenerateRandomOrders(map, vehicle, start, end, vehicleRotation);
         }
+
+        public List<AlgorithmOption> GetOptions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetOptions(List<AlgorithmOption> options)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public List<Order> GenerateRandomOrders(Map map, Vehicle vehicleTemplate, Point start, Point end, double vehicleRotation)
         {

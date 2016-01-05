@@ -177,7 +177,7 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
 
                         Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
-                            InitialVehicleRotation.Value, 360); // TODO angle density as parameter
+                            InitialVehicleRotation.Value); // TODO angle density as parameter
                     },
                         () =>
                         {

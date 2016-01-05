@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SRL.Commons.Utilities;
 using SRL.Commons.Model;
 using System.Windows;
+using SRL.Commons;
+using SRL.Commons.Model.Base;
+using System.Linq;
 using ASD.Graph;
 using ClipperLib;
-using SRL.Commons.Model.Base;
 
 namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
+        private List<AlgorithmOption> OptionTemplates;
+        private List<AlgorithmOption> CurrentOptions;
 
         struct IPoint
         {
@@ -21,8 +23,28 @@ namespace SRL.Algorithm
             public int index;
             public int obstacle;
         }
-        public List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation, int angleDensity)
+        List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
         {
+            int turnEdgeWeight = 10;
+            double maxDiff = 0.01;
+            int angleDensity = 360;
+
+            foreach(AlgorithmOption option in CurrentOptions)
+            {
+                switch(option.Names[Language.English])
+                {
+                    case "Angle density":
+                        angleDensity = (int)option.Value;
+                        break;
+                    case "Point size":
+                        maxDiff = (double)option.Value;
+                        break;
+                    case "Graph edge weight for turns":
+                        turnEdgeWeight = (int)option.Value;
+                        break;
+                }
+            }
+
             List<Point> lst = new List<Point>();
             for (int i = 0; i < InputVehicle.Shape.Vertices.Count; i++)
             {
@@ -31,7 +53,6 @@ namespace SRL.Algorithm
             Vehicle vehicle = new Vehicle();
             vehicle.Shape = new Polygon(lst);
             Map map = new Map();
-            double maxDiff = 0.01;
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<IPoint>>[] iPointObstacles = new List<List<IPoint>>[angleDensity];
             map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1), new Point(-1, 1), new Point(-2, 1), new Point(-2, -1) }));
@@ -138,8 +159,8 @@ namespace SRL.Algorithm
                     {
                         if (GeometryHelper.GetDistance(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) <= maxDiff)
                         {
-                            graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[(angle + 1) % angleDensity][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 50);
-                            graph.AddEdge(IndexPointAngleList[(angle + 1) % angleDensity][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + 50);
+                            graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[(angle + 1) % angleDensity][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + turnEdgeWeight);
+                            graph.AddEdge(IndexPointAngleList[(angle + 1) % angleDensity][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[(angle + 1) % angleDensity][j].point) + turnEdgeWeight);
                         }
                     }
                 }
@@ -155,7 +176,7 @@ namespace SRL.Algorithm
             if (path == null)
                 return null;
             List<Order> orders = new List<Order>();
-            orders.Add(new Order() { Destination = start, Rotation = vehicleRotation});
+            orders.Add(new Order() { Destination = start, Rotation = vehicleRotation });
             for (int i = 0; i < path.Length - 1; i++)
             {
                 int angle = 0;
@@ -168,7 +189,7 @@ namespace SRL.Algorithm
                 o.Destination = IndexPointAngleList[angle][ind].point;
                 o.Rotation = angle * singleAngle;
 
-                if(o.Rotation == (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
+                if (o.Rotation == (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
                 {
                     o.Rotation = (orders[orders.Count - 1].Rotation);
                     orders.Add(o);
@@ -177,8 +198,8 @@ namespace SRL.Algorithm
 
                 if ((o.Rotation < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) || (o.Rotation > Math.Abs(orders[orders.Count - 1].Rotation + (2 * Math.PI)) % (2 * Math.PI) && orders[orders.Count - 1].Rotation == 0)))
                     o.Rotation -= (2 * Math.PI);
-                
-                
+
+
                 orders.Add(o);
             }
             List<Order> os = new List<Order>();
@@ -199,6 +220,112 @@ namespace SRL.Algorithm
             return os;
         }
 
+
+        public Algorithm()
+        {
+            GenerateOptions();
+        }
+
+        
+        private void GenerateOptions()
+        {
+            CurrentOptions = new List<AlgorithmOption>();
+            OptionTemplates = new List<AlgorithmOption>();
+            // ANGLEDENSITY
+            AlgorithmOption angleDensity = new AlgorithmOption();
+            Dictionary<Language, string> angleDensityName = new Dictionary<Language, string>();
+            Dictionary<Language, string> angleDensityToolTip = new Dictionary<Language, string>();
+            angleDensity.Type = AlgorithmOption.ValueType.Integer;
+            angleDensity.Value = 360;
+            angleDensity.MinValue = 1;
+            angleDensity.MaxValue = null;
+            angleDensityName.Add(Language.English, "Angle density");
+            angleDensityName.Add(Language.Polish, "Gęstość kątów");
+            angleDensity.Names = angleDensityName;
+            angleDensityToolTip.Add(Language.English, "Describes, how many units will the full angle be devided into");
+            angleDensityToolTip.Add(Language.Polish, "Określa, na ile jednostek zostanie podzielony kąt pełny");
+            angleDensity.Tooltips = angleDensityToolTip;
+            OptionTemplates.Add(angleDensity);
+
+            // MAXDIFF
+            Dictionary<Language, string> maxDiffName = new Dictionary<Language, string>();
+            Dictionary<Language, string> maxDiffToolTip = new Dictionary<Language, string>();
+            AlgorithmOption maxDiff = new AlgorithmOption();
+            maxDiff.Type = AlgorithmOption.ValueType.Double;
+            maxDiff.Value = 0.01;
+            maxDiff.MinValue = 0;
+            maxDiff.MaxValue = 1;
+            maxDiffName.Add(Language.English, "Point size");
+            maxDiffName.Add(Language.Polish, "Wielkość punktu");
+            maxDiffToolTip.Add(Language.English, "Describes, what is the maximum distance between two points for algorithm to act like it is one point");
+            maxDiffToolTip.Add(Language.Polish, "Określa maksymalną odległość między punktami, żeby algorytm traktował te punkty jak jeden");
+            maxDiff.Names = maxDiffName;
+            maxDiff.Tooltips = maxDiffToolTip;
+            OptionTemplates.Add(maxDiff);
+
+
+            // TURNEDGEWEIGHT
+            Dictionary<Language, string> turnEdgeWeightName = new Dictionary<Language, string>();
+            Dictionary<Language, string> turnEdgeWeightToolTip = new Dictionary<Language, string>();
+            AlgorithmOption turnEdgeWeight = new AlgorithmOption();
+            turnEdgeWeight.Type = AlgorithmOption.ValueType.Integer;
+            turnEdgeWeight.MinValue = 0;
+            turnEdgeWeight.MaxValue = 100;
+            turnEdgeWeight.Value = 10;
+            turnEdgeWeightName.Add(Language.English, "Graph edge weight for turns");
+            turnEdgeWeightName.Add(Language.Polish, "Waga krawędzi grafu dla obrotu");
+            turnEdgeWeightToolTip.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
+            turnEdgeWeightToolTip.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
+            turnEdgeWeight.Names = turnEdgeWeightName;
+            turnEdgeWeight.Tooltips = turnEdgeWeightToolTip;
+            OptionTemplates.Add(turnEdgeWeight);
+
+            // MOVEBACKWARDS
+            Dictionary<Language, string> moveBackwardsName = new Dictionary<Language, string>();
+            Dictionary<Language, string> moveBackwardsToolTip = new Dictionary<Language, string>();
+            AlgorithmOption moveBackwards = new AlgorithmOption();
+            moveBackwards.Type = AlgorithmOption.ValueType.Boolean;
+            moveBackwards.MaxValue = null;
+            moveBackwards.MinValue = null;
+            moveBackwards.Value = false;
+            moveBackwardsName.Add(Language.English, "Allow reverse");
+            moveBackwardsName.Add(Language.Polish, "Zezwalaj na wsteczny");
+            moveBackwardsToolTip.Add(Language.English, "If set, allows vehicle to move front and back");
+            moveBackwardsToolTip.Add(Language.Polish, "Jeśli zaznaczony, zezwala pojazdowi na poruszanie się do przodu i do tyłu");
+            moveBackwards.Names = moveBackwardsName;
+            moveBackwards.Tooltips = moveBackwardsToolTip;
+            OptionTemplates.Add(moveBackwards);
+
+            // ANYDIRECTION
+            Dictionary<Language, string> anyDirectionName = new Dictionary<Language, string>();
+            Dictionary<Language, string> anyDirectionToolTip = new Dictionary<Language, string>();
+            AlgorithmOption anyDirection = new AlgorithmOption();
+            anyDirection.Type = AlgorithmOption.ValueType.Boolean;
+            anyDirection.MaxValue = null;
+            anyDirection.MinValue = null;
+            anyDirection.Value = false;
+            anyDirectionName.Add(Language.English, "Allow vehicle to move in any direction");
+            anyDirectionName.Add(Language.Polish, "Zezwalaj na poruszanie się we wszystkich kierunkach");
+            anyDirectionToolTip.Add(Language.English, "If set, allows vehicle to move in any direction, ignores \"Allow reverse\" option");
+            anyDirectionToolTip.Add(Language.Polish, "Jeśli zaznaczony, zezwala pojazdowi na poruszanie się we wszystkich kierunkach, ignoruje opcję \"Zezwalaj na wsteczny\"");
+            anyDirection.Names = anyDirectionName;
+            anyDirection.Tooltips = anyDirectionToolTip;
+            OptionTemplates.Add(anyDirection);
+
+            
+            for (int i = 0; i < OptionTemplates.Count; i++)
+            {
+                AlgorithmOption o = new AlgorithmOption();
+                o.Type = OptionTemplates[i].Type;
+                o.MaxValue = OptionTemplates[i].MaxValue;
+                o.MinValue = OptionTemplates[i].MinValue;
+                o.Value = OptionTemplates[i].Value;
+                o.Names = OptionTemplates[i].Names;
+                o.Tooltips = OptionTemplates[i].Tooltips;
+                CurrentOptions.Add(o);
+            }
+
+        }
 
         public List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
         {
@@ -370,6 +497,39 @@ namespace SRL.Algorithm
             return polys;
         }
 
+        public List<AlgorithmOption> GetOptions()
+        {
+            List<AlgorithmOption> options = new List<AlgorithmOption>();
+            for(int i=0;i<OptionTemplates.Count;i++)
+            {
+                AlgorithmOption o = new AlgorithmOption();
+                o.Type = OptionTemplates[i].Type;
+                o.MaxValue = OptionTemplates[i].MaxValue;
+                o.MinValue = OptionTemplates[i].MinValue;
+                o.Value = OptionTemplates[i].Value;
+                o.Names = OptionTemplates[i].Names;
+                o.Tooltips = OptionTemplates[i].Tooltips;
+                options.Add(o);
+            }
+            return options;
+        }
 
+        public void SetOptions(List<AlgorithmOption> options)
+        {
+            CurrentOptions = options;
+        }
+
+        
+
+
+        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
+        {
+            return GetPath(map, vehicle, start, end, vehicleSize, vehicleRotation);
+        }
     }
 }
+
+
+
+
+        

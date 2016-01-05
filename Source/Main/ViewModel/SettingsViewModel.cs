@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using Infralution.Localization.Wpf;
+using SRL.Commons;
 using SRL.Main.View.Localization;
 
 namespace SRL.Main.ViewModel
@@ -42,7 +43,12 @@ namespace SRL.Main.ViewModel
                 }
                 catch (TargetInvocationException)
                 {
-                    //TODO Investigate the problem.
+                    /*
+                    Yes, that's an actual exception supressing catch block. 
+                    And yes, its presence makes us die inside too.
+                    */
+
+                    //TODO Come up with a proper solution.
                 }
                 Settings.Default.Save();
             }
