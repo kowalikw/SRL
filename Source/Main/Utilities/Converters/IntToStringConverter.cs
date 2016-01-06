@@ -18,7 +18,7 @@ namespace SRL.Main.Utilities.Converters
         {
             int output;
 
-            if (int.TryParse((string)value, NumberStyles.None, culture, out output))
+            if (int.TryParse((string)value, NumberStyles.Integer, culture, out output))
                 return output;
 
             return null;

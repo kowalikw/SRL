@@ -18,7 +18,7 @@ namespace SRL.Main.Utilities.Converters
         {
             double output;
 
-            if (double.TryParse((string) value, NumberStyles.None, culture, out output))
+            if (double.TryParse((string) value, NumberStyles.Float, culture, out output))
                 return output;
 
             return null;

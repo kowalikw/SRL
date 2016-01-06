@@ -114,7 +114,7 @@ namespace SRL.Main.ViewModel
                         {
                             List<Polygon> output = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
 
-                            if (!_traceCancellationTokenSource.Token.IsCancellationRequested)
+                            if (!_traceCancellationTokenSource.Token.IsCancellationRequested) //TODO token
                             {
                                 Polygons.ReplaceRange(output);
                                 TraceTask = null;

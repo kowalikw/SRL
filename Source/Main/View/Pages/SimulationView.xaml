@@ -24,10 +24,13 @@
             <mui:ModernButton IconData="{StaticResource LoadIcon}" 
                               Command="{Binding LoadCommand}"
                               ToolTip="{Resx Key=LoadSimulationTooltip}"/>
-            <mui:ModernButton Margin="0,0,0,20"
-                              IconData="{StaticResource SaveIcon}" 
+            <mui:ModernButton IconData="{StaticResource SaveIcon}" 
                               Command="{Binding SaveCommand}"
                               ToolTip="{Resx Key=SaveSimulationTooltip}"/>
+            <mui:ModernButton Margin="0,0,0,20"
+                              IconData="{StaticResource ResetIcon}" 
+                              Command="{Binding ResetCommand}"
+                              ToolTip="{Resx Key=ResetTooltip}"/>
 
             <mui:ModernButton IconData="{StaticResource LoadMapIcon}" 
                               Command="{Binding LoadMapCommand}"

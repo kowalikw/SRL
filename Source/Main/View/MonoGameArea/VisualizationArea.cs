@@ -199,13 +199,15 @@ namespace SRL.Main.View.MonoGameArea
                 RedrawStaticObjectsTexture();
             }
             else if (propertyName == nameof(_context.Vehicle) ||
-                     propertyName == nameof(_context.VehicleSize) ||
-                     _context.Vehicle != null)
+                     propertyName == nameof(_context.VehicleSize))
             {
-                if (_context.VehicleSize == null)
-                    _resizedVehicleShape = _context.Vehicle.Shape;
-                else
-                    _resizedVehicleShape = GeometryHelper.Resize(_context.Vehicle.Shape, _context.VehicleSize.Value);
+                if (_context.Vehicle != null)
+                {
+                    if (_context.VehicleSize == null)
+                        _resizedVehicleShape = _context.Vehicle.Shape;
+                    else
+                        _resizedVehicleShape = GeometryHelper.Resize(_context.Vehicle.Shape, _context.VehicleSize.Value);
+                }
             }
         }
     }

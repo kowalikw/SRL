@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -60,6 +61,7 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
+                        SimulationRunning = false;
                         EditorMode = Mode.Normal;
                         Map = null;
                         Vehicle = null;
@@ -94,6 +96,9 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
                         Vehicle = LoadModelViaDialog<Vehicle>();
+
+                        if (StartPoint != null)
+                            EnterModeCommand.Execute(Mode.VehicleSetup);
                     }, () => !CalculatingPath);
                 }
                 return _loadVehicleCommand;
@@ -186,13 +191,7 @@ namespace SRL.Main.ViewModel
                         List<Option> options = _algorithm.GetOptions();
                         ShowOptionsDialog(options);
                         _algorithm.SetOptions(options);
-
-                        CalculatingPath = true;
-                        new Task(() =>
-                        {
-                            Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value);
-                            CalculatingPath = false;
-                        }).Start();
+                        CalculatePath();
                     },
                         () =>
                         {
@@ -244,6 +243,7 @@ namespace SRL.Main.ViewModel
                     _stopPlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
+                        SimulationRunning = false;
                         CurrentFrameIdx = 0;
                     }, () =>
                     {
@@ -262,6 +262,7 @@ namespace SRL.Main.ViewModel
                     _pausePlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
+                        SimulationRunning = false;
                     }, () => { return SimulationRunning; });
                 }
                 return _pausePlaybackCommand;
@@ -405,7 +406,8 @@ namespace SRL.Main.ViewModel
 
                         CalculateFrames(value);
                         MaxFrameIdx = Frames.Count - 1;
-                        CurrentFrameIdx = 0;
+                        StopPlaybackCommand.Execute(null);
+
                     }
 
                     RaisePropertyChanged();
@@ -420,38 +422,17 @@ namespace SRL.Main.ViewModel
         public int CurrentFrameIdx
         {
             get { return _currentFrameIdx; }
-            set
-            {
-                if (_currentFrameIdx != value)
-                {
-                    _currentFrameIdx = value;
-                    RaisePropertyChanged();
-                }
-            }
+            set { Set(ref _currentFrameIdx, value); }
         }
         public int MaxFrameIdx
         {
             get { return _maxFrameIdx; }
-            set
-            {
-                if (_maxFrameIdx != value)
-                {
-                    _maxFrameIdx = value;
-                    RaisePropertyChanged();
-                }
-            }
+            set { Set(ref _maxFrameIdx, value); }
         }
         public Path Path
         {
             get { return _path; }
-            private set
-            {
-                if (_path != value)
-                {
-                    _path = value;
-                    RaisePropertyChanged();
-                }
-            }
+            private set { Set(ref _path, value); }
         }
 
 
@@ -501,10 +482,11 @@ namespace SRL.Main.ViewModel
                     _simulationTimer.Stop();
             }
         }
+
         public bool CalculatingPath
         {
             get { return _calculatingPath; }
-            private set
+            set
             {
                 Set(ref _calculatingPath, value);
                 RaiseRequerySuggested();
@@ -515,6 +497,8 @@ namespace SRL.Main.ViewModel
             get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
         }
 
+        private Task _pathCalculationTask;
+        private CancellationTokenSource _cancellationTokenSource;
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
 
@@ -533,7 +517,7 @@ namespace SRL.Main.ViewModel
             _simulationTimer.Tick += (o, e) =>
             {
                 if (CurrentFrameIdx == MaxFrameIdx)
-                    EditorMode = Mode.Normal;
+                    SimulationRunning = false;
                 else
                     CurrentFrameIdx++;
             };
@@ -739,6 +723,32 @@ namespace SRL.Main.ViewModel
 
             }
             Frames = frames.Reverse().ToList();
+        }
+
+        private void CalculatePath()
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = _cancellationTokenSource.Token;
+
+            _pathCalculationTask = new Task(() =>
+            {
+                Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value); //TODO pass token
+
+                if (!token.IsCancellationRequested)
+                {
+                    CalculatingPath = false;
+                    RaisePropertyChanged(nameof(CalculatingPath));
+                    RaiseRequerySuggested();
+                }
+            }, token);
+
+            _pathCalculationTask.Start();
+            CalculatingPath = true;
+            RaisePropertyChanged(nameof(CalculatingPath));
+            RaiseRequerySuggested();
+            
+            //TODO lock setting _pathCalculationTask
         }
 
         private void ShowOptionsDialog(List<Option> options)
