@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
-using SRL.Algorithm;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
+using SRL.Main.View;
+using SRL.Main.ViewModel.Base;
+using Frame = SRL.Commons.Model.Frame;
 
 namespace SRL.Main.ViewModel
 {
@@ -31,6 +35,9 @@ namespace SRL.Main.ViewModel
                         EditorMode = mode;
                     }, mode =>
                     {
+                        if (CalculatingPath)
+                            return false;
+
                         switch (mode)
                         {
                             case Mode.StartPointSetup:
@@ -54,11 +61,12 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
+                        SimulationRunning = false;
                         EditorMode = Mode.Normal;
                         Map = null;
                         Vehicle = null;
                         Orders = null;
-                    });
+                    }, () => !CalculatingPath);
                 }
                 return _resetCommand;
             }
@@ -73,7 +81,7 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
                         Map = LoadModelViaDialog<Map>();
-                    });
+                    }, () => !CalculatingPath);
                 }
                 return _loadMapCommand;
             }
@@ -88,7 +96,10 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
                         Vehicle = LoadModelViaDialog<Vehicle>();
-                    });
+
+                        if (StartPoint != null)
+                            EnterModeCommand.Execute(Mode.VehicleSetup);
+                    }, () => !CalculatingPath);
                 }
                 return _loadVehicleCommand;
             }
@@ -106,7 +117,7 @@ namespace SRL.Main.ViewModel
                         EnterModeCommand.Execute(Mode.VehicleSetup);
                     }, point =>
                     {
-                        if (EditorMode != Mode.StartPointSetup || Map == null)
+                        if (EditorMode != Mode.StartPointSetup || CalculatingPath || Map == null)
                             return false;
 
                         return !IsInsideObstacle(point);
@@ -127,7 +138,7 @@ namespace SRL.Main.ViewModel
                         EndPoint = point;
                     }, point =>
                     {
-                        if (EditorMode != Mode.EndPointSetup || Map == null)
+                        if (EditorMode != Mode.EndPointSetup || CalculatingPath || Map == null)
                             return false;
 
                         return !IsInsideObstacle(point);
@@ -151,6 +162,7 @@ namespace SRL.Main.ViewModel
                     }, setup =>
                     {
                         if (EditorMode != Mode.VehicleSetup ||
+                            CalculatingPath ||
                             Map == null ||
                             Vehicle == null ||
                             StartPoint == null)
@@ -176,14 +188,15 @@ namespace SRL.Main.ViewModel
                     {
                         EditorMode = Mode.Normal;
 
-                        Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value,
-                            InitialVehicleRotation.Value); // TODO angle density as parameter
+                        List<Option> options = _algorithm.GetOptions();
+                        ShowOptionsDialog(options);
+                        _algorithm.SetOptions(options);
+                        CalculatePath();
                     },
                         () =>
                         {
-                            return EditorMode == Mode.Normal && Map != null && Vehicle != null && VehicleSize != null &&
-                                   InitialVehicleRotation != null && StartPoint != null && EndPoint != null &&
-                                   Orders == null;
+                            return !CalculatingPath && Map != null && Vehicle != null && VehicleSize != null &&
+                                   InitialVehicleRotation != null && StartPoint != null && EndPoint != null;
                         });
                 }
                 return _calculatePathCommand;
@@ -215,7 +228,7 @@ namespace SRL.Main.ViewModel
                     {
                         if (CurrentFrameIdx == MaxFrameIdx)
                             CurrentFrameIdx = 0;
-                        EditorMode = Mode.SimulationRunning;
+                        SimulationRunning = true;
                     }, () => { return EditorMode == Mode.Normal && Orders != null; });
                 }
                 return _startPlaybackCommand;
@@ -230,10 +243,11 @@ namespace SRL.Main.ViewModel
                     _stopPlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
+                        SimulationRunning = false;
                         CurrentFrameIdx = 0;
                     }, () =>
                     {
-                        return CurrentFrameIdx != 0 || EditorMode == Mode.SimulationRunning;
+                        return CurrentFrameIdx != 0 || SimulationRunning;
                     });
                 }
                 return _stopPlaybackCommand;
@@ -248,7 +262,8 @@ namespace SRL.Main.ViewModel
                     _pausePlaybackCommand = new RelayCommand(() =>
                     {
                         EditorMode = Mode.Normal;
-                    }, () => { return EditorMode == Mode.SimulationRunning; });
+                        SimulationRunning = false;
+                    }, () => { return SimulationRunning; });
                 }
                 return _pausePlaybackCommand;
             }
@@ -391,7 +406,8 @@ namespace SRL.Main.ViewModel
 
                         CalculateFrames(value);
                         MaxFrameIdx = Frames.Count - 1;
-                        CurrentFrameIdx = 0;
+                        StopPlaybackCommand.Execute(null);
+
                     }
 
                     RaisePropertyChanged();
@@ -406,38 +422,17 @@ namespace SRL.Main.ViewModel
         public int CurrentFrameIdx
         {
             get { return _currentFrameIdx; }
-            set
-            {
-                if (_currentFrameIdx != value)
-                {
-                    _currentFrameIdx = value;
-                    RaisePropertyChanged();
-                }
-            }
+            set { Set(ref _currentFrameIdx, value); }
         }
         public int MaxFrameIdx
         {
             get { return _maxFrameIdx; }
-            set
-            {
-                if (_maxFrameIdx != value)
-                {
-                    _maxFrameIdx = value;
-                    RaisePropertyChanged();
-                }
-            }
+            set { Set(ref _maxFrameIdx, value); }
         }
         public Path Path
         {
             get { return _path; }
-            private set
-            {
-                if (_path != value)
-                {
-                    _path = value;
-                    RaisePropertyChanged();
-                }
-            }
+            private set { Set(ref _path, value); }
         }
 
 
@@ -458,7 +453,6 @@ namespace SRL.Main.ViewModel
                 {
                     _editorMode = value;
 
-                    _simulationTimer.Stop();
                     switch (value)
                     {
                         case Mode.StartPointSetup:
@@ -466,9 +460,6 @@ namespace SRL.Main.ViewModel
                             break;
                         case Mode.EndPointSetup:
                             EndPoint = null;
-                            break;
-                        case Mode.SimulationRunning:
-                            _simulationTimer.Start();
                             break;
                     }
                     RaisePropertyChanged();
@@ -478,27 +469,55 @@ namespace SRL.Main.ViewModel
 
         private Mode _editorMode;
 
+        public bool SimulationRunning
+        {
+            get { return _simulationRunning; }
+            set
+            {
+                Set(ref _simulationRunning, value);
+
+                if (value)
+                    _simulationTimer.Start();
+                else
+                    _simulationTimer.Stop();
+            }
+        }
+
+        public bool CalculatingPath
+        {
+            get { return _calculatingPath; }
+            set
+            {
+                Set(ref _calculatingPath, value);
+                RaiseRequerySuggested();
+            }
+        }
         protected override bool IsEditedModelValid
         {
             get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
         }
 
+        private Task _pathCalculationTask;
+        private CancellationTokenSource _cancellationTokenSource;
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
+
+        private bool _calculatingPath;
+        private bool _simulationRunning;
 
 
         public SimulationViewModel()
         {
             EditorMode = Mode.Normal;
 
-            _algorithm = new MockAlgorithm(); //TODO change to an actual implementation
+            _algorithm = new Algorithm.Algorithm(); //TODO change to an actual implementation
 
             _simulationTimer = new DispatcherTimer();
             _simulationTimer.Interval = new TimeSpan(0, 0, 0, 0, FrameChangeInterval);
             _simulationTimer.Tick += (o, e) =>
             {
                 if (CurrentFrameIdx == MaxFrameIdx)
-                    EditorMode = Mode.Normal;
+                    SimulationRunning = false;
                 else
                     CurrentFrameIdx++;
             };
@@ -706,13 +725,49 @@ namespace SRL.Main.ViewModel
             Frames = frames.Reverse().ToList();
         }
 
+        private void CalculatePath()
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = _cancellationTokenSource.Token;
+
+            _pathCalculationTask = new Task(() =>
+            {
+                Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value); //TODO pass token
+
+                if (!token.IsCancellationRequested)
+                {
+                    CalculatingPath = false;
+                    RaisePropertyChanged(nameof(CalculatingPath));
+                    RaiseRequerySuggested();
+                }
+            }, token);
+
+            _pathCalculationTask.Start();
+            CalculatingPath = true;
+            RaisePropertyChanged(nameof(CalculatingPath));
+            RaiseRequerySuggested();
+            
+            //TODO lock setting _pathCalculationTask
+        }
+
+        private void ShowOptionsDialog(List<Option> options)
+        {
+            OptionsDialogView dialog = new OptionsDialogView(options);
+
+            if (dialog.ShowDialog() == true)
+            {
+                options.Clear();
+                options.AddRange(dialog.Result);
+            }
+        }
+
         public enum Mode
         {
             Normal,
             StartPointSetup,
             EndPointSetup,
             VehicleSetup,
-            SimulationRunning,
         }
     }
 }

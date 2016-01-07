@@ -136,12 +136,12 @@
     <value>Polski</value>
   </data>
   <data name="ShowPath" xml:space="preserve">
-    <value>Podgląd ścieżki</value>
+    <value>Rysowanie ścieżki</value>
   </data>
   <data name="ShowPathDisabled" xml:space="preserve">
-    <value>Pokaż</value>
+    <value>Wyłącz</value>
   </data>
   <data name="ShowPathEnabled" xml:space="preserve">
-    <value>Ukryj</value>
+    <value>Włącz</value>
   </data>
 </root>

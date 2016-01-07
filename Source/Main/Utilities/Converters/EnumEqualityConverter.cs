@@ -2,27 +2,18 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace SRL.Main.Utilities
+namespace SRL.Main.Utilities.Converters
 {
-    internal class BoolInverterConverter : IValueConverter
+    internal class EnumEqualityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool)
-            {
-                return !(bool)value;
-            }
-            return value;
+            return value.Equals(parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool)
-            {
-                return !(bool)value;
-            }
-            return value;
+            return value.Equals(true) ? parameter : Binding.DoNothing;
         }
-
     }
 }

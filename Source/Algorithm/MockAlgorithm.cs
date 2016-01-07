@@ -9,7 +9,7 @@ namespace SRL.Algorithm
 {
     public class MockAlgorithm : IAlgorithm
     {
-        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleRotation)
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {
@@ -22,12 +22,12 @@ namespace SRL.Algorithm
             return GenerateRandomOrders(map, vehicle, start, end, vehicleRotation);
         }
 
-        public List<AlgorithmOption> GetOptions()
+        public List<Option> GetOptions()
         {
             throw new NotImplementedException();
         }
 
-        public void SetOptions(List<AlgorithmOption> options)
+        public void SetOptions(List<Option> options)
         {
             throw new NotImplementedException();
         }

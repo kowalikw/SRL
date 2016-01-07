@@ -69,6 +69,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -106,13 +107,19 @@
     </Compile>
     <Compile Include="Tracing\BitmapTracer.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
-    <Compile Include="Utilities\BoolInverterConverter.cs" />
-    <Compile Include="Utilities\EnumToBoolConverter.cs" />
+    <Compile Include="Utilities\Converters\BoolNegationConverter.cs" />
+    <Compile Include="Utilities\Converters\DictionaryValueConverter.cs" />
+    <Compile Include="Utilities\Converters\DoubleToStringConverter.cs" />
+    <Compile Include="Utilities\Converters\EnumEqualityConverter.cs" />
+    <Compile Include="Utilities\Converters\IntToStringConverter.cs" />
     <Compile Include="Utilities\Normalization.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
-    <Compile Include="ViewModel\EditorViewModel.cs" />
+    <Compile Include="Utilities\OptionControlTemplateSelector.cs" />
+    <Compile Include="ViewModel\Base\EditorViewModel.cs" />
+    <Compile Include="ViewModel\Base\ViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
+    <Compile Include="ViewModel\OptionsDialogViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\SimulationViewModel.cs" />
     <Compile Include="ViewModel\TracingViewModel.cs" />
@@ -196,6 +203,9 @@
     <Compile Include="View\MonoGameArea\TraceArea.cs" />
     <Compile Include="View\MonoGameArea\VehicleEditArea.cs" />
     <Compile Include="View\MonoGameArea\VisualizationArea.cs" />
+    <Compile Include="View\OptionsDialogView.xaml.cs">
+      <DependentUpon>OptionsDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Pages\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -219,6 +229,10 @@
       <DependentUpon>VehicleEditorView.xaml</DependentUpon>
     </Compile>
     <Page Include="UriDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OptionsDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

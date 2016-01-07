@@ -1,18 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
-using System.Threading;
-using System.Windows;
-using GalaSoft.MvvmLight;
 using Infralution.Localization.Wpf;
 using SRL.Commons;
-using SRL.Main.View.Localization;
 
 namespace SRL.Main.ViewModel
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : Base.ViewModel
     {
         public bool AntialiasingEnabled
         {

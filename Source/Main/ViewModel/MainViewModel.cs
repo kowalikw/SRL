@@ -10,7 +10,7 @@ using SRL.Main.Messages;
 
 namespace SRL.Main.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : Base.ViewModel
     {
         public MainViewModel()
         {

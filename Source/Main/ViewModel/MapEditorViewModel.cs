@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
-using SRL.Main.Messages;
 using SRL.Main.Utilities;
+using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel
 {
