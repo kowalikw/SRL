@@ -7,6 +7,7 @@ using System.Windows;
 using SRL.Commons;
 using SRL.Commons.Model.Base;
 using System.Linq;
+using System.Threading;
 using ASD.Graph;
 using ClipperLib;
 
@@ -23,7 +24,7 @@ namespace SRL.Algorithm
             public int index;
             public int obstacle;
         }
-        List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
+        public List<Order> GetPath(Map InputMap, Vehicle InputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation, CancellationToken token)
         {
             // default values for user options
             int turnEdgeWeight = 10;
@@ -618,14 +619,6 @@ namespace SRL.Algorithm
         public void SetOptions(List<Option> options)
         {
             CurrentOptions = options;
-        }
-
-        
-
-
-        List<Order> IAlgorithm.GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
-        {
-            return GetPath(map, vehicle, start, end, vehicleSize, vehicleRotation);
         }
     }
 }

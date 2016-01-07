@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
@@ -9,7 +10,7 @@ namespace SRL.Algorithm
 {
     public class MockAlgorithm : IAlgorithm
     {
-        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation)
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation, CancellationToken token)
         {
             foreach (Point p in vehicle.Shape.Vertices)
             {

@@ -733,7 +733,7 @@ namespace SRL.Main.ViewModel
 
             _pathCalculationTask = new Task(() =>
             {
-                Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value); //TODO pass token
+                Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value, token); //TODO pass token
 
                 if (!token.IsCancellationRequested)
                 {
