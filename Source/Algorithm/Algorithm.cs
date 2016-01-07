@@ -113,6 +113,8 @@ namespace SRL.Algorithm
                 {
                     foreach (Point p in poly.Vertices)
                     {
+                        if (token.IsCancellationRequested)
+                            throw new OperationCanceledException();
                         ip.point = p;
                         ip.index = index++;
                         ip.obstacle = k;
@@ -136,6 +138,8 @@ namespace SRL.Algorithm
                 {
                     for (int j = 0; j < IndexPointAngleList[angle].Count; j++)
                     {
+                        if (token.IsCancellationRequested)
+                            throw new OperationCanceledException();
                         // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
                         if (IndexPointAngleList[angle][i].obstacle == -1)
                         {
@@ -219,8 +223,10 @@ namespace SRL.Algorithm
                 {
                     for (int j = 0; j < IndexPointAngleList[(angle + 1) % angleDensity].Count; j++)
                     {
+                        if (token.IsCancellationRequested)
+                            throw new OperationCanceledException();
                         // Again, checking if starting and ending point are not in any Minkowski's sum polygons
-                        if(IndexPointAngleList[angle][i].obstacle == -1)
+                        if (IndexPointAngleList[angle][i].obstacle == -1)
                         {
                             bool cancel = false;
                             foreach(Polygon obstacle in currentMap[angle])
@@ -260,6 +266,8 @@ namespace SRL.Algorithm
             // Adding edges to accepting state
             for (int i = 0; i < IndexPointAngleList.Length; i++)
             {
+                if (token.IsCancellationRequested)
+                    throw new OperationCanceledException();
                 if (IndexPointAngleList[i][IndexPointAngleList[i].Count - 1].obstacle == -1 && IndexPointAngleList[i][IndexPointAngleList[i].Count - 1].point == end)
                     graph.AddEdge(IndexPointAngleList[i][IndexPointAngleList[i].Count - 1].index, index, 0);
             }
@@ -268,7 +276,7 @@ namespace SRL.Algorithm
             Edge[] path;
             AStarGraphExtender.AStar(graph, startingIndex, graph.VerticesCount - 1, out path);
             if (path == null)
-                return null;
+                throw new NonexistentPathException();
 
             // Creating Orders from A* results
             // TODO: still some angle troubles
@@ -276,6 +284,8 @@ namespace SRL.Algorithm
             orders.Add(new Order() { Destination = start, Rotation = vehicleRotation });
             for (int i = 0; i < path.Length - 1; i++)
             {
+                if (token.IsCancellationRequested)
+                    throw new OperationCanceledException();
                 int angle = 0;
                 while (path[i].To > IndexPointAngleList[angle][IndexPointAngleList[angle].Count - 1].index)
                     angle++;
