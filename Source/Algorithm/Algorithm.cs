@@ -71,11 +71,11 @@ namespace SRL.Algorithm
             // copy of the map with additional obstacles as map edges (commented at the moment) (size of those additional obstacles can be changed, it works fine for these ones), right now map is without bounds as we have trouble with vehicles moving by normal obstacles
             Map map = new Map();
             List<List<IndexPoint>>[] iPointObstacles = new List<List<IndexPoint>>[angleDensity];
-            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -2), new Point(-1, 2), new Point(-2, 2), new Point(-2, -2) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -2), new Point(-1, 2), new Point(-2, 2), new Point(-2, -2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(-2, -1), new Point(2, -1), new Point(2, -2), new Point(-2, -2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 2), new Point(1, -2), new Point(2, -2), new Point(2, 2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(2, 1), new Point(-2, 1), new Point(-2, 2), new Point(2, 2) }));
-            */List<IndexPoint>[] IndexPointAngleList = new List<IndexPoint>[angleDensity];
+            List<IndexPoint>[] IndexPointAngleList = new List<IndexPoint>[angleDensity];
             for (int i = 0; i < InputMap.Obstacles.Count; i++)
                 map.Obstacles.Add(InputMap.Obstacles[i]);
 
@@ -170,10 +170,18 @@ namespace SRL.Algorithm
                                 continue;
                         }
                         if (i == j) continue; // We are not accepting edges in one point when not turning
-                        bool addEdge = true;
                         if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle], angle * singleAngle))
                         {
-                            if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, singleAngle * angle, triangle))
+                            if (!allDirections)
+                            {
+                                if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, singleAngle * angle, triangle))
+                                {
+                                    graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
+                                    if (backwards)
+                                        graph.AddEdge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
+                                }
+                            }
+                            else
                                 graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
                         }
                     }
@@ -604,12 +612,12 @@ namespace SRL.Algorithm
             for(int i=0;i<OptionTemplates.Count;i++)
             {
                 Option o = new Option();
-                o.Type = OptionTemplates[i].Type;
-                o.MaxValue = OptionTemplates[i].MaxValue;
-                o.MinValue = OptionTemplates[i].MinValue;
-                o.Value = OptionTemplates[i].Value;
-                o.Names = OptionTemplates[i].Names;
-                o.Tooltips = OptionTemplates[i].Tooltips;
+                o.Type = CurrentOptions[i].Type;
+                o.MaxValue = CurrentOptions[i].MaxValue;
+                o.MinValue = CurrentOptions[i].MinValue;
+                o.Value = CurrentOptions[i].Value;
+                o.Names = CurrentOptions[i].Names;
+                o.Tooltips = CurrentOptions[i].Tooltips;
                 options.Add(o);
             }
             return options;
