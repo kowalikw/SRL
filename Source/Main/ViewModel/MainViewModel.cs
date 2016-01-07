@@ -1,8 +1,7 @@
 using System;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using FirstFloor.ModernUI.Windows.Controls;
 using FirstFloor.ModernUI.Windows.Navigation;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
@@ -11,7 +10,7 @@ using SRL.Main.Messages;
 
 namespace SRL.Main.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : Base.ViewModel
     {
         public MainViewModel()
         {
@@ -26,7 +25,7 @@ namespace SRL.Main.ViewModel
         {
             var uriDictionary = (ResourceDictionary)Application.Current.Resources["UriDictionary"];
             Uri pageUri = (Uri)uriDictionary[msg.ViewType.Name];
-
+            
             IInputElement target = NavigationHelper.FindFrame(NavigationHelper.FrameTop, Application.Current.MainWindow);
             NavigationCommands.GoToPage.Execute(pageUri, target);
         }
@@ -55,11 +54,7 @@ namespace SRL.Main.ViewModel
 
         private void ErrorDialogHandler(ErrorDialogMessage msg)
         {
-            MessageBox.Show(
-                msg.ErrorDescription, 
-                "Error encountered", 
-                MessageBoxButton.OK, 
-                MessageBoxImage.Error);
+            ModernDialog.ShowMessage(msg.ErrorDescription, "Error", MessageBoxButton.OK); //TODO dialog title UICulture dependant
         }
 
     }

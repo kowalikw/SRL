@@ -1,17 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
-using System.Threading;
-using System.Windows;
-using GalaSoft.MvvmLight;
 using Infralution.Localization.Wpf;
-using SRL.Main.View.Localization;
+using SRL.Commons;
 
 namespace SRL.Main.ViewModel
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : Base.ViewModel
     {
         public bool AntialiasingEnabled
         {
@@ -42,7 +36,12 @@ namespace SRL.Main.ViewModel
                 }
                 catch (TargetInvocationException)
                 {
-                    //TODO Investigate the problem.
+                    /*
+                    Yes, that's an actual exception supressing catch block. 
+                    And yes, its presence makes us die inside too.
+                    */
+
+                    //TODO Come up with a proper solution.
                 }
                 Settings.Default.Save();
             }

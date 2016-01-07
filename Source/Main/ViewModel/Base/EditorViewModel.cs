@@ -1,17 +1,12 @@
-﻿using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using SRL.Commons;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
-using System.Xml.Linq;
 
-namespace SRL.Main.ViewModel
+namespace SRL.Main.ViewModel.Base
 {
-    public abstract class EditorViewModel<T> : ViewModelBase
+    public abstract class EditorViewModel<T> : ViewModel
         where T : SvgSerializable
     {
         protected const string DialogFilter = "Scalable Vector Graphics (*.svg)|*.svg";
@@ -31,11 +26,11 @@ namespace SRL.Main.ViewModel
                             if (filename == null)
                                 return;
 
-                            SaveModelToFile(GetModel(), filename);
+                            SvgSerializable.Serialize(GetEditedModel(), filename);
                         };
                         Messenger.Default.Send(msg);
                     },
-                    () => IsModelValid);
+                    () => IsEditedModelValid);
                 }
                 return _saveCommand;
             }
@@ -48,9 +43,9 @@ namespace SRL.Main.ViewModel
                 {
                     _loadCommand = new RelayCommand(() =>
                     {
-                        var model = LoadModel<T>();
+                        var model = LoadModelViaDialog<T>();
                         if (model != null)
-                            SetModel(model);
+                            SetEditedModel(model);
                     });
                 }
                 return _loadCommand;
@@ -63,73 +58,65 @@ namespace SRL.Main.ViewModel
         private RelayCommand _loadCommand;
 
 
-        protected abstract bool IsModelValid { get; }
+        protected abstract bool IsEditedModelValid { get; }
+
+        protected EditorViewModel()
+        {
+            Messenger.Default.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
+        } 
+
         /// <summary>
         /// Returns created model.
         /// </summary>
-        /// <returns>Model or null depending on whether IsModelValid property returns true.</returns>
-        protected abstract T GetModel();
+        /// <returns>Model or null depending on whether <see cref="IsEditedModelValid"/> property returns true.</returns>
+        public abstract T GetEditedModel();
+
         /// <summary>
         /// Sets model in the editor.
         /// </summary>
         /// <param name="model">Model to set; can be incomplete or even erroneous.</param>
         /// <returns>True if it's possible to set <paramref name="model"/>; false otherwise.</returns>
-        protected abstract void SetModel(T model);
-
-
-        private static void SaveModelToFile<R>(R model, string filename)
-        {
-            var serializer = new XmlSerializer(typeof(R));
-            var output = new XDocument();
-
-            using (XmlWriter writer = output.CreateWriter())
-                serializer.Serialize(writer, model);
-
-            output.Save(filename);
-        }
-
-        private static R LoadModelFromFile<R>(string filename)
-                        where R : SvgSerializable
-        {
-            var serializer = new XmlSerializer(typeof(R));
-
-            using (var reader = XmlReader.Create(filename))
-            {
-                if (serializer.CanDeserialize(reader))
-                    return (R)serializer.Deserialize(reader);
-            }
-            return null;
-        }
+        public abstract void SetEditedModel(T model);
 
         /// <summary>
-        /// Loads SvgSerializable model via dialog shown to the user.
+        /// Loads <see cref="SvgSerializable"/> model via dialog shown to the user.
         /// </summary>
         /// <typeparam name="R">Model type.</typeparam>
         /// <returns>Deserialized model instance.</returns>
-        protected static R LoadModel<R>()
+        protected static R LoadModelViaDialog<R>()
             where R : SvgSerializable
         {
+            bool invalidFile = false;
             R output = null;
 
             var msg = new OpenFileDialogMessage();
             msg.Filter = DialogFilter;
             msg.FilenameCallback = filename =>
             {
-                if (filename == null)
+                if (filename == null) // Dialog cancelled.
                     return;
 
-                output = LoadModelFromFile<R>(filename);
+                if (SvgSerializable.CanDeserialize<R>(filename))
+                    output = SvgSerializable.Deserialize<R>(filename);
+                else
+                    invalidFile = true;
             };
             Messenger.Default.Send(msg);
 
-            if (output == null)
+            if (invalidFile)
             {
                 var errorMsg = new ErrorDialogMessage();
-                errorMsg.ErrorDescription = $"Selected doesn't contain {nameof(R)} object."; //TODO Put error description in resources. Make polish version too.
+                errorMsg.ErrorDescription = $"The file doesn't contain {typeof(R).Name} object."; //TODO Put error description in resources. Make polish version too.
                 Messenger.Default.Send(errorMsg);
             }
 
             return output;
+        }
+
+        private void HandleSetModelMsg(SetModelMessage<T> msg)
+        {
+            if (msg.Model != null)
+                SetEditedModel(msg.Model);
         }
     }
 }

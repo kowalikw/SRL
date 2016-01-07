@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Messages;
 using SRL.Main.Tracing;
 using SRL.Main.Utilities;
+using SRL.Main.View.Pages;
 
 namespace SRL.Main.ViewModel
 {
-    public class TracingViewModel : ViewModelBase
+    public class TracingViewModel : Base.ViewModel
     {
         public RelayCommand LoadBitmapCommand
         {
@@ -59,7 +60,14 @@ namespace SRL.Main.ViewModel
                 {
                     _makeMapCommand = new RelayCommand(() =>
                     {
-                        //TODO
+                        var argMsg = new SetModelMessage<Map>(new Map());
+                        argMsg.Model.Obstacles.AddRange(
+                            Polygons.Where((polygon, i) => SelectedPolygonIndices.Contains(i)));
+
+                        var gotoMsg = new GoToPageMessage(typeof(MapEditorView));
+
+                        Messenger.Default.Send(argMsg);
+                        Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
                         return !OngoingTracing;
@@ -76,7 +84,13 @@ namespace SRL.Main.ViewModel
                 {
                     _makeVehicleCommand = new RelayCommand(() =>
                     {
-                        //TODO
+                        var argMsg = new SetModelMessage<Vehicle>(new Vehicle());
+                        argMsg.Model.Shape = Polygons[SelectedPolygonIndices.GetLast()];
+
+                        var gotoMsg = new GoToPageMessage(typeof(VehicleEditorView));
+                        
+                        Messenger.Default.Send(argMsg);
+                        Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
                         //TODO allow polygon sums?
@@ -100,7 +114,7 @@ namespace SRL.Main.ViewModel
                         {
                             List<Polygon> output = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
 
-                            if (!_traceCancellationTokenSource.Token.IsCancellationRequested)
+                            if (!_traceCancellationTokenSource.Token.IsCancellationRequested) //TODO token
                             {
                                 Polygons.ReplaceRange(output);
                                 TraceTask = null;
@@ -226,7 +240,7 @@ namespace SRL.Main.ViewModel
                 {
                     _ongoingTracing = value;
                     RaisePropertyChanged();
-                    Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
+                    RaiseRequerySuggested();
                 }
             }
         }
@@ -253,28 +267,31 @@ namespace SRL.Main.ViewModel
 
         public TracingViewModel()
         {
+            // Make sure that default instances of Map/Vehicle editors exist.
+            SimpleIoc.Default.GetInstance<MapEditorViewModel>();
+            SimpleIoc.Default.GetInstance<VehicleEditorViewModel>();
+
             Polygons = new ObservableCollectionEx<Polygon>();
             SelectedPolygonIndices = new ObservableCollectionEx<int>();
 
             PropertyChanged += (o, e) =>
             {
-                switch (e.PropertyName)
+                if (e.PropertyName == nameof(Bitmap))
                 {
-                    case nameof(Bitmap):
-                        _absoluteColorThreshold = (int)(255 * ColorThreshold);
+                    _absoluteColorThreshold = (int)(255 * ColorThreshold);
+                    _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
+                }
+                else if (e.PropertyName == nameof(ColorThreshold))
+                {
+                    _absoluteColorThreshold = (int)(255 * ColorThreshold);
+                }
+                else if (e.PropertyName == nameof(AreaThreshold))
+                {
+                    if (Bitmap != null)
                         _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
-                        break;
-                    case nameof(ColorThreshold):
-                        _absoluteColorThreshold = (int)(255 * ColorThreshold);
-                        break;
-                    case nameof(AreaThreshold):
-                        if (Bitmap != null)
-                            _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
-                        break;
                 }
             };
 
         }
-
     }
 }

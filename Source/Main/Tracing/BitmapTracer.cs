@@ -49,8 +49,7 @@ namespace SRL.Main.Tracing
 
                 output.Add(new Polygon(polygonPoints));
             }
-            
-            RemoveEnclosedPolygons(ref output);
+
             NormalizeOutput(output);
 
             return output;
@@ -81,21 +80,6 @@ namespace SRL.Main.Tracing
             }
         }
 
-        private void RemoveEnclosedPolygons(ref List<Polygon> polygons)
-        {
-            bool[] enclosed = new bool[polygons.Count];
 
-            for (int i = 0; i < polygons.Count; i++)
-            {
-                for (int j = i + 1; j < polygons.Count; j++)
-                {
-                    if (enclosed[j])
-                        continue;
-
-                    enclosed[j] = GeometryHelper.IsEnclosed(polygons[j], polygons[i]);
-                }
-            }
-            polygons = new List<Polygon>(polygons.SkipWhile((polygon, i) => enclosed[i]));
-        }
     }
 }

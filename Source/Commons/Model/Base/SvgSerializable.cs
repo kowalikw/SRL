@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -11,8 +13,6 @@ namespace SRL.Commons.Model.Base
         protected static readonly int Height = 480;
         protected static readonly Color BackgroundFill = Color.FromArgb(1, 47, 135);
         protected static readonly double StrokeWidth = 3; // only height of scale transform affects stroke.
-
-        protected string Type;
 
         /// <remarks>
         /// Must always return null (as specified by MSDN).
@@ -43,6 +43,39 @@ namespace SRL.Commons.Model.Base
             writer.WriteEndAttribute();
 
             writer.WriteEndElement();
+        }
+
+        public static void Serialize<R>(R model, string filename)
+            where R : SvgSerializable
+        {
+            var serializer = new XmlSerializer(typeof(R));
+            var output = new XDocument();
+
+            using (XmlWriter writer = output.CreateWriter())
+                serializer.Serialize(writer, model);
+
+            output.Save(filename);
+        }
+
+        public static bool CanDeserialize<R>(string filename)
+        {
+            var serializer = new XmlSerializer(typeof(R));
+
+            using (var reader = XmlReader.Create(filename))
+                return serializer.CanDeserialize(reader);
+        }
+
+        public static R Deserialize<R>(string filename)
+            where R : SvgSerializable
+        {
+            var serializer = new XmlSerializer(typeof(R));
+
+            using (var reader = XmlReader.Create(filename))
+            {
+                if (serializer.CanDeserialize(reader))
+                    return (R)serializer.Deserialize(reader);
+            }
+            throw new InvalidOperationException($"Can't deserialize {filename}.");
         }
     }
 }

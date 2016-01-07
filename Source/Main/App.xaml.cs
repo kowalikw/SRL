@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Windows;
 using Infralution.Localization.Wpf;
+using SRL.Commons;
 using SRL.Main.View.Localization;
 using SRL.Main;
 

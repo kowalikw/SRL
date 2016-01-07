@@ -1,40 +1,41 @@
 ﻿<UserControl x:Class="SRL.Main.View.Pages.SettingsView"
-             ResxExtension.DefaultResxName="SRL.Main.View.Localization.SettingsView"
+             ResxExtension.DefaultResxName="SRL.Main.View.Localization.SettingsView" Language="{UICulture}"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:local="clr-namespace:SRL.Main.Utilities"
-             xmlns:lang="clr-namespace:SRL.Main.View.Localization"
+             xmlns:commons="clr-namespace:SRL.Commons;assembly=SRL.Commons"
+             xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Settings}">
 
     <UserControl.Resources>
-        <local:BoolInverterConverter x:Key="BoolInverterConverter"/>
-        <local:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolInverterConverter"/>
+        <converters:EnumEqualityConverter x:Key="EnumToBoolConverter"/>
     </UserControl.Resources>
 
 
     <Grid Style="{StaticResource ContentRoot}">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" 
                    Content="{Resx Key=Language}"/>
         <StackPanel Grid.Row="0" Grid.Column="1">
-            <RadioButton Content="{Resx Key=LanguageEnglish}" IsChecked="{Binding Path=Language, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static lang:Language.English}}"/>
-            <RadioButton Content="{Resx Key=LanguagePolish}" IsChecked="{Binding Path=Language, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static lang:Language.Polish}}"/>
+            <RadioButton Content="{Resx Key=LanguageEnglish}" IsChecked="{Binding Path=Language, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static commons:Language.English}}"/>
+            <RadioButton Content="{Resx Key=LanguagePolish}" IsChecked="{Binding Path=Language, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static commons:Language.Polish}}"/>
         </StackPanel>
 
         <Label Grid.Row="1" Grid.Column="0" 

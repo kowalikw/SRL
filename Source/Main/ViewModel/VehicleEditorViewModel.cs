@@ -7,10 +7,12 @@ using SRL.Main.Utilities;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
+using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel
 {
@@ -187,7 +189,7 @@ namespace SRL.Main.ViewModel
         private bool _shapeDone;
         private double? _direction;
 
-        protected override bool IsModelValid
+        protected override bool IsEditedModelValid
         {
             get
             {
@@ -203,9 +205,9 @@ namespace SRL.Main.ViewModel
             VehicleShape = new ObservableCollectionEx<Point>();
         }
 
-        protected override Vehicle GetModel()
+        public override Vehicle GetEditedModel()
         {
-            if (!IsModelValid)
+            if (!IsEditedModelValid)
                 return null;
 
             Vehicle vehicle = new Vehicle();
@@ -251,7 +253,7 @@ namespace SRL.Main.ViewModel
             vehicle.Shape = rotatedShape;
             return vehicle;
         }
-        protected override void SetModel(Vehicle model)
+        public override void SetEditedModel(Vehicle model)
         {
             VehicleShape.ReplaceRange(model.Shape.Vertices);
             if (VehicleShape.Count >= 3) // TODO instead of checking count only, make sure at least 3 vertices are non collinear

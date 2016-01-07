@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
+using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel
 {
@@ -107,7 +110,7 @@ namespace SRL.Main.ViewModel
         public ObservableCollectionEx<Point> UnfinishedPolygon { get; }
 
 
-        protected override bool IsModelValid => UnfinishedPolygon.Count == 0;
+        protected override bool IsEditedModelValid => UnfinishedPolygon.Count == 0;
 
         public MapEditorViewModel()
         {
@@ -115,9 +118,9 @@ namespace SRL.Main.ViewModel
             UnfinishedPolygon = new ObservableCollectionEx<Point>();
         }
 
-        protected override Map GetModel()
+        public override Map GetEditedModel()
         {
-            if (!IsModelValid)
+            if (!IsEditedModelValid)
                 return null;
 
             Map map = new Map();
@@ -125,10 +128,33 @@ namespace SRL.Main.ViewModel
             return map;
         }
 
-        protected override void SetModel(Map model)
+        public override void SetEditedModel(Map model)
         {
+            var obstacles = model.Obstacles;
+            RemoveEnclosedPolygons(obstacles);
+
             UnfinishedPolygon.Clear();
-            FinishedPolygons.ReplaceRange(model.Obstacles);
+            FinishedPolygons.ReplaceRange(obstacles);
+        }
+
+        private void RemoveEnclosedPolygons(List<Polygon> polygons)
+        {
+            bool[] enclosed = new bool[polygons.Count];
+
+            for (int i = 0; i < polygons.Count; i++)
+            {
+                for (int j = i + 1; j < polygons.Count; j++)
+                {
+                    if (enclosed[j])
+                        continue;
+
+                    enclosed[j] = GeometryHelper.IsEnclosed(polygons[j], polygons[i]);
+                }
+            }
+
+            var nonEnclosedPolygons = new List<Polygon>(polygons.Where((polygon, i) => !enclosed[i]));
+            polygons.Clear();
+            polygons.AddRange(nonEnclosedPolygons);
         }
     }
 }
