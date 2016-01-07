@@ -171,46 +171,10 @@ namespace SRL.Algorithm
                         }
                         if (i == j) continue; // We are not accepting edges in one point when not turning
                         bool addEdge = true;
-                        if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle])) // Checking if current edge is not crossing any obstacle
+                        if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle], angle * singleAngle))
                         {
-                            if (IndexPointAngleList[angle][i].obstacle == IndexPointAngleList[angle][j].obstacle && IndexPointAngleList[angle][i].obstacle >= 0) // If 2 points are from the same obstacle and the edge between them is not crossing any obstacle (edge of an obstacle), we check if the edge goes through the obstacle or goes outside (possible only in concave polygons)
-                            {
-                                for (int obstacle = 0; obstacle < currentMap[angle].Count; obstacle++) // Looking for obstacle containing those points
-                                    if (currentMap[angle][obstacle].Vertices.Contains(IndexPointAngleList[angle][i].point))
-                                    {
-                                        for (int k = 0; k < currentMap[angle][obstacle].Vertices.Count; k++) // Looking for the index of that point in that obstacle
-                                        {
-                                            if (currentMap[angle][obstacle].Vertices[k] == IndexPointAngleList[angle][i].point)
-                                                // Checking, if two points are next to each other in the obstacle (can vehicle move along the edge of obstacle)
-                                                if (currentMap[angle][obstacle].Vertices[(k + 1) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point || currentMap[angle][obstacle].Vertices[(k - 1 + currentMap[angle][obstacle].Vertices.Count) % currentMap[angle][obstacle].Vertices.Count] == IndexPointAngleList[angle][j].point)
-                                                    break; // If so, no need to check if the edge goes through the middle of the obstacle
-                                        }
-                                        // Else, we check, if the middle point of the edge is inside the obstacle
-                                        if (GeometryHelper.IsInsidePolygon(new Point((IndexPointAngleList[angle][i].point.X + IndexPointAngleList[angle][j].point.X) / 2, (IndexPointAngleList[angle][i].point.Y + IndexPointAngleList[angle][j].point.Y) / 2), currentMap[angle][obstacle]))
-                                        {
-                                            addEdge = false;
-                                            break;
-                                        }
-                                    }
-                            }
-                            if (addEdge)
-                            {
-                                // If user enabled all directions in options we dont have to check if the points are in a line
-                                if (!allDirections)
-                                {
-                                    // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                    if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
-                                    {
-                                        graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
-                                        // if user enabled reverse in options, we add an edge back
-                                        if (backwards)
-                                            graph.AddEdge(new Edge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
-                                    }
-                                }
-                                // if user enabled all directions, we add all edges that passed all previous tests
-                                else
-                                    graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
-                            }
+                            if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, singleAngle * angle, triangle))
+                                graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
                         }
                     }
                 }
@@ -560,21 +524,46 @@ namespace SRL.Algorithm
             return (int)Math.Round(500 * Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y)), 0);
         }
 
-        bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles)
+        bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
         {
             if (Math.Abs(p1.X) > 1 || Math.Abs(p1.Y) > 1 || Math.Abs(p2.X) > 1 || Math.Abs(p2.Y) > 1)
                 return false;
-            foreach (Polygon obstacle in obstacles)
+            for (int i = 0; i < obstacles.Count; i++)
             {
-                for (int i = 0; i < obstacle.Vertices.Count; i++)
-                    if (GeometryHelper.DoSegmentsIntersect(p1, p2, obstacle.Vertices[i], obstacle.Vertices[(i + 1) % obstacle.Vertices.Count]))
+                for (int j = 0; j < obstacles[i].Vertices.Count; j++)
+                {
+                    if (GeometryHelper.DoSegmentsIntersect(p1, p2, obstacles[i].Vertices[j], obstacles[i].Vertices[(j + 1) % obstacles[i].Vertices.Count]))
                     {
-                        if (p1 == obstacle.Vertices[i] || p2 == obstacle.Vertices[i] || p1 == obstacle.Vertices[(i + 1) % obstacle.Vertices.Count] || p2 == obstacle.Vertices[(i + 1) % obstacle.Vertices.Count])
+                        if (p1 == obstacles[i].Vertices[j] || p2 == obstacles[i].Vertices[j] || p1 == obstacles[i].Vertices[(j + 1) % obstacles[i].Vertices.Count] || p2 == obstacles[i].Vertices[(j + 1) % obstacles[i].Vertices.Count])
+                        {
                             continue;
+                        }
                         return false;
                     }
+                }
+                if (GeometryHelper.IsInsidePolygon(p1, obstacles[i]) && !DoPolygonContainPoint(p1, obstacles[i]) || GeometryHelper.IsInsidePolygon(p2, obstacles[i]) && !DoPolygonContainPoint(p2, obstacles[i]))
+                    return false;
+                if (GeometryHelper.IsInsidePolygon(new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2), obstacles[i]))
+                {
+                    for (int index = 0; index < obstacles[i].Vertices.Count; index++)
+                    {
+                        if (obstacles[i].Vertices[index] == p1)
+                        {
+                            if (obstacles[i].Vertices[(index + 1) % obstacles[i].Vertices.Count] != p2 && obstacles[i].Vertices[(index - 1 + obstacles[i].Vertices.Count) % obstacles[i].Vertices.Count] != p2)
+                                return false;
+                        }
+                    }
+                }
             }
             return true;
+        }
+
+        bool DoPolygonContainPoint(Point p, Polygon poly)
+        {
+            for (int i = 0; i < poly.Vertices.Count; i++)
+                if (p.Equals(poly.Vertices[i]))
+                    return true;
+            return false;
         }
         List<Polygon> MergePolygons(List<Polygon> polygons)
         {
