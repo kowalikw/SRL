@@ -18,6 +18,7 @@ namespace SRL.Main.ViewModel
             Messenger.Default.Register<SaveFileDialogMessage>(this, SaveFileDialogHandler);
             Messenger.Default.Register<OpenFileDialogMessage>(this, OpenFileDialogHandler);
             Messenger.Default.Register<ErrorDialogMessage>(this, ErrorDialogHandler);
+            Messenger.Default.Register<InfoDialogMessage>(this, InfoDialogHandler);
             //TODO Not sure if navigation belongs in the view-model. Keep it like this until a better idea comes up.
         }
 
@@ -55,6 +56,11 @@ namespace SRL.Main.ViewModel
         private void ErrorDialogHandler(ErrorDialogMessage msg)
         {
             ModernDialog.ShowMessage(msg.ErrorDescription, "Error", MessageBoxButton.OK); //TODO dialog title UICulture dependant
+        }
+
+        private void InfoDialogHandler(InfoDialogMessage msg)
+        {
+            ModernDialog.ShowMessage(msg.Description, "Info", MessageBoxButton.OK); //TODO dialog title UICulture dependant
         }
 
     }

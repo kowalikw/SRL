@@ -189,9 +189,11 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
 
                         List<Option> options = _algorithm.GetOptions();
-                        ShowOptionsDialog(options);
-                        _algorithm.SetOptions(options);
-                        CalculatePath();
+                        if (ShowOptionsDialog(options))
+                        {
+                            _algorithm.SetOptions(options);
+                            CalculatePath();
+                        }
                     },
                         () =>
                         {
@@ -747,11 +749,11 @@ namespace SRL.Main.ViewModel
             CalculatingPath = true;
             RaisePropertyChanged(nameof(CalculatingPath));
             RaiseRequerySuggested();
-            
+
             //TODO lock setting _pathCalculationTask
         }
 
-        private void ShowOptionsDialog(List<Option> options)
+        private bool ShowOptionsDialog(List<Option> options)
         {
             OptionsDialogView dialog = new OptionsDialogView(options);
 
@@ -759,7 +761,10 @@ namespace SRL.Main.ViewModel
             {
                 options.Clear();
                 options.AddRange(dialog.Result);
+                return true;
             }
+
+            return false;
         }
 
         public enum Mode
