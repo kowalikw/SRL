@@ -132,6 +132,9 @@
   <data name="PausePlaybackTooltip" xml:space="preserve">
     <value>Wstrzymaj symulację</value>
   </data>
+  <data name="ResetTooltip" xml:space="preserve">
+    <value>Wyczyść</value>
+  </data>
   <data name="SaveSimulationTooltip" xml:space="preserve">
     <value>Zapisz symulację</value>
   </data>

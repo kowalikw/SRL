@@ -28,30 +28,25 @@
                     </Grid.ColumnDefinitions>
                     <Image x:Name="PW" Grid.Column="0" Source="{StaticResource PW}" />
                     <StackPanel Grid.Column="1" Margin="20,0" VerticalAlignment="Center">
-                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=14 }" HorizontalAlignment="Center">Politechnika Warszawska</TextBlock>
-                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center">Wydział Matematyki i Nauk Informacyjnych</TextBlock>
+                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=18 }" HorizontalAlignment="Center" Text="{Resx Key=university}"/>
+                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=24 }" HorizontalAlignment="Center" Text="{Resx Key=faculty}"/>
                     </StackPanel>
                     <Image x:Name="MiNI" Grid.Column="2" Source="{StaticResource MiNI}"/>
                 </Grid>
                 <StackPanel Grid.Row="1" Margin="0,20">
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center">Praca Dyplomowa Inżynierska</TextBlock>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center">INFORMATYKA</TextBlock>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=16 }" HorizontalAlignment="Center" Margin="0,24,0,0" FontWeight="Bold">Symulacja ruchu robota w labiryncie</TextBlock>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center" Text="{Resx Key=thesis}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center" Text="{Resx Key=computerscience}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=16 }" HorizontalAlignment="Center" Text="{Resx Key=title}" Margin="0,20,0,0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="0,20,0,10">
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center">Autorzy:</TextBlock>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center">Wojciech Kowalik, Konrad Miśkiewicz, Mateusz Pielat</TextBlock>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center" Text="{Resx Key=authorsHeader}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center" Text="{Resx Key=authors}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3">
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center">Promotor:</TextBlock>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center">dr inż. Paweł Rzążewski</TextBlock>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center" Text="{Resx Key=promotorHeader}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center" Text="{Resx Key=promotor}"/>
                 </StackPanel>
             </Grid>
-            <!--<StackPanel MinWidth="200">
-                <TextBlock Text="{Resx Key=testkey}" />
-                <Image x:Name="image" Height="100" Width="100" Source="pack://siteoforigin:,,,/Resources/MiNI.png"/>
-
-            </StackPanel>-->
         </ScrollViewer>
     </Grid>
 </UserControl>
