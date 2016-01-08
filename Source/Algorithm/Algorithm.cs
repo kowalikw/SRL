@@ -18,7 +18,7 @@ namespace SRL.Algorithm
         private List<Option> OptionTemplates;
         private List<Option> CurrentOptions;
 
-        struct IndexPoint // structure used to unify different index with each point
+        private struct IndexPoint // structure used to unify different index with each point
         {
             public Point point;
             public int index;
@@ -458,7 +458,7 @@ namespace SRL.Algorithm
             return tableOfObstacles;
         }
 
-        List<Point> ConvexMinkowski(List<Point> polygon1, List<Point> polygon2)
+        private List<Point> ConvexMinkowski(List<Point> polygon1, List<Point> polygon2)
         {
             List<Point> list = new List<Point>();
             for (int i = 0; i < polygon1.Count; i++)
@@ -469,7 +469,7 @@ namespace SRL.Algorithm
             return list;
         }
 
-        List<List<Point>> Triangulate(List<Point> shape)
+        private List<List<Point>> Triangulate(List<Point> shape)
         {
             Polygon poly = new Polygon(shape.ToArray());
             List<Point[]> triangles = Triangulation2D.Triangulate(ref poly);
@@ -486,7 +486,7 @@ namespace SRL.Algorithm
             return list;
         }
 
-        Polygon ConvexHull(List<Point> points)
+        private Polygon ConvexHull(List<Point> points)
         {
             Polygon poly;
             points.Sort((a, b) =>
@@ -532,7 +532,7 @@ namespace SRL.Algorithm
             return (int)Math.Round(500 * Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y)), 0);
         }
 
-        bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
+        private bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
         {
             if (Math.Abs(p1.X) > 1 || Math.Abs(p1.Y) > 1 || Math.Abs(p2.X) > 1 || Math.Abs(p2.Y) > 1)
                 return false;
@@ -566,14 +566,14 @@ namespace SRL.Algorithm
             return true;
         }
 
-        bool DoPolygonContainPoint(Point p, Polygon poly)
+        private bool DoPolygonContainPoint(Point p, Polygon poly)
         {
             for (int i = 0; i < poly.Vertices.Count; i++)
                 if (p.Equals(poly.Vertices[i]))
                     return true;
             return false;
         }
-        List<Polygon> MergePolygons(List<Polygon> polygons)
+        private List<Polygon> MergePolygons(List<Polygon> polygons)
         {
             // TODO: THIS FUNCTION USES THE LIBRARY THAT WE NEED TO REBUILD INTO OUR PROJECT
             long multiply = long.MaxValue / 10;
