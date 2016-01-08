@@ -95,12 +95,9 @@
     <Compile Include="Drawing\DynamicDrawHelper.cs" />
     <Compile Include="Drawing\LockBitmap.cs" />
     <Compile Include="Drawing\StaticDrawHelper.cs" />
-    <Compile Include="Messages\ErrorDialogMessage.cs" />
     <Compile Include="Messages\GoToPageMessage.cs" />
-    <Compile Include="Messages\InfoDialogMessage.cs" />
     <Compile Include="Messages\SetModelMessage.cs" />
-    <Compile Include="Messages\OpenFileDialogMessage.cs" />
-    <Compile Include="Messages\SaveFileDialogMessage.cs" />
+    <Compile Include="Messages\ShowDialogMessage.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -126,6 +123,9 @@
     <Compile Include="ViewModel\TracingViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Dialogs\DialogArgs.cs" />
+    <Compile Include="View\Dialogs\DialogService.cs" />
+    <Compile Include="View\Dialogs\IDialogService.cs" />
     <Compile Include="View\Localization\HomeView.pl.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

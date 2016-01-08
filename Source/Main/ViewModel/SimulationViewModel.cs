@@ -752,6 +752,8 @@ namespace SRL.Main.ViewModel
 
             //TODO lock setting _pathCalculationTask
         }
+        
+
 
         private bool ShowOptionsDialog(List<Option> options)
         {

@@ -9,14 +9,11 @@ namespace SRL.Main
     /// </summary>
     public partial class App : Application
     {
-        public Language UILanguage { get; private set; }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            UILanguage = Settings.Default.Language;
-            CultureManager.UICulture = UILanguage.GetCultureInfo();
+            
+            CultureManager.UICulture = Settings.Default.Language.GetCultureInfo();
         }
     }
 }

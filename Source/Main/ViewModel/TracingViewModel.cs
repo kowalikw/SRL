@@ -15,6 +15,7 @@ using SRL.Commons.Utilities;
 using SRL.Main.Messages;
 using SRL.Main.Tracing;
 using SRL.Main.Utilities;
+using SRL.Main.View.Dialogs;
 using SRL.Main.View.Pages;
 
 namespace SRL.Main.ViewModel
@@ -27,23 +28,20 @@ namespace SRL.Main.ViewModel
             {
                 if (_loadBitmapCommand == null)
                 {
-                    _loadBitmapCommand = new RelayCommand(() =>
+                    _loadBitmapCommand = new RelayCommand(() => 
                     {
-                        Messenger.Default.Send(new OpenFileDialogMessage
+                        var args = new OpenFileDialogArgs();
+                        args.Filter = "Raster image files|*.bmp;*.jpg;*.jpeg;*.png";
+                        args.CloseCallback = (result, filename) =>
                         {
-                            Filter = "Raster image files|*.bmp;*.jpg;*.jpeg;*.png",
-                            FilenameCallback = filename =>
-                            {
-                                if (filename == null)
-                                    return;
+                            if (!result)
+                                return;
 
-                                Bitmap = new BitmapImage(new Uri(filename));
-                                _tracer = new BitmapTracer(filename);
-                                Polygons.Clear();
-                                SelectedPolygonIndices.Clear();
-                            }
-
-                        });
+                            Bitmap = new BitmapImage(new Uri(filename));
+                            _tracer = new BitmapTracer(filename);
+                            Polygons.Clear();
+                            SelectedPolygonIndices.Clear();
+                        };
                     }, () =>
                     {
                         return !OngoingTracing;

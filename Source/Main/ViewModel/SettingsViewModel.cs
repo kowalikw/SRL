@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using Infralution.Localization.Wpf;
 using SRL.Commons;
 using SRL.Main.Messages;
+using SRL.Main.View.Dialogs;
 
 namespace SRL.Main.ViewModel
 {
@@ -33,9 +34,10 @@ namespace SRL.Main.ViewModel
                 Settings.Default.Language = value;
                 Settings.Default.Save();
 
-                InfoDialogMessage msg = new InfoDialogMessage();
-                msg.Description = "Application must be restarted to change the language.";
-                Messenger.Default.Send(msg);
+                var args = new MessageDialogArgs();
+                args.Title = "Info";
+                args.Description = "Application must be restarted to change the language."; //TODO localization
+                Messenger.Default.Send(new ShowDialogMessage(args));
             }
         }
 
