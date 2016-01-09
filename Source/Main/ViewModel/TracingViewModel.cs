@@ -42,9 +42,10 @@ namespace SRL.Main.ViewModel
                             Polygons.Clear();
                             SelectedPolygonIndices.Clear();
                         };
+                        Messenger.Default.Send(new ShowDialogMessage(args));
                     }, () =>
                     {
-                        return !OngoingTracing;
+                        return !TracingBitmap;
                     });
                 }
                 return _loadBitmapCommand;
@@ -68,7 +69,7 @@ namespace SRL.Main.ViewModel
                         Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
-                        return !OngoingTracing;
+                        return !TracingBitmap;
                     });
                 }
                 return _makeMapCommand;
@@ -92,7 +93,7 @@ namespace SRL.Main.ViewModel
                     }, () =>
                     {
                         //TODO allow polygon sums?
-                        return SelectedPolygonIndices.Count == 1 && !OngoingTracing;
+                        return SelectedPolygonIndices.Count == 1 && !TracingBitmap;
                     });
                 }
                 return _makeVehicleCommand;
@@ -124,7 +125,7 @@ namespace SRL.Main.ViewModel
                         TraceTask.Start();
                     }, () =>
                     {
-                        return _tracer != null && !OngoingTracing;
+                        return _tracer != null && !TracingBitmap;
                     });
                 }
                 return _traceCommand;
@@ -230,14 +231,14 @@ namespace SRL.Main.ViewModel
 
         private CancellationTokenSource _traceCancellationTokenSource;
 
-        public bool OngoingTracing
+        public bool TracingBitmap
         {
-            get { return _ongoingTracing; }
+            get { return _tracingBitmap; }
             private set
             {
-                if (_ongoingTracing != value)
+                if (_tracingBitmap != value)
                 {
-                    _ongoingTracing = value;
+                    _tracingBitmap = value;
                     RaisePropertyChanged();
                     RaiseRequerySuggested();
                 }
@@ -249,7 +250,7 @@ namespace SRL.Main.ViewModel
             set
             {
                 _traceTask = value;
-                OngoingTracing = _traceTask != null;
+                TracingBitmap = _traceTask != null;
             }
         }
 
@@ -261,7 +262,7 @@ namespace SRL.Main.ViewModel
         private double _colorThreshold;
         private int _pixelAreaThreshold;
         private int _absoluteColorThreshold;
-        private bool _ongoingTracing;
+        private bool _tracingBitmap;
 
 
         public TracingViewModel()
