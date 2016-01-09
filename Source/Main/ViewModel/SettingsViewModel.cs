@@ -34,10 +34,13 @@ namespace SRL.Main.ViewModel
                 Settings.Default.Language = value;
                 Settings.Default.Save();
 
-                var args = new MessageDialogArgs();
-                args.Title = "Info";
-                args.Description = "Application must be restarted to change the language."; //TODO localization
-                Messenger.Default.Send(new ShowDialogMessage(args));
+                if (CultureManager.UICulture.GetLanguage() != value)
+                {
+                    var args = new MessageDialogArgs();
+                    args.Title = "Info";
+                    args.Description = "Application must be restarted to change the language."; //TODO localization
+                    Messenger.Default.Send(new ShowDialogMessage(args));
+                }
             }
         }
 

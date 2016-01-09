@@ -141,7 +141,7 @@ namespace SRL.Algorithm
                       for (int j = 0; j < IndexPointAngleList[angle].Count; j++)
                       {
                           if (token.IsCancellationRequested)
-                              throw new OperationCanceledException();
+                              return;
                           // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
                           if (IndexPointAngleList[angle][i].obstacle == -1)
                           {
@@ -193,6 +193,9 @@ namespace SRL.Algorithm
                       }
                   }
               });
+
+            if (token.IsCancellationRequested)
+                throw new OperationCanceledException();
 
             // Adding turning edges
             for (int angle = 0; angle < angleDensity; angle++)

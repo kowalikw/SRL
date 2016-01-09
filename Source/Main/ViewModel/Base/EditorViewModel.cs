@@ -42,6 +42,8 @@ namespace SRL.Main.ViewModel.Base
                 {
                     _loadCommand = new RelayCommand(() =>
                     {
+                        ResetCommand.Execute(null);
+
                         var model = LoadModelViaDialog<T>();
                         if (model != null)
                             SetEditedModel(model);

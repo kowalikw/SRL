@@ -1,10 +1,8 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using FirstFloor.ModernUI.Windows.Controls;
 using FirstFloor.ModernUI.Windows.Navigation;
 using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Win32;
 using SRL.Main.Messages;
 using SRL.Main.View.Dialogs;
 

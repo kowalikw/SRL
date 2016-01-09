@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,12 +62,13 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
+                        StopPathCalculation();
                         SimulationRunning = false;
                         EditorMode = Mode.Normal;
                         Map = null;
                         Vehicle = null;
                         Orders = null;
-                    }, () => !CalculatingPath);
+                    });
                 }
                 return _resetCommand;
             }
@@ -192,7 +194,7 @@ namespace SRL.Main.ViewModel
                         if (ShowOptionsDialog(options))
                         {
                             _algorithm.SetOptions(options);
-                            CalculatePath();
+                            StartPathCalculation();
                         }
                     },
                         () =>
@@ -446,6 +448,25 @@ namespace SRL.Main.ViewModel
         #endregion
 
 
+        #region Path calculation properties
+
+        public bool CalculatingPath
+        {
+            get { return _calculatingPath; }
+            set
+            {
+                Set(ref _calculatingPath, value);
+                RaiseRequerySuggested();
+            }
+        }
+
+        private bool _calculatingPath;
+        private CancellationTokenSource _cancellationTokenSource;
+        private readonly object _cancellationLock = new object();
+
+        #endregion
+
+
         public Mode EditorMode
         {
             get { return _editorMode; }
@@ -485,26 +506,16 @@ namespace SRL.Main.ViewModel
             }
         }
 
-        public bool CalculatingPath
-        {
-            get { return _calculatingPath; }
-            set
-            {
-                Set(ref _calculatingPath, value);
-                RaiseRequerySuggested();
-            }
-        }
+
         protected override bool IsEditedModelValid
         {
             get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
         }
 
-        private Task _pathCalculationTask;
-        private CancellationTokenSource _cancellationTokenSource;
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
 
-        private bool _calculatingPath;
+        
         private bool _simulationRunning;
 
 
@@ -727,33 +738,49 @@ namespace SRL.Main.ViewModel
             Frames = frames.Reverse().ToList();
         }
 
-        private void CalculatePath()
+
+
+
+
+
+        private void StartPathCalculation()
         {
+            Monitor.Enter(_cancellationLock);
             _cancellationTokenSource?.Cancel();
+
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken token = _cancellationTokenSource.Token;
 
-            _pathCalculationTask = new Task(() =>
+            new Task(() =>
             {
-                Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value, token); //TODO pass token
+                try
+                {
+                    Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
+                        InitialVehicleRotation.Value, token);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
 
-                if (!token.IsCancellationRequested)
+                if (Monitor.TryEnter(_cancellationLock) && !token.IsCancellationRequested)
                 {
                     CalculatingPath = false;
-                    RaisePropertyChanged(nameof(CalculatingPath));
-                    RaiseRequerySuggested();
+                    Monitor.Exit(_cancellationLock);
                 }
-            }, token);
-
-            _pathCalculationTask.Start();
+            }, token).Start();
+            
             CalculatingPath = true;
-            RaisePropertyChanged(nameof(CalculatingPath));
-            RaiseRequerySuggested();
-
-            //TODO lock setting _pathCalculationTask
+            Monitor.Exit(_cancellationLock);
         }
-        
 
+        private void StopPathCalculation()
+        {
+            Monitor.Enter(_cancellationLock);
+            _cancellationTokenSource?.Cancel();
+            CalculatingPath = false;
+            Monitor.Exit(_cancellationLock);
+        }
 
         private bool ShowOptionsDialog(List<Option> options)
         {
