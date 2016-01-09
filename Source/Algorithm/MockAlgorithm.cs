@@ -81,7 +81,7 @@ namespace SRL.Algorithm
 
                     for (int j = 0; j < vehicleTemplate.Shape.Vertices.Count; j++)
                     {
-                        Point rotatedPoint = GeometryHelper.RotatePoint(vehicleTemplate.Shape.Vertices[j], new Point(0, 0), rotation);
+                        Point rotatedPoint = GeometryHelper.Rotate(vehicleTemplate.Shape.Vertices[j], new Point(0, 0), rotation);
                         double newPointX = x + vehicleTemplate.Shape.Vertices[j].X;
                         double newPointY = y + vehicleTemplate.Shape.Vertices[j].Y;
                         shp.Add(new Point(newPointX, newPointY));

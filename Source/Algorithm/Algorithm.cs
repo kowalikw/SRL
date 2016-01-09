@@ -148,7 +148,7 @@ namespace SRL.Algorithm
                               bool cancel = false;
                               foreach (Polygon obstacle in currentMap[angle])
                               {
-                                  if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][i].point, obstacle))
+                                  if (GeometryHelper.IsEnclosed(IndexPointAngleList[angle][i].point, obstacle))
                                   {
                                       cancel = true;
                                       break;
@@ -162,7 +162,7 @@ namespace SRL.Algorithm
                               bool cancel = false;
                               foreach (Polygon obstacle in currentMap[angle])
                               {
-                                  if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][j].point, obstacle))
+                                  if (GeometryHelper.IsEnclosed(IndexPointAngleList[angle][j].point, obstacle))
                                   {
                                       cancel = true;
                                       break;
@@ -212,7 +212,7 @@ namespace SRL.Algorithm
                             bool cancel = false;
                             foreach (Polygon obstacle in currentMap[angle])
                             {
-                                if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][i].point, obstacle))
+                                if (GeometryHelper.IsEnclosed(IndexPointAngleList[angle][i].point, obstacle))
                                 {
                                     cancel = true;
                                     break;
@@ -226,7 +226,7 @@ namespace SRL.Algorithm
                             bool cancel = false;
                             foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
                             {
-                                if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[(angle + 1) % angleDensity][j].point, obstacle))
+                                if (GeometryHelper.IsEnclosed(IndexPointAngleList[(angle + 1) % angleDensity][j].point, obstacle))
                                 {
                                     cancel = true;
                                     break;
@@ -473,7 +473,7 @@ namespace SRL.Algorithm
                 List<Point> rotatedVehicle = new List<Point>();
                 for (int j = 0; j < vehicle.Shape.Vertices.Count; j++)
                 {
-                    rotatedVehicle.Add(GeometryHelper.RotatePoint(vehicle.Shape.Vertices[j], new Point(0, 0), i * singleAngle + Math.PI));
+                    rotatedVehicle.Add(GeometryHelper.Rotate(vehicle.Shape.Vertices[j], new Point(0, 0), i * singleAngle + Math.PI));
                 }
 
                 List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
@@ -564,11 +564,11 @@ namespace SRL.Algorithm
             List<Point> newTriangle = new List<Point>();
             for (int i = 0; i < triangle.Vertices.Count; i++)
             {
-                Point p = GeometryHelper.RotatePoint(triangle.Vertices[i], new Point(0, 0), angle);
+                Point p = GeometryHelper.Rotate(triangle.Vertices[i], new Point(0, 0), angle);
                 newTriangle.Add(new Point(p1.X + p.X, p1.Y + p.Y));
             }
             Polygon poly = new Polygon(newTriangle);
-            return GeometryHelper.IsInsidePolygon(p2, poly);
+            return GeometryHelper.IsEnclosed(p2, poly);
         }
 
 
@@ -594,9 +594,9 @@ namespace SRL.Algorithm
                         return false;
                     }
                 }
-                if (GeometryHelper.IsInsidePolygon(p1, obstacles[i]) && !DoPolygonContainPoint(p1, obstacles[i]) || GeometryHelper.IsInsidePolygon(p2, obstacles[i]) && !DoPolygonContainPoint(p2, obstacles[i]))
+                if (GeometryHelper.IsEnclosed(p1, obstacles[i]) && !DoPolygonContainPoint(p1, obstacles[i]) || GeometryHelper.IsEnclosed(p2, obstacles[i]) && !DoPolygonContainPoint(p2, obstacles[i]))
                     return false;
-                if (GeometryHelper.IsInsidePolygon(new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2), obstacles[i]))
+                if (GeometryHelper.IsEnclosed(new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2), obstacles[i]))
                 {
                     for (int index = 0; index < obstacles[i].Vertices.Count; index++)
                     {

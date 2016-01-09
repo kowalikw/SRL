@@ -119,7 +119,7 @@ namespace SRL.Main.ViewModel
                 {
                     _setPivotCommand = new RelayCommand<Point>(
                         point => Pivot = point,
-                        point => GeometryHelper.IsInsidePolygon(point, new Polygon(VehicleShape)));
+                        point => GeometryHelper.IsEnclosed(point, new Polygon(VehicleShape)));
                 }
                 return _setPivotCommand;
             }
@@ -213,7 +213,7 @@ namespace SRL.Main.ViewModel
             Vehicle vehicle = new Vehicle();
 
             Polygon shape = new Polygon(VehicleShape);
-            Polygon rotatedShape = GeometryHelper.Rotate(Pivot.Value, shape, -Direction.Value);
+            Polygon rotatedShape = GeometryHelper.Rotate(shape, Pivot.Value , - Direction.Value);
 
             double minX = double.MaxValue, minY = double.MaxValue;
             double maxX = double.MinValue, maxY = double.MinValue;
@@ -259,7 +259,7 @@ namespace SRL.Main.ViewModel
             if (VehicleShape.Count >= 3) // TODO instead of checking count only, make sure at least 3 vertices are non collinear
             {
                 ShapeDone = true;
-                if (GeometryHelper.IsInsidePolygon(new Point(0, 0), model.Shape))
+                if (GeometryHelper.IsEnclosed(new Point(0, 0), model.Shape))
                 {
                     Pivot = new Point(0, 0);
                     Direction = 0;

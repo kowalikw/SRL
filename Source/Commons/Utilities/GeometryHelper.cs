@@ -12,7 +12,7 @@ namespace SRL.Commons.Utilities
             return pX * qY - qX * pY;
         }
 
-        public static double CrossProduct(Point p1, Point p2, Point? pivot = null)
+        public static double CrossProduct(Point p1, Point p2, Point? pivot = null) //TODO remove pivot parameter!
         {
             if (pivot.HasValue)
                 return (p1.X - pivot.Value.X) * (p2.Y - pivot.Value.Y) - (p2.X - pivot.Value.X) * (p1.Y - pivot.Value.Y);
@@ -20,34 +20,12 @@ namespace SRL.Commons.Utilities
             return p1.X * p2.Y - p2.X * p1.Y;
         }
 
-        public static double DotProduct(Point p1, Point p2, Point? pivot = null)
+        public static double DotProduct(Point p1, Point p2, Point? pivot = null) //TODO remove pivot parameter!
         {
             if (pivot.HasValue)
                 return (p1.X - pivot.Value.X) * (p2.X - pivot.Value.X) + (p1.Y - pivot.Value.Y) * (p2.Y - pivot.Value.Y);
 
             return p1.X * p2.X + p1.Y * p2.Y;
-        }
-
-        public static bool IsInsideRectangle(Point point, Point cornerA, Point cornerB)
-        {
-            return Math.Min(cornerA.X, cornerB.X) <= point.X
-                && point.X <= Math.Max(cornerA.X, cornerB.X)
-                && Math.Min(cornerA.Y, cornerB.Y) <= point.Y
-                && point.Y <= Math.Max(cornerA.Y, cornerB.Y);
-        }
-
-        public static bool IsInsidePolygon(Point point, Polygon polygon)
-        {
-            // If point it's on polygon edge, it's inside of polygon.
-
-            double epsilon = 0.000001;
-
-            double totalAngle = GetAngle(point, polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]);
-
-            for (int i = 0; i < polygon.Vertices.Count - 1; i++)
-                totalAngle += GetAngle(point, polygon.Vertices[i], polygon.Vertices[i + 1]);
-
-            return Math.Abs(totalAngle) > epsilon;
         }
 
         public static bool DoSegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
@@ -65,10 +43,10 @@ namespace SRL.Commons.Utilities
             if (d12 < 0 || d34 < 0)
                 return true;
 
-            return IsInsideRectangle(p1, q1, q2)
-                || IsInsideRectangle(p2, q1, q2)
-                || IsInsideRectangle(q1, p1, p2)
-                || IsInsideRectangle(q2, p1, p2);
+            return IsEnclosedByRect(p1, q1, q2)
+                || IsEnclosedByRect(p2, q1, q2)
+                || IsEnclosedByRect(q1, p1, p2)
+                || IsEnclosedByRect(q2, p1, p2);
         }
 
         public static double GetDistance(Point p, Point q)
@@ -76,24 +54,19 @@ namespace SRL.Commons.Utilities
             return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
         }
 
-        public static double GetAngle(Point pivot, Point point)
-        {
-            double angle = Math.Atan((point.Y - pivot.Y) / (point.X - pivot.X));
-
-            if (point.X < pivot.X)
-                angle += Math.PI;
-
-            return angle;
-        }
-
-        public static double GetAngle(Point pivot, Point origin, Point point)
+        public static double GetAngle(Point pivot, Point source, Point dest)
         {
             return Math.Atan2(
-                CrossProduct(origin, point, pivot), 
-                DotProduct(origin, point, pivot));
+                CrossProduct(source, dest, pivot),
+                DotProduct(source, dest, pivot));
         }
 
-        public static Point RotatePoint(Point point, Point pivot, double angle)
+        public static double GetAngle(Point pivot, Point dest)
+        {
+            return GetAngle(pivot, new Point(pivot.X + 1, 0), dest);
+        }
+
+        public static Point Rotate(Point point, Point pivot, double angle)
         {
             double cosTheta = Math.Cos(angle);
             double sinTheta = Math.Sin(angle);
@@ -104,30 +77,27 @@ namespace SRL.Commons.Utilities
                     cosTheta * (point.Y - pivot.Y) + pivot.Y));
         }
 
-        public static Polygon Rotate(Point pivot, Polygon polygon, double angle) //TODO change parameter order (pivot should be second), add ref to point and remove return value.
+        public static Polygon Rotate(Polygon polygon, Point pivot, double angle)
         {
             var output = new Polygon();
             for (int i = 0; i < polygon.Vertices.Count; i++)
-                output.Vertices.Add(RotatePoint(polygon.Vertices[i], pivot, angle));
+                output.Vertices.Add(Rotate(polygon.Vertices[i], pivot, angle));
             return output;
         }
 
         public static Polygon Rotate(Polygon polygon, double angle)
         {
-            var output = new Polygon();
-            for (int i = 0; i < polygon.Vertices.Count; i++)
-                output.Vertices.Add(RotatePoint(polygon.Vertices[i], new Point(0, 0), angle));
-            return output;
+            return Rotate(polygon, new Point(0, 0), angle);
         }
 
-        public static Polygon Move(Polygon polygon, double x, double y)
+        public static Polygon Move(Polygon polygon, double dx, double dy)
         {
             var output = new Polygon();
             for (int i = 0; i < polygon.Vertices.Count; i++)
             {
                 output.Vertices.Add(new Point(
-                    polygon.Vertices[i].X + x,
-                    polygon.Vertices[i].Y + y));
+                    polygon.Vertices[i].X + dx,
+                    polygon.Vertices[i].Y + dy));
             }
             return output;
         }
@@ -144,36 +114,66 @@ namespace SRL.Commons.Utilities
             return output;
         }
 
-        public static bool IsCounterClockwiseTurn(Point pivot, Point init, Point target)
+        public static bool IsCounterClockwiseTurn(Point pivot, Point source, Point dest)
         {
-            return CrossProduct(
-                new Point(init.X - pivot.X, init.Y - pivot.Y),
-                new Point(target.X - pivot.X, target.Y - pivot.Y)) > 0; // TODO Doesn't return value == 0 mean that no there's no turn? Fix me
+            return CrossProduct(source.X - pivot.X, source.Y - pivot.Y, dest.X - pivot.X, dest.Y - pivot.Y) > 0;
         }
 
         public static bool IsIntersected(Polygon subject, IEnumerable<Polygon> polygons)
         {
             foreach (Polygon polygon in polygons)
+            {
                 for (int i = 0; i < polygon.Vertices.Count; i++)
                     for (int j = 0; j < subject.Vertices.Count; j++)
                         if (DoSegmentsIntersect(
                             polygon.Vertices[i], polygon.Vertices[(i + 1) % polygon.Vertices.Count],
                             subject.Vertices[j], subject.Vertices[(j + 1) % subject.Vertices.Count]))
                             return true;
+            }
 
+            return false;
+        }
+
+        public static bool IsEnclosed(Point point, Polygon polygon)
+        {
+            // If point it's on polygon edge, it's inside of polygon.
+
+            double totalAngle = GetAngle(point, polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]);
+
+            for (int i = 0; i < polygon.Vertices.Count - 1; i++)
+                totalAngle += GetAngle(point, polygon.Vertices[i], polygon.Vertices[i + 1]);
+
+            return Math.Abs(totalAngle) > MathHelper.DoubleComparisonEpsilon;
+        }
+
+        public static bool IsEnclosed(Point point, IEnumerable<Polygon> polygons)
+        {
+            foreach (var polygon in polygons)
+            {
+                if (IsEnclosed(point, polygon))
+                    return true;
+            }
             return false;
         }
 
         public static bool IsEnclosed(Polygon subject, Polygon enclosure)
         {
-            for (int i = 0; i < subject.Vertices.Count; i++)
-                if (!IsInsidePolygon(subject.Vertices[i], enclosure))
+            foreach (var vertex in subject.Vertices)
+                if (!IsEnclosed(vertex, enclosure))
                     return false;
 
             if (IsIntersected(subject, new List<Polygon>() { enclosure }))
                 return false;
 
             return true;
+        }
+
+        public static bool IsEnclosedByRect(Point point, Point cornerA, Point cornerB)
+        {
+            return Math.Min(cornerA.X, cornerB.X) <= point.X
+                && point.X <= Math.Max(cornerA.X, cornerB.X)
+                && Math.Min(cornerA.Y, cornerB.Y) <= point.Y
+                && point.Y <= Math.Max(cornerA.Y, cornerB.Y);
         }
 
     }

@@ -122,7 +122,7 @@ namespace SRL.Main.ViewModel
                         if (EditorMode != Mode.StartPointSetup || CalculatingPath || Map == null)
                             return false;
 
-                        return !IsInsideObstacle(point);
+                        return !GeometryHelper.IsEnclosed(point, Map.Obstacles);
                     });
                 }
                 return _setStartPointCommand;
@@ -143,7 +143,7 @@ namespace SRL.Main.ViewModel
                         if (EditorMode != Mode.EndPointSetup || CalculatingPath || Map == null)
                             return false;
 
-                        return !IsInsideObstacle(point);
+                        return !GeometryHelper.IsEnclosed(point, Map.Obstacles);
                     });
                 }
                 return _setEndPointCommand;
@@ -191,10 +191,10 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
 
                         List<Option> options = _algorithm.GetOptions();
-                        if (ShowOptionsDialog(options))
+                        if (GetAlgorithmOptions(options))
                         {
                             _algorithm.SetOptions(options);
-                            StartPathCalculation();
+                            StartNewPathCalculation();
                         }
                     },
                         () =>
@@ -568,16 +568,6 @@ namespace SRL.Main.ViewModel
                 CalculateFrames(Orders);
         }
 
-        public bool IsInsideObstacle(Point point)
-        {
-            foreach (var obstacle in Map.Obstacles)
-            {
-                if (GeometryHelper.IsInsidePolygon(point, obstacle))
-                    return true;
-            }
-            return false;
-        }
-
         private void CalculateFrames(List<Order> orders)
         {
             double radiansPerPart = 1 / (double)FramesPerRadian;
@@ -738,12 +728,7 @@ namespace SRL.Main.ViewModel
             Frames = frames.Reverse().ToList();
         }
 
-
-
-
-
-
-        private void StartPathCalculation()
+        private void StartNewPathCalculation()
         {
             Monitor.Enter(_cancellationLock);
             _cancellationTokenSource?.Cancel();
@@ -782,7 +767,7 @@ namespace SRL.Main.ViewModel
             Monitor.Exit(_cancellationLock);
         }
 
-        private bool ShowOptionsDialog(List<Option> options)
+        private bool GetAlgorithmOptions(List<Option> options)
         {
             OptionsDialogView dialog = new OptionsDialogView(options);
 

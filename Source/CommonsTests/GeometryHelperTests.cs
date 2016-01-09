@@ -46,9 +46,9 @@ namespace CommonsTests
             Point point2 = new Point(5, 5);
             Point point3 = new Point(2, 8);
 
-            Assert.IsFalse(GeometryHelper.IsInsideRectangle(point1, cornerA, cornerB));
-            Assert.IsTrue(GeometryHelper.IsInsideRectangle(point2, cornerA, cornerB));
-            Assert.IsTrue(GeometryHelper.IsInsideRectangle(point3, cornerA, cornerB));
+            Assert.IsFalse(GeometryHelper.IsEnclosedByRect(point1, cornerA, cornerB));
+            Assert.IsTrue(GeometryHelper.IsEnclosedByRect(point2, cornerA, cornerB));
+            Assert.IsTrue(GeometryHelper.IsEnclosedByRect(point3, cornerA, cornerB));
         }
 
         [TestMethod]
@@ -66,9 +66,9 @@ namespace CommonsTests
             Point point2 = new Point(0, 0);
             Point point3 = new Point(0, 0.1);
 
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point1, polygon));
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point2, polygon));
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point3, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point1, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point2, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point3, polygon));
         }
 
         [TestMethod]
@@ -85,8 +85,8 @@ namespace CommonsTests
             Point point1 = new Point(0.5, 0.5);
             Point point2 = new Point(0.21, 0.1);
 
-            Assert.IsFalse(GeometryHelper.IsInsidePolygon(point1, polygon));
-            Assert.IsFalse(GeometryHelper.IsInsidePolygon(point2, polygon));
+            Assert.IsFalse(GeometryHelper.IsEnclosed(point1, polygon));
+            Assert.IsFalse(GeometryHelper.IsEnclosed(point2, polygon));
         }
 
         [TestMethod]
@@ -131,7 +131,7 @@ namespace CommonsTests
         [TestMethod]
         public void RotatePointTest()
         {
-            var actual = GeometryHelper.RotatePoint(new Point(1, 2), new Point(0, 1), Math.PI / 2);
+            var actual = GeometryHelper.Rotate(new Point(1, 2), new Point(0, 1), Math.PI / 2);
             var expected = new Point(-1, 2);
 
             Assert.AreEqual(expected.X, Math.Round(actual.X));
@@ -158,7 +158,7 @@ namespace CommonsTests
                 new Point(-4, 1)
             });
 
-            Polygon actual2 = GeometryHelper.Rotate(new Point(0.2, 0.5), polygon, Math.PI / 2);
+            Polygon actual2 = GeometryHelper.Rotate(polygon, new Point(0.2, 0.5), Math.PI / 2);
             Polygon expected2 = new Polygon(new List<Point>()
             {
                 new Point(-0.3, 1.3),

@@ -140,7 +140,7 @@ namespace SRL.Main.ViewModel
                     {
                         for (int i = Polygons.Count - 1; i >= 0; i--)
                         {
-                            if (GeometryHelper.IsInsidePolygon(point, Polygons[i])
+                            if (GeometryHelper.IsEnclosed(point, Polygons[i])
                                && !SelectedPolygonIndices.Contains(i))
                             {
                                 SelectedPolygonIndices.Add(i);
@@ -162,7 +162,7 @@ namespace SRL.Main.ViewModel
                     {
                         for (int i = Polygons.Count - 1; i >= 0; i--)
                         {
-                            if (GeometryHelper.IsInsidePolygon(point, Polygons[i])
+                            if (GeometryHelper.IsEnclosed(point, Polygons[i])
                                && SelectedPolygonIndices.Contains(i))
                             {
                                 SelectedPolygonIndices.Remove(i);
