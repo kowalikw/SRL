@@ -47,7 +47,8 @@ namespace SRL.Main.ViewModel.Base
                         var model = LoadModelViaDialog<T>();
                         if (model != null)
                             SetEditedModel(model);
-                    });
+                    },
+                    () => ResetCommand.CanExecute(null));
                 }
                 return _loadCommand;
             }
