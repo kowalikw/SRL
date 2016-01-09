@@ -37,6 +37,8 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.PropertyChanged += _propertyChangedHandler;
             Settings.Default.PropertyChanged += _propertyChangedHandler;
+
+
         }
 
         protected override void Unitialize()
@@ -87,7 +89,7 @@ namespace SRL.Main.View.MonoGameArea
                         Rotation = angle
                     };
 
-                    if (_context.SetInitialVehicleSetup.CanExecute(setup))
+                    if (_context.SetInitialVehicleSetupCommandCommand.CanExecute(setup))
                         color = ValidColor;
                     else
                         color = InvalidColor;
@@ -182,8 +184,8 @@ namespace SRL.Main.View.MonoGameArea
                         Rotation = GeometryHelper.GetAngle(origin, normalizedMousePos)
                     };
 
-                    if (_context.SetInitialVehicleSetup.CanExecute(setup))
-                        _context.SetInitialVehicleSetup.Execute(setup);
+                    if (_context.SetInitialVehicleSetupCommandCommand.CanExecute(setup))
+                        _context.SetInitialVehicleSetupCommandCommand.Execute(setup);
                 }
             }
         }
@@ -210,5 +212,7 @@ namespace SRL.Main.View.MonoGameArea
                 }
             }
         }
+
+
     }
 }

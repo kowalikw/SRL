@@ -108,7 +108,7 @@ namespace SRL.Main.ViewModel.Base
             {
                 var msgDialogArgs = new MessageDialogArgs();
                 msgDialogArgs.Title = "Error"; //TODO localization
-                msgDialogArgs.Description = $"The file doesn't contain {typeof(R).Name} object."; //TODO Put error description in resources. Make polish version too.
+                msgDialogArgs.Description = $"The file doesn't contain {typeof(R).Name} object."; //TODO localization
                 Messenger.Default.Send(new ShowDialogMessage(msgDialogArgs));
             }
 

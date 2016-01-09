@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
+using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
+using SRL.Main.Messages;
 using SRL.Main.View;
+using SRL.Main.View.Dialogs;
 using SRL.Main.ViewModel.Base;
 using Frame = SRL.Commons.Model.Frame;
 
@@ -149,13 +152,13 @@ namespace SRL.Main.ViewModel
                 return _setEndPointCommand;
             }
         }
-        public RelayCommand<VehicleSetup> SetInitialVehicleSetup
+        public RelayCommand<VehicleSetup> SetInitialVehicleSetupCommandCommand
         {
             get
             {
-                if (_setInitialVehicleSetup == null)
+                if (_setInitialVehicleSetupCommand == null)
                 {
-                    _setInitialVehicleSetup = new RelayCommand<VehicleSetup>(setup =>
+                    _setInitialVehicleSetupCommand = new RelayCommand<VehicleSetup>(setup =>
                     {
                         EditorMode = Mode.Normal;
                         VehicleSize = setup.RelativeSize;
@@ -177,7 +180,7 @@ namespace SRL.Main.ViewModel
                         return !GeometryHelper.IsIntersected(shape, Map.Obstacles);
                     });
                 }
-                return _setInitialVehicleSetup;
+                return _setInitialVehicleSetupCommand;
             }
         }
         public RelayCommand CalculatePathCommand
@@ -214,7 +217,7 @@ namespace SRL.Main.ViewModel
         private RelayCommand _loadVehicleCommand;
         private RelayCommand<Point> _setStartPointCommand;
         private RelayCommand<Point> _setEndPointCommand;
-        private RelayCommand<VehicleSetup> _setInitialVehicleSetup;
+        private RelayCommand<VehicleSetup> _setInitialVehicleSetupCommand;
         private RelayCommand _calculatePathCommand;
 
         #endregion
@@ -509,13 +512,22 @@ namespace SRL.Main.ViewModel
 
         protected override bool IsEditedModelValid
         {
-            get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
+            get
+            {
+                return Map != null &&
+                    Vehicle != null &&
+                    StartPoint != null &&
+                    EndPoint != null &&
+                    VehicleSize != null &&
+                    InitialVehicleRotation != null &&
+                    Orders != null;
+            }
         }
 
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
 
-        
+
         private bool _simulationRunning;
 
 
@@ -523,7 +535,7 @@ namespace SRL.Main.ViewModel
         {
             EditorMode = Mode.Normal;
 
-            _algorithm = new Algorithm.Algorithm(); //TODO change to an actual implementation
+            _algorithm = new Algorithm.Algorithm();
 
             _simulationTimer = new DispatcherTimer();
             _simulationTimer.Interval = new TimeSpan(0, 0, 0, 0, FrameChangeInterval);
@@ -735,7 +747,7 @@ namespace SRL.Main.ViewModel
 
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken token = _cancellationTokenSource.Token;
-            
+
             CalculatingPath = true;
             new Task(() =>
             {
@@ -749,6 +761,14 @@ namespace SRL.Main.ViewModel
                 {
                     return;
                 }
+                catch (NonexistentPathException)
+                {
+                    var args = new MessageDialogArgs();
+                    args.Title = "Path not found"; //TODO localization
+                    args.Description = "Current simulation setting does not allow to calculate a proper path."; //TODO localization
+                    Messenger.Default.Send(new ShowDialogMessage(args));
+                    return;
+                }
 
                 if (Monitor.TryEnter(_cancellationLock) && !token.IsCancellationRequested)
                 {
@@ -757,7 +777,7 @@ namespace SRL.Main.ViewModel
                     Monitor.Exit(_cancellationLock);
                 }
             }, token).Start();
-            
+
             Monitor.Exit(_cancellationLock);
         }
 

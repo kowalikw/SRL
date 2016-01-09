@@ -18,8 +18,6 @@ namespace SRL.Main.ViewModel
 
             Messenger.Default.Register<GoToPageMessage>(this, GoToPageMessageHandler);
             Messenger.Default.Register<ShowDialogMessage>(this, ShowDialogMessageHandler);
-
-            //TODO Not sure if navigation belongs in the view-model. Keep it like this until a better idea comes up.
         }
 
         private void GoToPageMessageHandler(GoToPageMessage msg)
