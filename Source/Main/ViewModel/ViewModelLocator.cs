@@ -17,7 +17,7 @@ namespace SRL.Main.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<MainViewModel>(MainViewModelFactory);
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<MapEditorViewModel>();
             SimpleIoc.Default.Register<VehicleEditorViewModel>();
