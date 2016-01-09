@@ -62,7 +62,7 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
-                        StopPathCalculation();
+                        CancelPathCalculation();
                         SimulationRunning = false;
                         EditorMode = Mode.Normal;
                         Map = null;
@@ -735,12 +735,14 @@ namespace SRL.Main.ViewModel
 
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken token = _cancellationTokenSource.Token;
-
+            
+            CalculatingPath = true;
             new Task(() =>
             {
+                List<Order> orders;
                 try
                 {
-                    Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
+                    orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
                         InitialVehicleRotation.Value, token);
                 }
                 catch (OperationCanceledException)
@@ -751,15 +753,15 @@ namespace SRL.Main.ViewModel
                 if (Monitor.TryEnter(_cancellationLock) && !token.IsCancellationRequested)
                 {
                     CalculatingPath = false;
+                    Orders = orders;
                     Monitor.Exit(_cancellationLock);
                 }
             }, token).Start();
             
-            CalculatingPath = true;
             Monitor.Exit(_cancellationLock);
         }
 
-        private void StopPathCalculation()
+        private void CancelPathCalculation()
         {
             Monitor.Enter(_cancellationLock);
             _cancellationTokenSource?.Cancel();

@@ -68,7 +68,7 @@
                         Minimum="0" Maximum="0.1"
                         LargeChange="0.01"
                         VerticalAlignment="Center"
-                        IsEnabled="{Binding TracingBitmap, Converter={StaticResource BoolInverterConverter}}"
+                        IsEnabled="{Binding TracingOngoing, Converter={StaticResource BoolInverterConverter}}"
                         Value="{Binding AreaThreshold}"/>
                 <TextBlock Grid.Row="0" Grid.Column="2"
                            Width="55"
@@ -84,7 +84,7 @@
                         Minimum="0" Maximum="1" 
                         LargeChange="0.1"
                         VerticalAlignment="Center"
-                        IsEnabled="{Binding TracingBitmap, Converter={StaticResource BoolInverterConverter}}"
+                        IsEnabled="{Binding TracingOngoing, Converter={StaticResource BoolInverterConverter}}"
                         Value="{Binding ColorThreshold}"/>
                 <TextBlock Grid.Row="2" Grid.Column="2"
                            Width="55"
@@ -114,6 +114,6 @@
 
         <mui:ModernProgressRing Grid.Row="1" Grid.Column="1"
                                 Width="80" Height="80"
-                                IsActive="{Binding TracingBitmap}" Foreground="Black"/>
+                                IsActive="{Binding TracingOngoing}" Foreground="Black"/>
     </Grid>
 </UserControl>

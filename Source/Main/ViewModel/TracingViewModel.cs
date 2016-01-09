@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
@@ -22,16 +19,18 @@ namespace SRL.Main.ViewModel
 {
     public class TracingViewModel : Base.ViewModel
     {
+        #region Commands
+
         public RelayCommand LoadBitmapCommand
         {
             get
             {
                 if (_loadBitmapCommand == null)
                 {
-                    _loadBitmapCommand = new RelayCommand(() => 
+                    _loadBitmapCommand = new RelayCommand(() =>
                     {
                         var args = new OpenFileDialogArgs();
-                        args.Filter = "Raster image files|*.bmp;*.jpg;*.jpeg;*.png";
+                        args.Filter = "Raster image files|*.bmp;*.jpg;*.jpeg;*.png"; //TODO localization
                         args.CloseCallback = (result, filename) =>
                         {
                             if (!result)
@@ -45,7 +44,7 @@ namespace SRL.Main.ViewModel
                         Messenger.Default.Send(new ShowDialogMessage(args));
                     }, () =>
                     {
-                        return !TracingBitmap;
+                        return !TracingOngoing;
                     });
                 }
                 return _loadBitmapCommand;
@@ -69,7 +68,7 @@ namespace SRL.Main.ViewModel
                         Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
-                        return !TracingBitmap;
+                        return !TracingOngoing;
                     });
                 }
                 return _makeMapCommand;
@@ -87,13 +86,13 @@ namespace SRL.Main.ViewModel
                         argMsg.Model.Shape = Polygons[SelectedPolygonIndices.GetLast()];
 
                         var gotoMsg = new GoToPageMessage(typeof(VehicleEditorView));
-                        
+
                         Messenger.Default.Send(argMsg);
                         Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
                         //TODO allow polygon sums?
-                        return SelectedPolygonIndices.Count == 1 && !TracingBitmap;
+                        return SelectedPolygonIndices.Count == 1 && !TracingOngoing;
                     });
                 }
                 return _makeVehicleCommand;
@@ -105,28 +104,8 @@ namespace SRL.Main.ViewModel
             {
                 if (_traceCommand == null)
                 {
-                    _traceCommand = new RelayCommand(() =>
-                    {
-                        _traceCancellationTokenSource?.Cancel();
-                        _traceCancellationTokenSource = new CancellationTokenSource();
-                        var token = _traceCancellationTokenSource.Token;
-                        TraceTask = new Task(() =>
-                        {
-                            var traceResult = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
-
-                            if (!token.IsCancellationRequested) //TODO token
-                            {
-                                Polygons.ReplaceRange(traceResult);
-                                TraceTask = null;
-                            }
-                        }, token);
-                        Polygons.Clear();
-                        SelectedPolygonIndices.Clear();
-                        TraceTask.Start();
-                    }, () =>
-                    {
-                        return _tracer != null && !TracingBitmap;
-                    });
+                    _traceCommand = new RelayCommand(StartNewTraceTask, 
+                        () => _tracer != null && !TracingOngoing);
                 }
                 return _traceCommand;
             }
@@ -142,8 +121,8 @@ namespace SRL.Main.ViewModel
                     {
                         for (int i = Polygons.Count - 1; i >= 0; i--)
                         {
-                            if (GeometryHelper.IsEnclosed(point, Polygons[i])
-                               && !SelectedPolygonIndices.Contains(i))
+                            if (!SelectedPolygonIndices.Contains(i) &&
+                                GeometryHelper.IsEnclosed(point, Polygons[i]))
                             {
                                 SelectedPolygonIndices.Add(i);
                                 return;
@@ -151,7 +130,7 @@ namespace SRL.Main.ViewModel
                         }
                     });
                 }
-                return _selectPolygonCommand; ;
+                return _selectPolygonCommand;
             }
         }
         public RelayCommand<Point> DeselectPolygonCommand
@@ -164,8 +143,8 @@ namespace SRL.Main.ViewModel
                     {
                         for (int i = Polygons.Count - 1; i >= 0; i--)
                         {
-                            if (GeometryHelper.IsEnclosed(point, Polygons[i])
-                               && SelectedPolygonIndices.Contains(i))
+                            if (SelectedPolygonIndices.Contains(i) &&
+                                GeometryHelper.IsEnclosed(point, Polygons[i]))
                             {
                                 SelectedPolygonIndices.Remove(i);
                                 return;
@@ -184,87 +163,50 @@ namespace SRL.Main.ViewModel
         private RelayCommand<Point> _selectPolygonCommand;
         private RelayCommand<Point> _deselectPolygonCommand;
 
-
-        public double AreaThreshold
-        {
-            get { return _areaThreshold; }
-            set
-            {
-                if (_areaThreshold != value)
-                {
-                    _areaThreshold = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-        public double ColorThreshold
-        {
-            get { return _colorThreshold; }
-            set
-            {
-                if (_colorThreshold != value)
-                {
-                    _colorThreshold = value;
-                    RaisePropertyChanged();
-
-                }
-            }
-        }
-
-
+        #endregion
+        
 
         public BitmapSource Bitmap
         {
             get { return _bitmap; }
+            private set { Set(ref _bitmap, value); }
+        }
+
+        public double AreaThreshold
+        {
+            get { return _areaThreshold; }
+            set { Set(ref _areaThreshold, value); }
+        }
+
+        public double ColorThreshold
+        {
+            get { return _colorThreshold; }
+            set { Set(ref _colorThreshold, value); }
+        }
+        public bool TracingOngoing
+        {
+            get { return _tracingOngoing; }
             private set
             {
-                if (_bitmap != value)
-                {
-                    _bitmap = value;
-                    RaisePropertyChanged();
-                }
+                if (Set(ref _tracingOngoing, value))
+                    RaiseRequerySuggested();
             }
         }
+
         public ObservableCollectionEx<Polygon> Polygons { get; }
         public ObservableCollectionEx<int> SelectedPolygonIndices { get; }
 
 
-        private CancellationTokenSource _traceCancellationTokenSource;
-
-        public bool TracingBitmap
-        {
-            get { return _tracingBitmap; }
-            private set
-            {
-                if (_tracingBitmap != value)
-                {
-                    _tracingBitmap = value;
-                    RaisePropertyChanged();
-                    RaiseRequerySuggested();
-                }
-            }
-        }
-        private Task TraceTask
-        {
-            get { return _traceTask; }
-            set
-            {
-                _traceTask = value;
-                TracingBitmap = _traceTask != null;
-            }
-        }
-
-        private BitmapTracer _tracer;
-        private Task _traceTask;
-
         private BitmapSource _bitmap;
         private double _areaThreshold;
         private double _colorThreshold;
-        private int _pixelAreaThreshold;
-        private int _absoluteColorThreshold;
-        private bool _tracingBitmap;
+        private bool _tracingOngoing;
 
+        private BitmapTracer _tracer;
+        private CancellationTokenSource _cancellationTokenSource;
+        private readonly object _cancellationLock = new object();
 
+        
         public TracingViewModel()
         {
             // Make sure that default instances of Map/Vehicle editors exist.
@@ -273,25 +215,38 @@ namespace SRL.Main.ViewModel
 
             Polygons = new ObservableCollectionEx<Polygon>();
             SelectedPolygonIndices = new ObservableCollectionEx<int>();
+        }
 
-            PropertyChanged += (o, e) =>
+        private void StartNewTraceTask()
+        {
+            Monitor.Enter(_cancellationLock);
+            _cancellationTokenSource?.Cancel();
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            var token = _cancellationTokenSource.Token;
+
+            TracingOngoing = true;
+            new Task(() =>
             {
-                if (e.PropertyName == nameof(Bitmap))
-                {
-                    _absoluteColorThreshold = (int)(255 * ColorThreshold);
-                    _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
-                }
-                else if (e.PropertyName == nameof(ColorThreshold))
-                {
-                    _absoluteColorThreshold = (int)(255 * ColorThreshold);
-                }
-                else if (e.PropertyName == nameof(AreaThreshold))
-                {
-                    if (Bitmap != null)
-                        _pixelAreaThreshold = (int)(_bitmap.Height * _bitmap.Width * AreaThreshold);
-                }
-            };
+                var traceResult = _tracer.Trace(AreaThreshold, ColorThreshold);
 
+                if (Monitor.TryEnter(_cancellationLock) && !token.IsCancellationRequested)
+                {
+                    TracingOngoing = false;
+                    Polygons.ReplaceRange(traceResult);
+                    Monitor.Exit(_cancellationLock);
+                }
+            }, token).Start();
+            
+            Monitor.Exit(_cancellationLock);
+        }
+
+        private void CancelTraceTask()
+        {
+            Monitor.Enter(_cancellationLock);
+            _cancellationTokenSource?.Cancel();
+            TracingOngoing = false;
+            Monitor.Exit(_cancellationLock);
         }
     }
 }

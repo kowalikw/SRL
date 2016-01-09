@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Windows;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using CsPotrace;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
@@ -25,16 +27,27 @@ namespace SRL.Main.Tracing
             _bitmap = bitmap;
         }
 
-        public List<Polygon> Trace(int areaThreshold, int colorThreshold)
+        public List<Polygon> Trace(double areaThreshold, double colorThreshold)
+        {
+            int absoluteColorThreshold = (int)(255 * colorThreshold);
+            int pixelThreshold = (int)(_bitmap.Height * _bitmap.Width * areaThreshold);
+            
+            var output = new List<Polygon>(TraceBitmap(_bitmap, pixelThreshold, absoluteColorThreshold));
+            NormalizeOutput(output);
+            
+            return output;
+        }
+
+        private IEnumerable<Polygon> TraceBitmap(Bitmap bitmap, int pixelThreshold, int maxRgb)
         {
             var output = new List<Polygon>();
 
             Potrace.alphamax = 0; // Corner threshold.
-            Potrace.turdsize = areaThreshold;
+            Potrace.turdsize = pixelThreshold;
             Potrace.curveoptimizing = false; // Bezier curve optimization.
 
             ArrayList polygons = new ArrayList();
-            bool[,] matrix = Potrace.BitMapToBinary(_bitmap, 255 - colorThreshold);
+            bool[,] matrix = Potrace.BitMapToBinary(bitmap, 255 - maxRgb);
             Potrace.potrace_trace(matrix, polygons);
 
             for (int i = 0; i < polygons.Count; i++)
@@ -49,17 +62,14 @@ namespace SRL.Main.Tracing
 
                 output.Add(new Polygon(polygonPoints));
             }
-
-            NormalizeOutput(output);
-
             return output;
         }
 
-        private void NormalizeOutput(List<Polygon> polygons)
+        private void NormalizeOutput(IEnumerable<Polygon> polygons)
         {
             bool heightShrink = _bitmap.Width > _bitmap.Height;
-            double shrinkFactor = heightShrink 
-                ? (double)_bitmap.Height / _bitmap.Width 
+            double shrinkFactor = heightShrink
+                ? (double)_bitmap.Height / _bitmap.Width
                 : (double)_bitmap.Width / _bitmap.Height;
 
             Size bitmapSize = new Size(_bitmap.Width, _bitmap.Height);
@@ -78,6 +88,28 @@ namespace SRL.Main.Tracing
                     polygon.Vertices[i] = shrinked;
                 }
             }
+        }
+
+        private Bitmap GetInvertedBitmap(Bitmap bitmap)
+        {
+            Bitmap inverted = new Bitmap(bitmap);
+            var data = inverted.LockBits(new Rectangle(0, 0, inverted.Width, inverted.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppRgb);
+            var length = data.Stride * data.Height;
+            var newData = new byte[length];
+            Marshal.Copy(data.Scan0, newData, 0, length);
+            inverted.UnlockBits(data);
+
+            for (int i = 0; i < length; i += 4)
+            {
+                newData[i] = (byte)(255 - newData[i]);
+                newData[i + 1] = (byte)(255 - newData[i + 1]);
+                newData[i + 2] = (byte)(255 - newData[i + 2]);
+            }
+
+            var bitmapWrite = inverted.LockBits(new Rectangle(0, 0, inverted.Width, inverted.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppPArgb);
+            Marshal.Copy(newData, 0, bitmapWrite.Scan0, length);
+            inverted.UnlockBits(bitmapWrite);
+            return inverted;
         }
 
 
