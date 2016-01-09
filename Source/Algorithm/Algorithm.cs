@@ -133,65 +133,66 @@ namespace SRL.Algorithm
             IGraph graph = new AdjacencyListsGraph<HashTableAdjacencyList>(true, index + 1);
 
             // creating graph edges for each angle (all done in one graph from the very beginning)
-            for (int angle = 0; angle < angleDensity; angle++)
-            {
-                for (int i = 0; i < IndexPointAngleList[angle].Count; i++)
-                {
-                    for (int j = 0; j < IndexPointAngleList[angle].Count; j++)
-                    {
-                        if (token.IsCancellationRequested)
-                            throw new OperationCanceledException();
-                        // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
-                        if (IndexPointAngleList[angle][i].obstacle == -1)
-                        {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[angle])
-                            {
-                                if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][i].point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
-                            }
-                            if (cancel)
-                                continue;
-                        }
-                        if (IndexPointAngleList[angle][j].obstacle == -1)
-                        {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[angle])
-                            {
-                                if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][j].point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
-                            }
-                            if (cancel)
-                                continue;
-                        }
-                        if (i == j) continue; // We are not accepting edges in one point when not turning
+            object locker = new object();
+            Parallel.For(0, angleDensity, angle =>
+              {
+                  for (int i = 0; i < IndexPointAngleList[angle].Count; i++)
+                  {
+                      for (int j = 0; j < IndexPointAngleList[angle].Count; j++)
+                      {
+                          if (token.IsCancellationRequested)
+                              throw new OperationCanceledException();
+                          // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
+                          if (IndexPointAngleList[angle][i].obstacle == -1)
+                          {
+                              bool cancel = false;
+                              foreach (Polygon obstacle in currentMap[angle])
+                              {
+                                  if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][i].point, obstacle))
+                                  {
+                                      cancel = true;
+                                      break;
+                                  }
+                              }
+                              if (cancel)
+                                  continue;
+                          }
+                          if (IndexPointAngleList[angle][j].obstacle == -1)
+                          {
+                              bool cancel = false;
+                              foreach (Polygon obstacle in currentMap[angle])
+                              {
+                                  if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][j].point, obstacle))
+                                  {
+                                      cancel = true;
+                                      break;
+                                  }
+                              }
+                              if (cancel)
+                                  continue;
+                          }
+                          if (i == j) continue; // We are not accepting edges in one point when not turning
 
-                        if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle], angle * singleAngle))
-                        {
-                            if (!allDirections)
-                            {
-                                // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
-                                {
-                                    graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
-                                    // if user enabled reverse in options, we add an edge back
-                                    if (backwards)
-                                        graph.AddEdge(new Edge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
-                                }
-                            }
-                            // if user enabled all directions, we add all edges that passed all previous tests
-                            else
-                                graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
-                        }
-                    }
-                }
-            }
+                          if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle], angle * singleAngle))
+                          {
+                              if (!allDirections)
+                              {
+                                  // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
+                                  if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
+                                  {
+                                      graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
+                                      // if user enabled reverse in options, we add an edge back
+                                      if (backwards)
+                                          graph.AddEdge(new Edge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
+                                  }
+                              }
+                              // if user enabled all directions, we add all edges that passed all previous tests
+                              else
+                                  graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
+                          }
+                      }
+                  }
+              });
 
             // Adding turning edges
             for (int angle = 0; angle < angleDensity; angle++)
