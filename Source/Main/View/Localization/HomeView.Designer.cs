@@ -61,11 +61,83 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to testval.
+        ///   Looks up a localized string similar to Wojciech Kowalik, Konrad Miśkiewicz, Mateusz Pielat.
         /// </summary>
-        internal static string testkey {
+        internal static string authors {
             get {
-                return ResourceManager.GetString("testkey", resourceCulture);
+                return ResourceManager.GetString("authors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authors:.
+        /// </summary>
+        internal static string authorsHeader {
+            get {
+                return ResourceManager.GetString("authorsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Computer Science.
+        /// </summary>
+        internal static string computerscience {
+            get {
+                return ResourceManager.GetString("computerscience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Faculty of Mathematics and Information Science.
+        /// </summary>
+        internal static string faculty {
+            get {
+                return ResourceManager.GetString("faculty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dr inż. Paweł Rzążewski.
+        /// </summary>
+        internal static string promotor {
+            get {
+                return ResourceManager.GetString("promotor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Promotor:.
+        /// </summary>
+        internal static string promotorHeader {
+            get {
+                return ResourceManager.GetString("promotorHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bachelor Thesis.
+        /// </summary>
+        internal static string thesis {
+            get {
+                return ResourceManager.GetString("thesis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simulation of a robot in a labirynth.
+        /// </summary>
+        internal static string title {
+            get {
+                return ResourceManager.GetString("title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warsaw University of Technology.
+        /// </summary>
+        internal static string university {
+            get {
+                return ResourceManager.GetString("university", resourceCulture);
             }
         }
     }

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2000/svg" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="svg">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="rect">
+          <xs:complexType>
+            <xs:attribute name="width" type="xs:unsignedShort" use="required" />
+            <xs:attribute name="height" type="xs:unsignedShort" use="required" />
+            <xs:attribute name="fill" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="g">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="polygon">
+                <xs:complexType>
+                  <xs:attribute name="points" type="xs:string" use="required" />
+                  <xs:attribute name="stroke" type="xs:string" use="required" />
+                  <xs:attribute name="stroke-width" type="xs:double" use="required" />
+                  <xs:attribute name="fill" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="transform" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="width" type="xs:unsignedShort" use="required" />
+      <xs:attribute name="height" type="xs:unsignedShort" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

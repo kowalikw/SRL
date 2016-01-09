@@ -106,6 +106,15 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string ResetTooltip {
+            get {
+                return ResourceManager.GetString("ResetTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save simulation.
         /// </summary>
         internal static string SaveSimulationTooltip {

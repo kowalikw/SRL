@@ -117,7 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="testkey" xml:space="preserve">
-    <value>wartośćtestowa</value>
+  <data name="authors" xml:space="preserve">
+    <value>Wojciech Kowalik, Konrad Miśkiewicz, Mateusz Pielat</value>
+  </data>
+  <data name="authorsHeader" xml:space="preserve">
+    <value>Autorzy:</value>
+  </data>
+  <data name="computerscience" xml:space="preserve">
+    <value>INFORMATYKA</value>
+  </data>
+  <data name="faculty" xml:space="preserve">
+    <value>Wydział Matematyki i Nauk Informacyjnych</value>
+  </data>
+  <data name="promotor" xml:space="preserve">
+    <value>dr inż. Paweł Rzążewski</value>
+  </data>
+  <data name="promotorHeader" xml:space="preserve">
+    <value>Promotor:</value>
+  </data>
+  <data name="thesis" xml:space="preserve">
+    <value>Praca Dyplomowa Inżynierska</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>Symulacja ruchu robota w labiryncie</value>
+  </data>
+  <data name="university" xml:space="preserve">
+    <value>Politechnika Warszawska</value>
   </data>
 </root>

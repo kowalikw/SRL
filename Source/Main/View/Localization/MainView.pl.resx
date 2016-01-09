@@ -138,4 +138,7 @@
   <data name="vehicleEditorSubTab" xml:space="preserve">
     <value>Edytor pojazdów</value>
   </data>
+  <data name="windowTitle" xml:space="preserve">
+    <value>Symulacja ruchu robota w labiryncie</value>
+  </data>
 </root>

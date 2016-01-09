@@ -117,37 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CalculatePathTooltip" xml:space="preserve">
-    <value>Calculate path</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MapSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>model\xmlschema\mapschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="LoadMapTooltip" xml:space="preserve">
-    <value>Load map</value>
+  <data name="SimulationSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>model\xmlschema\simulationschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="LoadSimulationTooltip" xml:space="preserve">
-    <value>Load simulation</value>
+  <data name="SimulationSchemaXlink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>model\xmlschema\simulationschemaxlink.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="LoadVehicleTooltip" xml:space="preserve">
-    <value>Load vehicle</value>
-  </data>
-  <data name="PausePlaybackTooltip" xml:space="preserve">
-    <value>Pause simulation</value>
-  </data>
-  <data name="ResetTooltip" xml:space="preserve">
-    <value>Reset</value>
-  </data>
-  <data name="SaveSimulationTooltip" xml:space="preserve">
-    <value>Save simulation</value>
-  </data>
-  <data name="SetPathEndTooltip" xml:space="preserve">
-    <value>Set target point</value>
-  </data>
-  <data name="SetUpVehicleTooltip" xml:space="preserve">
-    <value>Put the vehicle on the map</value>
-  </data>
-  <data name="StartPlaybackTooltip" xml:space="preserve">
-    <value>Start/Resume simulation</value>
-  </data>
-  <data name="StopPlaybackTooltip" xml:space="preserve">
-    <value>Stop simulation</value>
+  <data name="VehicleSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>model\xmlschema\vehicleschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
