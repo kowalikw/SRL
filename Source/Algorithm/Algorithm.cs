@@ -18,7 +18,7 @@ namespace SRL.Algorithm
         private List<Option> OptionTemplates;
         private List<Option> CurrentOptions;
 
-        private struct IndexPoint // structure used to unify different index with each point
+        struct IndexPoint // structure used to unify different index with each point
         {
             public Point point;
             public int index;
@@ -35,9 +35,9 @@ namespace SRL.Algorithm
 
 
             // wczytanie opcji
-            foreach(Option option in CurrentOptions)
+            foreach (Option option in CurrentOptions)
             {
-                switch(option.Names[Language.English])
+                switch (option.Names[Language.English])
                 {
                     case "Angle density":
                         angleDensity = (int)option.Value;
@@ -60,7 +60,7 @@ namespace SRL.Algorithm
 
             double singleAngle = 2 * Math.PI / angleDensity;
             // changing size of the vehicle to current one
-            List <Point> lst = new List<Point>();
+            List<Point> lst = new List<Point>();
             for (int i = 0; i < InputVehicle.Shape.Vertices.Count; i++)
             {
                 lst.Add(new Point(InputVehicle.Shape.Vertices[i].X * vehicleSize, InputVehicle.Shape.Vertices[i].Y * vehicleSize));
@@ -71,10 +71,11 @@ namespace SRL.Algorithm
             // copy of the map with additional obstacles as map edges (commented at the moment) (size of those additional obstacles can be changed, it works fine for these ones), right now map is without bounds as we have trouble with vehicles moving by normal obstacles
             Map map = new Map();
             List<List<IndexPoint>>[] iPointObstacles = new List<List<IndexPoint>>[angleDensity];
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -2), new Point(-1, 2), new Point(-2, 2), new Point(-2, -2) }));
+            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -2), new Point(-1, 2), new Point(-2, 2), new Point(-2, -2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(-2, -1), new Point(2, -1), new Point(2, -2), new Point(-2, -2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 2), new Point(1, -2), new Point(2, -2), new Point(2, 2) }));
             map.Obstacles.Add(new Polygon(new Point[] { new Point(2, 1), new Point(-2, 1), new Point(-2, 2), new Point(2, 2) }));
+            */
             List<IndexPoint>[] IndexPointAngleList = new List<IndexPoint>[angleDensity];
             for (int i = 0; i < InputMap.Obstacles.Count; i++)
                 map.Obstacles.Add(InputMap.Obstacles[i]);
@@ -90,8 +91,8 @@ namespace SRL.Algorithm
             Polygon triangle = new Polygon(triangleTemplate);
 
             // Getting angle for starting set up of the vehicle
-            int startingIndex = (int)(((vehicleRotation + 2 * Math.PI)% ( 2 * Math.PI))/ singleAngle);
-            
+            int startingIndex = (int)(((vehicleRotation + 2 * Math.PI) % (2 * Math.PI)) / singleAngle);
+
 
             // setting index for each Minkowski's sum point of each angle
             int index = 0;
@@ -170,24 +171,27 @@ namespace SRL.Algorithm
                                 continue;
                         }
                         if (i == j) continue; // We are not accepting edges in one point when not turning
-                        bool addEdge = true;
+
                         if (CanTwoPointsConnect(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, currentMap[angle], angle * singleAngle))
                         {
-                                if (!allDirections)
+                            if (!allDirections)
+                            {
+                                // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
+                                if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, angle * singleAngle, triangle))
                                 {
-                                if (IsPointInTriangle(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point, singleAngle * angle, triangle))
-                                    {
-                                    graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
-                                        if (backwards)
-                                        graph.AddEdge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
-                                    }
+                                    graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
+                                    // if user enabled reverse in options, we add an edge back
+                                    if (backwards)
+                                        graph.AddEdge(new Edge(IndexPointAngleList[angle][j].index, IndexPointAngleList[angle][i].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
                                 }
-                                else
-                                graph.AddEdge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point));
                             }
+                            // if user enabled all directions, we add all edges that passed all previous tests
+                            else
+                                graph.AddEdge(new Edge(IndexPointAngleList[angle][i].index, IndexPointAngleList[angle][j].index, GetEdgeWeight(IndexPointAngleList[angle][i].point, IndexPointAngleList[angle][j].point)));
                         }
                     }
                 }
+            }
 
             // Adding turning edges
             for (int angle = 0; angle < angleDensity; angle++)
@@ -202,9 +206,9 @@ namespace SRL.Algorithm
                         if (IndexPointAngleList[angle][i].obstacle == -1)
                         {
                             bool cancel = false;
-                            foreach(Polygon obstacle in currentMap[angle])
+                            foreach (Polygon obstacle in currentMap[angle])
                             {
-                                if(GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][i].point, obstacle))
+                                if (GeometryHelper.IsInsidePolygon(IndexPointAngleList[angle][i].point, obstacle))
                                 {
                                     cancel = true;
                                     break;
@@ -276,7 +280,7 @@ namespace SRL.Algorithm
                     continue;
                 }
 
-                if(o.Rotation == 0 && orders[orders.Count - 1].Rotation <= -Math.PI)
+                if (o.Rotation == 0 && orders[orders.Count - 1].Rotation <= -Math.PI)
                 {
                     o.Rotation = -2 * Math.PI;
                 }
@@ -284,7 +288,7 @@ namespace SRL.Algorithm
                 {
                     // do nothing
                 }
-                else if(o.Rotation > 0 && orders[orders.Count - 1].Rotation > 0)
+                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation > 0)
                 {
                     if (o.Rotation < orders[orders.Count - 1].Rotation)
                         o.Rotation -= 2 * Math.PI;
@@ -292,15 +296,15 @@ namespace SRL.Algorithm
                 }
                 else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation < 0)
                 {
-                    if(((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
+                    if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
                         o.Rotation -= 2 * Math.PI;
-                    else if(orders[orders.Count - 1].Rotation == -2 * Math.PI && o.Rotation > Math.PI)
+                    else if (orders[orders.Count - 1].Rotation == -2 * Math.PI && o.Rotation > Math.PI)
                         o.Rotation -= 2 * Math.PI;
                     // else do nothing
                 }
-                else if(o.Rotation > 0 && orders[orders.Count - 1].Rotation == 0)
+                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation == 0)
                 {
-                    if(o.Rotation > Math.PI)
+                    if (o.Rotation > Math.PI)
                         o.Rotation -= 2 * Math.PI;
                 }
 
@@ -345,7 +349,7 @@ namespace SRL.Algorithm
             GenerateOptions();
         }
 
-        
+
         private void GenerateOptions()
         {
             CurrentOptions = new List<Option>();
@@ -432,7 +436,7 @@ namespace SRL.Algorithm
             anyDirection.Tooltips = anyDirectionToolTip;
             OptionTemplates.Add(anyDirection);
 
-            
+
             for (int i = 0; i < OptionTemplates.Count; i++)
             {
                 Option o = new Option();
@@ -495,7 +499,7 @@ namespace SRL.Algorithm
             return tableOfObstacles;
         }
 
-        private List<Point> ConvexMinkowski(List<Point> polygon1, List<Point> polygon2)
+        List<Point> ConvexMinkowski(List<Point> polygon1, List<Point> polygon2)
         {
             List<Point> list = new List<Point>();
             for (int i = 0; i < polygon1.Count; i++)
@@ -506,7 +510,7 @@ namespace SRL.Algorithm
             return list;
         }
 
-        private List<List<Point>> Triangulate(List<Point> shape)
+        List<List<Point>> Triangulate(List<Point> shape)
         {
             Polygon poly = new Polygon(shape.ToArray());
             List<Point[]> triangles = Triangulation2D.Triangulate(ref poly);
@@ -523,7 +527,7 @@ namespace SRL.Algorithm
             return list;
         }
 
-        private Polygon ConvexHull(List<Point> points)
+        Polygon ConvexHull(List<Point> points)
         {
             Polygon poly;
             points.Sort((a, b) =>
@@ -580,7 +584,7 @@ namespace SRL.Algorithm
                     if (GeometryHelper.DoSegmentsIntersect(p1, p2, obstacles[i].Vertices[j], obstacles[i].Vertices[(j + 1) % obstacles[i].Vertices.Count]))
                     {
                         if (p1 == obstacles[i].Vertices[j] || p2 == obstacles[i].Vertices[j] || p1 == obstacles[i].Vertices[(j + 1) % obstacles[i].Vertices.Count] || p2 == obstacles[i].Vertices[(j + 1) % obstacles[i].Vertices.Count])
-                    {
+                        {
                             continue;
                         }
                         return false;
@@ -595,22 +599,22 @@ namespace SRL.Algorithm
                         if (obstacles[i].Vertices[index] == p1)
                         {
                             if (obstacles[i].Vertices[(index + 1) % obstacles[i].Vertices.Count] != p2 && obstacles[i].Vertices[(index - 1 + obstacles[i].Vertices.Count) % obstacles[i].Vertices.Count] != p2)
-                        return false;
-                    }
+                                return false;
+                        }
                     }
                 }
             }
             return true;
-            }
+        }
 
         bool DoPolygonContainPoint(Point p, Polygon poly)
         {
             for (int i = 0; i < poly.Vertices.Count; i++)
                 if (p.Equals(poly.Vertices[i]))
-            return true;
+                    return true;
             return false;
         }
-        private List<Polygon> MergePolygons(List<Polygon> polygons)
+        List<Polygon> MergePolygons(List<Polygon> polygons)
         {
             // TODO: THIS FUNCTION USES THE LIBRARY THAT WE NEED TO REBUILD INTO OUR PROJECT
             long multiply = long.MaxValue / 10;
@@ -646,15 +650,15 @@ namespace SRL.Algorithm
         public List<Option> GetOptions()
         {
             List<Option> options = new List<Option>();
-            for(int i=0;i<OptionTemplates.Count;i++)
+            for (int i = 0; i < OptionTemplates.Count; i++)
             {
                 Option o = new Option();
-                o.Type = CurrentOptions[i].Type;
-                o.MaxValue = CurrentOptions[i].MaxValue;
-                o.MinValue = CurrentOptions[i].MinValue;
-                o.Value = CurrentOptions[i].Value;
-                o.Names = CurrentOptions[i].Names;
-                o.Tooltips = CurrentOptions[i].Tooltips;
+                o.Type = OptionTemplates[i].Type;
+                o.MaxValue = OptionTemplates[i].MaxValue;
+                o.MinValue = OptionTemplates[i].MinValue;
+                o.Value = OptionTemplates[i].Value;
+                o.Names = OptionTemplates[i].Names;
+                o.Tooltips = OptionTemplates[i].Tooltips;
                 options.Add(o);
             }
             return options;
