@@ -108,16 +108,17 @@ namespace SRL.Main.ViewModel
                     {
                         _traceCancellationTokenSource?.Cancel();
                         _traceCancellationTokenSource = new CancellationTokenSource();
+                        var token = _traceCancellationTokenSource.Token;
                         TraceTask = new Task(() =>
                         {
-                            List<Polygon> output = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
+                            var traceResult = _tracer.Trace(_pixelAreaThreshold, _absoluteColorThreshold);
 
-                            if (!_traceCancellationTokenSource.Token.IsCancellationRequested) //TODO token
+                            if (!token.IsCancellationRequested) //TODO token
                             {
-                                Polygons.ReplaceRange(output);
+                                Polygons.ReplaceRange(traceResult);
                                 TraceTask = null;
                             }
-                        });
+                        }, token);
                         Polygons.Clear();
                         SelectedPolygonIndices.Clear();
                         TraceTask.Start();

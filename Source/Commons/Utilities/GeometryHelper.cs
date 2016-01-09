@@ -63,7 +63,7 @@ namespace SRL.Commons.Utilities
 
         public static double GetAngle(Point pivot, Point dest)
         {
-            return GetAngle(pivot, new Point(pivot.X + 1, 0), dest);
+            return GetAngle(pivot, new Point(pivot.X + 1, pivot.Y), dest);
         }
 
         public static Point Rotate(Point point, Point pivot, double angle)
