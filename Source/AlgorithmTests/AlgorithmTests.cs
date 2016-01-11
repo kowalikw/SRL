@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AlgorithmTests
+namespace SRL.AlgorithmTests
 {
     [TestClass]
     public class AlgorithmTests

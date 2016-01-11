@@ -1,11 +1,11 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SRL.Commons.Model;
 using System.Collections.Generic;
 using System.Windows;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 
-namespace CommonsTests
+namespace SRL.CommonsTests
 {
     [TestClass]
     public class GeometryHelperTests

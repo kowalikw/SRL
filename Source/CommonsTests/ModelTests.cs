@@ -1,14 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SRL.Commons.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SRL.Commons.Model;
 
-namespace CommonsTests
+namespace SRL.CommonsTests
 {
     [TestClass]
     public class ModelTests

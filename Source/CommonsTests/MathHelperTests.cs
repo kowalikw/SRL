@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Commons.Utilities;
 
-namespace CommonsTests
+namespace SRL.CommonsTests
 {
     [TestClass]
     public class MathHelperTests
