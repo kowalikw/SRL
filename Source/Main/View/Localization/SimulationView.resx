@@ -139,7 +139,7 @@
     <value>Save simulation</value>
   </data>
   <data name="SetPathEndTooltip" xml:space="preserve">
-    <value>Set target point</value>
+    <value>Set target subject</value>
   </data>
   <data name="SetUpVehicleTooltip" xml:space="preserve">
     <value>Put the vehicle on the map</value>

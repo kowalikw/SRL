@@ -6,10 +6,8 @@ using SRL.Commons.Model;
 using System.Windows;
 using SRL.Commons;
 using SRL.Commons.Model.Base;
-using System.Linq;
 using System.Threading;
 using ASD.Graph;
-using ClipperLib;
 
 namespace SRL.Algorithm
 {
@@ -314,8 +312,6 @@ namespace SRL.Algorithm
 
 
 
-
-
                 /*else if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) 
                     || ((o.Rotation + (2 * Math.PI)) % (2 * Math.PI) > Math.Abs(orders[orders.Count - 1].Rotation + (2 * Math.PI)) % (2 * Math.PI) && ((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) == 0))))
                 {
@@ -460,6 +456,7 @@ namespace SRL.Algorithm
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity];
             double singleAngle = 2 * Math.PI / angleDensity;
             List<List<Point>> triangularObstacles = new List<List<Point>>();
+
             for (int i = 0; i < map.Obstacles.Count; i++)
             {
                 List<List<Point>> triangles = Triangulate(map.Obstacles[i].Vertices);
@@ -468,6 +465,7 @@ namespace SRL.Algorithm
                     triangularObstacles.Add(triangles[j]);
                 }
             }
+
             for (int i = 0; i < angleDensity; i++)
             {
                 List<Point> rotatedVehicle = new List<Point>();
@@ -492,13 +490,10 @@ namespace SRL.Algorithm
                     }
                 });
                 tableOfObstacles[i] = newObstacles;
-
-
             }
+
             for (int i = 0; i < tableOfObstacles.Length; i++)
-            {
-                tableOfObstacles[i] = MergePolygons(tableOfObstacles[i]);
-            }
+                tableOfObstacles[i] = GeometryHelper.Union(tableOfObstacles[i]);
 
             return tableOfObstacles;
         }
@@ -555,7 +550,7 @@ namespace SRL.Algorithm
             {
                 U.Add(L[i]);
             }
-            poly = new Polygon(U.ToArray());
+            poly = new Polygon(U);
             return poly;
         }
 
@@ -594,7 +589,7 @@ namespace SRL.Algorithm
                         return false;
                     }
                 }
-                if (GeometryHelper.IsEnclosed(p1, obstacles[i]) && !DoPolygonContainPoint(p1, obstacles[i]) || GeometryHelper.IsEnclosed(p2, obstacles[i]) && !DoPolygonContainPoint(p2, obstacles[i]))
+                if (GeometryHelper.IsEnclosed(p1, obstacles[i]) && !obstacles[i].Vertices.Contains(p1) || GeometryHelper.IsEnclosed(p2, obstacles[i]) && !obstacles[i].Vertices.Contains(p2))
                     return false;
                 if (GeometryHelper.IsEnclosed(new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2), obstacles[i]))
                 {
@@ -609,46 +604,6 @@ namespace SRL.Algorithm
                 }
             }
             return true;
-        }
-
-        bool DoPolygonContainPoint(Point p, Polygon poly)
-        {
-            for (int i = 0; i < poly.Vertices.Count; i++)
-                if (p.Equals(poly.Vertices[i]))
-                    return true;
-            return false;
-        }
-        List<Polygon> MergePolygons(List<Polygon> polygons)
-        {
-            // TODO: THIS FUNCTION USES THE LIBRARY THAT WE NEED TO REBUILD INTO OUR PROJECT
-            long multiply = long.MaxValue / 10;
-            if (polygons == null)
-                return null;
-            List<Polygon> polys = new List<Polygon>();
-            List<List<IntPoint>> clipPolys = new List<List<IntPoint>>();
-            foreach (Polygon p in polygons)
-            {
-                List<IntPoint> tmpPoly = new List<IntPoint>();
-                for (int i = 0; i < p.Vertices.Count; i++)
-                    tmpPoly.Add(new IntPoint(p.Vertices[i].X * multiply, p.Vertices[i].Y * multiply));
-                clipPolys.Add(tmpPoly);
-            }
-            List<List<IntPoint>> solution = new List<List<IntPoint>>();
-            Clipper c = new Clipper();
-            c.AddPaths(clipPolys, PolyType.ptClip, true);
-            bool succeeded = c.Execute(ClipType.ctUnion, solution,
-                        PolyFillType.pftNonZero, PolyFillType.pftNonZero);
-            if (succeeded)
-            {
-                foreach (List<IntPoint> p in solution)
-                {
-                    List<Point> tmpPoly = new List<Point>();
-                    for (int i = 0; i < p.Count; i++)
-                        tmpPoly.Add(new Point((double)p[i].X / (double)multiply, (double)p[i].Y / (double)multiply));
-                    polys.Add(new Polygon(tmpPoly));
-                }
-            }
-            return polys;
         }
 
         public List<Option> GetOptions()

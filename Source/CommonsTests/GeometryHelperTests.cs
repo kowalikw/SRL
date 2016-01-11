@@ -67,10 +67,10 @@ namespace SRL.CommonsTests
             Point point3 = new Point(0, 0.1);
             Point point4 = new Point(0.2, 0.1);
 
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point1, polygon));
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point2, polygon));
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point3, polygon));
-            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point4, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point1, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point2, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point3, polygon));
+            Assert.IsTrue(GeometryHelper.IsEnclosed(point4, polygon));
         }
 
         [TestMethod]

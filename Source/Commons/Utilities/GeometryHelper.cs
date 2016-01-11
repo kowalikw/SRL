@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using ClipperLib;
 using SRL.Commons.Model;
 
 namespace SRL.Commons.Utilities
@@ -134,23 +136,23 @@ namespace SRL.Commons.Utilities
             return false;
         }
 
-        public static bool IsEnclosed(Point point, Polygon polygon)
+        public static bool IsEnclosed(Point subject, Polygon polygon)
         {
-            // If point it's on polygon edge, it's inside of polygon.
+            // If subject it's on polygon edge, it's inside of polygon.
 
-            double totalAngle = GetAngle(point, polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]);
+            double totalAngle = GetAngle(subject, polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]);
 
             for (int i = 0; i < polygon.Vertices.Count - 1; i++)
-                totalAngle += GetAngle(point, polygon.Vertices[i], polygon.Vertices[i + 1]);
+                totalAngle += GetAngle(subject, polygon.Vertices[i], polygon.Vertices[i + 1]);
 
             return Math.Abs(totalAngle) > MathHelper.DoubleComparisonEpsilon;
         }
 
-        public static bool IsEnclosed(Point point, IEnumerable<Polygon> polygons)
+        public static bool IsEnclosed(Point subject, IEnumerable<Polygon> polygons)
         {
             foreach (var polygon in polygons)
             {
-                if (IsEnclosed(point, polygon))
+                if (IsEnclosed(subject, polygon))
                     return true;
             }
             return false;
@@ -174,6 +176,32 @@ namespace SRL.Commons.Utilities
                 && point.X <= Math.Max(cornerA.X, cornerB.X)
                 && Math.Min(cornerA.Y, cornerB.Y) <= point.Y
                 && point.Y <= Math.Max(cornerA.Y, cornerB.Y);
+        }
+
+        public static List<Polygon> Union(List<Polygon> polygons)
+        {
+            const long multiply = long.MaxValue / 4;
+
+            if (polygons == null)
+                throw new ArgumentNullException(nameof(polygons));
+            
+            var input = new List<List<IntPoint>>(polygons.Count);
+            foreach (Polygon polygon in polygons)
+                input.Add(polygon.Vertices.Select(t => new IntPoint(t.X * multiply, t.Y * multiply)).ToList());
+
+            var output = new List<List<IntPoint>>();
+            Clipper c = new Clipper();
+            c.AddPaths(input, PolyType.ptClip, true);
+            c.Execute(ClipType.ctUnion, output, PolyFillType.pftNonZero, PolyFillType.pftNonZero);
+
+            List<Polygon> result = new List<Polygon>();
+            foreach (var polygon in output)
+            {
+                var vertices = polygon.Select(v => new Point(v.X/(double) multiply, v.Y/(double) multiply));
+                result.Add(new Polygon(vertices));
+            }
+
+            return result;
         }
 
     }
