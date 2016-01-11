@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
+using SRL.Main.View.Dialogs;
 
 namespace SRL.Main.ViewModel.Base
 {
@@ -19,16 +20,14 @@ namespace SRL.Main.ViewModel.Base
                 {
                     _saveCommand = new RelayCommand(() =>
                     {
-                        var msg = new SaveFileDialogMessage();
-                        msg.Filter = DialogFilter;
-                        msg.FilenameCallback = filename =>
+                        var dialogArgs = new SaveFileDialogArgs();
+                        dialogArgs.Filter = DialogFilter;
+                        dialogArgs.CloseCallback = (result, filename) =>
                         {
-                            if (filename == null)
-                                return;
-
-                            SvgSerializable.Serialize(GetEditedModel(), filename);
+                            if (result)
+                                SvgSerializable.Serialize(GetEditedModel(), filename);
                         };
-                        Messenger.Default.Send(msg);
+                        Messenger.Default.Send(new ShowDialogMessage(dialogArgs));
                     },
                     () => IsEditedModelValid);
                 }
@@ -43,6 +42,8 @@ namespace SRL.Main.ViewModel.Base
                 {
                     _loadCommand = new RelayCommand(() =>
                     {
+                        ResetCommand.Execute(null);
+
                         var model = LoadModelViaDialog<T>();
                         if (model != null)
                             SetEditedModel(model);
@@ -89,11 +90,11 @@ namespace SRL.Main.ViewModel.Base
             bool invalidFile = false;
             R output = null;
 
-            var msg = new OpenFileDialogMessage();
-            msg.Filter = DialogFilter;
-            msg.FilenameCallback = filename =>
+            var args = new OpenFileDialogArgs();
+            args.Filter = DialogFilter;
+            args.CloseCallback = (result, filename) =>
             {
-                if (filename == null) // Dialog cancelled.
+                if (!result)
                     return;
 
                 if (SvgSerializable.CanDeserialize<R>(filename))
@@ -101,13 +102,14 @@ namespace SRL.Main.ViewModel.Base
                 else
                     invalidFile = true;
             };
-            Messenger.Default.Send(msg);
+            Messenger.Default.Send(new ShowDialogMessage(args));
 
             if (invalidFile)
             {
-                var errorMsg = new ErrorDialogMessage();
-                errorMsg.ErrorDescription = $"The file doesn't contain {typeof(R).Name} object."; //TODO Put error description in resources. Make polish version too.
-                Messenger.Default.Send(errorMsg);
+                var msgDialogArgs = new MessageDialogArgs();
+                msgDialogArgs.Title = "Error"; //TODO localization
+                msgDialogArgs.Description = $"The file doesn't contain {typeof(R).Name} object."; //TODO localization
+                Messenger.Default.Send(new ShowDialogMessage(msgDialogArgs));
             }
 
             return output;

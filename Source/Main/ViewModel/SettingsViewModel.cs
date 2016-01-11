@@ -1,7 +1,10 @@
 ﻿using System.Globalization;
 using System.Reflection;
+using GalaSoft.MvvmLight.Messaging;
 using Infralution.Localization.Wpf;
 using SRL.Commons;
+using SRL.Main.Messages;
+using SRL.Main.View.Dialogs;
 
 namespace SRL.Main.ViewModel
 {
@@ -29,21 +32,15 @@ namespace SRL.Main.ViewModel
             set
             {
                 Settings.Default.Language = value;
-                CultureInfo cultureInfo = value.GetCultureInfo();
-                try
-                {
-                    CultureManager.UICulture = cultureInfo;
-                }
-                catch (TargetInvocationException)
-                {
-                    /*
-                    Yes, that's an actual exception supressing catch block. 
-                    And yes, its presence makes us die inside too.
-                    */
-
-                    //TODO Come up with a proper solution.
-                }
                 Settings.Default.Save();
+
+                if (CultureManager.UICulture.GetLanguage() != value)
+                {
+                    var args = new MessageDialogArgs();
+                    args.Title = "Info";
+                    args.Description = "Application must be restarted to change the language."; //TODO localization
+                    Messenger.Default.Send(new ShowDialogMessage(args));
+                }
             }
         }
 

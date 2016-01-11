@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
+using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
+using SRL.Main.Messages;
 using SRL.Main.View;
+using SRL.Main.View.Dialogs;
 using SRL.Main.ViewModel.Base;
 using Frame = SRL.Commons.Model.Frame;
 
@@ -61,12 +65,13 @@ namespace SRL.Main.ViewModel
                 {
                     _resetCommand = new RelayCommand(() =>
                     {
+                        CancelPathCalculation();
                         SimulationRunning = false;
                         EditorMode = Mode.Normal;
                         Map = null;
                         Vehicle = null;
                         Orders = null;
-                    }, () => !CalculatingPath);
+                    });
                 }
                 return _resetCommand;
             }
@@ -120,7 +125,7 @@ namespace SRL.Main.ViewModel
                         if (EditorMode != Mode.StartPointSetup || CalculatingPath || Map == null)
                             return false;
 
-                        return !IsInsideObstacle(point);
+                        return !GeometryHelper.IsEnclosed(point, Map.Obstacles);
                     });
                 }
                 return _setStartPointCommand;
@@ -141,19 +146,19 @@ namespace SRL.Main.ViewModel
                         if (EditorMode != Mode.EndPointSetup || CalculatingPath || Map == null)
                             return false;
 
-                        return !IsInsideObstacle(point);
+                        return !GeometryHelper.IsEnclosed(point, Map.Obstacles);
                     });
                 }
                 return _setEndPointCommand;
             }
         }
-        public RelayCommand<VehicleSetup> SetInitialVehicleSetup
+        public RelayCommand<VehicleSetup> SetInitialVehicleSetupCommandCommand
         {
             get
             {
-                if (_setInitialVehicleSetup == null)
+                if (_setInitialVehicleSetupCommand == null)
                 {
-                    _setInitialVehicleSetup = new RelayCommand<VehicleSetup>(setup =>
+                    _setInitialVehicleSetupCommand = new RelayCommand<VehicleSetup>(setup =>
                     {
                         EditorMode = Mode.Normal;
                         VehicleSize = setup.RelativeSize;
@@ -175,7 +180,7 @@ namespace SRL.Main.ViewModel
                         return !GeometryHelper.IsIntersected(shape, Map.Obstacles);
                     });
                 }
-                return _setInitialVehicleSetup;
+                return _setInitialVehicleSetupCommand;
             }
         }
         public RelayCommand CalculatePathCommand
@@ -189,9 +194,11 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
 
                         List<Option> options = _algorithm.GetOptions();
-                        ShowOptionsDialog(options);
-                        _algorithm.SetOptions(options);
-                        CalculatePath();
+                        if (GetAlgorithmOptions(options))
+                        {
+                            _algorithm.SetOptions(options);
+                            StartNewPathCalculation();
+                        }
                     },
                         () =>
                         {
@@ -210,7 +217,7 @@ namespace SRL.Main.ViewModel
         private RelayCommand _loadVehicleCommand;
         private RelayCommand<Point> _setStartPointCommand;
         private RelayCommand<Point> _setEndPointCommand;
-        private RelayCommand<VehicleSetup> _setInitialVehicleSetup;
+        private RelayCommand<VehicleSetup> _setInitialVehicleSetupCommand;
         private RelayCommand _calculatePathCommand;
 
         #endregion
@@ -444,6 +451,25 @@ namespace SRL.Main.ViewModel
         #endregion
 
 
+        #region Path calculation properties
+
+        public bool CalculatingPath
+        {
+            get { return _calculatingPath; }
+            set
+            {
+                Set(ref _calculatingPath, value);
+                RaiseRequerySuggested();
+            }
+        }
+
+        private bool _calculatingPath;
+        private CancellationTokenSource _cancellationTokenSource;
+        private readonly object _cancellationLock = new object();
+
+        #endregion
+
+
         public Mode EditorMode
         {
             get { return _editorMode; }
@@ -483,26 +509,25 @@ namespace SRL.Main.ViewModel
             }
         }
 
-        public bool CalculatingPath
-        {
-            get { return _calculatingPath; }
-            set
-            {
-                Set(ref _calculatingPath, value);
-                RaiseRequerySuggested();
-            }
-        }
+
         protected override bool IsEditedModelValid
         {
-            get { return Map != null && Vehicle != null && StartPoint != null && EndPoint != null && VehicleSize != null && InitialVehicleRotation != null && Orders != null; }
+            get
+            {
+                return Map != null &&
+                    Vehicle != null &&
+                    StartPoint != null &&
+                    EndPoint != null &&
+                    VehicleSize != null &&
+                    InitialVehicleRotation != null &&
+                    Orders != null;
+            }
         }
 
-        private Task _pathCalculationTask;
-        private CancellationTokenSource _cancellationTokenSource;
         private readonly DispatcherTimer _simulationTimer;
         private IAlgorithm _algorithm;
 
-        private bool _calculatingPath;
+
         private bool _simulationRunning;
 
 
@@ -510,7 +535,7 @@ namespace SRL.Main.ViewModel
         {
             EditorMode = Mode.Normal;
 
-            _algorithm = new Algorithm.Algorithm(); //TODO change to an actual implementation
+            _algorithm = new Algorithm.Algorithm();
 
             _simulationTimer = new DispatcherTimer();
             _simulationTimer.Interval = new TimeSpan(0, 0, 0, 0, FrameChangeInterval);
@@ -553,16 +578,6 @@ namespace SRL.Main.ViewModel
 
             if (Orders != null)
                 CalculateFrames(Orders);
-        }
-
-        public bool IsInsideObstacle(Point point)
-        {
-            foreach (var obstacle in Map.Obstacles)
-            {
-                if (GeometryHelper.IsInsidePolygon(point, obstacle))
-                    return true;
-            }
-            return false;
         }
 
         private void CalculateFrames(List<Order> orders)
@@ -725,33 +740,56 @@ namespace SRL.Main.ViewModel
             Frames = frames.Reverse().ToList();
         }
 
-        private void CalculatePath()
+        private void StartNewPathCalculation()
         {
+            Monitor.Enter(_cancellationLock);
             _cancellationTokenSource?.Cancel();
+
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken token = _cancellationTokenSource.Token;
 
-            _pathCalculationTask = new Task(() =>
+            CalculatingPath = true;
+            new Task(() =>
             {
-                Orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value, InitialVehicleRotation.Value, token); //TODO pass token
+                List<Order> orders;
+                try
+                {
+                    orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
+                        InitialVehicleRotation.Value, token);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+                catch (NonexistentPathException)
+                {
+                    var args = new MessageDialogArgs();
+                    args.Title = "Path not found"; //TODO localization
+                    args.Description = "Current simulation setting does not allow to calculate a proper path."; //TODO localization
+                    Messenger.Default.Send(new ShowDialogMessage(args));
+                    return;
+                }
 
-                if (!token.IsCancellationRequested)
+                if (Monitor.TryEnter(_cancellationLock) && !token.IsCancellationRequested)
                 {
                     CalculatingPath = false;
-                    RaisePropertyChanged(nameof(CalculatingPath));
-                    RaiseRequerySuggested();
+                    Orders = orders;
+                    Monitor.Exit(_cancellationLock);
                 }
-            }, token);
+            }, token).Start();
 
-            _pathCalculationTask.Start();
-            CalculatingPath = true;
-            RaisePropertyChanged(nameof(CalculatingPath));
-            RaiseRequerySuggested();
-            
-            //TODO lock setting _pathCalculationTask
+            Monitor.Exit(_cancellationLock);
         }
 
-        private void ShowOptionsDialog(List<Option> options)
+        private void CancelPathCalculation()
+        {
+            Monitor.Enter(_cancellationLock);
+            _cancellationTokenSource?.Cancel();
+            CalculatingPath = false;
+            Monitor.Exit(_cancellationLock);
+        }
+
+        private bool GetAlgorithmOptions(List<Option> options)
         {
             OptionsDialogView dialog = new OptionsDialogView(options);
 
@@ -759,7 +797,10 @@ namespace SRL.Main.ViewModel
             {
                 options.Clear();
                 options.AddRange(dialog.Result);
+                return true;
             }
+
+            return false;
         }
 
         public enum Mode

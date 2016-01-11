@@ -23,7 +23,7 @@ namespace SRL.Commons
             }
         }
 
-        public static Language GetLanguage(CultureInfo culture)
+        public static Language GetLanguage(this CultureInfo culture)
         {
             switch (culture.TwoLetterISOLanguageName)
             {

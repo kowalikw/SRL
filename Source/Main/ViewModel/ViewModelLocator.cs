@@ -1,5 +1,6 @@
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using SRL.Main.View.Dialogs;
 
 namespace SRL.Main.ViewModel
 {
@@ -7,7 +8,7 @@ namespace SRL.Main.ViewModel
     /// This class contains static references to all the view models in the
     /// application and provides an entry point for the bindings.
     /// </summary>
-    public class ViewModelLocator
+    internal class ViewModelLocator
     {
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
@@ -16,12 +17,14 @@ namespace SRL.Main.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<MainViewModel>(MainViewModelFactory);
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<MapEditorViewModel>();
             SimpleIoc.Default.Register<VehicleEditorViewModel>();
             SimpleIoc.Default.Register<TracingViewModel>();
             SimpleIoc.Default.Register<SimulationViewModel>();
+            
+            
         }
 
         public MainViewModel Main
@@ -52,6 +55,12 @@ namespace SRL.Main.ViewModel
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
+        }
+
+
+        private static MainViewModel MainViewModelFactory()
+        {
+            return new MainViewModel(new DialogService());
         }
     }
 }
