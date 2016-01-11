@@ -122,5 +122,14 @@ namespace SRL.Main.View.Localization {
                 return ResourceManager.GetString("vehicleEditorSubTab", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simulation of a robot in a labirynth.
+        /// </summary>
+        internal static string windowTitle {
+            get {
+                return ResourceManager.GetString("windowTitle", resourceCulture);
+            }
+        }
     }
 }

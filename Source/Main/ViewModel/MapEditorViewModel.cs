@@ -22,6 +22,9 @@ namespace SRL.Main.ViewModel
                         UnfinishedPolygon.Add(vertex);
                     }, vertex =>
                     {
+                        if (UnfinishedPolygon.Count > 0 && UnfinishedPolygon.GetLast() == vertex)
+                            return false;
+
                         if (UnfinishedPolygon.Count <= 2)
                             return true;
 

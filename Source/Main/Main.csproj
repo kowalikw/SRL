@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="Tracing\BitmapTracer.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
+    <Compile Include="Utilities\Converters\FontSizeConverter.cs" />
     <Compile Include="Utilities\Converters\BoolNegationConverter.cs" />
     <Compile Include="Utilities\Converters\DictionaryValueConverter.cs" />
     <Compile Include="Utilities\Converters\DoubleToStringConverter.cs" />
@@ -358,7 +359,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\MiNI.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algorithm\Algorithm.csproj">
       <Project>{2F22392D-FE48-4407-8C62-0D8FB182CF52}</Project>
@@ -372,6 +377,11 @@
       <Project>{3C5FAFF4-BFC0-48F2-907A-88095272F764}</Project>
       <Name>MonoGameControl</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PW.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

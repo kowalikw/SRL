@@ -5,13 +5,48 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:local="clr-namespace:SRL.Main.Utilities.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid Style="{StaticResource ContentRoot}" x:Name="Home">
         <ScrollViewer>
-            <StackPanel MinWidth="200">
-                <TextBlock Text="{Resx Key=testkey}" />
-            </StackPanel>
+            <Grid Margin="20,0">
+                <Grid.Resources>
+                    <local:FontSizeConverter  x:Key="FontSizeConverter" />
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="PW" Grid.Column="0" Source="{StaticResource PW}" />
+                    <StackPanel Grid.Column="1" Margin="20,0" VerticalAlignment="Center">
+                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=18 }" HorizontalAlignment="Center" Text="{Resx Key=university}"/>
+                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=24 }" HorizontalAlignment="Center" Text="{Resx Key=faculty}"/>
+                    </StackPanel>
+                    <Image x:Name="MiNI" Grid.Column="2" Source="{StaticResource MiNI}"/>
+                </Grid>
+                <StackPanel Grid.Row="1" Margin="0,20">
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center" Text="{Resx Key=thesis}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center" Text="{Resx Key=computerscience}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=16 }" HorizontalAlignment="Center" Text="{Resx Key=title}" Margin="0,20,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Margin="0,20,0,10">
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center" Text="{Resx Key=authorsHeader}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center" Text="{Resx Key=authors}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3">
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center" Text="{Resx Key=promotorHeader}"/>
+                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center" Text="{Resx Key=promotor}"/>
+                </StackPanel>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </UserControl>

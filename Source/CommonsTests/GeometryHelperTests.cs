@@ -65,10 +65,12 @@ namespace CommonsTests
             Point point1 = new Point(-0.1, 0.01);
             Point point2 = new Point(0, 0);
             Point point3 = new Point(0, 0.1);
+            Point point4 = new Point(0.2, 0.1);
 
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point1, polygon));
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point2, polygon));
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point3, polygon));
+            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point1, polygon));
+            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point2, polygon));
+            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point3, polygon));
+            Assert.IsTrue(GeometryHelper.IsInsidePolygon(point4, polygon));
         }
 
         [TestMethod]
@@ -95,10 +97,14 @@ namespace CommonsTests
             var segmentIntersection1 = GeometryHelper.DoSegmentsIntersect(new Point(0, 0), new Point(0, 1), new Point(0, 0), new Point(1, 0));
             var segmentIntersection2 = GeometryHelper.DoSegmentsIntersect(new Point(0, 0), new Point(1, 0), new Point(0.5, -0.5), new Point(1, 1));
             var segmentIntersection3 = GeometryHelper.DoSegmentsIntersect(new Point(0, 0), new Point(0, 1), new Point(-0.2, 0), new Point(-1, 1));
+            var segmentIntersection4 = GeometryHelper.DoSegmentsIntersect(new Point(0, 0), new Point(0, 1), new Point(0, 0), new Point(0, 1));
+            var segmentIntersection5 = GeometryHelper.DoSegmentsIntersect(new Point(0, 0), new Point(0, 1), new Point(0, 1), new Point(1, 1));
 
             Assert.IsTrue(segmentIntersection1);
             Assert.IsTrue(segmentIntersection2);
             Assert.IsFalse(segmentIntersection3);
+            Assert.IsTrue(segmentIntersection4);
+            Assert.IsTrue(segmentIntersection5);
         }
 
         [TestMethod]

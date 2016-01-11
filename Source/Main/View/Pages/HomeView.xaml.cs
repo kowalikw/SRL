@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Controls;
 using Infralution.Localization.Wpf;
+using System.Windows;
 
 namespace SRL.Main.View.Pages
 {
@@ -11,8 +12,7 @@ namespace SRL.Main.View.Pages
     {
         public HomeView()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
         }
     }
 }

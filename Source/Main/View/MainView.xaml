@@ -7,7 +7,7 @@
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
         xmlns:local="clr-namespace:SRL.Main"
         mc:Ignorable="d"
-        Title="MainView" IsTitleVisible="True"
+        Title="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=windowTitle}" IsTitleVisible="True"
         MinHeight="600" MinWidth="800"
         ContentSource="/View/Pages/HomeView.xaml"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
