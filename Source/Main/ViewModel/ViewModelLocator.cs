@@ -17,14 +17,12 @@ namespace SRL.Main.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<MainViewModel>(MainViewModelFactory);
+            SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<MapEditorViewModel>();
             SimpleIoc.Default.Register<VehicleEditorViewModel>();
             SimpleIoc.Default.Register<TracingViewModel>();
             SimpleIoc.Default.Register<SimulationViewModel>();
-            
-            
         }
 
         public MainViewModel Main
@@ -55,12 +53,6 @@ namespace SRL.Main.ViewModel
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
-        }
-
-
-        private static MainViewModel MainViewModelFactory()
-        {
-            return new MainViewModel(new DialogService());
         }
     }
 }

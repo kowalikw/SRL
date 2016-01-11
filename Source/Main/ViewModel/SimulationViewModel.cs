@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -751,7 +752,7 @@ namespace SRL.Main.ViewModel
             CalculatingPath = true;
             new Task(() =>
             {
-                List<Order> orders;
+                List<Order> orders = null;
                 try
                 {
                     orders = _algorithm.GetPath(Map, Vehicle, StartPoint.Value, EndPoint.Value, VehicleSize.Value,
@@ -759,6 +760,7 @@ namespace SRL.Main.ViewModel
                 }
                 catch (OperationCanceledException)
                 {
+                    Debug.WriteLine("task done (cancelled)");
                     return;
                 }
                 catch (NonexistentPathException)
@@ -767,15 +769,19 @@ namespace SRL.Main.ViewModel
                     args.Title = "Path not found"; //TODO localization
                     args.Description = "Current simulation setting does not allow to calculate a proper path."; //TODO localization
                     Messenger.Default.Send(new ShowDialogMessage(args));
-                    return;
                 }
 
-                if (Monitor.TryEnter(_cancellationLock) && !token.IsCancellationRequested)
+                if (Monitor.TryEnter(_cancellationLock))
                 {
-                    CalculatingPath = false;
-                    Orders = orders;
+                    if (!token.IsCancellationRequested)
+                    {
+                        CalculatingPath = false;
+                        Orders = orders;
+                    }
                     Monitor.Exit(_cancellationLock);
                 }
+
+                Debug.WriteLine("task done");
             }, token).Start();
 
             Monitor.Exit(_cancellationLock);
