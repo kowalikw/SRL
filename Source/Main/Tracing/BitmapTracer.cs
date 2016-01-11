@@ -29,9 +29,9 @@ namespace SRL.Main.Tracing
 
         public List<Polygon> Trace(double areaThreshold, double colorThreshold)
         {
-            int absoluteColorThreshold = (int)(255 * colorThreshold);
             int pixelThreshold = (int)(_bitmap.Height * _bitmap.Width * areaThreshold);
-            
+            int absoluteColorThreshold = (int)(254 * colorThreshold) + 1;
+
             var output = new List<Polygon>(TraceBitmap(_bitmap, pixelThreshold, absoluteColorThreshold));
             NormalizeOutput(output);
             
@@ -47,7 +47,7 @@ namespace SRL.Main.Tracing
             Potrace.curveoptimizing = false; // Bezier curve optimization.
 
             ArrayList polygons = new ArrayList();
-            bool[,] matrix = Potrace.BitMapToBinary(bitmap, 255 - maxRgb);
+            bool[,] matrix = Potrace.BitMapToBinary(bitmap, maxRgb);
             Potrace.potrace_trace(matrix, polygons);
 
             for (int i = 0; i < polygons.Count; i++)
