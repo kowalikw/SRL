@@ -6,7 +6,7 @@ using GalaSoft.MvvmLight;
 
 namespace SRL.Commons.Model
 {
-    public class Option : ObservableObject, IDataErrorInfo
+    public class Option : ObservableObject, IDataErrorInfo, ICloneable
     {
         public enum ValueType
         {
@@ -15,22 +15,51 @@ namespace SRL.Commons.Model
             Boolean
         }
 
-        public ValueType Type { get; set; }
+        public ValueType Type { get; }
 
         public object Value
         {
             get { return _value; }
-            set { Set(ref _value, value); }
+            set
+            {
+                Set(ref _value, value);
+            }
         }
 
-        public object MinValue { get; set; }
-        public object MaxValue { get; set; }
+        public object MinValue
+        {
+            get { return _minValue; }
+            set
+            {
+                Set(ref _minValue, value);
+            }
+        }
 
-        public Dictionary<Language, string> Names { get; set; }
-        public Dictionary<Language, string> Tooltips { get; set; }
+        public object MaxValue
+        {
+            get { return _maxValue; }
+            set
+            {
+                Set(ref _maxValue, value);
+            }
+        }
+
+        public Dictionary<Language, string> Names { get; }
+        public Dictionary<Language, string> Tooltips { get; }
 
         private object _value;
+        private object _minValue;
+        private object _maxValue;
 
+
+        public Option(ValueType type)
+        {
+            Type = type;
+
+            Names = new Dictionary<Language, string>();
+            Tooltips = new Dictionary<Language, string>();
+        }
+        
 
         public string this[string columnName]
         {
@@ -74,5 +103,10 @@ namespace SRL.Commons.Model
         }
 
         public bool IsValid => Error == null;
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }
