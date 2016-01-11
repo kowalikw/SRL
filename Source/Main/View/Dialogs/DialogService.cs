@@ -21,6 +21,7 @@ namespace SRL.Main.View.Dialogs
         public void ShowMessageDialog(string title, string message, Action closeCallback)
         {
             ModernDialog.ShowMessage(message, title, MessageBoxButton.OK);
+            closeCallback();
         }
 
         public void ShowOptionsDialog(List<Option> options, Action<bool> closeCallback)
