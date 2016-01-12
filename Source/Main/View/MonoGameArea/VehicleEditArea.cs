@@ -23,8 +23,6 @@ namespace SRL.Main.View.MonoGameArea
         private NotifyCollectionChangedEventHandler _vehicleShapeChangedHandler;
         private PropertyChangedEventHandler _propertyChangedHandler;
 
-        private readonly Line _activeLine = new Line();
-
         protected override void Initialize()
         {
             base.Initialize();
@@ -61,14 +59,14 @@ namespace SRL.Main.View.MonoGameArea
 
                 if (IsMouseOver && _context.VehicleShape.Count > 0)
                 {
-                    _activeLine.EndpointA = _context.VehicleShape.GetLast();
-                    _activeLine.EndpointB = normalizedMousePosition;
-
-                        spriteBatch.DrawLine(_activeLine, RenderSize, color, AntialiasingEnabled);
+                    // Draw active line.
+                    Point endpointA = _context.VehicleShape.GetLast();
+                    Point endpointB = normalizedMousePosition;
+                    spriteBatch.DrawLine(endpointA, endpointB, RenderSize, color, AntialiasingEnabled);
                 }
                 else if (_context.VehicleShape.Count == 1)
                 {
-                        spriteBatch.DrawVertex(_context.VehicleShape.GetLast(), RenderSize, ActiveColor, AntialiasingEnabled);
+                    spriteBatch.DrawVertex(_context.VehicleShape.GetLast(), RenderSize, ActiveColor, AntialiasingEnabled);
                 }
             }
             else if (!_context.Pivot.HasValue)
@@ -79,7 +77,7 @@ namespace SRL.Main.View.MonoGameArea
                         ? ValidColor
                         : InvalidColor;
 
-                        spriteBatch.DrawVertex(normalizedMousePosition, RenderSize, color, AntialiasingEnabled);
+                    spriteBatch.DrawVertex(normalizedMousePosition, RenderSize, color, AntialiasingEnabled);
                 }
             }
             else if (!_context.Direction.HasValue)
@@ -91,12 +89,12 @@ namespace SRL.Main.View.MonoGameArea
                         ? ValidColor
                         : InvalidColor;
 
-                        spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, color, AntialiasingEnabled);
+                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, angle, RenderSize, color, AntialiasingEnabled);
                 }
             }
             else
             {
-                    spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor, AntialiasingEnabled);
+                spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor, AntialiasingEnabled);
             }
         }
 
@@ -104,18 +102,18 @@ namespace SRL.Main.View.MonoGameArea
         {
             if (!_context.ShapeDone)
             {
-                    lockBitmap.DrawPath(new Path(_context.VehicleShape), RenderSize, ActiveColor, AntialiasingEnabled);
+                lockBitmap.DrawPath(new Path(_context.VehicleShape), RenderSize, ActiveColor, AntialiasingEnabled);
             }
             else
             {
-                    lockBitmap.DrawPolygon(new Polygon(_context.VehicleShape), RenderSize, RegularColor, AntialiasingEnabled);
+                lockBitmap.DrawPolygon(new Polygon(_context.VehicleShape), RenderSize, RegularColor, AntialiasingEnabled);
             }
 
             if (_context.Pivot.HasValue)
             {
                 Color color = _context.Direction.HasValue ? RegularColor : ActiveColor;
 
-                    lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, color, AntialiasingEnabled);
+                lockBitmap.DrawVertex(_context.Pivot.Value, RenderSize, color, AntialiasingEnabled);
             }
 
             // Arrow is drawn dynamically only.

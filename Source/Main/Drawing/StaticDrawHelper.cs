@@ -129,17 +129,15 @@ namespace SRL.Main.Drawing
 
         #region Line
 
-        public static void DrawLine(this LockBitmap lockBitmap, Line line, Size renderSize, Color color, bool antialiasing)
+        public static void DrawLine(this LockBitmap lockBitmap, Point endpointA, Point endpointB, Size renderSize, Color color, bool antialiasing)
         {
-            int aX = (int)line.EndpointA.Denormalize(renderSize).X;
-            int aY = (int)line.EndpointA.Denormalize(renderSize).Y;
-            int bX = (int)line.EndpointB.Denormalize(renderSize).X;
-            int bY = (int)line.EndpointB.Denormalize(renderSize).Y;
+            Point a = endpointA.Denormalize(renderSize);
+            Point b = endpointB.Denormalize(renderSize);
 
             if (antialiasing)
-                lockBitmap.WuLine(aX, aY, bX, bY, color);
+                lockBitmap.WuLine((int)a.X, (int)a.Y, (int)b.X, (int)b.Y, color);
             else
-                lockBitmap.BresenhamLine(aX, aY, bX, bY, color);
+                lockBitmap.BresenhamLine((int)a.X, (int)a.Y, (int)b.X, (int)b.Y, color);
         }
 
         #endregion
@@ -149,7 +147,7 @@ namespace SRL.Main.Drawing
         public static void DrawPath(this LockBitmap lockBitmap, Path path, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < path.Vertices.Count; i++)
-                lockBitmap.DrawLine(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color, antialiasing);
+                lockBitmap.DrawLine(path.Vertices[i - 1], path.Vertices[i], renderSize, color, antialiasing);
         }
 
         #endregion
@@ -159,8 +157,8 @@ namespace SRL.Main.Drawing
         public static void DrawPolygon(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
-                lockBitmap.DrawLine(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color, antialiasing);
-            lockBitmap.DrawLine(new Line(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]), renderSize, color, antialiasing);
+                lockBitmap.DrawLine(polygon.Vertices[i - 1], polygon.Vertices[i], renderSize, color, antialiasing);
+            lockBitmap.DrawLine(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0], renderSize, color, antialiasing);
         }
 
         #endregion

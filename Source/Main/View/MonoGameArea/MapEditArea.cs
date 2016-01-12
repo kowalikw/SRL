@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework;
@@ -18,8 +17,6 @@ namespace SRL.Main.View.MonoGameArea
         private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
-
-        private readonly Line _activeLine = new Line();
 
         protected override void Initialize()
         {
@@ -49,10 +46,10 @@ namespace SRL.Main.View.MonoGameArea
                 Color color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
                     ValidColor : InvalidColor;
 
-                _activeLine.EndpointA = _context.UnfinishedPolygon.GetLast();
-                _activeLine.EndpointB = normalizedMousePosition;
-
-                spriteBatch.DrawLine(_activeLine, RenderSize, color, AntialiasingEnabled);
+                // Draw active line.
+                Point endpointA = _context.UnfinishedPolygon.GetLast();
+                Point endpointB = normalizedMousePosition;
+                spriteBatch.DrawLine(endpointA, endpointB, RenderSize, color, AntialiasingEnabled);
             }
             else if (_context.UnfinishedPolygon.Count == 1)
             {

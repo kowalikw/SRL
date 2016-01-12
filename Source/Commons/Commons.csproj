@@ -75,7 +75,6 @@
     <Compile Include="Model\Base\IAlgorithm.cs" />
     <Compile Include="Model\Base\SvgSerializable.cs" />
     <Compile Include="Model\Frame.cs" />
-    <Compile Include="Model\Line.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Path.cs" />

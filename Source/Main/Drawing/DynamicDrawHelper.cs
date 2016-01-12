@@ -183,17 +183,15 @@ namespace SRL.Main.Drawing
 
         #region Line
 
-        public static void DrawLine(this SpriteBatch spriteBatch, Line line, Size renderSize, Color color, bool antialiasing)
+        public static void DrawLine(this SpriteBatch spriteBatch, Point endpointA, Point endpointB, Size renderSize, Color color, bool antialiasing)
         {
-            float aX = (float)line.EndpointA.Denormalize(renderSize).X;
-            float aY = (float)line.EndpointA.Denormalize(renderSize).Y;
-            float bX = (float)line.EndpointB.Denormalize(renderSize).X;
-            float bY = (float)line.EndpointB.Denormalize(renderSize).Y;
+            Point a = endpointA.Denormalize(renderSize);
+            Point b = endpointB.Denormalize(renderSize);
 
             if (antialiasing)
-                spriteBatch.WuLine(aX, aY, bX, bY, color);
+                spriteBatch.WuLine((float)a.X, (float)a.Y, (float)b.X, (float)b.Y, color);
             else
-                spriteBatch.BresenhamLine(aX, aY, bX, bY, color);
+                spriteBatch.BresenhamLine((float)a.X, (float)a.Y, (float)b.X, (float)b.Y, color);
         }
 
         #endregion
@@ -270,7 +268,7 @@ namespace SRL.Main.Drawing
         public static void DrawPath(this SpriteBatch spriteBatch, Path path, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < path.Vertices.Count; i++)
-                spriteBatch.DrawLine(new Line(path.Vertices[i - 1], path.Vertices[i]), renderSize, color, antialiasing);
+                spriteBatch.DrawLine(path.Vertices[i - 1], path.Vertices[i], renderSize, color, antialiasing);
         }
 
         #endregion
@@ -280,8 +278,8 @@ namespace SRL.Main.Drawing
         public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
-                spriteBatch.DrawLine(new Line(polygon.Vertices[i - 1], polygon.Vertices[i]), renderSize, color, antialiasing);
-            spriteBatch.DrawLine(new Line(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0]), renderSize, color, antialiasing);
+                spriteBatch.DrawLine(polygon.Vertices[i - 1], polygon.Vertices[i], renderSize, color, antialiasing);
+            spriteBatch.DrawLine(polygon.Vertices[polygon.Vertices.Count - 1], polygon.Vertices[0], renderSize, color, antialiasing);
         }
 
         #endregion
