@@ -77,7 +77,6 @@
     <Compile Include="Model\Frame.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Order.cs" />
-    <Compile Include="Model\Path.cs" />
     <Compile Include="Model\Polygon.cs" />
     <Compile Include="Model\Simulation.cs" />
     <Compile Include="Model\Vehicle.cs" />

@@ -102,7 +102,7 @@ namespace SRL.Main.View.MonoGameArea
         {
             if (!_context.ShapeDone)
             {
-                lockBitmap.DrawPath(new Path(_context.VehicleShape), RenderSize, ActiveColor, AntialiasingEnabled);
+                lockBitmap.DrawPath(_context.VehicleShape, RenderSize, ActiveColor, AntialiasingEnabled);
             }
             else
             {

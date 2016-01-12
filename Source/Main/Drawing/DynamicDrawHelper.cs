@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -265,10 +267,10 @@ namespace SRL.Main.Drawing
 
         #region Path
 
-        public static void DrawPath(this SpriteBatch spriteBatch, Path path, Size renderSize, Color color, bool antialiasing)
+        public static void DrawPath(this SpriteBatch spriteBatch, IList<Point> path, Size renderSize, Color color, bool antialiasing)
         {
-            for (int i = 1; i < path.Vertices.Count; i++)
-                spriteBatch.DrawLine(path.Vertices[i - 1], path.Vertices[i], renderSize, color, antialiasing);
+            for (int i = 1; i < path.Count; i++)
+                spriteBatch.DrawLine(path[i - 1], path[i], renderSize, color, antialiasing);
         }
 
         #endregion

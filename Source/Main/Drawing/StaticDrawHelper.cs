@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Microsoft.Xna.Framework;
 using SRL.Commons.Model;
@@ -144,10 +146,10 @@ namespace SRL.Main.Drawing
 
         #region Path
 
-        public static void DrawPath(this LockBitmap lockBitmap, Path path, Size renderSize, Color color, bool antialiasing)
+        public static void DrawPath(this LockBitmap lockBitmap, IList<Point> path, Size renderSize, Color color, bool antialiasing)
         {
-            for (int i = 1; i < path.Vertices.Count; i++)
-                lockBitmap.DrawLine(path.Vertices[i - 1], path.Vertices[i], renderSize, color, antialiasing);
+            for (int i = 1; i < path.Count; i++)
+                lockBitmap.DrawLine(path[i - 1], path[i], renderSize, color, antialiasing);
         }
 
         #endregion

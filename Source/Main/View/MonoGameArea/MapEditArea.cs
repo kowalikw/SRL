@@ -42,7 +42,6 @@ namespace SRL.Main.View.MonoGameArea
 
             if (_context.UnfinishedPolygon.Count > 0 && IsMouseOver)
             {
-
                 Color color = _context.AddVertexCommand.CanExecute(normalizedMousePosition) ?
                     ValidColor : InvalidColor;
 
@@ -61,7 +60,7 @@ namespace SRL.Main.View.MonoGameArea
         {
             foreach (var obstacle in _context.FinishedPolygons)
                 lockBitmap.DrawPolygon(obstacle, RenderSize, RegularColor, AntialiasingEnabled);
-            lockBitmap.DrawPath(new Path(_context.UnfinishedPolygon), RenderSize, ActiveColor, AntialiasingEnabled);
+            lockBitmap.DrawPath(_context.UnfinishedPolygon, RenderSize, ActiveColor, AntialiasingEnabled);
         }
 
         protected override void OnMouseUp(MouseButton button)

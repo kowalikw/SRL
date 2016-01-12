@@ -410,12 +410,11 @@ namespace SRL.Main.ViewModel
                         var pathVertices = new List<Point>();
                         pathVertices.Add(StartPoint.Value);
                         pathVertices.AddRange(Orders.Select(order => order.Destination));
-                        Path = new Path(pathVertices);
+                        Path = pathVertices;
 
                         CalculateFrames(value);
                         MaxFrameIdx = Frames.Count - 1;
                         StopPlaybackCommand.Execute(null);
-
                     }
 
                     RaisePropertyChanged();
@@ -437,7 +436,7 @@ namespace SRL.Main.ViewModel
             get { return _maxFrameIdx; }
             set { Set(ref _maxFrameIdx, value); }
         }
-        public Path Path
+        public List<Point> Path
         {
             get { return _path; }
             private set { Set(ref _path, value); }
@@ -447,7 +446,7 @@ namespace SRL.Main.ViewModel
         private List<Order> _orders;
         private int _currentFrameIdx;
         private int _maxFrameIdx;
-        private Path _path;
+        private List<Point> _path;
 
         #endregion
 
