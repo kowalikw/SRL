@@ -142,78 +142,32 @@ namespace SRL.Main.Drawing
                 MathHelper.Swap(ref aX, ref bX);
                 MathHelper.Swap(ref aY, ref bY);
             }
-
-            float dx = bX - aX;
-            float dy = bY - aY;
-            float gradient = dy / dx;
-
-            // Calculate and set first point
-            float xEnd = (float)Math.Round(aX);
-            float yEnd = aY + gradient * (xEnd - aX);
-            float xGap = MathHelper.Rfpart(aX + 0.5f);
             
-            float intensityTop = MathHelper.Rfpart(yEnd) * xGap;
-            float intensityDown = MathHelper.Fpart(yEnd) * xGap;
-
-            float xPxl1 = xEnd;
-            float yPxl1 = yEnd;
-
-            if (steep)
-            {
-                spriteBatch.SetBigPixel(yPxl1, xPxl1, color * intensityTop);
-                spriteBatch.SetBigPixel(yPxl1 + 1, xPxl1, color * intensityDown);
-            }
-            else
-            {
-                spriteBatch.SetBigPixel(xPxl1, yPxl1, color * intensityTop);
-                spriteBatch.SetBigPixel(xPxl1, yPxl1 + 1, color * intensityDown);
-            }
-
-            float intery = yEnd + gradient;
-
-            // Calculate and set last point
-            xEnd = (float)Math.Round(bX);
-            yEnd = bY + gradient * (xEnd - bX);
-            xGap = MathHelper.Fpart(bX + 0.5f);
+            float gradient = (bY - aY) / (bX - aX);
             
-            intensityTop = MathHelper.Rfpart(yEnd) * xGap;
-            intensityDown = MathHelper.Fpart(yEnd) * xGap;
+            float xStart = (float)Math.Round(aX);
+            float xEnd = (float)Math.Round(bX);
 
-            float xPxl2 = xEnd;
-            float yPxl2 = yEnd;
+            float x = xStart;
+            float y = aY + gradient * (xStart - aX);
 
-            if (steep)
+            for (; x <= xEnd; x++)
             {
-                spriteBatch.SetBigPixel(yPxl2, xPxl2, color * intensityTop);
-                spriteBatch.SetBigPixel(yPxl2 + 1, xPxl2, color * intensityDown);
-            }
-            else
-            {
-                spriteBatch.SetBigPixel(xPxl2, yPxl2, color * intensityTop);
-                spriteBatch.SetBigPixel(xPxl2, yPxl2 + 1, color * intensityDown);
-            }
-
-            // Main loop
-            for (float x = xPxl1 + 1; x < xPxl2; x++)
-            {
-                intery = intery + gradient;
-
-                intensityTop = MathHelper.Rfpart(intery);
-                intensityDown = MathHelper.Fpart(intery);
-
-                if (x < 0) continue;
-                if (intery < 0) continue;
+                float intensityTop = MathHelper.Rfpart(y);
+                float intensityDown = MathHelper.Fpart(y);
 
                 if (steep)
                 {
-                    spriteBatch.SetBigPixel((int)intery, x, color * intensityTop);
-                    spriteBatch.SetBigPixel((int)intery + 1, x, color * intensityDown);
+                    spriteBatch.SetBigPixel((int)y, x, color * intensityTop);
+                    spriteBatch.SetBigPixel((int)y + 1, x, color * intensityDown);
                 }
                 else
                 {
-                    spriteBatch.SetBigPixel(x, (int)intery, color * intensityTop);
-                    spriteBatch.SetBigPixel(x, (int)intery + 1, color * intensityDown);
+                    spriteBatch.SetBigPixel(x, (int)y, color * intensityTop);
+                    spriteBatch.SetBigPixel(x, (int)y + 1, color * intensityDown);
                 }
+
+                y = y + gradient;
             }
         }
 
@@ -259,13 +213,13 @@ namespace SRL.Main.Drawing
 
             if (antialiasing)
             {
-                spriteBatch.WuLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
+                spriteBatch.WuLine((float)t.X, (float)t.Y, (float)o.X, (float)o.Y, color);
                 spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
                 spriteBatch.WuLine((float)t.X, (float)t.Y, (float)ah2.X, (float)ah2.Y, color);
             }
             else
             {
-                spriteBatch.BresenhamLine((float)o.X, (float)o.Y, (float)t.X, (float)t.Y, color);
+                spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)o.X, (float)o.Y, color);
                 spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah1.X, (float)ah1.Y, color);
                 spriteBatch.BresenhamLine((float)t.X, (float)t.Y, (float)ah2.X, (float)ah2.Y, color);
             }
