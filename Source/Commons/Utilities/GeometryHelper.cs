@@ -145,7 +145,7 @@ namespace SRL.Commons.Utilities
             for (int i = 0; i < polygon.Vertices.Count - 1; i++)
                 totalAngle += GetAngle(subject, polygon.Vertices[i], polygon.Vertices[i + 1]);
 
-            return Math.Abs(totalAngle) > MathHelper.DoubleComparisonEpsilon;
+            return totalAngle.EpsilonEquals(0);
         }
 
         public static bool IsEnclosed(Point subject, IEnumerable<Polygon> polygons)
@@ -184,7 +184,7 @@ namespace SRL.Commons.Utilities
 
             if (polygons == null)
                 throw new ArgumentNullException(nameof(polygons));
-            
+
             var input = new List<List<IntPoint>>(polygons.Count);
             foreach (Polygon polygon in polygons)
                 input.Add(polygon.Vertices.Select(t => new IntPoint(t.X * multiply, t.Y * multiply)).ToList());
@@ -197,12 +197,11 @@ namespace SRL.Commons.Utilities
             List<Polygon> result = new List<Polygon>();
             foreach (var polygon in output)
             {
-                var vertices = polygon.Select(v => new Point(v.X/(double) multiply, v.Y/(double) multiply));
+                var vertices = polygon.Select(v => new Point(v.X / (double)multiply, v.Y / (double)multiply));
                 result.Add(new Polygon(vertices));
             }
 
             return result;
         }
-
     }
 }

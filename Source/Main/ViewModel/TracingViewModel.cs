@@ -68,7 +68,7 @@ namespace SRL.Main.ViewModel
                         Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
-                        return !TracingOngoing;
+                        return SelectedPolygonIndices.Count > 0 && !TracingOngoing;
                     });
                 }
                 return _makeMapCommand;
@@ -91,7 +91,6 @@ namespace SRL.Main.ViewModel
                         Messenger.Default.Send(gotoMsg);
                     }, () =>
                     {
-                        //TODO allow polygon sums?
                         return SelectedPolygonIndices.Count == 1 && !TracingOngoing;
                     });
                 }

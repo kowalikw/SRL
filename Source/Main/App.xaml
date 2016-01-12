@@ -17,6 +17,5 @@
                 <ResourceDictionary Source="/View/ThemeExtension.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
     </Application.Resources>
 </Application>

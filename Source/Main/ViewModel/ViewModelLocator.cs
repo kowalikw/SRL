@@ -52,7 +52,7 @@ namespace SRL.Main.ViewModel
 
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
+            SimpleIoc.Default.Reset();
         }
     }
 }

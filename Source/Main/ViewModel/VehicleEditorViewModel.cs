@@ -259,7 +259,7 @@ namespace SRL.Main.ViewModel
         public override void SetEditedModel(Vehicle model)
         {
             VehicleShape.ReplaceRange(model.Shape.Vertices);
-            if (VehicleShape.Count >= 3) // TODO instead of checking count only, make sure at least 3 vertices are non collinear
+            if (VehicleShape.Count >= 3)
             {
                 ShapeDone = true;
                 if (GeometryHelper.IsEnclosed(new Point(0, 0), model.Shape))

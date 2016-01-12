@@ -42,5 +42,10 @@ namespace SRL.Commons.Utilities
         {
             return values.Max();
         }
+
+        public static bool EpsilonEquals(this double a, double b)
+        {
+            return Math.Abs(a - b) <= DoubleComparisonEpsilon;
+        }
     }
 }
