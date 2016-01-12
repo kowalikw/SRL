@@ -26,7 +26,6 @@ namespace SRL.Main.View.MonoGameArea
 
 
         private PropertyChangedEventHandler _propertyChangedHandler;
-        private Polygon _resizedVehicleShape;
 
 
         protected override void Initialize()
@@ -72,10 +71,11 @@ namespace SRL.Main.View.MonoGameArea
             }
             else if (_context.Vehicle != null && _context.StartPoint != null)
             {
-                Polygon shape;
+                Polygon shape = _context.Vehicle.Shape;
                 Point origin = _context.StartPoint.Value;
                 Color color;
                 double angle;
+                double resizeFactor;
 
                 if (_context.EditorMode == SimulationViewModel.Mode.VehicleSetup)
                 {
@@ -83,9 +83,10 @@ namespace SRL.Main.View.MonoGameArea
                         return;
 
                     angle = GeometryHelper.GetAngle(origin, normalizedMousePos);
+                    resizeFactor = GeometryHelper.GetDistance(origin, normalizedMousePos);
                     VehicleSetup setup = new VehicleSetup
                     {
-                        RelativeSize = GeometryHelper.GetDistance(origin, normalizedMousePos),
+                        RelativeSize = resizeFactor,
                         Rotation = angle
                     };
 
@@ -93,22 +94,19 @@ namespace SRL.Main.View.MonoGameArea
                         color = ValidColor;
                     else
                         color = InvalidColor;
-
+                    
                     spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor, AntialiasingEnabled);
-
-                    shape = _context.Vehicle.Shape;
-                    shape = GeometryHelper.Resize(shape, setup.RelativeSize);
-
                 }
                 else if (_context.InitialVehicleRotation != null && _context.VehicleSize != null)
                 {
                     angle = _context.InitialVehicleRotation.Value;
+                    resizeFactor = _context.VehicleSize.Value;
                     color = VehicleColor;
-                    shape = _resizedVehicleShape;
                 }
                 else
                     throw new MissingMemberException();
-
+                
+                shape = GeometryHelper.Resize(shape, resizeFactor);
                 shape = GeometryHelper.Rotate(shape, angle);
                 shape = GeometryHelper.Move(shape, origin.X, origin.Y);
 
@@ -130,10 +128,13 @@ namespace SRL.Main.View.MonoGameArea
 
         private void RenderFrame(SpriteBatch spriteBatch, TimeSpan time)
         {
+            double resizeFactor = _context.VehicleSize.Value;
             double rotation = _context.CurrentFrame.Rotation;
             Point position = _context.CurrentFrame.Position;
 
-            Polygon shape = GeometryHelper.Rotate(_resizedVehicleShape, rotation);
+            Polygon shape = _context.Vehicle.Shape;
+            shape = GeometryHelper.Resize(shape, resizeFactor);
+            shape = GeometryHelper.Rotate(shape, rotation);
             shape = GeometryHelper.Move(shape, position.X, position.Y);
 
             spriteBatch.DrawPolygon(shape, RenderSize, VehicleColor, AntialiasingEnabled);
@@ -199,17 +200,6 @@ namespace SRL.Main.View.MonoGameArea
                 propertyName == nameof(Settings.Default.ShowPath))
             {
                 RedrawStaticObjectsTexture();
-            }
-            else if (propertyName == nameof(_context.Vehicle) ||
-                     propertyName == nameof(_context.VehicleSize))
-            {
-                if (_context.Vehicle != null)
-                {
-                    if (_context.VehicleSize == null)
-                        _resizedVehicleShape = _context.Vehicle.Shape;
-                    else
-                        _resizedVehicleShape = GeometryHelper.Resize(_context.Vehicle.Shape, _context.VehicleSize.Value);
-                }
             }
         }
 
