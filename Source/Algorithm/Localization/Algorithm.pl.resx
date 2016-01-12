@@ -118,33 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="angleDensity" xml:space="preserve">
-    <value>Angle density</value>
+    <value>Gęstość kątów</value>
   </data>
   <data name="angleDensityTooltip" xml:space="preserve">
-    <value>Divides the 360 degree spectrum into this many angles distinguished by the algorithm. The bigger the value the better the precision.</value>
+    <value>Dzieli kąt pełny na tyle rozróżnialnych przez algorytm kątów. Im większa wartość, tym większa precyzja.</value>
   </data>
   <data name="bidirectional" xml:space="preserve">
-    <value>Bidirectional movement</value>
+    <value>Ruch dwukierunkowy</value>
   </data>
   <data name="bidirectionalTooltip" xml:space="preserve">
-    <value>Allows the vehicle to move backwards (with the same cost).</value>
+    <value>Pozwala poruszać się pojazdowi tyłem (z takim samym kosztem).</value>
   </data>
   <data name="multidirectional" xml:space="preserve">
-    <value>Multidirectional movement</value>
+    <value>Ruch wielokierunkowy</value>
   </data>
   <data name="multidirectionalTooltip" xml:space="preserve">
-    <value>Allows the vehicle to move in any direction without having to point its front towards it. Overrides [{0}] setting.</value>
+    <value>Pozwala poruszać się pojazdowi w dowolną stronę bez potrzeby ustawiania przodu pojazdu w kierunku ruchu. Nadpisuje opcję [{0}].</value>
   </data>
   <data name="pointPrecision" xml:space="preserve">
-    <value>Point precision</value>
+    <value>Precyzja punktowa</value>
   </data>
   <data name="pointPrecisionTooltip" xml:space="preserve">
-    <value>Maximum distance between two vertices that makes then indistinguishable by the algorithm. The smaller the value the better the precision.</value>
-  </data>
-  <data name="turnWeight" xml:space="preserve">
-    <value>Turn weight</value>
-  </data>
-  <data name="turnWeightTooltip" xml:space="preserve">
-    <value />
+    <value>Maksymalna odległość pomiędzy dwoma punktami, taka że algorytm potraktuje je jako ten sam punkt. Im mniejsza wartość, tym większa precyzja.</value>
   </data>
 </root>

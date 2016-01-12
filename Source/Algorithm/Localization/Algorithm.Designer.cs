@@ -59,5 +59,95 @@ namespace SRL.Algorithm.Localization {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle density.
+        /// </summary>
+        internal static string angleDensity {
+            get {
+                return ResourceManager.GetString("angleDensity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Divides the 360 degree spectrum into this many angles distinguished by the algorithm. The bigger the value the better the precision..
+        /// </summary>
+        internal static string angleDensityTooltip {
+            get {
+                return ResourceManager.GetString("angleDensityTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bidirectional movement.
+        /// </summary>
+        internal static string bidirectional {
+            get {
+                return ResourceManager.GetString("bidirectional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the vehicle to move backwards (with the same cost)..
+        /// </summary>
+        internal static string bidirectionalTooltip {
+            get {
+                return ResourceManager.GetString("bidirectionalTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multidirectional movement.
+        /// </summary>
+        internal static string multidirectional {
+            get {
+                return ResourceManager.GetString("multidirectional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the vehicle to move in any direction without having to point its front towards it. Overrides [{0}] setting..
+        /// </summary>
+        internal static string multidirectionalTooltip {
+            get {
+                return ResourceManager.GetString("multidirectionalTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Point precision.
+        /// </summary>
+        internal static string pointPrecision {
+            get {
+                return ResourceManager.GetString("pointPrecision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum distance between two vertices that makes then indistinguishable by the algorithm. The smaller the value the better the precision..
+        /// </summary>
+        internal static string pointPrecisionTooltip {
+            get {
+                return ResourceManager.GetString("pointPrecisionTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn weight.
+        /// </summary>
+        internal static string turnWeight {
+            get {
+                return ResourceManager.GetString("turnWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string turnWeightTooltip {
+            get {
+                return ResourceManager.GetString("turnWeightTooltip", resourceCulture);
+            }
+        }
     }
 }
