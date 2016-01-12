@@ -151,23 +151,31 @@ namespace SRL.Main.Drawing
             float x = xStart;
             float y = aY + gradient * (xStart - aX);
 
-            for (; x <= xEnd; x++)
+            if (steep)
             {
-                float intensityTop = MathHelper.Rfpart(y);
-                float intensityDown = MathHelper.Fpart(y);
-
-                if (steep)
+                for (; x <= xEnd; x++)
                 {
+                    float intensityTop = MathHelper.Rfpart(y);
+                    float intensityDown = MathHelper.Fpart(y);
+
                     spriteBatch.SetBigPixel((int)y, x, color * intensityTop);
                     spriteBatch.SetBigPixel((int)y + 1, x, color * intensityDown);
+
+                    y = y + gradient;
                 }
-                else
+            }
+            else
+            {
+                for (; x <= xEnd; x++)
                 {
+                    float intensityTop = MathHelper.Rfpart(y);
+                    float intensityDown = MathHelper.Fpart(y);
+
                     spriteBatch.SetBigPixel(x, (int)y, color * intensityTop);
                     spriteBatch.SetBigPixel(x, (int)y + 1, color * intensityDown);
-                }
 
-                y = y + gradient;
+                    y = y + gradient;
+                }
             }
         }
 

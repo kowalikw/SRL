@@ -89,7 +89,7 @@ namespace SRL.Main.Drawing
 
             float dx = bX - aX;
             float dy = bY - aY;
-            float gradient = dy/dx;
+            float gradient = dy / dx;
 
             int xStart = aX;
             float xEnd = bX;
@@ -97,23 +97,31 @@ namespace SRL.Main.Drawing
             int x = xStart;
             float y = aY + gradient * (xStart - aX);
 
-            for (; x <= xEnd; x++)
+            if (steep)
             {
-                float intensityTop = MathHelper.Rfpart(y);
-                float intensityDown = MathHelper.Fpart(y);
-
-                if (steep)
+                for (; x <= xEnd; x++)
                 {
+                    float intensityTop = MathHelper.Rfpart(y);
+                    float intensityDown = MathHelper.Fpart(y);
+
                     lockBitmap.SetBigPixel((int)y, x, color * intensityTop);
                     lockBitmap.SetBigPixel((int)y + 1, x, color * intensityDown);
+
+                    y = y + gradient;
                 }
-                else
+            }
+            else
+            {
+                for (; x <= xEnd; x++)
                 {
+                    float intensityTop = MathHelper.Rfpart(y);
+                    float intensityDown = MathHelper.Fpart(y);
+
                     lockBitmap.SetBigPixel(x, (int)y, color * intensityTop);
                     lockBitmap.SetBigPixel(x, (int)y + 1, color * intensityDown);
-                }
 
-                y = y + gradient;
+                    y = y + gradient;
+                }
             }
         }
 
