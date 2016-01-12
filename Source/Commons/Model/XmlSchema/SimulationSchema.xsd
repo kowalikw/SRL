@@ -81,7 +81,7 @@
           </xs:complexType>
         </xs:element>
         <xs:element minOccurs="1" maxOccurs="1" name="vehicleSize" type="xs:double" />
-        <xs:element minOccurs="1" maxOccurs="1" name="vehicleInitialRotation" type="xs:unsignedByte" />
+        <xs:element minOccurs="1" maxOccurs="1" name="vehicleInitialRotation" type="xs:double" />
         <xs:element minOccurs="1" maxOccurs="1" name="orders">
           <xs:complexType>
             <xs:sequence>

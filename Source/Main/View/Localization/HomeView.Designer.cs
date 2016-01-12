@@ -97,7 +97,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to dr inż. Paweł Rzążewski.
+        ///   Looks up a localized string similar to dr Paweł Rzążewski.
         /// </summary>
         internal static string promotor {
             get {

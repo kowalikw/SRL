@@ -73,11 +73,11 @@ namespace SRL.Algorithm
             // copy of the map with additional obstacles as map edges (commented at the moment) (size of those additional obstacles can be changed, it works fine for these ones), right now map is without bounds as we have trouble with vehicles moving by normal obstacles
             Map map = new Map();
             List<List<IndexPoint>>[] iPointObstacles = new List<List<IndexPoint>>[angleDensity];
-            /*map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -2), new Point(-1, 2), new Point(-2, 2), new Point(-2, -2) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(-2, -1), new Point(2, -1), new Point(2, -2), new Point(-2, -2) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 2), new Point(1, -2), new Point(2, -2), new Point(2, 2) }));
-            map.Obstacles.Add(new Polygon(new Point[] { new Point(2, 1), new Point(-2, 1), new Point(-2, 2), new Point(2, 2) }));
-            */
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1, -1.1), new Point(-1, 1.1), new Point(-1.1, 1.1), new Point(-1.1, -1.1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(-1.1, -1), new Point(1.1, -1), new Point(1.1, -1.1), new Point(-1.1, -1.1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1, 1.1), new Point(1, -1.1), new Point(1.1, -1.1), new Point(1.1, 1.1) }));
+            map.Obstacles.Add(new Polygon(new Point[] { new Point(1.1, 1), new Point(-1.1, 1), new Point(-1.1, 1.1), new Point(1.1, 1.1) }));
+            
             List<IndexPoint>[] indexPointAngleList = new List<IndexPoint>[angleDensity];
             for (int i = 0; i < inputMap.Obstacles.Count; i++)
                 map.Obstacles.Add(inputMap.Obstacles[i]);
@@ -314,18 +314,8 @@ namespace SRL.Algorithm
                         o.Rotation -= 2 * Math.PI;
                 }
 
-
-
-                /*else if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) 
-                    || ((o.Rotation + (2 * Math.PI)) % (2 * Math.PI) > Math.Abs(orders[orders.Count - 1].Rotation + (2 * Math.PI)) % (2 * Math.PI) && ((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI) == 0))))
-                {
-                        o.Rotation -= (2 * Math.PI);
-                }*/
-
                 orders.Add(o);
             }
-
-            //return orders;
 
             // Checking for doubled points previous orders list
             List<Order> os = new List<Order>();
@@ -429,46 +419,37 @@ namespace SRL.Algorithm
         {
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity];
             double singleAngle = 2 * Math.PI / angleDensity;
-            List<List<Point>> triangularObstacles = new List<List<Point>>();
-
+            List<List<List<Point>>> triangularObstacles = new List<List<List<Point>>>();
             for (int i = 0; i < map.Obstacles.Count; i++)
             {
-                List<List<Point>> triangles = Triangulate(map.Obstacles[i].Vertices);
-                for (int j = 0; j < triangles.Count; j++)
-                {
-                    triangularObstacles.Add(triangles[j]);
-                }
+                triangularObstacles.Add(Triangulate(map.Obstacles[i].Vertices));
             }
-
             for (int i = 0; i < angleDensity; i++)
             {
-                List<Point> rotatedVehicle = new List<Point>();
+                tableOfObstacles[i] = new List<Polygon>();
+                Polygon rotatedVehicle = new Polygon();
+                List<List<Point>> triangularVehicle = new List<List<Point>>();
                 for (int j = 0; j < vehicle.Shape.Vertices.Count; j++)
                 {
-                    rotatedVehicle.Add(GeometryHelper.Rotate(vehicle.Shape.Vertices[j], new Point(0, 0), i * singleAngle + Math.PI));
+                    rotatedVehicle = GeometryHelper.Rotate(vehicle.Shape, Math.PI + i * singleAngle);
                 }
+                triangularVehicle = Triangulate(rotatedVehicle.Vertices);
 
-                List<List<Point>> triangularVehicle = Triangulate(rotatedVehicle);
-                List<Polygon> newObstacles = new List<Polygon>();
-                object locker = new object();
-                Parallel.For(0, triangularVehicle.Count, j =>
+                foreach (List<List<Point>> obstacle in triangularObstacles)
                 {
-                    for (int k = 0; k < triangularObstacles.Count; k++)
+                    List<Polygon> convexSubPolygons = new List<Polygon>();
+                    foreach (List<Point> VehicleTriangle in triangularVehicle)
                     {
-                        Polygon poly = ConvexHull(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k]));
-                        lock (locker)
+                        foreach (List<Point> obstacleTriangle in obstacle)
                         {
-                            newObstacles.Add(poly);
-
+                            convexSubPolygons.Add(ConvexHull(ConvexMinkowski(VehicleTriangle, obstacleTriangle)));
                         }
                     }
-                });
-                tableOfObstacles[i] = newObstacles;
+                    List<Polygon> lst = GeometryHelper.Union(convexSubPolygons);
+                    foreach (Polygon poly in lst)
+                        tableOfObstacles[i].Add(poly);
+                }
             }
-
-            for (int i = 0; i < tableOfObstacles.Length; i++)
-                tableOfObstacles[i] = GeometryHelper.Union(tableOfObstacles[i]);
-
             return tableOfObstacles;
         }
 
