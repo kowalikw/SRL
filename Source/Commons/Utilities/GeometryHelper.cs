@@ -145,7 +145,7 @@ namespace SRL.Commons.Utilities
             for (int i = 0; i < polygon.Vertices.Count - 1; i++)
                 totalAngle += GetAngle(subject, polygon.Vertices[i], polygon.Vertices[i + 1]);
 
-            return totalAngle.EpsilonEquals(0);
+            return !totalAngle.EpsilonEquals(0);
         }
 
         public static bool IsEnclosed(Point subject, IEnumerable<Polygon> polygons)
