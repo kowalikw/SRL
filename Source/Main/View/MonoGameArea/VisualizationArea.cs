@@ -36,8 +36,6 @@ namespace SRL.Main.View.MonoGameArea
 
             _context.PropertyChanged += _propertyChangedHandler;
             Settings.Default.PropertyChanged += _propertyChangedHandler;
-
-
         }
 
         protected override void Unitialize()
@@ -202,7 +200,5 @@ namespace SRL.Main.View.MonoGameArea
                 RedrawStaticObjectsTexture();
             }
         }
-
-
     }
 }
