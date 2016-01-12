@@ -89,75 +89,31 @@ namespace SRL.Main.Drawing
 
             float dx = bX - aX;
             float dy = bY - aY;
-            float gradient = dy / dx;
+            float gradient = dy/dx;
 
-            // Calculate and set first point
-            float xEnd = aX;
-            float yEnd = aY + gradient * (xEnd - aX);
-            float xGap = MathHelper.Rfpart(aX + 0.5f);
+            int xStart = aX;
+            float xEnd = bX;
 
-            float intensityTop = MathHelper.Rfpart(yEnd) * xGap;
-            float intensityDown = MathHelper.Fpart(yEnd) * xGap;
+            int x = xStart;
+            float y = aY + gradient * (xStart - aX);
 
-            int xPxl1 = (int)xEnd;
-            int yPxl1 = (int)yEnd;
-
-            if (steep)
+            for (; x <= xEnd; x++)
             {
-                lockBitmap.SetBigPixel(yPxl1, xPxl1, color * intensityTop);
-                lockBitmap.SetBigPixel(yPxl1 + 1, xPxl1, color * intensityDown);
-            }
-            else
-            {
-                lockBitmap.SetBigPixel(xPxl1, yPxl1, color * intensityTop);
-                lockBitmap.SetBigPixel(xPxl1, yPxl1 + 1, color * intensityDown);
-            }
-
-            float intery = yEnd + gradient;
-
-            // Calculate and set last point
-            xEnd = bX;
-            yEnd = bY + gradient * (xEnd - bX);
-            xGap = MathHelper.Fpart(bX + 0.5f);
-
-            intensityTop = MathHelper.Rfpart(yEnd) * xGap;
-            intensityDown = MathHelper.Fpart(yEnd) * xGap;
-
-            int xPxl2 = (int)xEnd;
-            int yPxl2 = (int)yEnd;
-
-            if (steep)
-            {
-                lockBitmap.SetBigPixel(yPxl2, xPxl2, color * intensityTop);
-                lockBitmap.SetBigPixel(yPxl2 + 1, xPxl2, color * intensityDown);
-            }
-            else
-            {
-                lockBitmap.SetBigPixel(xPxl2, yPxl2, color * intensityTop);
-                lockBitmap.SetBigPixel(xPxl2, yPxl2 + 1, color * intensityDown);
-            }
-
-            // Main loop
-            for (int x = xPxl1 + 1; x < xPxl2; x++)
-            {
-                intery = intery + gradient;
-
-                intensityTop = MathHelper.Rfpart(intery);
-                intensityDown = MathHelper.Fpart(intery);
-
-                if (x < 0) continue;
-                if (intery < 0) continue;
+                float intensityTop = MathHelper.Rfpart(y);
+                float intensityDown = MathHelper.Fpart(y);
 
                 if (steep)
                 {
-                    lockBitmap.SetBigPixel((int)intery, x, color * intensityTop);
-                    lockBitmap.SetBigPixel((int)intery + 1, x, color * intensityDown);
+                    lockBitmap.SetBigPixel((int)y, x, color * intensityTop);
+                    lockBitmap.SetBigPixel((int)y + 1, x, color * intensityDown);
                 }
                 else
                 {
-                    lockBitmap.SetBigPixel(x, (int)intery, color * intensityTop);
-                    lockBitmap.SetBigPixel(x, (int)intery + 1, color * intensityDown);
+                    lockBitmap.SetBigPixel(x, (int)y, color * intensityTop);
+                    lockBitmap.SetBigPixel(x, (int)y + 1, color * intensityDown);
                 }
+
+                y = y + gradient;
             }
         }
 
