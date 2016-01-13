@@ -14,26 +14,20 @@ namespace SRL.CommonsTests
         public void CrossProductTest()
         {
             var actual1 = GeometryHelper.CrossProduct(new Point(-1, 1), new Point(5.2, 9));
-            var actual2 = GeometryHelper.CrossProduct(new Point(-1, 1), new Point(5.2, 9), new Point(-3, 4));
 
             var expected1 = -14.2;
-            var expected2 = 34.6;
 
             Assert.AreEqual(expected1, Math.Round(actual1, 1));
-            Assert.AreEqual(expected2, Math.Round(actual2, 1));
         }
 
         [TestMethod]
         public void DotProductTest()
         {
             var actual1 = GeometryHelper.DotProduct(new Point(-1, 1), new Point(5.2, 9));
-            var actual2 = GeometryHelper.DotProduct(new Point(-1, 1), new Point(5.2, 9), new Point(-3, 4));
 
             var expected1 = 3.8;
-            var expected2 = 1.4;
 
             Assert.AreEqual(expected1, Math.Round(actual1, 1));
-            Assert.AreEqual(expected2, Math.Round(actual2, 1));
         }
 
         [TestMethod]

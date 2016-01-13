@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -749,7 +748,7 @@ namespace SRL.Main.ViewModel
             CancellationToken token = _cancellationTokenSource.Token;
 
             CalculatingPath = true;
-            new Task(() =>
+            Task.Run(() =>
             {
                 List<Order> orders = null;
                 try
@@ -759,7 +758,6 @@ namespace SRL.Main.ViewModel
                 }
                 catch (OperationCanceledException)
                 {
-                    Debug.WriteLine("task done (cancelled)");
                     return;
                 }
                 catch (NonexistentPathException)
@@ -779,9 +777,8 @@ namespace SRL.Main.ViewModel
                     }
                     Monitor.Exit(_cancellationLock);
                 }
-
-                Debug.WriteLine("task done");
-            }, token).Start();
+                
+            }, token);
 
             Monitor.Exit(_cancellationLock);
         }
