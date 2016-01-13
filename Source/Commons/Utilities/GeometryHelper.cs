@@ -14,19 +14,13 @@ namespace SRL.Commons.Utilities
             return pX * qY - qX * pY;
         }
 
-        public static double CrossProduct(Point p1, Point p2, Point? pivot = null) //TODO remove pivot parameter!
+        public static double CrossProduct(Point p1, Point p2)
         {
-            if (pivot.HasValue)
-                return (p1.X - pivot.Value.X) * (p2.Y - pivot.Value.Y) - (p2.X - pivot.Value.X) * (p1.Y - pivot.Value.Y);
-
             return p1.X * p2.Y - p2.X * p1.Y;
         }
 
-        public static double DotProduct(Point p1, Point p2, Point? pivot = null) //TODO remove pivot parameter!
+        public static double DotProduct(Point p1, Point p2)
         {
-            if (pivot.HasValue)
-                return (p1.X - pivot.Value.X) * (p2.X - pivot.Value.X) + (p1.Y - pivot.Value.Y) * (p2.Y - pivot.Value.Y);
-
             return p1.X * p2.X + p1.Y * p2.Y;
         }
 
@@ -58,9 +52,12 @@ namespace SRL.Commons.Utilities
 
         public static double GetAngle(Point pivot, Point source, Point dest)
         {
+            Point s = new Point(source.X - pivot.X, source.Y - pivot.Y);
+            Point d = new Point(dest.X - pivot.X, dest.Y - pivot.Y);
+
             return Math.Atan2(
-                CrossProduct(source, dest, pivot),
-                DotProduct(source, dest, pivot));
+                CrossProduct(s, d),
+                DotProduct(s, d));
         }
 
         public static double GetAngle(Point pivot, Point dest)
@@ -180,7 +177,7 @@ namespace SRL.Commons.Utilities
 
         public static List<Polygon> Union(List<Polygon> polygons)
         {
-            const long multiply = long.MaxValue / 4;
+            const long multiply = long.MaxValue / 8;
 
             if (polygons == null)
                 throw new ArgumentNullException(nameof(polygons));
