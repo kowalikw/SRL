@@ -185,17 +185,6 @@ namespace SRL.Commons.Model
             return Shape.Equals(other.Shape);
         }
 
-        public override bool Equals(object obj)
-        {
-            var vehicle = obj as Vehicle;
-            return vehicle != null && Equals(vehicle);
-        }
-
-        public override int GetHashCode()
-        {
-            return Shape.GetHashCode();
-        }
-
         #endregion
     }
 }

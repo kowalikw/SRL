@@ -109,17 +109,6 @@ namespace SRL.Commons.Model
             return false;
         }
 
-        public override bool Equals(object obj)
-        {
-            var polygon = obj as Polygon;
-            return polygon != null && Equals(polygon);
-        }
-
-        public override int GetHashCode()
-        {
-            return Vertices.GetHashCode();
-        }
-
         #endregion
     }
 }

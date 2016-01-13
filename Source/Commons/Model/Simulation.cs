@@ -379,28 +379,6 @@ namespace SRL.Commons.Model
                 && InitialVehicleRotation == other.InitialVehicleRotation;
         }
 
-        public override bool Equals(object obj)
-        {
-            var simulation = obj as Simulation;
-            return simulation != null && Equals(simulation);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 29 + Map.GetHashCode();
-                hash = hash * 29 + Vehicle.GetHashCode();
-                hash = hash * 29 + VehicleSize.GetHashCode();
-                hash = hash * 29 + InitialVehicleRotation.GetHashCode();
-                hash = hash * 29 + StartPoint.GetHashCode();
-                hash = hash * 29 + EndPoint.GetHashCode();
-                hash = hash * 29 + Orders.GetHashCode();
-                return hash;
-            }
-        }
-
         #endregion
     }
 }

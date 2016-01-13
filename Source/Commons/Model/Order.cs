@@ -8,7 +8,7 @@ using SRL.Commons.Model.Base;
 namespace SRL.Commons.Model
 {
     [XmlRoot(ElementName = "order")]
-    public class Order : SvgSerializable, IEquatable<Order>
+    public class Order : SvgSerializable
     {
         public double Rotation { get; set; }
         public Point Destination { get; set; }
@@ -60,23 +60,6 @@ namespace SRL.Commons.Model
         {
             return Rotation == other.Rotation && 
                 Destination == other.Destination;
-        }
-
-        public override bool Equals(object obj)
-        {
-            var order = obj as Order;
-            return order != null && Equals(order);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash*29 + Rotation.GetHashCode();
-                hash = hash*29 + Destination.GetHashCode();
-                return hash;
-            }
         }
 
         #endregion
