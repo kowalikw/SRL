@@ -47,7 +47,7 @@ namespace SRL.Commons.Utilities
 
         public static double GetDistance(Point p, Point q)
         {
-            return Math.Sqrt(Math.Pow((p.X - q.X), 2) + Math.Pow((p.Y - q.Y), 2));
+            return Math.Sqrt(Math.Pow(p.X - q.X, 2) + Math.Pow(p.Y - q.Y, 2));
         }
 
         public static double GetAngle(Point pivot, Point source, Point dest)

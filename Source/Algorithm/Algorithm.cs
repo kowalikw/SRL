@@ -14,6 +14,10 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
+        //TODO fix `==` and Equals() comparisons for doubles throughout the class. Use double.EpsilonEquals() instead.
+
+        //TODO throw OperationCanceledException in meaningful spots (before and after long calculations; MinkowskiSum?). Not just at the beginning of loop iterations.
+
         private List<Option> _defaultOptions;
         private List<Option> _currentOptions;
 
@@ -93,7 +97,7 @@ namespace SRL.Algorithm
             Polygon triangle = new Polygon(triangleTemplate);
 
             // Getting angle for starting set up of the vehicle
-            int startingIndex = (int)(((vehicleRotation + 2 * Math.PI) % (2 * Math.PI)) / singleAngle);
+            int startingIndex = (int)((vehicleRotation + 2 * Math.PI) % (2 * Math.PI) / singleAngle);
 
 
             // setting index for each Minkowski's sum point of each angle
@@ -251,6 +255,7 @@ namespace SRL.Algorithm
             {
                 if (token.IsCancellationRequested)
                     throw new OperationCanceledException();
+
                 if (indexPointAngleList[i][indexPointAngleList[i].Count - 1].Obstacle == -1 && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point == end)
                     graph.AddEdge(indexPointAngleList[i][indexPointAngleList[i].Count - 1].Index, index, 0);
             }
@@ -258,17 +263,19 @@ namespace SRL.Algorithm
             // Graph algorithm A*
             Edge[] path;
             AStarGraphExtender.AStar(graph, startingIndex, graph.VerticesCount - 1, out path);
+
             if (path == null)
                 throw new NonexistentPathException();
 
             // Creating Orders from A* results
             // TODO: still some angle troubles
             List<Order> orders = new List<Order>();
-            orders.Add(new Order() { Destination = start, Rotation = (vehicleRotation + 2 * Math.PI) % (2 * Math.PI) });
+            orders.Add(new Order { Destination = start, Rotation = (vehicleRotation + 2 * Math.PI) % (2 * Math.PI) }); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
             for (int i = 0; i < path.Length - 1; i++)
             {
                 if (token.IsCancellationRequested)
                     throw new OperationCanceledException();
+
                 int angle = 0;
                 while (path[i].To > indexPointAngleList[angle][indexPointAngleList[angle].Count - 1].Index)
                     angle++;
@@ -458,7 +465,7 @@ namespace SRL.Algorithm
                         Polygon poly = ConvexHull(ConvexMinkowski(triangularVehicle[j], triangularObstacles[k]));
                         lock (locker)
                         {
-                            newObstacles.Add(poly);
+                            newObstacles.Add(poly); //TODO use thread safe collections instead of locks https://msdn.microsoft.com/en-us/library/dd997305(v=vs.110).aspx
 
                         }
                     }
@@ -543,7 +550,7 @@ namespace SRL.Algorithm
 
         private int GetEdgeWeight(Point p1, Point p2)
         {
-            return (int)Math.Round(500 * Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y)), 0);
+            return (int)Math.Round(500 * GeometryHelper.GetDistance(p1,p2), 0);
         }
 
         private bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
