@@ -430,7 +430,7 @@ namespace SRL.Algorithm
             for (int i = 0; i < map.Obstacles.Count; i++)
             {
                 triangularObstacles.Add(Triangulate(map.Obstacles[i].Vertices));
-                }
+            }
             for (int i = 0; i < angleDensity; i++)
             {
                 tableOfObstacles[i] = new List<Polygon>();
@@ -449,13 +449,13 @@ namespace SRL.Algorithm
                     {
                         foreach (List<Point> obstacleTriangle in obstacle)
                         {
-                            newObstacles.Add(poly); //TODO use thread safe collections instead of locks https://msdn.microsoft.com/en-us/library/dd997305(v=vs.110).aspx
-
+                            convexSubPolygons.Add(ConvexHull(ConvexMinkowski(VehicleTriangle, obstacleTriangle)));
                         }
-                    List<Polygon> lst = GeometryHelper.Union(convexSubPolygons);
-                    foreach (Polygon poly in lst)
-                        tableOfObstacles[i].Add(poly);
                     }
+                    List<Polygon> lst = GeometryHelper.Union(convexSubPolygons);
+                        foreach (Polygon poly in lst)
+                            tableOfObstacles[i].Add(poly);
+                }
             }
             return tableOfObstacles;
         }
