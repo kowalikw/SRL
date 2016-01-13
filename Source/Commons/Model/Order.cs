@@ -58,20 +58,25 @@ namespace SRL.Commons.Model
 
         public bool Equals(Order other)
         {
-            return Rotation == other.Rotation
-                && Destination.Equals(other.Destination);
+            return Rotation == other.Rotation && 
+                Destination == other.Destination;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Order)
-                return Equals((Order)obj);
-            return false;
+            var order = obj as Order;
+            return order != null && Equals(order);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            unchecked
+            {
+                int hash = 17;
+                hash = hash*29 + Rotation.GetHashCode();
+                hash = hash*29 + Destination.GetHashCode();
+                return hash;
+            }
         }
 
         #endregion

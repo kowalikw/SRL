@@ -86,20 +86,18 @@ namespace SRL.Commons.Model
                         return false;
                 return true;
             }
-
             return false;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Map)
-                return Equals((Map)obj);
-            return false;
+            var map = obj as Map;
+            return map != null && Equals(map);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Obstacles.GetHashCode();
         }
 
         #endregion

@@ -111,14 +111,13 @@ namespace SRL.Commons.Model
 
         public override bool Equals(object obj)
         {
-            if (obj is Polygon)
-                return Equals((Polygon)obj);
-            return false;
+            var polygon = obj as Polygon;
+            return polygon != null && Equals(polygon);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Vertices.GetHashCode();
         }
 
         #endregion

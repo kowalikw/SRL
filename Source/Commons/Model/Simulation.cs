@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
 
@@ -368,28 +367,38 @@ namespace SRL.Commons.Model
 
         public bool Equals(Simulation other)
         {
-            foreach (Order order in Orders)
-                if (!other.Orders.Contains(order))
+            for (int i = 0; i < Orders.Count; i++)
+                if (!Equals(Orders[i], other.Orders[i]))
                     return false;
 
             return Map.Equals(other.Map)
                 && Vehicle.Equals(other.Vehicle)
-                && StartPoint.Equals(other.StartPoint)
-                && EndPoint.Equals(other.EndPoint)
+                && StartPoint == other.StartPoint
+                && EndPoint == other.EndPoint
                 && VehicleSize == other.VehicleSize
                 && InitialVehicleRotation == other.InitialVehicleRotation;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Simulation)
-                return Equals((Simulation)obj);
-            return false;
+            var simulation = obj as Simulation;
+            return simulation != null && Equals(simulation);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 29 + Map.GetHashCode();
+                hash = hash * 29 + Vehicle.GetHashCode();
+                hash = hash * 29 + VehicleSize.GetHashCode();
+                hash = hash * 29 + InitialVehicleRotation.GetHashCode();
+                hash = hash * 29 + StartPoint.GetHashCode();
+                hash = hash * 29 + EndPoint.GetHashCode();
+                hash = hash * 29 + Orders.GetHashCode();
+                return hash;
+            }
         }
 
         #endregion

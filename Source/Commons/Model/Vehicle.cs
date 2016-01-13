@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
 
@@ -188,14 +187,13 @@ namespace SRL.Commons.Model
 
         public override bool Equals(object obj)
         {
-            if (obj is Vehicle)
-                return Equals((Vehicle)obj);
-            return false;
+            var vehicle = obj as Vehicle;
+            return vehicle != null && Equals(vehicle);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Shape.GetHashCode();
         }
 
         #endregion

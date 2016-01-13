@@ -59,7 +59,7 @@ namespace SRL.Commons.Model
             Names = new Dictionary<Language, string>();
             Tooltips = new Dictionary<Language, string>();
         }
-        
+
 
         public string this[string columnName]
         {
