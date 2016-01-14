@@ -9,11 +9,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Style="{StaticResource ContentRoot}" x:Name="Home">
-        <ScrollViewer>
+        <Viewbox Stretch="Uniform" TextOptions.TextFormattingMode="Ideal">
             <Grid Margin="20,0">
-                <Grid.Resources>
-                    <local:FontSizeConverter  x:Key="FontSizeConverter" />
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -26,27 +23,27 @@
                         <ColumnDefinition Width="5*" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="PW" Grid.Column="0" Source="{StaticResource PW}" />
+                    <Image Grid.Column="0" Source="{StaticResource PW}" />
                     <StackPanel Grid.Column="1" Margin="20,0" VerticalAlignment="Center">
-                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=18 }" HorizontalAlignment="Center" Text="{Resx Key=university}"/>
-                        <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=24 }" HorizontalAlignment="Center" Text="{Resx Key=faculty}"/>
+                        <TextBlock FontSize="36" HorizontalAlignment="Center" Text="{Resx Key=university}"/>
+                        <TextBlock FontSize="48" HorizontalAlignment="Center" Text="{Resx Key=faculty}"/>
                     </StackPanel>
-                    <Image x:Name="MiNI" Grid.Column="2" Source="{StaticResource MiNI}"/>
+                    <Image Grid.Column="2" Source="{StaticResource MiNI}"/>
                 </Grid>
                 <StackPanel Grid.Row="1" Margin="0,20">
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center" Text="{Resx Key=thesis}"/>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=22 }" HorizontalAlignment="Center" Text="{Resx Key=computerscience}"/>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=16 }" HorizontalAlignment="Center" Text="{Resx Key=title}" Margin="0,20,0,0"/>
+                    <TextBlock FontSize="44" HorizontalAlignment="Center" Text="{Resx Key=thesis}"/>
+                    <TextBlock FontSize="44" HorizontalAlignment="Center" Text="{Resx Key=computerscience}"/>
+                    <TextBlock FontSize="32" HorizontalAlignment="Center" Text="{Resx Key=title}" Margin="0,20,0,0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Margin="0,20,0,10">
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center" Text="{Resx Key=authorsHeader}"/>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center" Text="{Resx Key=authors}"/>
+                    <TextBlock FontSize="52" HorizontalAlignment="Center" Text="{Resx Key=authorsHeader}"/>
+                    <TextBlock FontSize="56" HorizontalAlignment="Center" Text="{Resx Key=authors}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3">
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=26 }" HorizontalAlignment="Center" Text="{Resx Key=promotorHeader}"/>
-                    <TextBlock FontSize="{Binding ElementName=Home, Path=ActualHeight, Converter={StaticResource FontSizeConverter}, ConverterParameter=28 }" HorizontalAlignment="Center" Text="{Resx Key=promotor}"/>
+                    <TextBlock FontSize="52" HorizontalAlignment="Center" Text="{Resx Key=promotorHeader}"/>
+                    <TextBlock FontSize="56" HorizontalAlignment="Center" Text="{Resx Key=promotor}"/>
                 </StackPanel>
             </Grid>
-        </ScrollViewer>
+        </Viewbox>
     </Grid>
 </UserControl>
