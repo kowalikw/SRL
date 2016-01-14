@@ -24,7 +24,7 @@ namespace SRL.CommonsTests
         {
             float val = 1.567f;
 
-            var actual = MathHelper.Rfpart(val);
+            var actual = MathHelper.Rfrac(val);
             var expected = 0.433;
 
             Assert.AreEqual(expected, Math.Round(actual, 3));
@@ -35,7 +35,7 @@ namespace SRL.CommonsTests
         {
             float val = 1.567f;
 
-            var actual = MathHelper.Fpart(val);
+            var actual = MathHelper.Frac(val);
             var expected = 0.567;
 
             Assert.AreEqual(expected, Math.Round(actual, 3));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Windows;
 
@@ -8,23 +9,21 @@ namespace SRL.Commons.Utilities
     {
         public const double DoubleComparisonEpsilon = 1e-15;
 
-        public static void Swap<T>(ref T lhs, ref T rhs)
+        public static void Swap<T>(ref T a, ref T b)
         {
-            T temp = lhs;
-            lhs = rhs;
-            rhs = temp;
+            T temp = a;
+            a = b;
+            b = temp;
         }
 
-        public static float Rfpart(float val) //TODO rename
+        public static float Rfrac(float val)
         {
-            return 1 - Fpart(val);
+            return 1 - Frac(val);
         }
 
-        public static float Fpart(float val) //TODO rename
+        public static float Frac(float val)
         {
-            if (val < 0)
-                return 1f - val + (float)Math.Floor(val);
-            return val - (float)Math.Floor(val);
+            return val - (float) Math.Truncate(val);
         }
 
         public static T Clamp<T>(this T value, T min, T max)

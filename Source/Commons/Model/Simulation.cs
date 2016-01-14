@@ -11,20 +11,31 @@ namespace SRL.Commons.Model
     public class Simulation : SvgSerializable, IEquatable<Simulation>
     {
         public Map Map { get; set; }
-
         public Vehicle Vehicle { get; set; }
-
         public double VehicleSize { get; set; }
-
         public double InitialVehicleRotation { get; set; }
-
         public Point StartPoint { get; set; }
-
         public Point EndPoint { get; set; }
-
         public List<Order> Orders { get; set; }
 
+
+        public bool Equals(Simulation other)
+        {
+            for (int i = 0; i < Orders.Count; i++)
+                if (!Equals(Orders[i], other.Orders[i]))
+                    return false;
+
+            return Map.Equals(other.Map)
+                && Vehicle.Equals(other.Vehicle)
+                && StartPoint == other.StartPoint
+                && EndPoint == other.EndPoint
+                && VehicleSize == other.VehicleSize
+                && InitialVehicleRotation == other.InitialVehicleRotation;
+        }
+
         #region IXmlSerializable
+
+
 
         public override void ReadXml(XmlReader reader)
         {
@@ -362,23 +373,6 @@ namespace SRL.Commons.Model
         }
 
         #endregion
-
-        #region IEquatable members
-
-        public bool Equals(Simulation other)
-        {
-            for (int i = 0; i < Orders.Count; i++)
-                if (!Equals(Orders[i], other.Orders[i]))
-                    return false;
-
-            return Map.Equals(other.Map)
-                && Vehicle.Equals(other.Vehicle)
-                && StartPoint == other.StartPoint
-                && EndPoint == other.EndPoint
-                && VehicleSize == other.VehicleSize
-                && InitialVehicleRotation == other.InitialVehicleRotation;
-        }
-
-        #endregion
+        
     }
 }

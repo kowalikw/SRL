@@ -1,15 +1,21 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using System;
+using System.Reflection;
+using System.Resources;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
 using SRL.Main.View.Dialogs;
+using SRL.Main.View.Localization;
+using SRL.Commons.Localization;
+using SRL.Commons.Utilities;
 
 namespace SRL.Main.ViewModel.Base
 {
     public abstract class EditorViewModel<T> : ViewModel
         where T : SvgSerializable
     {
-        protected const string DialogFilter = "Scalable Vector Graphics (*.svg)|*.svg";
+        protected readonly string _modelName;
 
         public RelayCommand SaveCommand
         {
@@ -19,8 +25,11 @@ namespace SRL.Main.ViewModel.Base
                 {
                     _saveCommand = new RelayCommand(() =>
                     {
+                        var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
+                        string modelName = rm.GetString(typeof(T).Name);
+
                         var dialogArgs = new SaveFileDialogArgs();
-                        dialogArgs.Filter = DialogFilter;
+                        dialogArgs.Filter = string.Format(rm.GetString("modelFilter"), modelName);
                         dialogArgs.CloseCallback = (result, filename) =>
                         {
                             if (result)
@@ -63,7 +72,9 @@ namespace SRL.Main.ViewModel.Base
         protected EditorViewModel()
         {
             Messenger.Default.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
-        } 
+
+            _modelName = ModelNames.ResourceManager.GetString(typeof (T).Name);
+        }
 
         /// <summary>
         /// Returns created model.
@@ -86,11 +97,14 @@ namespace SRL.Main.ViewModel.Base
         protected static R LoadModelViaDialog<R>()
             where R : SvgSerializable
         {
+            string modelName = ModelNames.ResourceManager.GetString(typeof(R).Name);
+            string filter = Dialogs.ResourceManager.GetString("modelFilter");
+
             bool invalidFile = false;
             R output = null;
 
             var args = new OpenFileDialogArgs();
-            args.Filter = DialogFilter;
+            args.Filter = string.Format(filter, modelName);
             args.CloseCallback = (result, filename) =>
             {
                 if (!result)
@@ -105,9 +119,12 @@ namespace SRL.Main.ViewModel.Base
 
             if (invalidFile)
             {
+                string dialogTitle = Dialogs.ResourceManager.GetString("modelNotFoundTitle");
+                string dialogMsg = Dialogs.ResourceManager.GetString("modelNotFoundMsg");
+
                 var msgDialogArgs = new MessageDialogArgs();
-                msgDialogArgs.Title = "Error"; //TODO localization
-                msgDialogArgs.Description = $"The file doesn't contain {typeof(R).Name} object."; //TODO localization
+                msgDialogArgs.Title = dialogTitle;
+                msgDialogArgs.Description = string.Format(dialogMsg, modelName);
                 Messenger.Default.Send(new ShowDialogMessage(msgDialogArgs));
             }
 

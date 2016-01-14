@@ -71,6 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Language.cs" />
+    <Compile Include="Localization\ModelNames.pl.Designer.cs">
+      <DependentUpon>ModelNames.pl.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Localization\ModelNames.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelNames.resx</DependentUpon>
+    </Compile>
     <Compile Include="Model\Option.cs" />
     <Compile Include="Model\Base\IAlgorithm.cs" />
     <Compile Include="Model\Base\SvgSerializable.cs" />
@@ -109,6 +119,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Localization\ModelNames.pl.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModelNames.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\ModelNames.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModelNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

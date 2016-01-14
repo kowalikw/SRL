@@ -1,10 +1,12 @@
 ﻿using System.Globalization;
 using System.Reflection;
+using System.Resources;
 using GalaSoft.MvvmLight.Messaging;
 using Infralution.Localization.Wpf;
 using SRL.Commons;
 using SRL.Main.Messages;
 using SRL.Main.View.Dialogs;
+using SRL.Main.View.Localization;
 
 namespace SRL.Main.ViewModel
 {
@@ -37,8 +39,8 @@ namespace SRL.Main.ViewModel
                 if (CultureManager.UICulture.GetLanguage() != value)
                 {
                     var args = new MessageDialogArgs();
-                    args.Title = "Info";
-                    args.Description = "Application must be restarted to change the language."; //TODO localization
+                    args.Title = Dialogs.ResourceManager.GetString("langChangeRestartTitle");
+                    args.Description = Dialogs.ResourceManager.GetString("langChangeRestartMsg");
                     Messenger.Default.Send(new ShowDialogMessage(args));
                 }
             }

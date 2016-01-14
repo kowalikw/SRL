@@ -13,6 +13,12 @@ namespace SRL.Commons.Model
         public double Rotation { get; set; }
         public Point Destination { get; set; }
 
+        public bool Equals(Order other)
+        {
+            return Rotation == other.Rotation &&
+                Destination == other.Destination;
+        }
+
         #region IXmlSerializable members
 
         public override void ReadXml(XmlReader reader)
@@ -54,14 +60,5 @@ namespace SRL.Commons.Model
 
         #endregion
 
-        #region IEquatable members
-
-        public bool Equals(Order other)
-        {
-            return Rotation == other.Rotation && 
-                Destination == other.Destination;
-        }
-
-        #endregion
     }
 }

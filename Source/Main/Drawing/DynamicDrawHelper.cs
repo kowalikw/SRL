@@ -157,8 +157,8 @@ namespace SRL.Main.Drawing
             {
                 for (; x <= xEnd; x++)
                 {
-                    float intensityTop = MathHelper.Rfpart(y);
-                    float intensityDown = MathHelper.Fpart(y);
+                    float intensityTop = MathHelper.Rfrac(y);
+                    float intensityDown = MathHelper.Frac(y);
 
                     spriteBatch.SetBigPixel((int)y, x, color * intensityTop);
                     spriteBatch.SetBigPixel((int)y + 1, x, color * intensityDown);
@@ -170,8 +170,8 @@ namespace SRL.Main.Drawing
             {
                 for (; x <= xEnd; x++)
                 {
-                    float intensityTop = MathHelper.Rfpart(y);
-                    float intensityDown = MathHelper.Fpart(y);
+                    float intensityTop = MathHelper.Rfrac(y);
+                    float intensityDown = MathHelper.Frac(y);
 
                     spriteBatch.SetBigPixel(x, (int)y, color * intensityTop);
                     spriteBatch.SetBigPixel(x, (int)y + 1, color * intensityDown);

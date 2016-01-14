@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
 
@@ -18,7 +16,21 @@ namespace SRL.Commons.Model
             Obstacles = new List<Polygon>();
         }
 
+        public bool Equals(Map other)
+        {
+            if (Obstacles.Count == other.Obstacles.Count)
+            {
+                foreach (Polygon polygon in Obstacles)
+                    if (!other.Obstacles.Contains(polygon))
+                        return false;
+                return true;
+            }
+            return false;
+        }
+
         #region IXmlSerializable members
+
+
 
         public override void ReadXml(XmlReader reader)
         {
@@ -75,20 +87,5 @@ namespace SRL.Commons.Model
 
         #endregion
 
-        #region IEquatable members
-
-        public bool Equals(Map other)
-        {
-            if(Obstacles.Count == other.Obstacles.Count)
-            {
-                foreach (Polygon polygon in Obstacles)
-                    if (!other.Obstacles.Contains(polygon))
-                        return false;
-                return true;
-            }
-            return false;
-        }
-
-        #endregion
     }
 }

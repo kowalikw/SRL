@@ -142,6 +142,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MapEditorView.pl.resx</DependentUpon>
     </Compile>
+    <Compile Include="View\Localization\Dialogs.pl.Designer.cs">
+      <DependentUpon>Dialogs.pl.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="View\Localization\Dialogs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dialogs.resx</DependentUpon>
+    </Compile>
     <Compile Include="View\Localization\SettingsView.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -312,6 +322,15 @@
     <EmbeddedResource Include="View\Localization\MapEditorView.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MapEditorView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\Dialogs.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dialogs.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Localization\Dialogs.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dialogs.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Localization\SettingsView.pl.resx">
       <Generator>ResXFileCodeGenerator</Generator>

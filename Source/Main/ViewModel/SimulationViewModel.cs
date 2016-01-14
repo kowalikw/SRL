@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +17,7 @@ using SRL.Commons.Utilities;
 using SRL.Main.Messages;
 using SRL.Main.View;
 using SRL.Main.View.Dialogs;
+using SRL.Main.View.Localization;
 using SRL.Main.ViewModel.Base;
 using Frame = SRL.Commons.Model.Frame;
 
@@ -762,9 +766,11 @@ namespace SRL.Main.ViewModel
                 }
                 catch (NonexistentPathException)
                 {
+                    var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
+
                     var args = new MessageDialogArgs();
-                    args.Title = "Path not found"; //TODO localization
-                    args.Description = "Current simulation setting does not allow to calculate a proper path."; //TODO localization
+                    args.Title = rm.GetString("pathNotFoundTitle");
+                    args.Description = rm.GetString("pathNotFoundMsg");
                     Messenger.Default.Send(new ShowDialogMessage(args));
                 }
 

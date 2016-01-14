@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +15,9 @@ using SRL.Main.Messages;
 using SRL.Main.Tracing;
 using SRL.Main.Utilities;
 using SRL.Main.View.Dialogs;
-using SRL.Main.View.Pages;
+using SRL.Main.View.Localization;
+using MapEditorView = SRL.Main.View.Pages.MapEditorView;
+using VehicleEditorView = SRL.Main.View.Pages.VehicleEditorView;
 
 namespace SRL.Main.ViewModel
 {
@@ -30,7 +34,7 @@ namespace SRL.Main.ViewModel
                     _loadBitmapCommand = new RelayCommand(() =>
                     {
                         var args = new OpenFileDialogArgs();
-                        args.Filter = "Raster image files|*.bmp;*.jpg;*.jpeg;*.png"; //TODO localization
+                        args.Filter = Dialogs.ResourceManager.GetString("rasterImageFilter");
                         args.CloseCallback = (result, filename) =>
                         {
                             if (!result)

@@ -23,6 +23,27 @@ namespace SRL.Commons.Model
             Vertices = new List<Point>(vertices);
         }
 
+        public bool Equals(Polygon other)
+        {
+            if (Vertices.Count == other.Vertices.Count)
+            {
+                int i;
+                for (i = 0; i < Vertices.Count; i++)
+                {
+                    if (Vertices[i] == other.Vertices[0])
+                        break;
+                }
+                if (i < Vertices.Count)
+                {
+                    for (int j = 0; j < Vertices.Count; j++)
+                        if (Vertices[(i + j) % Vertices.Count] != other.Vertices[j])
+                            return false;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         #region IXmlSerializable members
 
         public override void ReadXml(XmlReader reader)
@@ -86,29 +107,5 @@ namespace SRL.Commons.Model
 
         #endregion
 
-        #region IEquatable members
-
-        public bool Equals(Polygon other)
-        {
-            if (Vertices.Count == other.Vertices.Count)
-            {
-                int i;
-                for (i = 0; i < Vertices.Count; i++)
-                {
-                    if (Vertices[i] == other.Vertices[0])
-                        break;
-                }
-                if (i < Vertices.Count)
-                {
-                    for (int j = 0; j < Vertices.Count; j++)
-                        if (Vertices[(i + j) % Vertices.Count] != other.Vertices[j])
-                            return false;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        #endregion
     }
 }

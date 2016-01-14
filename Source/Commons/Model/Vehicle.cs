@@ -10,6 +10,12 @@ namespace SRL.Commons.Model
     {
         public Polygon Shape { get; set; }
 
+
+        public bool Equals(Vehicle other)
+        {
+            return Shape.Equals(other.Shape);
+        }
+
         #region IXmlSerializable members
 
         public override void ReadXml(XmlReader reader)
@@ -53,7 +59,7 @@ namespace SRL.Commons.Model
             writer.WriteStartElement("g");
 
             writer.WriteStartAttribute("transform");
-            writer.WriteValue("translate(" + Width / 2 + "," + Height / 2 + ") scale(" + Width / 2 + "," + (-Height / 2) + ")");
+            writer.WriteValue("translate(" + Width/2 + "," + Height/2 + ") scale(" + Width/2 + "," + (-Height/2) + ")");
             writer.WriteEndAttribute();
 
             Shape.WriteXml(writer);
@@ -64,11 +70,11 @@ namespace SRL.Commons.Model
             writer.WriteStartElement("circle");
 
             writer.WriteStartAttribute("cx");
-            writer.WriteValue(Width / 2);
+            writer.WriteValue(Width/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("cy");
-            writer.WriteValue(Height / 2);
+            writer.WriteValue(Height/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("r");
@@ -93,19 +99,19 @@ namespace SRL.Commons.Model
             writer.WriteStartElement("line");
 
             writer.WriteStartAttribute("x1");
-            writer.WriteValue(Width / 2);
+            writer.WriteValue(Width/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("y1");
-            writer.WriteValue(Height / 2);
+            writer.WriteValue(Height/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("x2");
-            writer.WriteValue(Width / 2 + 100);
+            writer.WriteValue(Width/2 + 100);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("y2");
-            writer.WriteValue(Height / 2);
+            writer.WriteValue(Height/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
@@ -122,19 +128,19 @@ namespace SRL.Commons.Model
             writer.WriteStartElement("line");
 
             writer.WriteStartAttribute("x1");
-            writer.WriteValue(Width / 2 + 100);
+            writer.WriteValue(Width/2 + 100);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("y1");
-            writer.WriteValue(Height / 2);
+            writer.WriteValue(Height/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("x2");
-            writer.WriteValue(Width / 2 + 80);
+            writer.WriteValue(Width/2 + 80);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("y2");
-            writer.WriteValue(Height / 2 - 10);
+            writer.WriteValue(Height/2 - 10);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
@@ -150,19 +156,19 @@ namespace SRL.Commons.Model
             writer.WriteStartElement("line");
 
             writer.WriteStartAttribute("x1");
-            writer.WriteValue(Width / 2 + 100);
+            writer.WriteValue(Width/2 + 100);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("y1");
-            writer.WriteValue(Height / 2);
+            writer.WriteValue(Height/2);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("x2");
-            writer.WriteValue(Width / 2 + 80);
+            writer.WriteValue(Width/2 + 80);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("y2");
-            writer.WriteValue(Height / 2 + 10);
+            writer.WriteValue(Height/2 + 10);
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("stroke");
@@ -174,15 +180,6 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             writer.WriteEndElement();
-        }
-
-        #endregion
-
-        #region IEquatable members
-
-        public bool Equals(Vehicle other)
-        {
-            return Shape.Equals(other.Shape);
         }
 
         #endregion
