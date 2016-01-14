@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Style="{StaticResource ContentRoot}" x:Name="Home">
-        <Viewbox Stretch="Uniform" TextOptions.TextFormattingMode="Ideal" VerticalAlignment="Center"  MaxHeight="800">
+        <Viewbox Stretch="Uniform" TextOptions.TextFormattingMode="Ideal" Margin="-20,0,0,0" MaxHeight="700">
             <DockPanel Margin="30,0,30,100" VerticalAlignment="Bottom">
                 <DockPanel.Resources>
                     <Style TargetType="TextBlock">
@@ -32,7 +32,7 @@
                     <TextBlock Margin="0,30,0,0" Text="{Resx Key=promoterHeader}"/>
                     <TextBlock Text="{Resx Key=promoter}"/>
                 </StackPanel>
-                <Image Margin="-30,0,50,0" DockPanel.Dock="Left" Source="{StaticResource PW}"/>
+                <Image Margin="0,0,50,0" DockPanel.Dock="Left" Source="{StaticResource PW}"/>
                 <Image Margin="50,0,0,0" DockPanel.Dock="Right" Source="{StaticResource MiNI}"/>
                 <TextBlock DockPanel.Dock="Bottom" Margin="0,5,0,0" Text="{Resx Key=faculty}"/>
                 <TextBlock FontSize="30" Text="{Resx Key=university}" VerticalAlignment="Bottom"/>
