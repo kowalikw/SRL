@@ -123,23 +123,23 @@
   <data name="authorsHeader" xml:space="preserve">
     <value>Authors:</value>
   </data>
-  <data name="computerscience" xml:space="preserve">
-    <value>Computer Science</value>
-  </data>
   <data name="faculty" xml:space="preserve">
     <value>Faculty of Mathematics and Information Science</value>
   </data>
-  <data name="promotor" xml:space="preserve">
+  <data name="major" xml:space="preserve">
+    <value>Informatyka</value>
+  </data>
+  <data name="promoter" xml:space="preserve">
     <value>dr Paweł Rzążewski</value>
   </data>
-  <data name="promotorHeader" xml:space="preserve">
-    <value>Promotor:</value>
+  <data name="promoterHeader" xml:space="preserve">
+    <value>Promoter:</value>
   </data>
   <data name="thesis" xml:space="preserve">
-    <value>Bachelor Thesis</value>
+    <value>Simulation of a robot in a labirynth</value>
   </data>
   <data name="title" xml:space="preserve">
-    <value>Simulation of a robot in a labirynth</value>
+    <value>Engineering thesis</value>
   </data>
   <data name="university" xml:space="preserve">
     <value>Warsaw University of Technology</value>

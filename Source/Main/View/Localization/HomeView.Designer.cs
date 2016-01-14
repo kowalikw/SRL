@@ -79,15 +79,6 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Computer Science.
-        /// </summary>
-        internal static string computerscience {
-            get {
-                return ResourceManager.GetString("computerscience", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Faculty of Mathematics and Information Science.
         /// </summary>
         internal static string faculty {
@@ -97,25 +88,34 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Informatyka.
+        /// </summary>
+        internal static string major {
+            get {
+                return ResourceManager.GetString("major", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to dr Paweł Rzążewski.
         /// </summary>
-        internal static string promotor {
+        internal static string promoter {
             get {
-                return ResourceManager.GetString("promotor", resourceCulture);
+                return ResourceManager.GetString("promoter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Promotor:.
+        ///   Looks up a localized string similar to Promoter:.
         /// </summary>
-        internal static string promotorHeader {
+        internal static string promoterHeader {
             get {
-                return ResourceManager.GetString("promotorHeader", resourceCulture);
+                return ResourceManager.GetString("promoterHeader", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bachelor Thesis.
+        ///   Looks up a localized string similar to Simulation of a robot in a labirynth.
         /// </summary>
         internal static string thesis {
             get {
@@ -124,7 +124,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simulation of a robot in a labirynth.
+        ///   Looks up a localized string similar to Engineering thesis.
         /// </summary>
         internal static string title {
             get {
