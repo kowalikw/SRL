@@ -14,17 +14,19 @@
                 <DockPanel.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="FontSize" Value="30"/>
+                        <Setter Property="FontSize" Value="26"/>
+                        <Setter Property="TextAlignment" Value="Center"/>
+                        <Setter Property="FontFamily" Value="Cambria"/>
                     </Style>
                     <Style TargetType="Image">
-                        <Setter Property="Height" Value="100"/>
+                        <Setter Property="Height" Value="70"/>
                         <Setter Property="VerticalAlignment" Value="Bottom"/>
                         <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
                     </Style>
                 </DockPanel.Resources>
                 <StackPanel DockPanel.Dock="Bottom">
-                    <TextBlock Margin="0,60,0,0" FontSize="48" Text="{Resx Key=title}"/>
-                    <TextBlock Margin="0,30,0,40" FontStyle="Italic" FontSize="48" Text="{Resx Key=thesis}"/>
+                    <TextBlock Margin="0,60,0,0" FontWeight="Bold" FontSize="38" Text="{Resx Key=title}"/>
+                    <TextBlock Margin="0,10,0,40" FontStyle="Italic" FontSize="32" Text="{Resx Key=thesis}"/>
                     <TextBlock Margin="0,30,0,0" Text="{Resx Key=authorsHeader}"/>
                     <TextBlock Text="{Resx Key=authors}"/>
                     <TextBlock Margin="0,30,0,0" Text="{Resx Key=promoterHeader}"/>
@@ -32,8 +34,8 @@
                 </StackPanel>
                 <Image Margin="-30,0,50,0" DockPanel.Dock="Left" Source="{StaticResource PW}"/>
                 <Image Margin="50,0,0,0" DockPanel.Dock="Right" Source="{StaticResource MiNI}"/>
-                <TextBlock DockPanel.Dock="Bottom" Text="{Resx Key=faculty}"/>
-                <TextBlock FontSize="36" Text="{Resx Key=university}" VerticalAlignment="Bottom"/>
+                <TextBlock DockPanel.Dock="Bottom" Margin="0,5,0,0" Text="{Resx Key=faculty}"/>
+                <TextBlock FontSize="30" Text="{Resx Key=university}" VerticalAlignment="Bottom"/>
             </DockPanel>
         </Viewbox>
     </Grid>
