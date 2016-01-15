@@ -198,7 +198,7 @@ namespace SRL.CommonsTests
                 new Point(1, 4)
             });
 
-            Polygon actual = GeometryHelper.Move(polygon, 3, -4);
+            Polygon actual = GeometryHelper.Move(polygon, new Point(3, -4));
             Polygon expected = new Polygon(new List<Point>
             {
                 new Point(4, -3),

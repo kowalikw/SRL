@@ -59,83 +59,73 @@ namespace SRL.Main.View.MonoGameArea
 
             if (_context.EditorMode == Mode.StartPointSetup)
             {
-                if (!IsMouseOver)
-                    return;
-
-                Point position = normalizedMousePos;
-                Color color = _context.SetStartPointCommand.CanExecute(normalizedMousePos)
-                    ? ValidColor : InvalidColor;
-
-                spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
-            }
-            else if (_context.Vehicle != null && _context.StartPoint != null)
-            {
-                Polygon shape = _context.Vehicle.Shape;
-                Point origin = _context.StartPoint.Value;
-                Color color;
-                double angle;
-                double resizeFactor;
-
-                if (_context.EditorMode == Mode.VehicleSetup)
+                if (IsMouseOver)
                 {
-                    if (!IsMouseOver)
-                        return;
+                    Color color = _context.SetStartPointCommand.CanExecute(normalizedMousePos)
+                        ? ValidColor
+                        : InvalidColor;
 
-                    angle = GeometryHelper.GetAngle(origin, normalizedMousePos);
-                    resizeFactor = GeometryHelper.GetDistance(origin, normalizedMousePos);
-                    VehicleSetup setup = new VehicleSetup
+                    spriteBatch.DrawVertex(normalizedMousePos, RenderSize, color, AntialiasingEnabled);
+                }
+            }
+            else if (_context.EditorMode == Mode.EndPointSetup)
+            {
+                if (IsMouseOver)
+                {
+                    Color color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
+                        ? ValidColor
+                        : InvalidColor;
+
+                    spriteBatch.DrawVertex(normalizedMousePos, RenderSize, color, AntialiasingEnabled);
+                }
+            }
+            else if (_context.EditorMode == Mode.VehicleSetup)
+            {
+                if (IsMouseOver)
+                {
+                    var origin = _context.StartPoint.Value;
+                    var angle = GeometryHelper.GetAngle(origin, normalizedMousePos);
+                    var size = GeometryHelper.GetDistance(origin, normalizedMousePos);
+
+                    var setup = new VehicleSetup
                     {
-                        RelativeSize = resizeFactor,
+                        RelativeSize = size,
                         Rotation = angle
                     };
 
+                    Color color;
                     if (_context.SetInitialVehicleSetupCommandCommand.CanExecute(setup))
                         color = ValidColor;
                     else
                         color = InvalidColor;
 
+                    Polygon shape = _context.Vehicle.Shape.Transform(size, angle, origin);
                     spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor, AntialiasingEnabled);
+                    spriteBatch.DrawPolygon(shape, RenderSize, color, AntialiasingEnabled);
                 }
-                else if (_context.InitialVehicleRotation != null && _context.VehicleSize != null)
-                {
-                    angle = _context.InitialVehicleRotation.Value;
-                    resizeFactor = _context.VehicleSize.Value;
-                    color = VehicleColor;
-                }
-                else
-                    throw new MissingMemberException();
-
-                shape = GeometryHelper.Resize(shape, resizeFactor);
-                shape = GeometryHelper.Rotate(shape, angle);
-                shape = GeometryHelper.Move(shape, origin.X, origin.Y);
-
-                spriteBatch.DrawPolygon(shape, RenderSize, color, AntialiasingEnabled);
             }
 
-            if (_context.EditorMode == Mode.EndPointSetup)
+            if (_context.Vehicle != null &&
+                _context.StartPoint != null &&
+                _context.InitialVehicleRotation != null &&
+                _context.VehicleSize != null)
             {
-                if (!IsMouseOver)
-                    return;
+                var origin = _context.StartPoint.Value;
+                var angle = _context.InitialVehicleRotation.Value;
+                var size = _context.VehicleSize.Value;
 
-                Point position = normalizedMousePos;
-                Color color = _context.SetEndPointCommand.CanExecute(normalizedMousePos)
-                    ? ValidColor : InvalidColor;
-
-                spriteBatch.DrawVertex(position, RenderSize, color, AntialiasingEnabled);
+                Polygon shape = _context.Vehicle.Shape.Transform(size, angle, origin);
+                spriteBatch.DrawPolygon(shape, RenderSize, VehicleColor, AntialiasingEnabled);
             }
         }
 
         private void RenderFrame(SpriteBatch spriteBatch, TimeSpan time)
         {
-            double resizeFactor = _context.VehicleSize.Value;
-            double rotation = _context.CurrentFrame.Rotation;
-            Point position = _context.CurrentFrame.Position;
+            var size = _context.VehicleSize.Value;
+            var angle = _context.CurrentFrame.Rotation;
+            var position = _context.CurrentFrame.Position;
 
-            Polygon shape = _context.Vehicle.Shape;
-            shape = GeometryHelper.Resize(shape, resizeFactor);
-            shape = GeometryHelper.Rotate(shape, rotation);
-            shape = GeometryHelper.Move(shape, position.X, position.Y);
-
+            Polygon shape = _context.Vehicle.Shape.Transform(size, angle, position);
             spriteBatch.DrawPolygon(shape, RenderSize, VehicleColor, AntialiasingEnabled);
         }
 
@@ -175,34 +165,41 @@ namespace SRL.Main.View.MonoGameArea
             }
             else if (button == MouseButton.Right)
             {
-                if (_context.EditorMode == Mode.VehicleSetup)
+                if (_context.EditorMode == Mode.StartPointSetup)
+                    _context.EnterModeCommand.Execute(Mode.Normal);
+                else if (_context.EditorMode == Mode.VehicleSetup)
+                    _context.EnterModeCommand.Execute(Mode.StartPointSetup);
+                else if (_context.EditorMode == Mode.EndPointSetup)
+                    _context.EnterModeCommand.Execute(Mode.Normal);
+                else if (_context.EditorMode == Mode.Normal)
                 {
-                    _context.SetStartPointCommand.Execute(null);
-                    return;
-                }
-                if (_context.EndPoint != null)
-                {
-                    var denormalizedEndPoint = _context.EndPoint.Value.Denormalize(RenderSize);
-                    if (IsMousePulledByPoint(denormalizedEndPoint) && _context.SetEndPointCommand.CanExecute(null))
+                    if (_context.EndPoint != null)
                     {
-                        _context.SetEndPointCommand.Execute(null);
-                        return;
+                        var denormalizedEndPoint = _context.EndPoint.Value.Denormalize(RenderSize);
+                        if (IsMousePulledByPoint(denormalizedEndPoint))
+                        {
+                            _context.EnterModeCommand.Execute(Mode.EndPointSetup);
+                            return;
+                        }
                     }
-                }
-                if (_context.StartPoint != null && _context.Vehicle != null)
-                {
-                    Polygon shape = _context.Vehicle.Shape;
-                    shape = GeometryHelper.Resize(shape, _context.VehicleSize.Value);
-                    shape = GeometryHelper.Rotate(shape, _context.InitialVehicleRotation.Value);
-                    shape = GeometryHelper.Move(shape, _context.StartPoint.Value.X, _context.StartPoint.Value.Y);
+                    if (_context.StartPoint != null)
+                    {
+                        var size = _context.VehicleSize.Value;
+                        var angle = _context.InitialVehicleRotation.Value;
+                        var position = _context.StartPoint.Value;
 
-                    if (GeometryHelper.IsEnclosed(normalizedMousePos, shape))
-                    {
-                        _context.SetStartPointCommand.Execute(null);
-                        return;
+                        Polygon shape = _context.Vehicle.Shape.Transform(size, angle, position);
+                        if (GeometryHelper.IsEnclosed(normalizedMousePos, shape))
+                        {
+                            _context.EnterModeCommand.Execute(Mode.StartPointSetup);
+                            return;
+                        }
                     }
                 }
+                else
+                    throw new ArgumentOutOfRangeException();
             }
+
         }
 
         private void HandlePropertyChange(string propertyName)

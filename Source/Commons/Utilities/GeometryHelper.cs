@@ -86,11 +86,11 @@ namespace SRL.Commons.Utilities
             return Rotate(polygon, new Point(0, 0), angle);
         }
 
-        public static Polygon Move(Polygon polygon, double dx, double dy)
+        public static Polygon Move(Polygon polygon, Point position)
         {
             return new Polygon(polygon.Vertices.Select(vertex => new Point(
-                    vertex.X + dx,
-                    vertex.Y + dy)));
+                    vertex.X + position.X,
+                    vertex.Y + position.Y)));
         }
 
         public static Polygon Resize(Polygon polygon, double factor)
@@ -98,6 +98,17 @@ namespace SRL.Commons.Utilities
             return new Polygon(polygon.Vertices.Select(vertex => new Point(
                     vertex.X * factor,
                     vertex.Y * factor)));
+        }
+
+        public static Polygon Transform(this Polygon polygon, double? size = null, double? rotation = null, Point? position = null)
+        {
+            if (size != null)
+                polygon = GeometryHelper.Resize(polygon, size.Value);
+            if (rotation != null)
+                polygon = GeometryHelper.Rotate(polygon, rotation.Value);
+            if (position != null)
+                polygon = GeometryHelper.Move(polygon, position.Value);
+            return polygon;
         }
 
         public static bool IsCounterClockwiseTurn(Point pivot, Point source, Point dest)
