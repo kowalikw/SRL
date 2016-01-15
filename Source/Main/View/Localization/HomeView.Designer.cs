@@ -124,7 +124,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Computer Science Engineering Thesis.
+        ///   Looks up a localized string similar to Engineering Thesis in Computer Science .
         /// </summary>
         internal static string title {
             get {

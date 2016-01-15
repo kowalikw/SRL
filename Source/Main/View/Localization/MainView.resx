@@ -127,10 +127,10 @@
     <value>Run</value>
   </data>
   <data name="settings" xml:space="preserve">
-    <value>settings</value>
+    <value>Settings</value>
   </data>
   <data name="setupTab" xml:space="preserve">
-    <value>Setup</value>
+    <value>Edit</value>
   </data>
   <data name="tracingSubTab" xml:space="preserve">
     <value>Image tracer</value>

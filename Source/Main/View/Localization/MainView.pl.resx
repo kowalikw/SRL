@@ -127,13 +127,13 @@
     <value>Symulacja</value>
   </data>
   <data name="settings" xml:space="preserve">
-    <value>ustawienia</value>
+    <value>Ustawienia</value>
   </data>
   <data name="setupTab" xml:space="preserve">
-    <value>Konfiguracja</value>
+    <value>Edycja</value>
   </data>
   <data name="tracingSubTab" xml:space="preserve">
-    <value>Traser obrazków</value>
+    <value>Traser</value>
   </data>
   <data name="vehicleEditorSubTab" xml:space="preserve">
     <value>Edytor pojazdów</value>

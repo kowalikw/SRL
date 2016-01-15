@@ -88,7 +88,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to settings.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string settings {
             get {
@@ -97,7 +97,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setup.
+        ///   Looks up a localized string similar to Edit.
         /// </summary>
         internal static string setupTab {
             get {
