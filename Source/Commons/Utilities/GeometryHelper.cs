@@ -78,10 +78,7 @@ namespace SRL.Commons.Utilities
 
         public static Polygon Rotate(Polygon polygon, Point pivot, double angle)
         {
-            var output = new Polygon();
-            for (int i = 0; i < polygon.Vertices.Count; i++)
-                output.Vertices.Add(Rotate(polygon.Vertices[i], pivot, angle));
-            return output;
+            return new Polygon(polygon.Vertices.Select(vertex => Rotate(vertex, pivot, angle)));
         }
 
         public static Polygon Rotate(Polygon polygon, double angle)
@@ -91,26 +88,16 @@ namespace SRL.Commons.Utilities
 
         public static Polygon Move(Polygon polygon, double dx, double dy)
         {
-            var output = new Polygon();
-            for (int i = 0; i < polygon.Vertices.Count; i++)
-            {
-                output.Vertices.Add(new Point(
-                    polygon.Vertices[i].X + dx,
-                    polygon.Vertices[i].Y + dy));
-            }
-            return output;
+            return new Polygon(polygon.Vertices.Select(vertex => new Point(
+                    vertex.X + dx,
+                    vertex.Y + dy)));
         }
 
         public static Polygon Resize(Polygon polygon, double factor)
         {
-            var output = new Polygon();
-            for (int i = 0; i < polygon.Vertices.Count; i++)
-            {
-                output.Vertices.Add(new Point(
-                    polygon.Vertices[i].X * factor,
-                    polygon.Vertices[i].Y * factor));
-            }
-            return output;
+            return new Polygon(polygon.Vertices.Select(vertex => new Point(
+                    vertex.X * factor,
+                    vertex.Y * factor)));
         }
 
         public static bool IsCounterClockwiseTurn(Point pivot, Point source, Point dest)

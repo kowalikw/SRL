@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
+using SRL.Commons.Utilities;
 
 namespace SRL.Commons.Model
 {
@@ -50,7 +51,7 @@ namespace SRL.Commons.Model
                 while(reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "polygon")
                 {
                     Polygon obstacle = new Polygon();
-                    obstacle.ReadXml(reader);
+                    obstacle = reader.ReadContentAsPolygon();
                     Obstacles.Add(obstacle);
                 }
                 reader.ReadEndElement();
@@ -80,7 +81,8 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Obstacles)
-                polygon.WriteXml(writer);
+                writer.WritePolygon(polygon);
+            
 
             writer.WriteEndElement();
         }

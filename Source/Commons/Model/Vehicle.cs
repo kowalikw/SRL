@@ -2,6 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
+using SRL.Commons.Utilities;
 
 namespace SRL.Commons.Model
 {
@@ -35,7 +36,7 @@ namespace SRL.Commons.Model
                 reader.MoveToContent();
 
                 reader.ReadToDescendant("polygon");
-                Shape.ReadXml(reader);
+                Shape = reader.ReadContentAsPolygon();
                 reader.ReadEndElement();
             }
             else
@@ -62,7 +63,7 @@ namespace SRL.Commons.Model
             writer.WriteValue("translate(" + Width/2 + "," + Height/2 + ") scale(" + Width/2 + "," + (-Height/2) + ")");
             writer.WriteEndAttribute();
 
-            Shape.WriteXml(writer);
+            writer.WritePolygon(Shape);
 
             writer.WriteEndElement();
 

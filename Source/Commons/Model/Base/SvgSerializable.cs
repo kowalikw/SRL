@@ -46,6 +46,8 @@ namespace SRL.Commons.Model.Base
             writer.WriteEndElement();
         }
 
+        
+
         public static void Serialize<R>(R model, string filename)
             where R : SvgSerializable
         {

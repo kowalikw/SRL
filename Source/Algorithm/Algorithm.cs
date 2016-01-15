@@ -270,7 +270,7 @@ namespace SRL.Algorithm
             // Creating Orders from A* results
             // TODO: still some angle troubles
             List<Order> orders = new List<Order>();
-            orders.Add(new Order { Destination = start, Rotation = (vehicleRotation + 2 * Math.PI) % (2 * Math.PI) }); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
+            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start )); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
             for (int i = 0; i < path.Length - 1; i++)
             {
                 if (token.IsCancellationRequested)
@@ -282,20 +282,17 @@ namespace SRL.Algorithm
                 int ind = 0;
                 while (indexPointAngleList[angle][ind].Index != path[i].To)
                     ind++;
-                Order o = new Order();
-                o.Destination = indexPointAngleList[angle][ind].Point;
-                o.Rotation = angle * singleAngle;
+                Order o = new Order(angle * singleAngle, indexPointAngleList[angle][ind].Point);
 
                 if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) == (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
                 {
-                    o.Rotation = (orders[orders.Count - 1].Rotation);
-                    orders.Add(o);
+                    orders.Add(new Order(orders[orders.Count - 1].Rotation, o.Destination));
                     continue;
                 }
 
                 if (o.Rotation == 0 && orders[orders.Count - 1].Rotation <= -Math.PI)
                 {
-                    o.Rotation = -2 * Math.PI;
+                    o = new Order(-2 * Math.PI, o.Destination);
                 }
                 else if (o.Rotation == 0 && orders[orders.Count - 1].Rotation > 0)
                 {
@@ -304,21 +301,21 @@ namespace SRL.Algorithm
                 else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation > 0)
                 {
                     if (o.Rotation < orders[orders.Count - 1].Rotation)
-                        o.Rotation -= 2 * Math.PI;
+                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
                     // else do nothing
                 }
                 else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation < 0)
                 {
-                    if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
-                        o.Rotation -= 2 * Math.PI;
+                    if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
+                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
                     else if (orders[orders.Count - 1].Rotation == -2 * Math.PI && o.Rotation > Math.PI)
-                        o.Rotation -= 2 * Math.PI;
+                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
                     // else do nothing
                 }
                 else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation == 0)
                 {
                     if (o.Rotation > Math.PI)
-                        o.Rotation -= 2 * Math.PI;
+                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
                 }
 
                 orders.Add(o);

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 using SRL.Commons.Model.Base;
+using SRL.Commons.Utilities;
 
 namespace SRL.Commons.Model
 {
@@ -63,7 +64,7 @@ namespace SRL.Commons.Model
                     while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "polygon")
                     {
                         Polygon obstacle = new Polygon();
-                        obstacle.ReadXml(reader);
+                        obstacle = reader.ReadContentAsPolygon();
                         Map.Obstacles.Add(obstacle);
                     }
                 }
@@ -83,7 +84,7 @@ namespace SRL.Commons.Model
                     reader.MoveToContent();
 
                     reader.ReadToDescendant("polygon");
-                    Vehicle.Shape.ReadXml(reader);
+                    Vehicle.Shape = reader.ReadContentAsPolygon();
                 }
                 else
                     throw new XmlException();
@@ -142,8 +143,7 @@ namespace SRL.Commons.Model
                 reader.ReadToFollowing("order");
                 while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "order")
                 {
-                    Order order = new Order();
-                    order.ReadXml(reader);
+                    Order order = reader.ReadContentAsOrder();
                     Orders.Add(order);
                 }
                 reader.ReadEndElement();
@@ -180,7 +180,7 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Map.Obstacles)
-                polygon.WriteXml(writer);
+                writer.WritePolygon(polygon);
 
             writer.WriteEndElement();
 
@@ -197,7 +197,7 @@ namespace SRL.Commons.Model
             writer.WriteValue(")");
             writer.WriteEndAttribute();
 
-            Vehicle.Shape.WriteXml(writer);
+            writer.WritePolygon(Vehicle.Shape);
 
             writer.WriteEndElement();
 
@@ -368,7 +368,7 @@ namespace SRL.Commons.Model
             // Order list
             writer.WriteStartElement("orders");
             foreach (Order order in Orders)
-                order.WriteXml(writer);
+                writer.WriteOrder(order);
             writer.WriteEndElement();
         }
 

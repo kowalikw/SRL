@@ -62,11 +62,7 @@ namespace SRL.CommonsTests
             var serializer = new XmlSerializer(typeof(Order));
             var output = new XDocument();
 
-            Order order = new Order()
-            {
-                Rotation = 0.5,
-                Destination = new Point(-0.3, 0.7)
-            };
+            Order order = new Order(0.5, new Point(-0.3, 0.7));
 
             using (XmlWriter writer = output.CreateWriter())
                 serializer.Serialize(writer, order);
@@ -79,11 +75,7 @@ namespace SRL.CommonsTests
         {
             var serializer = new XmlSerializer(typeof(Order));
 
-            Order expected = new Order()
-            {
-                Rotation = 0.1,
-                Destination = new Point(-0.41667, -0.2083)
-            };
+            Order expected = new Order(0.1, new Point(-0.41667, -0.2083));
 
             TextReader reader = new StringReader(Resources.Order);
             Order actual = (Order)serializer.Deserialize(reader);
@@ -239,13 +231,13 @@ namespace SRL.CommonsTests
             vehicle.Shape = new Polygon(new List<Point>() { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
 
             List<Order> orders = new List<Order>();
-            orders.Add(new Order { Destination = new Point(-0.41667, -0.2083), Rotation = 0.1 });
-            orders.Add(new Order { Destination = new Point(0.2083, -0.8333), Rotation = 0.84 });
-            orders.Add(new Order { Destination = new Point(-0.625, -0.833), Rotation = 2.34 });
-            orders.Add(new Order { Destination = new Point(-0.833, 0.25), Rotation = 0.1 });
-            orders.Add(new Order { Destination = new Point(-0.1389, 0.4583), Rotation = 0.6 });
-            orders.Add(new Order { Destination = new Point(0.3889, 0.6667), Rotation = 0.6 });
-            orders.Add(new Order { Destination = new Point(0.1111, -0.2083), Rotation = 3.14 });
+            orders.Add(new Order(0.1, new Point(-0.41667, -0.2083)));
+            orders.Add(new Order(0.84, new Point(0.2083, -0.8333)));
+            orders.Add(new Order(2.34, new Point(-0.625, -0.833)));
+            orders.Add(new Order(0.1, new Point(-0.833, 0.25)));
+            orders.Add(new Order(0.6, new Point(-0.1389, 0.4583)));
+            orders.Add(new Order(0.6, new Point(0.3889, 0.6667)));
+            orders.Add(new Order(3.14, new Point(0.1111, -0.2083)));
 
             Simulation simulation = new Simulation();
             simulation.StartPoint = new Point(-0.41667, -0.2083);
@@ -277,13 +269,13 @@ namespace SRL.CommonsTests
             vehicle.Shape = new Polygon(new List<Point>() { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
 
             List<Order> orders = new List<Order>();
-            orders.Add(new Order { Destination = new Point(-0.41667, -0.2083), Rotation = 0.1 });
-            orders.Add(new Order { Destination = new Point(0.2083, -0.8333), Rotation = 0.84 });
-            orders.Add(new Order { Destination = new Point(-0.625, -0.833), Rotation = 2.34 });
-            orders.Add(new Order { Destination = new Point(-0.833, 0.25), Rotation = 0.1 });
-            orders.Add(new Order { Destination = new Point(-0.1389, 0.4583), Rotation = 0.6 });
-            orders.Add(new Order { Destination = new Point(0.3889, 0.6667), Rotation = 0.6 });
-            orders.Add(new Order { Destination = new Point(0.1111, -0.2083), Rotation = 3.14 });
+            orders.Add(new Order(0.1, new Point(-0.41667, -0.2083)));
+            orders.Add(new Order(0.84, new Point(0.2083, -0.8333)));
+            orders.Add(new Order(2.34, new Point(-0.625, -0.833)));
+            orders.Add(new Order(0.1, new Point(-0.833, 0.25)));
+            orders.Add(new Order(0.6, new Point(-0.1389, 0.4583)));
+            orders.Add(new Order(0.6, new Point(0.3889, 0.6667)));
+            orders.Add(new Order(3.14, new Point(0.1111, -0.2083)));
 
             expected.StartPoint = new Point(-0.41667, -0.2083);
             expected.EndPoint = new Point(0.1111, -0.2083);
