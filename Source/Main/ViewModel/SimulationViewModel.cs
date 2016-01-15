@@ -195,14 +195,15 @@ namespace SRL.Main.ViewModel
                 return _setInitialVehicleSetupCommand;
             }
         }
-        public RelayCommand CalculatePathCommand
+        public RelayCommand StartPathCalculationCommand
         {
             get
             {
-                if (_calculatePathCommand == null)
+                if (_startPathCalculationCommand == null)
                 {
-                    _calculatePathCommand = new RelayCommand(() =>
+                    _startPathCalculationCommand = new RelayCommand(() =>
                     {
+                        StopPlaybackCommand.Execute(null);
                         EditorMode = Mode.Normal;
 
                         List<Option> options = _algorithm.GetOptions();
@@ -211,17 +212,26 @@ namespace SRL.Main.ViewModel
                             _algorithm.SetOptions(options);
                             StartNewPathCalculation();
                         }
-                    },
-                        () =>
-                        {
+                    }, () =>
+                    {
                             return !CalculatingPath && Map != null && Vehicle != null && VehicleSize != null &&
                                    InitialVehicleRotation != null && StartPoint != null && EndPoint != null;
-                        });
+                    });
                 }
-                return _calculatePathCommand;
+                return _startPathCalculationCommand;
             }
         }
-
+        public RelayCommand CancelPathCalculationCommand
+        {
+            get
+            {
+                if (_cancelPathCalculationCommand == null)
+                {
+                    _cancelPathCalculationCommand = new RelayCommand(CancelPathCalculation, () => CalculatingPath);
+                }
+                return _cancelPathCalculationCommand;
+            }
+        }
 
         private RelayCommand<Mode> _enterModeCommand;
         private RelayCommand _resetCommand;
@@ -230,7 +240,8 @@ namespace SRL.Main.ViewModel
         private RelayCommand<Point> _setStartPointCommand;
         private RelayCommand<Point> _setEndPointCommand;
         private RelayCommand<VehicleSetup> _setInitialVehicleSetupCommand;
-        private RelayCommand _calculatePathCommand;
+        private RelayCommand _startPathCalculationCommand;
+        private RelayCommand _cancelPathCalculationCommand;
 
         #endregion
 
@@ -248,7 +259,13 @@ namespace SRL.Main.ViewModel
                         if (CurrentFrameIdx == MaxFrameIdx)
                             CurrentFrameIdx = 0;
                         SimulationRunning = true;
-                    }, () => { return EditorMode == Mode.Normal && Orders != null; });
+                    }, () =>
+                    {
+                        return EditorMode == Mode.Normal && 
+                            !CalculatingPath && 
+                            !SimulationRunning && 
+                            _frames != null;
+                    });
                 }
                 return _startPlaybackCommand;
             }

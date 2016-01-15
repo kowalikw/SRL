@@ -124,15 +124,15 @@
     <value>Color threshold</value>
   </data>
   <data name="LoadBitmapTooltip" xml:space="preserve">
-    <value>Load image</value>
+    <value>Load raster image</value>
   </data>
   <data name="MakeMapTooltip" xml:space="preserve">
-    <value>Make map</value>
+    <value>Create map</value>
   </data>
   <data name="MakeVehicleTooltip" xml:space="preserve">
-    <value>Make vehicle</value>
+    <value>Create vehicle</value>
   </data>
   <data name="TraceTooltip" xml:space="preserve">
-    <value>Trace image</value>
+    <value>Trace</value>
   </data>
 </root>

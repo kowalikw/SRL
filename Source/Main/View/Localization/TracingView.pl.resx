@@ -124,7 +124,7 @@
     <value>Progowanie kolorów</value>
   </data>
   <data name="LoadBitmapTooltip" xml:space="preserve">
-    <value>Wczytaj obrazek</value>
+    <value>Wczytaj grafikę rastrową</value>
   </data>
   <data name="MakeMapTooltip" xml:space="preserve">
     <value>Stwórz mapę</value>
@@ -133,6 +133,6 @@
     <value>Stwórz pojazd</value>
   </data>
   <data name="TraceTooltip" xml:space="preserve">
-    <value>Trasuj obrazek</value>
+    <value>Trasuj</value>
   </data>
 </root>
