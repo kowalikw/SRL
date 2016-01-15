@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 
 namespace SRL.Commons.Model
 {
-    [XmlRoot(ElementName = "order")]
     public struct Order : IEquatable<Order>
     {
         public double Rotation { get; }

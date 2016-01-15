@@ -76,14 +76,14 @@ namespace SRL.CommonsTests
             Assert.IsTrue(new List<Point>
             {
                 new Point(0.95, -0.95),
-                new Point(0.9, -0.9),
+                new Point(0.9, -0.9)
             }.All(point => GeometryHelper.IsEnclosed(point, square)));
         }
 
         [TestMethod]
         public void IsInsidePolygonTestFalse()
         {
-            Polygon polygon = new Polygon(new List<Point>()
+            Polygon polygon = new Polygon(new List<Point>
             {
                 new Point(-0.2, 0.0),
                 new Point(0.0, 0.5),
@@ -154,7 +154,7 @@ namespace SRL.CommonsTests
         [TestMethod]
         public void RotateTest()
         {
-            Polygon polygon = new Polygon(new List<Point>()
+            Polygon polygon = new Polygon(new List<Point>
             {
                 new Point(1, 1),
                 new Point(4, 1),
@@ -163,7 +163,7 @@ namespace SRL.CommonsTests
             });
 
             Polygon actual1 = GeometryHelper.Rotate(polygon, Math.PI / 2);
-            Polygon expected1 =  new Polygon(new List<Point>()
+            Polygon expected1 =  new Polygon(new List<Point>
             {
                 new Point(-1, 1),
                 new Point(-1, 4),
@@ -172,7 +172,7 @@ namespace SRL.CommonsTests
             });
 
             Polygon actual2 = GeometryHelper.Rotate(polygon, new Point(0.2, 0.5), Math.PI / 2);
-            Polygon expected2 = new Polygon(new List<Point>()
+            Polygon expected2 = new Polygon(new List<Point>
             {
                 new Point(-0.3, 1.3),
                 new Point(-0.3, 4.3),
@@ -180,13 +180,8 @@ namespace SRL.CommonsTests
                 new Point(-3.3, 1.3)
             });
 
-            Polygon actual1Rounded = new Polygon();
-            for (int i = 0; i < actual1.Vertices.Count; i++)
-                actual1Rounded.Vertices.Add(new Point(Math.Round(actual1.Vertices[i].X, 0), Math.Round(actual1.Vertices[i].Y, 0)));
-
-            Polygon actual2Rounded = new Polygon();
-            for (int i = 0; i < actual2.Vertices.Count; i++)
-                actual2Rounded.Vertices.Add(new Point(Math.Round(actual2.Vertices[i].X, 1), Math.Round(actual2.Vertices[i].Y, 1)));
+            var actual1Rounded = new Polygon(actual1.Vertices.Select(vertex => new Point(Math.Round(vertex.X, 0), Math.Round(vertex.Y, 0))));
+            var actual2Rounded = new Polygon(actual2.Vertices.Select(vertex => new Point(Math.Round(vertex.X, 1), Math.Round(vertex.Y, 1))));
 
             Assert.AreEqual(expected1, actual1Rounded);
             Assert.AreEqual(expected2, actual2Rounded);
@@ -195,7 +190,7 @@ namespace SRL.CommonsTests
         [TestMethod]
         public void MoveTest()
         {
-            Polygon polygon = new Polygon(new List<Point>()
+            Polygon polygon = new Polygon(new List<Point>
             {
                 new Point(1, 1),
                 new Point(4, 1),
@@ -204,7 +199,7 @@ namespace SRL.CommonsTests
             });
 
             Polygon actual = GeometryHelper.Move(polygon, 3, -4);
-            Polygon expected = new Polygon(new List<Point>()
+            Polygon expected = new Polygon(new List<Point>
             {
                 new Point(4, -3),
                 new Point(7, -3),
@@ -218,7 +213,7 @@ namespace SRL.CommonsTests
         [TestMethod]
         public void ResizeTest()
         {
-            Polygon polygon = new Polygon(new List<Point>()
+            Polygon polygon = new Polygon(new List<Point>
             {
                 new Point(1, 1),
                 new Point(4, 1),
@@ -227,7 +222,7 @@ namespace SRL.CommonsTests
             });
 
             Polygon actual = GeometryHelper.Resize(polygon, 2);
-            Polygon expected = new Polygon(new List<Point>()
+            Polygon expected = new Polygon(new List<Point>
             {
                 new Point(2, 2),
                 new Point(8, 2),
@@ -251,7 +246,7 @@ namespace SRL.CommonsTests
         [TestMethod]
         public void IsIntersectedTest()
         {
-            Polygon subject = new Polygon(new List<Point>()
+            Polygon subject = new Polygon(new List<Point>
             {
                 new Point(1, 1),
                 new Point(4, 1),
@@ -259,14 +254,14 @@ namespace SRL.CommonsTests
                 new Point(1, 4)
             });
 
-            Polygon polygon1 = new Polygon(new List<Point>()
+            Polygon polygon1 = new Polygon(new List<Point>
             {
                 new Point(5, 5),
                 new Point(7, 5),
                 new Point(7, 7)
             });
 
-            Polygon polygon2 = new Polygon(new List<Point>()
+            Polygon polygon2 = new Polygon(new List<Point>
             {
                 new Point(0, 0),
                 new Point(5, 0),
@@ -278,14 +273,14 @@ namespace SRL.CommonsTests
                 new Point(0, 5)
             });
 
-            Assert.IsFalse(GeometryHelper.IsIntersected(subject, new List<Polygon>() { polygon1 }));
-            Assert.IsTrue(GeometryHelper.IsIntersected(subject, new List<Polygon>() { polygon2 }));
+            Assert.IsFalse(GeometryHelper.IsIntersected(subject, new List<Polygon> { polygon1 }));
+            Assert.IsTrue(GeometryHelper.IsIntersected(subject, new List<Polygon> { polygon2 }));
         }
 
         [TestMethod]
         public void IsEnclosedTest()
         {
-            Polygon subject = new Polygon(new List<Point>()
+            Polygon subject = new Polygon(new List<Point>
             {
                 new Point(1, 1),
                 new Point(4, 1),
@@ -293,7 +288,7 @@ namespace SRL.CommonsTests
                 new Point(1, 4)
             });
 
-            Polygon enclosure1 = new Polygon(new List<Point>()
+            Polygon enclosure1 = new Polygon(new List<Point>
             {
                 new Point(0, 0),
                 new Point(5, 0),
@@ -301,7 +296,7 @@ namespace SRL.CommonsTests
                 new Point(0, 5)
             });
 
-            Polygon enclosure2 = new Polygon(new List<Point>()
+            Polygon enclosure2 = new Polygon(new List<Point>
             {
                 new Point(0, 0),
                 new Point(5, 0),

@@ -63,7 +63,9 @@ namespace SRL.Commons.Model
             writer.WriteValue("translate(" + Width/2 + "," + Height/2 + ") scale(" + Width/2 + "," + (-Height/2) + ")");
             writer.WriteEndAttribute();
 
+            writer.WriteStartElement("polygon");
             writer.WritePolygon(Shape);
+            writer.WriteEndElement();
 
             writer.WriteEndElement();
 

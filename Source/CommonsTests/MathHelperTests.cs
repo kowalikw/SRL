@@ -13,7 +13,7 @@ namespace SRL.CommonsTests
             int num1 = 3;
             int num2 = 10;
 
-            MathHelper.Swap<int>(ref num1, ref num2);
+            MathHelper.Swap(ref num1, ref num2);
 
             Assert.AreEqual(10, num1);
             Assert.AreEqual(3, num2);

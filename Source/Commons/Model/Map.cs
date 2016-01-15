@@ -81,8 +81,12 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Obstacles)
+            {
+                writer.WriteStartElement("polygon");
                 writer.WritePolygon(polygon);
-            
+                writer.WriteEndElement();
+            }
+
 
             writer.WriteEndElement();
         }

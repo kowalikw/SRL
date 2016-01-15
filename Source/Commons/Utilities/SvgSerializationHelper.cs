@@ -44,8 +44,6 @@ namespace SRL.Commons.Utilities
 
         public static void WritePolygon(this XmlWriter writer, Polygon polygon) //TODO stroke, fill, stroke-width
         {
-            writer.WriteStartElement("polygon");
-
             writer.WriteStartAttribute("points");
             foreach (var point in polygon.Vertices)
             {
@@ -67,8 +65,6 @@ namespace SRL.Commons.Utilities
             writer.WriteStartAttribute("fill");
             writer.WriteValue("white");
             writer.WriteEndAttribute();
-
-            writer.WriteEndElement();
         }
 
         public static Order ReadContentAsOrder(this XmlReader reader)
@@ -98,8 +94,6 @@ namespace SRL.Commons.Utilities
 
         public static void WriteOrder(this XmlWriter writer, Order order)
         {
-            writer.WriteStartElement("order");
-
             writer.WriteStartAttribute("rotation");
             writer.WriteValue(order.Rotation);
             writer.WriteEndAttribute();
@@ -109,8 +103,6 @@ namespace SRL.Commons.Utilities
             writer.WriteValue(",");
             writer.WriteValue(order.Destination.Y);
             writer.WriteEndAttribute();
-
-            writer.WriteEndElement();
         }
     }
 }

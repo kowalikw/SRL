@@ -5,7 +5,6 @@ using System.Xml.Serialization;
 
 namespace SRL.Commons.Model
 {
-    [XmlRoot(ElementName = "polygon")]
     public struct Polygon : IEquatable<Polygon>
     {
         public List<Point> Vertices { get; }
@@ -34,6 +33,17 @@ namespace SRL.Commons.Model
                 }
             }
             return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var polygon = obj as Polygon?;
+            return polygon != null && Equals(polygon.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return Vertices.GetHashCode();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace SRL.CommonsTests
             var serializer = new XmlSerializer(typeof(Polygon));
             var output = new XDocument();
 
-            Polygon polygon = new Polygon(new List<Point>()
+            Polygon polygon = new Polygon(new List<Point>
             {
                 new Point(0.2, 0.3),
                 new Point(0.7, 0.4),
@@ -40,7 +40,7 @@ namespace SRL.CommonsTests
         {
             var serializer = new XmlSerializer(typeof(Polygon));
 
-            Polygon expected = new Polygon(new List<Point>()
+            Polygon expected = new Polygon(new List<Point>
             {
                 new Point(-0.54811715481171552,0.20920502092050208),
                 new Point(0.7405857740585774,0.32217573221757323),
@@ -92,9 +92,9 @@ namespace SRL.CommonsTests
             var serializer = new XmlSerializer(typeof(Vehicle));
             var output = new XDocument();
 
-            Vehicle vehicle = new Vehicle()
+            Vehicle vehicle = new Vehicle
             {
-                Shape = new Polygon(new List<Point>()
+                Shape = new Polygon(new List<Point>
                 {
                     new Point(0.2, 0.3),
                     new Point(0.7, 0.4),
@@ -113,9 +113,9 @@ namespace SRL.CommonsTests
         {
             var serializer = new XmlSerializer(typeof(Vehicle));
 
-            Vehicle expected = new Vehicle()
+            Vehicle expected = new Vehicle
             {
-                Shape = new Polygon(new List<Point>()
+                Shape = new Polygon(new List<Point>
                 {
                     new Point(0.14697853332425609,-0.00075762130579515308),
                     new Point(-0.26289459311091157,0.57427694979271182),
@@ -142,14 +142,16 @@ namespace SRL.CommonsTests
 
             Map map = new Map();
             map.Obstacles.Add(
-                new Polygon(new List<Point>() {
+                new Polygon(new List<Point>
+                {
                     new Point(0.2, 0.3),
                     new Point(0.7, 0.4),
                     new Point(-0.2, 0.9)
                 })
             );
             map.Obstacles.Add(
-                new Polygon(new List<Point>() {
+                new Polygon(new List<Point>
+                {
                     new Point(0.2, 0.3),
                     new Point(0.7, 0.4),
                     new Point(-0.2, 0.9),
@@ -157,7 +159,8 @@ namespace SRL.CommonsTests
                 })
             );
             map.Obstacles.Add(
-                new Polygon(new List<Point>() {
+                new Polygon(new List<Point>
+                {
                     new Point(0.1, 0.3),
                     new Point(0.3, 0.7),
                     new Point(-0.2, 0.0)
@@ -176,13 +179,13 @@ namespace SRL.CommonsTests
             var serializer = new XmlSerializer(typeof(Map));
 
             Map expected = new Map();
-            expected.Obstacles.Add(new Polygon(new List<Point>()
+            expected.Obstacles.Add(new Polygon(new List<Point>
             {
                 new Point(-0.54811715481171552,0.20920502092050208),
                 new Point(0.7405857740585774,0.32217573221757323),
                 new Point(0.55648535564853552,-0.606694560669456)
             }));
-            expected.Obstacles.Add(new Polygon(new List<Point>()
+            expected.Obstacles.Add(new Polygon(new List<Point>
             {
                 new Point(-0.61087866108786615,-0.32635983263598328),
                 new Point(-0.68619246861924688,-0.7615062761506276),
@@ -199,7 +202,7 @@ namespace SRL.CommonsTests
                 new Point(-0.82008368200836823,-0.39330543933054396),
                 new Point(-0.71966527196652719,-0.3807531380753138)
             }));
-            expected.Obstacles.Add(new Polygon(new List<Point>()
+            expected.Obstacles.Add(new Polygon(new List<Point>
             {
                 new Point(-0.23430962343096234,0.799163179916318),
                 new Point(-0.21338912133891214,0.49372384937238495),
@@ -224,11 +227,11 @@ namespace SRL.CommonsTests
             var output = new XDocument();
 
             Map map = new Map();
-            map.Obstacles.Add(new Polygon(new List<Point>() { new Point(-0.0188087774294671, 0.899581589958159), new Point(-0.689655172413793, -0.878661087866109), new Point(0.247648902821317, -0.866108786610879) }));
-            map.Obstacles.Add(new Polygon(new List<Point>() { new Point(0.366771159874608, 0.267782426778243), new Point(0.351097178683386, -0.121338912133891), new Point(0.821316614420063, -0.158995815899582), new Point(0.855799373040752, 0.330543933054393) }));
+            map.Obstacles.Add(new Polygon(new List<Point> { new Point(-0.0188087774294671, 0.899581589958159), new Point(-0.689655172413793, -0.878661087866109), new Point(0.247648902821317, -0.866108786610879) }));
+            map.Obstacles.Add(new Polygon(new List<Point> { new Point(0.366771159874608, 0.267782426778243), new Point(0.351097178683386, -0.121338912133891), new Point(0.821316614420063, -0.158995815899582), new Point(0.855799373040752, 0.330543933054393) }));
 
             Vehicle vehicle = new Vehicle();
-            vehicle.Shape = new Polygon(new List<Point>() { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
+            vehicle.Shape = new Polygon(new List<Point> { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
 
             List<Order> orders = new List<Order>();
             orders.Add(new Order(0.1, new Point(-0.41667, -0.2083)));
@@ -262,11 +265,11 @@ namespace SRL.CommonsTests
             Simulation expected = new Simulation();
 
             Map map = new Map();
-            map.Obstacles.Add(new Polygon(new List<Point>() { new Point(-0.0188087774294671, 0.899581589958159), new Point(-0.689655172413793, -0.878661087866109), new Point(0.247648902821317, -0.866108786610879) }));
-            map.Obstacles.Add(new Polygon(new List<Point>() { new Point(0.366771159874608, 0.267782426778243), new Point(0.351097178683386, -0.121338912133891), new Point(0.821316614420063, -0.158995815899582), new Point(0.855799373040752, 0.330543933054393) }));
+            map.Obstacles.Add(new Polygon(new List<Point> { new Point(-0.0188087774294671, 0.899581589958159), new Point(-0.689655172413793, -0.878661087866109), new Point(0.247648902821317, -0.866108786610879) }));
+            map.Obstacles.Add(new Polygon(new List<Point> { new Point(0.366771159874608, 0.267782426778243), new Point(0.351097178683386, -0.121338912133891), new Point(0.821316614420063, -0.158995815899582), new Point(0.855799373040752, 0.330543933054393) }));
 
             Vehicle vehicle = new Vehicle();
-            vehicle.Shape = new Polygon(new List<Point>() { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
+            vehicle.Shape = new Polygon(new List<Point> { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
 
             List<Order> orders = new List<Order>();
             orders.Add(new Order(0.1, new Point(-0.41667, -0.2083)));

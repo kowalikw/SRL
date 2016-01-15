@@ -180,7 +180,11 @@ namespace SRL.Commons.Model
             writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Map.Obstacles)
+            {
+                writer.WriteStartElement("polygon");
                 writer.WritePolygon(polygon);
+                writer.WriteEndElement();
+            }
 
             writer.WriteEndElement();
 
@@ -197,7 +201,9 @@ namespace SRL.Commons.Model
             writer.WriteValue(")");
             writer.WriteEndAttribute();
 
+            writer.WriteStartElement("polygon");
             writer.WritePolygon(Vehicle.Shape);
+            writer.WriteEndElement();
 
             writer.WriteEndElement();
 
@@ -368,7 +374,11 @@ namespace SRL.Commons.Model
             // Order list
             writer.WriteStartElement("orders");
             foreach (Order order in Orders)
+            {
+                writer.WriteStartElement("order");
                 writer.WriteOrder(order);
+                writer.WriteEndElement();
+            }
             writer.WriteEndElement();
         }
 
