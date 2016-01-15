@@ -74,7 +74,9 @@ namespace SRL.Main.ViewModel
                         EditorMode = Mode.Normal;
                         Map = null;
                         Vehicle = null;
-                        Orders = null;
+                    }, () =>
+                    {
+                        return Map != null && Vehicle != null;
                     });
                 }
                 return _resetCommand;
@@ -113,44 +115,50 @@ namespace SRL.Main.ViewModel
                 return _loadVehicleCommand;
             }
         }
-        public RelayCommand<Point> SetStartPointCommand
+        public RelayCommand<Point?> SetStartPointCommand
         {
             get
             {
                 if (_setStartPointCommand == null)
                 {
-                    _setStartPointCommand = new RelayCommand<Point>(point =>
+                    _setStartPointCommand = new RelayCommand<Point?>(point =>
                     {
                         EditorMode = Mode.Normal;
                         StartPoint = point;
                         EnterModeCommand.Execute(Mode.VehicleSetup);
                     }, point =>
                     {
+                        if (point == null)
+                            return true;
+
                         if (EditorMode != Mode.StartPointSetup || CalculatingPath || Map == null)
                             return false;
 
-                        return !GeometryHelper.IsEnclosed(point, Map.Obstacles);
+                        return !GeometryHelper.IsEnclosed(point.Value, Map.Obstacles);
                     });
                 }
                 return _setStartPointCommand;
             }
         }
-        public RelayCommand<Point> SetEndPointCommand
+        public RelayCommand<Point?> SetEndPointCommand
         {
             get
             {
                 if (_setEndPointCommand == null)
                 {
-                    _setEndPointCommand = new RelayCommand<Point>(point =>
+                    _setEndPointCommand = new RelayCommand<Point?>(point =>
                     {
                         EditorMode = Mode.Normal;
                         EndPoint = point;
                     }, point =>
                     {
+                        if (point == null)
+                            return true;
+
                         if (EditorMode != Mode.EndPointSetup || CalculatingPath || Map == null)
                             return false;
 
-                        return !GeometryHelper.IsEnclosed(point, Map.Obstacles);
+                        return !GeometryHelper.IsEnclosed(point.Value, Map.Obstacles);
                     });
                 }
                 return _setEndPointCommand;
@@ -180,6 +188,9 @@ namespace SRL.Main.ViewModel
                         Polygon shape = GeometryHelper.Resize(Vehicle.Shape, setup.RelativeSize);
                         shape = GeometryHelper.Rotate(shape, setup.Rotation);
                         shape = GeometryHelper.Move(shape, StartPoint.Value.X, StartPoint.Value.Y);
+
+                        if (shape.Vertices.Any(GeometryHelper.IsOutOfBounds))
+                            return false;
 
                         return !GeometryHelper.IsIntersected(shape, Map.Obstacles);
                     });
@@ -219,8 +230,8 @@ namespace SRL.Main.ViewModel
         private RelayCommand _resetCommand;
         private RelayCommand _loadMapCommand;
         private RelayCommand _loadVehicleCommand;
-        private RelayCommand<Point> _setStartPointCommand;
-        private RelayCommand<Point> _setEndPointCommand;
+        private RelayCommand<Point?> _setStartPointCommand;
+        private RelayCommand<Point?> _setEndPointCommand;
         private RelayCommand<VehicleSetup> _setInitialVehicleSetupCommand;
         private RelayCommand _calculatePathCommand;
 
@@ -783,7 +794,7 @@ namespace SRL.Main.ViewModel
                     }
                     Monitor.Exit(_cancellationLock);
                 }
-                
+
             }, token);
 
             Monitor.Exit(_cancellationLock);

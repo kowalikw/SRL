@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRL.Commons.Model;
@@ -48,23 +49,35 @@ namespace SRL.CommonsTests
         [TestMethod]
         public void IsInsidePolygonTestTrue()
         {
-            Polygon polygon = new Polygon(new List<Point>()
+            Polygon polygon = new Polygon(new List<Point>
             {
                 new Point(-0.2, 0.0),
                 new Point(0.0, 0.5),
                 new Point(0.2, 0.1),
                 new Point(0.0, -0.2)
             });
+            Polygon square = new Polygon(new List<Point>
+            {
+                new Point(0.9, -0.9),
+                new Point(1, -0.9),
+                new Point(1, -1),
+                new Point(0.9, -1)
+            });
+            
+            
+            Assert.IsTrue(new List<Point>
+            {
+                new Point(-0.1, 0.01),
+                new Point(0, 0),
+                new Point(0, 0.1),
+                new Point(0.2, 0.1)
+            }.All(point => GeometryHelper.IsEnclosed(point, polygon)));
 
-            Point point1 = new Point(-0.1, 0.01);
-            Point point2 = new Point(0, 0);
-            Point point3 = new Point(0, 0.1);
-            Point point4 = new Point(0.2, 0.1);
-
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point1, polygon));
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point2, polygon));
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point3, polygon));
-            Assert.IsTrue(GeometryHelper.IsEnclosed(point4, polygon));
+            Assert.IsTrue(new List<Point>
+            {
+                new Point(0.95, -0.95),
+                new Point(0.9, -0.9),
+            }.All(point => GeometryHelper.IsEnclosed(point, square)));
         }
 
         [TestMethod]

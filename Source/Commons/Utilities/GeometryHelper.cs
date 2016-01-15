@@ -200,5 +200,10 @@ namespace SRL.Commons.Utilities
 
             return result;
         }
+
+        public static bool IsOutOfBounds(Point p)
+        {
+            return p.X > 1 || p.X < -1 || p.Y > 1 || p.Y < -1;
+        }
     }
 }

@@ -10,6 +10,7 @@ using SRL.Main.Drawing;
 using SRL.Main.Utilities;
 using SRL.Main.ViewModel;
 using Point = System.Windows.Point;
+using Mode = SRL.Main.ViewModel.SimulationViewModel.Mode;
 
 namespace SRL.Main.View.MonoGameArea
 {
@@ -56,7 +57,7 @@ namespace SRL.Main.View.MonoGameArea
 
             Point normalizedMousePos = MousePosition.Normalize(RenderSize);
 
-            if (_context.EditorMode == SimulationViewModel.Mode.StartPointSetup)
+            if (_context.EditorMode == Mode.StartPointSetup)
             {
                 if (!IsMouseOver)
                     return;
@@ -75,7 +76,7 @@ namespace SRL.Main.View.MonoGameArea
                 double angle;
                 double resizeFactor;
 
-                if (_context.EditorMode == SimulationViewModel.Mode.VehicleSetup)
+                if (_context.EditorMode == Mode.VehicleSetup)
                 {
                     if (!IsMouseOver)
                         return;
@@ -92,7 +93,7 @@ namespace SRL.Main.View.MonoGameArea
                         color = ValidColor;
                     else
                         color = InvalidColor;
-                    
+
                     spriteBatch.DrawArrow(origin, normalizedMousePos, RenderSize, ActiveColor, AntialiasingEnabled);
                 }
                 else if (_context.InitialVehicleRotation != null && _context.VehicleSize != null)
@@ -103,7 +104,7 @@ namespace SRL.Main.View.MonoGameArea
                 }
                 else
                     throw new MissingMemberException();
-                
+
                 shape = GeometryHelper.Resize(shape, resizeFactor);
                 shape = GeometryHelper.Rotate(shape, angle);
                 shape = GeometryHelper.Move(shape, origin.X, origin.Y);
@@ -111,7 +112,7 @@ namespace SRL.Main.View.MonoGameArea
                 spriteBatch.DrawPolygon(shape, RenderSize, color, AntialiasingEnabled);
             }
 
-            if (_context.EditorMode == SimulationViewModel.Mode.EndPointSetup)
+            if (_context.EditorMode == Mode.EndPointSetup)
             {
                 if (!IsMouseOver)
                     return;
@@ -141,21 +142,13 @@ namespace SRL.Main.View.MonoGameArea
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
             if (_context.Map != null)
-            {
                 lockBitmap.DrawMap(_context.Map, RenderSize, RegularColor, AntialiasingEnabled);
-            }
             if (ShowPath && _context.Path != null)
-            {
                 lockBitmap.DrawPath(_context.Path, RenderSize, PathColor, AntialiasingEnabled);
-            }
             if (_context.StartPoint != null)
-            {
                 lockBitmap.DrawVertex(_context.StartPoint.Value, RenderSize, StartPointColor, AntialiasingEnabled);
-            }
             if (_context.EndPoint != null)
-            {
                 lockBitmap.DrawVertex(_context.EndPoint.Value, RenderSize, EndPointColor, AntialiasingEnabled);
-            }
         }
 
         protected override void OnMouseUp(MouseButton button)
@@ -164,17 +157,11 @@ namespace SRL.Main.View.MonoGameArea
 
             if (button == MouseButton.Left)
             {
-                if (_context.EditorMode == SimulationViewModel.Mode.StartPointSetup)
-                {
-                    if (_context.SetStartPointCommand.CanExecute(normalizedMousePos))
-                        _context.SetStartPointCommand.Execute(normalizedMousePos);
-                }
-                else if (_context.EditorMode == SimulationViewModel.Mode.EndPointSetup)
-                {
-                    if (_context.SetEndPointCommand.CanExecute(normalizedMousePos))
-                        _context.SetEndPointCommand.Execute(normalizedMousePos);
-                }
-                else if (_context.EditorMode == SimulationViewModel.Mode.VehicleSetup)
+                if (_context.EditorMode == Mode.StartPointSetup)
+                    _context.SetStartPointCommand.Execute(normalizedMousePos);
+                else if (_context.EditorMode == Mode.EndPointSetup)
+                    _context.SetEndPointCommand.Execute(normalizedMousePos);
+                else if (_context.EditorMode == Mode.VehicleSetup)
                 {
                     Point origin = _context.StartPoint.Value;
                     VehicleSetup setup = new VehicleSetup()
@@ -183,8 +170,37 @@ namespace SRL.Main.View.MonoGameArea
                         Rotation = GeometryHelper.GetAngle(origin, normalizedMousePos)
                     };
 
-                    if (_context.SetInitialVehicleSetupCommandCommand.CanExecute(setup))
-                        _context.SetInitialVehicleSetupCommandCommand.Execute(setup);
+                    _context.SetInitialVehicleSetupCommandCommand.Execute(setup);
+                }
+            }
+            else if (button == MouseButton.Right)
+            {
+                if (_context.EditorMode == Mode.VehicleSetup)
+                {
+                    _context.SetStartPointCommand.Execute(null);
+                    return;
+                }
+                if (_context.EndPoint != null)
+                {
+                    var denormalizedEndPoint = _context.EndPoint.Value.Denormalize(RenderSize);
+                    if (IsMousePulledByPoint(denormalizedEndPoint) && _context.SetEndPointCommand.CanExecute(null))
+                    {
+                        _context.SetEndPointCommand.Execute(null);
+                        return;
+                    }
+                }
+                if (_context.StartPoint != null && _context.Vehicle != null)
+                {
+                    Polygon shape = _context.Vehicle.Shape;
+                    shape = GeometryHelper.Resize(shape, _context.VehicleSize.Value);
+                    shape = GeometryHelper.Rotate(shape, _context.InitialVehicleRotation.Value);
+                    shape = GeometryHelper.Move(shape, _context.StartPoint.Value.X, _context.StartPoint.Value.Y);
+
+                    if (GeometryHelper.IsEnclosed(normalizedMousePos, shape))
+                    {
+                        _context.SetStartPointCommand.Execute(null);
+                        return;
+                    }
                 }
             }
         }
