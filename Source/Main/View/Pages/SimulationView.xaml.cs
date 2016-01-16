@@ -1,11 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using FirstFloor.ModernUI.Windows.Navigation;
-using GalaSoft.MvvmLight.Messaging;
-using SRL.Main.Messages;
+﻿using System.Windows.Controls;
 
 namespace SRL.Main.View.Pages
 {

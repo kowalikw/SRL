@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Resources;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
@@ -8,7 +7,6 @@ using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
 using SRL.Main.View.Localization;
 using SRL.Commons.Localization;
-using SRL.Commons.Utilities;
 using SRL.Main.ViewModel.Services;
 
 namespace SRL.Main.ViewModel.Base

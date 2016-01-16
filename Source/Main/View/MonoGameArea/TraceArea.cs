@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Xna.Framework.Graphics;

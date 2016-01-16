@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using CsPotrace;
 using SRL.Commons.Model;
-using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using SRL.Commons.Utilities;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace SRL.Main.Drawing

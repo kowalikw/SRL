@@ -1,11 +1,6 @@
-﻿using System.Globalization;
-using System.Reflection;
-using System.Resources;
-using GalaSoft.MvvmLight.Ioc;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Ioc;
 using Infralution.Localization.Wpf;
 using SRL.Commons;
-using SRL.Main.Messages;
 using SRL.Main.View.Localization;
 using SRL.Main.ViewModel.Services;
 

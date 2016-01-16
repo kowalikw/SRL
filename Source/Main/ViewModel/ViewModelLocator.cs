@@ -1,7 +1,9 @@
 using System;
 using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
+using SRL.Main.Messages;
 using SRL.Main.View.Pages;
 using SRL.Main.ViewModel.Services;
 
@@ -80,7 +82,8 @@ namespace SRL.Main.ViewModel
 
         public static void Cleanup()
         {
-            //TODO unsubscribe from events
+            Messenger.Default.Send(new CleanupMessage());
+
             SimpleIoc.Default.Reset();
         }
     }

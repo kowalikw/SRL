@@ -95,6 +95,7 @@
     <Compile Include="Drawing\DynamicDrawHelper.cs" />
     <Compile Include="Drawing\LockBitmap.cs" />
     <Compile Include="Drawing\StaticDrawHelper.cs" />
+    <Compile Include="Messages\CleanUpMessage.cs" />
     <Compile Include="Messages\SetModelMessage.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>

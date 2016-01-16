@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using SRL.Commons.Localization;
 
