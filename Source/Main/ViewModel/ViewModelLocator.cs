@@ -1,6 +1,9 @@
+using System;
+using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
-using SRL.Main.View.Dialogs;
+using SRL.Main.View.Pages;
+using SRL.Main.ViewModel.Services;
 
 namespace SRL.Main.ViewModel
 {
@@ -23,6 +26,9 @@ namespace SRL.Main.ViewModel
             SimpleIoc.Default.Register<VehicleEditorViewModel>();
             SimpleIoc.Default.Register<TracingViewModel>();
             SimpleIoc.Default.Register<SimulationViewModel>();
+
+            SimpleIoc.Default.Register<INavigationService>(NavigationServiceFactory);
+            SimpleIoc.Default.Register<IDialogService>(DialogServiceFactory);
         }
 
         public MainViewModel Main
@@ -50,8 +56,31 @@ namespace SRL.Main.ViewModel
             get { return ServiceLocator.Current.GetInstance<SimulationViewModel>(); }
         }
 
+        private INavigationService NavigationServiceFactory()
+        {
+            var nav = new NavigationService();
+
+            var uriDictionary = (ResourceDictionary)Application.Current.Resources["UriDictionary"];
+            
+            nav.Configure(nameof(HomeView), (Uri)uriDictionary[nameof(HomeView)]);
+            nav.Configure(nameof(MapEditorView), (Uri)uriDictionary[nameof(MapEditorView)]);
+            nav.Configure(nameof(SettingsView), (Uri)uriDictionary[nameof(SettingsView)]);
+            nav.Configure(nameof(SimulationView), (Uri)uriDictionary[nameof(SimulationView)]);
+            nav.Configure(nameof(TracingView), (Uri)uriDictionary[nameof(TracingView)]);
+            nav.Configure(nameof(VehicleEditorView), (Uri)uriDictionary[nameof(VehicleEditorView)]);
+
+            return nav;
+        }
+
+        private IDialogService DialogServiceFactory()
+        {
+            var srv = new DialogService(Application.Current.MainWindow);
+            return srv;
+        }
+
         public static void Cleanup()
         {
+            //TODO unsubscribe from events
             SimpleIoc.Default.Reset();
         }
     }

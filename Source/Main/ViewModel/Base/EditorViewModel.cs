@@ -2,13 +2,14 @@
 using System.Reflection;
 using System.Resources;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
-using SRL.Main.View.Dialogs;
 using SRL.Main.View.Localization;
 using SRL.Commons.Localization;
 using SRL.Commons.Utilities;
+using SRL.Main.ViewModel.Services;
 
 namespace SRL.Main.ViewModel.Base
 {
@@ -28,14 +29,9 @@ namespace SRL.Main.ViewModel.Base
                         var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
                         string modelName = rm.GetString(typeof(T).Name);
 
-                        var dialogArgs = new SaveFileDialogArgs();
-                        dialogArgs.Filter = string.Format(rm.GetString("modelFilter"), modelName);
-                        dialogArgs.CloseCallback = (result, filename) =>
-                        {
-                            if (result)
-                                SvgSerializable.Serialize(GetEditedModel(), filename);
-                        };
-                        Messenger.Default.Send(new ShowDialogMessage(dialogArgs));
+                        SimpleIoc.Default.GetInstance<IDialogService>().ShowSaveFileDialog(
+                            string.Format(rm.GetString("modelFilter"), modelName),
+                            (r, f) => { if (r) SvgSerializable.Serialize(GetEditedModel(), f); });
                     },
                     () => IsEditedModelValid);
                 }
@@ -103,29 +99,25 @@ namespace SRL.Main.ViewModel.Base
             bool invalidFile = false;
             R output = null;
 
-            var args = new OpenFileDialogArgs();
-            args.Filter = string.Format(filter, modelName);
-            args.CloseCallback = (result, filename) =>
-            {
-                if (!result)
-                    return;
+            SimpleIoc.Default.GetInstance<IDialogService>().ShowOpenFileDialog(
+                string.Format(filter, modelName),
+                (result, filename) =>
+                {
+                    if (!result)
+                        return;
 
-                if (SvgSerializable.CanDeserialize<R>(filename))
-                    output = SvgSerializable.Deserialize<R>(filename);
-                else
-                    invalidFile = true;
-            };
-            Messenger.Default.Send(new ShowDialogMessage(args));
+                    if (SvgSerializable.CanDeserialize<R>(filename))
+                        output = SvgSerializable.Deserialize<R>(filename);
+                    else
+                        invalidFile = true;
+                });
 
             if (invalidFile)
             {
-                string dialogTitle = Dialogs.ResourceManager.GetString("modelNotFoundTitle");
-                string dialogMsg = Dialogs.ResourceManager.GetString("modelNotFoundMsg");
-
-                var msgDialogArgs = new MessageDialogArgs();
-                msgDialogArgs.Title = dialogTitle;
-                msgDialogArgs.Description = string.Format(dialogMsg, modelName);
-                Messenger.Default.Send(new ShowDialogMessage(msgDialogArgs));
+                SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                    Dialogs.ResourceManager.GetString("modelNotFoundTitle"),
+                    Dialogs.ResourceManager.GetString("modelNotFoundMsg"),
+                    null);
             }
 
             return output;

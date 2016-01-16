@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using SRL.Commons;
 using SRL.Commons.Model;
@@ -15,9 +16,9 @@ using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
 using SRL.Main.Messages;
 using SRL.Main.View;
-using SRL.Main.View.Dialogs;
 using SRL.Main.View.Localization;
 using SRL.Main.ViewModel.Base;
+using SRL.Main.ViewModel.Services;
 using Frame = SRL.Commons.Model.Frame;
 
 namespace SRL.Main.ViewModel
@@ -763,10 +764,10 @@ namespace SRL.Main.ViewModel
                 {
                     var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
 
-                    var args = new MessageDialogArgs();
-                    args.Title = rm.GetString("pathNotFoundTitle");
-                    args.Description = rm.GetString("pathNotFoundMsg");
-                    Messenger.Default.Send(new ShowDialogMessage(args));
+                    SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                        rm.GetString("pathNotFoundTitle"),
+                        rm.GetString("pathNotFoundMsg"),
+                        null);
                 }
 
                 if (Monitor.TryEnter(_cancellationLock))
