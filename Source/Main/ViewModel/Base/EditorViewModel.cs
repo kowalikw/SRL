@@ -73,7 +73,7 @@ namespace SRL.Main.ViewModel.Base
         {
             Messenger.Default.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
 
-            _modelName = ModelNames.ResourceManager.GetString(typeof (T).Name);
+            _modelName = Models.ResourceManager.GetString(typeof (T).Name);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SRL.Main.ViewModel.Base
         protected static R LoadModelViaDialog<R>()
             where R : SvgSerializable
         {
-            string modelName = ModelNames.ResourceManager.GetString(typeof(R).Name);
+            string modelName = Models.ResourceManager.GetString(typeof(R).Name);
             string filter = Dialogs.ResourceManager.GetString("modelFilter");
 
             bool invalidFile = false;

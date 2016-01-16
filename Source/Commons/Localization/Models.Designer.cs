@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SRL.Main.View.Localization {
+namespace SRL.Commons.Localization {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace SRL.Main.View.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Dialogs {
+    public class Models {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Dialogs() {
+        internal Models() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Main.View.Localization.Dialogs", typeof(Dialogs).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Commons.Localization.Models", typeof(Models).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace SRL.Main.View.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,83 +61,74 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application must be restarted to apply the change..
+        ///   Looks up a localized string similar to Frame.
         /// </summary>
-        internal static string langChangeRestartMsg {
+        public static string Frame {
             get {
-                return ResourceManager.GetString("langChangeRestartMsg", resourceCulture);
+                return ResourceManager.GetString("Frame", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language change.
+        ///   Looks up a localized string similar to Map.
         /// </summary>
-        internal static string langChangeRestartTitle {
+        public static string Map {
             get {
-                return ResourceManager.GetString("langChangeRestartTitle", resourceCulture);
+                return ResourceManager.GetString("Map", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} object (*.svg)|*.svg.
+        ///   Looks up a localized string similar to Option.
         /// </summary>
-        internal static string modelFilter {
+        public static string Option {
             get {
-                return ResourceManager.GetString("modelFilter", resourceCulture);
+                return ResourceManager.GetString("Option", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file doesn&apos;t contain {0} object..
+        ///   Looks up a localized string similar to Order.
         /// </summary>
-        internal static string modelNotFoundMsg {
+        public static string Order {
             get {
-                return ResourceManager.GetString("modelNotFoundMsg", resourceCulture);
+                return ResourceManager.GetString("Order", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wrong file.
+        ///   Looks up a localized string similar to Polygon.
         /// </summary>
-        internal static string modelNotFoundTitle {
+        public static string Polygon {
             get {
-                return ResourceManager.GetString("modelNotFoundTitle", resourceCulture);
+                return ResourceManager.GetString("Polygon", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options.
+        ///   Looks up a localized string similar to Simulation.
         /// </summary>
-        internal static string optionsTitle {
+        public static string Simulation {
             get {
-                return ResourceManager.GetString("optionsTitle", resourceCulture);
+                return ResourceManager.GetString("Simulation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Algorithm could not find any valid path..
+        ///   Looks up a localized string similar to Vehicle.
         /// </summary>
-        internal static string pathNotFoundMsg {
+        public static string Vehicle {
             get {
-                return ResourceManager.GetString("pathNotFoundMsg", resourceCulture);
+                return ResourceManager.GetString("Vehicle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Path not found.
+        ///   Looks up a localized string similar to Vehicle setup.
         /// </summary>
-        internal static string pathNotFoundTitle {
+        public static string VehicleSetup {
             get {
-                return ResourceManager.GetString("pathNotFoundTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Raster image files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png.
-        /// </summary>
-        internal static string rasterImageFilter {
-            get {
-                return ResourceManager.GetString("rasterImageFilter", resourceCulture);
+                return ResourceManager.GetString("VehicleSetup", resourceCulture);
             }
         }
     }

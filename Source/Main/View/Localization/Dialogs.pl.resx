@@ -133,6 +133,9 @@
   <data name="modelNotFoundTitle" xml:space="preserve">
     <value>Niepoprawny plik</value>
   </data>
+  <data name="optionsTitle" xml:space="preserve">
+    <value>Opcje</value>
+  </data>
   <data name="pathNotFoundMsg" xml:space="preserve">
     <value>Algorytm nie mógł znaleźć poprawnej ścieżki.</value>
   </data>

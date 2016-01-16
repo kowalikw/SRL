@@ -117,32 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="langChangeRestartMsg" xml:space="preserve">
-    <value>Application must be restarted to apply the change.</value>
+  <data name="valueInvalid" xml:space="preserve">
+    <value>Invalid value.</value>
   </data>
-  <data name="langChangeRestartTitle" xml:space="preserve">
-    <value>Language change</value>
+  <data name="valueTooBig" xml:space="preserve">
+    <value>The maximum value is {0}.</value>
   </data>
-  <data name="modelFilter" xml:space="preserve">
-    <value>{0} object (*.svg)|*.svg</value>
-  </data>
-  <data name="modelNotFoundMsg" xml:space="preserve">
-    <value>The file doesn't contain {0} object.</value>
-    <comment>Pass model name as the argument.</comment>
-  </data>
-  <data name="modelNotFoundTitle" xml:space="preserve">
-    <value>Wrong file</value>
-  </data>
-  <data name="optionsTitle" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="pathNotFoundMsg" xml:space="preserve">
-    <value>Algorithm could not find any valid path.</value>
-  </data>
-  <data name="pathNotFoundTitle" xml:space="preserve">
-    <value>Path not found</value>
-  </data>
-  <data name="rasterImageFilter" xml:space="preserve">
-    <value>Raster image files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png</value>
+  <data name="valueTooSmall" xml:space="preserve">
+    <value>The minimum value is {0}.</value>
   </data>
 </root>
