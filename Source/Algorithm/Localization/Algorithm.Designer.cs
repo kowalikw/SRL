@@ -70,7 +70,7 @@ namespace SRL.Algorithm.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Divides the 360 degree spectrum into this many angles distinguished by the algorithm. The bigger the value the better the precision..
+        ///   Looks up a localized string similar to Divides the 360 degree spectrum into this many possible vehicle orientations. The bigger the value the better the precision..
         /// </summary>
         internal static string angleDensityTooltip {
             get {
@@ -93,6 +93,24 @@ namespace SRL.Algorithm.Localization {
         internal static string bidirectionalTooltip {
             get {
                 return ResourceManager.GetString("bidirectionalTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move weight.
+        /// </summary>
+        internal static string moveWeight {
+            get {
+                return ResourceManager.GetString("moveWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cost of the vehicle move by the distance of [{0}]..
+        /// </summary>
+        internal static string moveWeightTooltip {
+            get {
+                return ResourceManager.GetString("moveWeightTooltip", resourceCulture);
             }
         }
         
@@ -142,7 +160,7 @@ namespace SRL.Algorithm.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Cost of the minimal turn the vehicle can take (which is defined by [{0}] option)..
         /// </summary>
         internal static string turnWeightTooltip {
             get {

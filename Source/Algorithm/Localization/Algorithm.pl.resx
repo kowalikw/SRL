@@ -121,13 +121,19 @@
     <value>Gęstość kątów</value>
   </data>
   <data name="angleDensityTooltip" xml:space="preserve">
-    <value>Dzieli kąt pełny na tyle rozróżnialnych przez algorytm kątów. Im większa wartość, tym większa precyzja.</value>
+    <value>Dzieli kąt pełny na tyle możliwych orientacji pojazdu. Im większa wartość, tym większa precyzja.</value>
   </data>
   <data name="bidirectional" xml:space="preserve">
     <value>Ruch dwukierunkowy</value>
   </data>
   <data name="bidirectionalTooltip" xml:space="preserve">
     <value>Pozwala poruszać się pojazdowi tyłem (z takim samym kosztem).</value>
+  </data>
+  <data name="moveWeight" xml:space="preserve">
+    <value>Move weight</value>
+  </data>
+  <data name="moveWeightTooltip" xml:space="preserve">
+    <value>Koszt ruchu pojazdu o odległość [{0}].</value>
   </data>
   <data name="multidirectional" xml:space="preserve">
     <value>Ruch wielokierunkowy</value>
@@ -140,5 +146,11 @@
   </data>
   <data name="pointPrecisionTooltip" xml:space="preserve">
     <value>Maksymalna odległość pomiędzy dwoma punktami, taka że algorytm potraktuje je jako ten sam punkt. Im mniejsza wartość, tym większa precyzja.</value>
+  </data>
+  <data name="turnWeight" xml:space="preserve">
+    <value>Turn weight</value>
+  </data>
+  <data name="turnWeightTooltip" xml:space="preserve">
+    <value>Koszt minimalnego skrętu jaki może zrobić pojazd (definiowany przez opcję [{0}]).</value>
   </data>
 </root>

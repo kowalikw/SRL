@@ -121,13 +121,19 @@
     <value>Angle density</value>
   </data>
   <data name="angleDensityTooltip" xml:space="preserve">
-    <value>Divides the 360 degree spectrum into this many angles distinguished by the algorithm. The bigger the value the better the precision.</value>
+    <value>Divides the 360 degree spectrum into this many possible vehicle orientations. The bigger the value the better the precision.</value>
   </data>
   <data name="bidirectional" xml:space="preserve">
     <value>Bidirectional movement</value>
   </data>
   <data name="bidirectionalTooltip" xml:space="preserve">
     <value>Allows the vehicle to move backwards (with the same cost).</value>
+  </data>
+  <data name="moveWeight" xml:space="preserve">
+    <value>Move weight</value>
+  </data>
+  <data name="moveWeightTooltip" xml:space="preserve">
+    <value>Cost of the vehicle move by the distance of [{0}].</value>
   </data>
   <data name="multidirectional" xml:space="preserve">
     <value>Multidirectional movement</value>
@@ -145,6 +151,6 @@
     <value>Turn weight</value>
   </data>
   <data name="turnWeightTooltip" xml:space="preserve">
-    <value />
+    <value>Cost of the minimal turn the vehicle can take (which is defined by [{0}] option).</value>
   </data>
 </root>
