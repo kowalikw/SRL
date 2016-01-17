@@ -34,6 +34,7 @@ namespace SRL.Algorithm
 
             // default values for user options
             int turnEdgeWeight = 10;
+            int moveEdgeWeight = 10;
             double maxDiff = 0.01;
             int angleDensity = 360;
             bool backwards = true;
@@ -53,6 +54,9 @@ namespace SRL.Algorithm
                         break;
                     case "Graph edge weight for turns":
                         turnEdgeWeight = (int)option.Value;
+                        break;
+                    case "Graph edge weight for move":
+                        moveEdgeWeight = (int)option.Value;
                         break;
                     case "Allow reverse":
                         backwards = (bool)option.Value;
@@ -383,10 +387,23 @@ namespace SRL.Algorithm
             Option turnEdgeWeight = new Option(Option.ValueType.Integer)
             {
                 Value = 10,
-                MinValue = 0,
+                MinValue = 1, //TODO ??
                 MaxValue = 100
             };
             turnEdgeWeight.Names.Add(Language.English, "Graph edge weight for turns");
+            turnEdgeWeight.Names.Add(Language.Polish, "Waga krawędzi grafu dla obrotu");
+            turnEdgeWeight.Tooltips.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
+            turnEdgeWeight.Tooltips.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
+            _defaultOptions.Add(turnEdgeWeight);
+
+            // MOVEEDGEWEIGHT
+            Option moveEdgeWeight = new Option(Option.ValueType.Integer)
+            {
+                Value = 10,
+                MinValue = 1, //TODO ??
+                MaxValue = 100
+            };
+            turnEdgeWeight.Names.Add(Language.English, "Graph edge weight for move");
             turnEdgeWeight.Names.Add(Language.Polish, "Waga krawędzi grafu dla obrotu");
             turnEdgeWeight.Tooltips.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
             turnEdgeWeight.Tooltips.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
