@@ -404,11 +404,11 @@ namespace SRL.Algorithm
                 MinValue = 1, //TODO ??
                 MaxValue = 100
             };
-            turnEdgeWeight.Names.Add(Language.English, "Graph edge weight for move");
-            turnEdgeWeight.Names.Add(Language.Polish, "Waga krawędzi grafu dla obrotu");
-            turnEdgeWeight.Tooltips.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
-            turnEdgeWeight.Tooltips.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
-            _defaultOptions.Add(turnEdgeWeight);
+            moveEdgeWeight.Names.Add(Language.English, "Graph edge weight for move");
+            moveEdgeWeight.Names.Add(Language.Polish, "Waga krawędzi grafu dla ruchu");
+            moveEdgeWeight.Tooltips.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
+            moveEdgeWeight.Tooltips.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
+            _defaultOptions.Add(moveEdgeWeight);
 
             // MOVEBACKWARDS
             Option moveBackwards = new Option(Option.ValueType.Boolean)
