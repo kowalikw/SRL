@@ -1,6 +1,6 @@
-\documentclass[12pt, twoside, openany]{report}
+ \documentclass[11pt, twoside, openany]{report}
 \usepackage[dvips]{graphicx,color,rotating}
-\usepackage[cp1250]{inputenc}
+\usepackage[latin2]{inputenc}
 \usepackage{t1enc}
 \usepackage{a4wide}
 \usepackage{amsfonts}
@@ -22,21 +22,23 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \newtheorem{theorem}{Twierdzenie}[section]
 \newtheorem{remark}{Uwaga}[section]
 \newtheorem{definition}{Definicja}[section]
+\newtheorem{subdefinition}{Definicja}[subsection]
 \newtheorem{alg}{Algorytm}[chapter]
 \newtheorem{prz}{Przypadek}[section]
 \newtheorem{np}{Przyk³ad}[section]
+\newtheorem{image}{Obrazek}[section]
+\newtheorem{pseudokod}{Pseudokod}[subsection]
 \newtheorem{lemma}[theorem]{Lemat}
-\linespread{1.5}
+\linespread{1.2}
 \newcommand*{\norm}[1]{\left\Vert{#1}\right\Vert}
 \newcommand*{\abs}[1]{\left\vert{#1}\right\vert}
 \newcommand*{\om}{\omega}
 
-\author{Autor}
-\title{Tytu³ pracy}
+\author{Wojciech Kowalik, Konrad Mi¶kiewicz, Mateusz Pielat}
+\title{Symulacja ruchu robota w labiryncie}
 
 \begin{document}
 
-% Za¿ó³æ gêœl¹ jaŸñ.
 \begin{titlepage}
 \pagestyle{empty}
 
@@ -52,9 +54,9 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \end{table}
 
 % \vfill
-\begin{center}PRACA DYPLOMOWA IN¯YNIERSKA NA KIERUNKU\end{center}
+\begin{center}PRACA DYPLOMOWA IN¯YNIERSKA\end{center}
 \begin{center}INFORMATYKA\end{center}\end{Large}
-% \vfill
+\vfill
 \begin{center}
 \Huge
 \textbf{Symulacja ruchu robota w labiryncie}
@@ -63,19 +65,21 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \vfill
 \begin{center}
 \Large
-Autor:\\
+Autorzy:\\
 \LARGE
-Anna Zdolna
+Wojciech Kowalik \\
+Konrad Mi¶kiewicz \\
+Mateusz Pielat
 \end{center}
 \vfill
 \begin{center}
 \Large
-Promotor: dr in¿. Pawe³ Rza¿ewski
+Promotor: dr Pawe³ Rz±¿ewski
 \end{center}
 \vfill
 \begin{center}
 \large
-Warszawa, luty 2016
+Warszawa, 15.01.2016
 \end{center}
 \newpage
 \hfill
@@ -97,65 +101,1044 @@ podpis promotora & \hspace*{100pt} & podpis autora
 \hyphenation{Syl-ves-tra}
 \hyphenation{Syl-ves-ter-a}
 
+\tableofcontents
+
 \begin{abstract}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+\addcontentsline{toc}{chapter}{Streszczenie}
+Niniejsza praca dyplomowa opisuje proces tworzenia aplikacji umo¿liwiaj±cej przeprowadzenie symulacji ruchu robota w labiryncie. Aplikacja zosta³a wyposa¿ona w trzy podstawowe modu³y: rêczny edytor map i pojazdów, traser plików graficznych oraz modu³ symulacji. Program dzia³a poprawnie pod kontrol± systemów operacyjnych z rodziny Windows z zainstalowan± platform± .NET Framework 4.6+.
+
+~\\W pierwszym rozdziale szczegó³owo opisano wszystkie wymagania funkcjonalne dla ka¿dego z modu³ów. Najwa¿niejsz± funkcjonalno¶ci± dla rêcznych edytorów jest mo¿liwo¶æ stworzenia pojazdu i mapy oraz zapisania ich do pliku SVG. Traser plików graficznych umo¿liwia wczytanie pliku graficznego w jednym z dozwolonych formatów, a nastêpnie stworzenie z niego pojazdu lub mapy. Modu³ symulacji pozwala na wczytanie mapy oraz pojazdu, wyznaczenie punktu startowego i koñcowego oraz obliczenie ¶cie¿ki pomiêdzy tymi punktami i wizualizacjê ruchu pojazdu (je¶li ¶cie¿ka istnieje). Dodatkowo mo¿liwa jest zmiana rozmiaru pojazdu oraz jego pocz±tkowego obrotu.
+
+~\\Kolejne trzy rozdzia³y zosta³y po¶wiêcone u¿ytym technologiom, architekturze systemu oraz zastosowanym w aplikacji algorytmom. Opisano miêdzy innymi w jaki sposób stworzyæ i osadziæ kontrolkê opart± na silniku graficznym MonoGame w aplikacji zbudowanej w technologii WPF (Windows Presentation Foundation), a tak¿e jakie ograniczenia wynikaj± z takiego po³±czenia. Szczegó³owo opisano równie¿ sposób w jaki obliczana jest ¶cie¿ka od punktu startowego do punktu koñcowego, oraz jakie parametry wp³ywaj± na wynik obliczeñ.
+
+~\\W rozdziale pi±tym dokonana zosta³a analiza porównawcza obejmuj±ca zarówno wydajno¶æ, jak i jako¶æ tworzonej ¶cie¿ki ze wzglêdu na dobór parametrów przez u¿ytkownika oraz z³o¿ono¶æ mapy testowej i pojazdu.
+
+~\\Rozdzia³ szósty zawiera szczegó³ow± instrukcjê u¿ytkownika. Krok po kroku opisane zosta³y czynno¶ci prowadz±ce do przygotowania symulacji.
+
+~\\Podsumowaniem pracy jest krótki raport z przeprowadzonych testów oraz opis modelu wytwórczego i przebiegu pisania pracy.
 \end{abstract}
 
 %-----------Pocz¹tek czêœci zasadniczej-----------
 
-\chapter{Wstêp}
-\section{Czêœæ}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\chapter{Analiza wymagañ}
 
-\subsection{Podczêœæ}
-\begin{definition}[Definicja czegokolwiek]
-  Cokolwiek jest czymkolwiek.
-\end{definition}
+Celem niniejszej pracy dyplomowej by³o zbudowanie aplikacji umo¿liwiaj±cej przygotowanie i przeprowadzenie symulacji ruchu pojazdu w labiryncie. Aplikacja zosta³a podzielona na trzy podstawowe modu³y. Poni¿ej szczegó³owo opisane zosta³y wymagania funkcjonalne dla ka¿dego z modu³ów oraz wymagania niefunkcjonalne dotycz±ce ca³ej aplikacji.
 
-\begin{remark}
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-\end{remark}
+\section{S³ownik pojêæ}
 
-\begin{theorem}[Pietii Gorasa]
-	$a^2+b^2=c^2$
-\end{theorem}
+\begin{description}
+	\item[Algorytm] - algorytm wyszukiwania ¶cie¿ki prowadz±cej od \textit{punktu startowego} do \textit{punktu koñcowego} dla danej \textit{mapy} i \textit{pojazdu}.
+	\item[Mapa] - zbiór wielok±tów reprezentuj±cych \textit{przeszkody}, których powinien unikaæ \textit{pojazd}.
+	\item[O¶ obrotu pojazdu] - punkt znajduj±cy siê wewn±trz wielok±ta reprezentuj±cego \textit{pojazd}, do którego sprowadzany bêdzie \textit{pojazd} podczas dzia³ania \textit{algorytmu}.
+	\item[Platforma .NET Framework] - platforma programistyczna opracowana przez Microsoft, obejmuj±ca ¶rodowisko uruchomieniowe oraz biblioteki klas dostarczaj±ce standardowej funkcjonalno¶ci dla aplikacji.
+	\item[Plik graficzny] - zdjêcie/bitmapa w jednym z dozwolonych formatów.
+	\item[Pojazd] - dowolny wielok±t z wyznaczon± \textit{osi± obrotu} oraz wskazanym kierunkiem ruchu.
+	\item[Przeszkoda] - dowolny wielok±t wchodz±cy w sk³ad wielok±tów tworz±cych \textit{mapê}.
+	\item[Punkt koñcowy] - wyznaczany przez \textit{u¿ytkownika} punkt na \textit{mapie}, do którego bêdzie wyznaczana ¶cie¿ka, któr± powinien przebyæ \textit{pojazd}.
+	\item[Punkt startowy] - wyznaczany przez \textit{u¿ytkownika} punkt na \textit{mapie}, z którego wyruszy \textit{pojazd}.
+  	\item[System] - wszystkie modu³y aplikacji po³±czone w ca³o¶æ.
+  	\item[Trasa] - wyznaczona przez \textit{algorytm} ¶cie¿ka pomiêdzy \textit{punktem pocz±tkowym} i \textit{punktem koñcowym}, któr± powinien przebyæ \textit{pojazd}.
+  	\item[Traser plików graficznych] - jeden z modu³ów systemu umo¿liwiaj±cy \textit{trasowanie} \textit{plików graficznych}, a nastêpnie przekszta³cenie ich w \textit{pojazd} lub \textit{mapê}.
+  	\item[Trasowanie] - proces polegaj±cy na przekszta³ceniu grafiki w postaci rastrowej do postaci wektorowej.
+  	\item[U¿ytkownik] - osoba korzystaj±ca z aplikacji.
+	\item[Wizualizacja] - animacja poruszaj±cego siê \textit{pojazdu} po \textit{trasie} wyznaczonej przez \textit{algorytm}.
+	\item[Wzorzec MVVM] - wzorzec architektoniczny wykorzystywany do rozdzielania warstwy prezentacji, logiki oraz warstwy danych 
+	\item[XML] - uniwersalny jêzyk znaczników przeznaczony do reprezentowania ró¿nych danych w strukturalizowany sposób.
+\end{description}
 
-\begin{proof}
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-\end{proof}
+\section{Wymagania funkcjonalne edytora map i pojazdów}
 
-\begin{lemma}[Dy]
-	Dy-lemat
-\end{lemma}
+G³ównym zadaniem edytora map i pojazdów jest umo¿liwienie u¿ytkownikowi stworzenia i zapisania do pliku odpowiednio mapy lub pojazdu. Mapa mo¿e sk³adaæ siê z dowolnej liczby wielok±tów, natomiast pojazd jest reprezentowany jako jeden wielok±t z wyznaczon± osi± obrotu i kierunkiem jazdy. W celu stworzenia pojazdu/mapy modu³ umo¿liwia:
+\begin{itemize}
+  	\item rysowanie wielok±tów reprezentuj±cych pojazdy lub przeszkody omijane przez pojazd.
+  	\item zapis narysowanych pojazdów/map do plików SVG
+  	\item wczytywanie uprzednio zapisanych pojazdów/map
+  	\item wyznaczenie osi obrotu oraz kierunku jazdy pojazdu
+  	\item cofniêcie ostatnio wykonanej akcji (np. usuniêcie ostatniej dodanej krawêdzi)
+  	\item wyczyszczenia obszaru edytora i rozpoczêcia tworzenia pojazdu/mapy od pocz±tku
+\end{itemize}
+~\\Dodatkowo modu³ zosta³ wyposa¿ony w mechanizm zapobiegaj±cy przecinaniu siê krawêdzi tego samego wielok±ta. Je¶li u¿ytkownik chcia³by narysowaæ krawêd¼ przecinaj±c± inn± krawêd¼ obecnie rysowanego wielok±ta, nie bêdzie to mo¿liwe. Dopuszczone s± jedynie sytuacje, w których przecinaj± siê krawêdzie ró¿nych wielok±tów.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+\section{Wymagania funkcjonalne trasera plików graficznych}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+G³ównym zadaniem trasera plików graficznych jest przekszta³cenie pliku graficznego w postaci rastrowej do postaci wektorowej, a nastêpnie umo¿liwienie stworzenia pojazdu lub mapy z wielok±tów powsta³ych w wyniku trasowania. W celu realizacji tego zadania modu³ umo¿liwia:
+\begin{itemize}
+	\item wczytanie pliku graficznego w jednym z dozwolonych formatów
+	\item trasowanie wczytanego pliku graficznego
+	\item wybór jednego wielok±ta w celu utworzenia pojazdu
+	\item wybór wielu wielok±tów w celu utworzenia mapy
+	\item dobór parametrów trasowania [patrz 6.2]
+\end{itemize}
+~\\Modu³ umo¿liwia stworzenie pojazdu w przypadku, gdy wybrany zosta³ tylko jeden wielok±t. W przeciwnym wypadku mo¿liwe jest utworzenie mapy. Dopuszczona jest sytuacja, w której nie zosta³ wybrany ¿aden wielok±t (mapa mo¿e byæ pusta). Dodatkowo po zatwierdzeniu wielok±ta jako pojazdu konieczne jest wyznaczenie jego osi obrotu i kierunku ruchu. Po wybraniu kilku wielok±tów i utworzeniu z nich mapy, u¿ytkownik ma mo¿liwo¶æ rêcznego dodania nowych wielok±tów.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+~\\Dozwolone formaty dla plików graficznych:
+\begin{itemize}
+	\item PNG
+	\item BMP
+	\item JPG, JPEG
+	\item GIF - w przypadku tego formatu poprawne dzia³anie nie jest gwarantowane dla plików bêd±cych animacj±
+\end{itemize}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\section{Wymagania funkcjonalne modu³u symulacji}
 
-%-----------Koniec czêœci zasadniczej-----------
+G³ównym zadaniem modu³u symulacji jest obliczenie ¶cie¿ki oraz wizualizacja ruchu pojazdu od punktu pocz±tkowego do punktu koñcowego. W celu realizacji tego zadania modu³ umo¿liwia:
+\begin{itemize}
+	\item wczytanie uprzednio stworzonej i zapisanej mapy
+	\item wczytanie uprzednio stworzonego i zapisanego pojazdu
+	\item wybór punktu pocz±tkowego
+	\item dopasowanie rozmiaru oraz obrotu pocz±tkowego pojazdu
+	\item wybór punktu koñcowego
+	\item dobór parametrów dla algorytmu [patrz 4.3]
+	\item obliczenie ¶cie¿ki za pomoc± algorytmu [patrz 4.3]
+	\item wczytanie uprzednio zapisanej symulacji
+	\item zapisanie gotowej symulacji
+	\item rozpoczêcie tworzenia symulacji od pocz±tku
+\end{itemize}
+Jako wynik obliczeñ algorytmu, modu³ zwraca listê rozkazów [patrz x.x] na podstawie której tworzona jest animacja ruchu pojazdu po mapie. Pojedynczy rozkaz zawiera nastêpuj±ce informacje:
+\begin{itemize}
+	\item punkt docelowy, do którego powinien przemie¶ciæ siê pojazd,
+	\item bezwzglêdn± warto¶æ k±ta o jaki powinien byæ obrócony pojazd, przed rozpoczêciem ruchu w kierunku punktu docelowego.
+\end{itemize}
+Ponadto warto¶æ k±ta mo¿e byæ ujemna lub dodatnia, co umo¿liwi wykonywanie obrotów zgodnie z ruchem wskazówek zegara lub przeciwnie do ruchu wskazówek zegara. Zosta³o to dok³adniej opisane w dalszej czê¶ci dokumentu. [patrz x.x]
+
+~\\Po przygotowaniu symulacji i obliczeniu ¶cie¿ki, u¿ytkownik ma mo¿liwo¶æ rozpoczêcia odtwarzania, wstrzymywania lub ca³kowitego zatrzymania animacji. Dodatkowo ma on do dyspozycji suwak, dziêki któremu mo¿e rêcznie przegl±daæ animacjê lub rozpocz±æ jej odtwarzanie od wybranego miejsca.
+
+\section{Wymagania niefunkcjonalne}
+
+Poza wymienionymi powy¿ej wymaganiami funkcjonalnymi dla poszczególnych modu³ów, ca³a aplikacja spe³nia wymienione poni¿ej wymagania niefunkcjonalne.
+\begin{itemize}
+	\item Aplikacja poprawnie dzia³a na systemach operacyjnych z rodziny Windows z zainstalowan± platform± .NET Framework 4.6+.
+	\item System informuje u¿ytkownika, gdy wyznaczenie ¶cie¿ki od punktu startowego do punktu koñcowego nie jest mo¿liwe.
+	\item Rysowanie wielok±tów odbywa siê poprzez dodawanie kolejnych punktów w obszarze edytora.
+	\item Podczas rysowania wielok±tów ich krawêdzie nie mog± siê przecinaæ.
+	\item System umo¿liwia ³atwe przet³umaczenie interfejsu na ró¿ne jêzyki - posiada wbudowany jêzyk polski i angielski 
+\end{itemize}
+
+\chapter{Technologie}
+
+W tym rozdziale przedstawione zosta³y technologie, które wybrano w celu realizacji wymagañ opisanych w rozdziale 1. 
+
+~\\G³ówn± technologi± wykorzystan± podczas pisania pracy dyplomowej jest technologia Windows Presentation Foundation (WPF) wchodz±ca w sk³ad platformy .NET Framework. API w WPF opiera siê na jêzyku XML, dok³adniej na jego implementacji o nazwie XAML [patrz 2.1]. O wyborze tej technologii zdecydowa³a prostota tworzenia interfejsu u¿ytkownika oraz fakt, i¿ WPF ¶wietnie sprawdza siê podczas implementacji wzorca MVVM [patrz 3.x]. Aby interfejs aplikacji by³ jak najbardziej przyjazny dla u¿ytkownika zastosowano bibliotekê ModernUI, która od¶wie¿a wygl±d podstawowych kontrolek oraz sprawia, i¿ aplikacja swoim wygl±dem przypomina aplikacje przeznaczone dla systemu Windows 8 lub Windows 10. Ponadto przy implementacji wzorca MVVM wykorzystano bibliotekê MVVM Light [patrz 2.2].
+
+~\\Podczas implementacji modu³u rêcznych edytorów map i pojazdów oraz modu³u symulacji zastosowano silnik graficzny MonoGame [patrz 2.3]. Przy implementacji modu³u trasowania plików graficznych wykorzystano za¶ bibliotekê D3DPotrace [patrz 2.5]. Dodatkowo stworzone przez u¿ytkownika pojazdy, mapy oraz symulacje mog± byæ zapisywane do plików SVG [patrz 2.4], które nastêpnie mo¿na podejrzeæ bezpo¶rednio za pomoc± przegl±darki internetowej, wspieraj±cej format SVG. 
+
+~\\Ze wzglêdu na to, i¿ algorytm wyszukiwania ¶cie¿ki [patrz 4.3] na mapie opiera siê na tworzeniu i przeszukiwaniu grafów, konieczne by³o skorzystanie z biblioteki, która udostêpnia wymienione operacje. Wybrana zosta³a biblioteka Graph autorstwa dr. Jana Bródki.
+
+\section{XAML}
+
+XAML jest jêzykiem u¿ywanym do opisu interfejsu u¿ytkownika opartym na jêzyku XML. Jest on elementem platformy .NET Framework pocz±wszy od wersji 3.0. Jêzyk XAML umo¿liwia rozdzielenie definicji interfejsu u¿ytkownika od kodu logiki, który czêsto znajduje siê w osobnych plikach. Takie podej¶cie nazywamy podej¶ciem code-behind. Poza rozdzia³em interfejsu u¿ytkownika od kodu logiki jêzyk XAML umo¿liwia tak¿e prost± implementacjê wzorca MVVM [patrz 3.x]. 
+\begin{np}
+Przypisanie metody do zdarzenia klikniêcia przycisku w podej¶ciu code-behind
+\begin{verbatim}
+<Button Background="Blue" Content="Hello World" Click="Button_Click"/>
+\end{verbatim}
+\end{np}
+~\\W przypadku pracy z MVVM zawarto¶æ kontrolek czy wywo³ywane zdarzenia mo¿emy wi±zaæ z w³a¶ciwo¶ciami lub metodami zaimplementowanymi w odrêbnej klasie, nazywanej klas± view-modelu. Klasa ta zawiera komendy, do których wi±zane s± akcje z interfejsu u¿ytkownika oraz publiczne w³a¶ciwo¶ci do których mo¿emy podpi±æ ró¿ne elementy interfejsu [patrz 3.x]. Aby by³o to mo¿liwe, jako ¼ród³o danych w pliku XAML nale¿y podaæ odpowiedni± klasê view-modelu.
+\begin{np}
+Zmiana ¼ród³a danych
+\begin{verbatim}
+<DataContext="{Binding User, Source={StaticResource Locator}}">
+\end{verbatim}
+\end{np}
+~\\Dodanie powy¿szej linijki oznacza, ¿e od tej pory wszystkie dane pochodziæ bêd± z view-modelu o nazwie \textit{User}. Nazwa ta zosta³a zdefiniowana w klasie \textit{Locator}, która przechowuje nazwy wszystkich view-modeli.
+\begin{np}
+Definicja nazwy view-modelu w klasie \textit{Locator}
+\begin{verbatim}
+public UserViewModel User
+{
+    get 
+    { 
+        return ServiceLocator.Current.GetInstance<UserViewModel>(); 
+    }
+}
+\end{verbatim}
+\end{np} 
+~\\Dziêki zmianie ¼ród³a danych, odwo³ywanie siê do w³a¶ciwo¶ci czy metod z klasy \textit{UserViewModel} staje siê bardzo proste i mo¿e ono wygl±daæ jak na poni¿szym przyk³adzie. 
+\begin{np}
+Odwo³ywanie siê do w³a¶ciwo¶ci i metod z view-modelu
+\begin{verbatim}
+<TextBox Text="{Binding Name}"/>
+<Button Command="{Binding EditProfileCommand}"/>
+\end{verbatim}
+\end{np}
+
+\section{MVVM Light}
+
+MVVM Light to biblioteka, której g³ównym zadaniem jest zapewnienie wsparcia dla wzorca MVVM. Dziêki zastosowaniu tej biblioteki uzyskujemy dostêp do kilku istotnych z punktu widzenia naszej pracy elementów, takich jak:
+\begin{itemize}
+	\item \textit{RelayCommand} - lokalna implementacja interfejsu \textit{ICommand}. Mo¿emy w ten sposób tworzyæ ró¿ne akcje, które pó¼niej zostan± podpiête do widoku [patrz 3.x]
+	\item \textit{ViewModelBase} - bazowa klasa dla wszystkich view-modeli [patrz 3.x]
+\end{itemize}
+Dostêp do w³a¶ciwo¶ci i metod z view-modeli mo¿na uzyskaæ w identyczny sposób jak w przyk³adzie 2.1.4.
+
+\section{MonoGame}
+
+MonoGame jest silnikiem graficznym bêd±cym kontynuacj± projektu XNA stworzonego przez firmê Microsoft. Obecnie kod ¼ród³owy MonoGame jest otwarty, dziêki czemu technologia ta wci±¿ zyskuje nowych zwolenników. MonoGame pozwala na tworzenie projektów dzia³aj±cych na wiêkszo¶ci popularnych systemów operacyjnych, jak na przyk³ad Windows, Android czy iOS.
+
+~\\Podczas pisania niniejszej pracy dyplomowej, silnik MonoGame zosta³ wykorzystany przy tworzeniu modu³u rêcznych edytorów map i pojazdów oraz modu³u symulacji. W tym celu zosta³a przygotowana specjalna kontrolka hostuj±ca [patrz x.x], pozwalaj±ca na osadzenie MonoGame wewn±trz WPF. Okaza³o siê jednak, ¿e poprzez takie dzia³anie, czê¶æ z dostêpnych w MonoGame funkcjonalno¶ci nie mog³a zostaæ wykorzystana w projekcie. G³ównym problemem natury estetycznej, okaza³ siê brak mo¿liwo¶ci w³±czenia antyaliasingu dla rysowanych obiektów. Z tego powodu konieczna by³a rêczna implementacja odpowiedniego algorytmu odpowiedzialnego za rysowanie linii z antyaliasingiem [patrz 5.1]. 
+
+\section{SVG}
+
+SVG jest uniwersalnym formatem dwuwymiarowej grafiki wektorowej. Pozwala na tworzenie grafiki statycznej lub animowanej. Format SVG powsta³ z my¶l± o zastosowaniu g³ównie na stronach WWW, jednak obecnie jego zastosowanie jest znacznie szersze. Do popularyzacji formatu SVG przyczyni³a siê jego niezale¿no¶æ od platformy systemowej oraz prostota. SVG nale¿y do rodziny jêzyka XML. Poni¿ej zaprezentowano przyk³adowy kod pliku SVG oraz efekt jego dzia³ania.
+\begin{np}
+Przyk³adowy plik SVG
+\begin{verbatim}
+<svg height="210" width="500">
+  <polygon points="200,10 250,190 160,210" 
+           style="fill:lime; stroke:purple; stroke-width:1" />
+</svg>
+\end{verbatim}
+\end{np}
+~\begin{center}
+	\includegraphics[scale=1.0]{SvgExample}\\
+	\textit{\textbf{Obrazek 2.4.1}. Przyk³adowy plik SVG}
+\end{center}
+W opisywanej pracy format SVG zosta³ wykorzystany do zapisywania stworzonych map, pojazdów i symulacji [patrz x.x]. Dziêki takiemu rozwi±zaniu, u¿ytkownik ma mo¿liwo¶æ ich podgl±du bez konieczno¶ci uruchamiania aplikacji, bezpo¶rednio w przegl±darce internetowej. Mapy i pojazdy zapisywane s± jako statyczne pliki SVG, natomiast symulacje s± zapisywane jako prosta animacja.
+
+\section{D3DPotrace}
+
+D3DPotrace to biblioteka bêd±ca portem biblioteki Potrace przeznaczonym dla platformy .NET Framework. Jest to jedna z dwóch (obok AutoTrace) popularnych bibliotek do trasowania obrazków rastrowych o otwartym kodzie. 
+
+~\\Biblioteka D3DPotrace zosta³a wykorzystana przy tworzeniu modu³u trasowania plików graficznych [patrz 3.x]. Jest ona opakowana specjalnie do tego przygotowan± klas± \textit{BitmapTracer} [patrz x.x], która upublicznia metodê s³u¿±c± do trasowania pliku graficznego. Metoda ta przyjmuje kilka parametrów, pozwalaj±cych na dostosowanie trasowania do konkretnego pliku graficznego [patrz x.x].
+
+\chapter{Dokumentacja techniczna}
+
+W tym rozdziale opisano architekturê systemu oraz modele wykorzystane podczas jego implementacji. Przedstawiono równie¿ sposób na osadzenie silnika MonoGame wewn±trz interfejsu WPF.
+
+\section{Architektura systemu}
+
+\subsection{MVVM}
+
+Architektura systemu zosta³a oparta o wzorzec \textit{Model-View-ViewModel (MVVM)} zaprojektowany dla platformy WPF. Polega on na rozdziale warstwy prezentacji (view), logiki biznesowej (model) oraz logiki prezentacji (view-model) umo¿liwiaj±cej ³atwe przetwarzanie modelu przez widok. Istotnym elementem technologii pozwalaj±cej wprowadziæ ten wzorzec jest tzw. \textit{Binder}, który opisuje jak dane zawarte w danym momencie w view-modelu bêd± wy¶wietlone w widoku, lub te¿ jak wprowadzanie danych przez u¿ytkownika w interfejsie graficznym wp³ywa na dane w view-modelu.
+
+~\\Kontrolki MonoGame jako mechanizm spoza technologii WPF spowodowa³y jednak, ¿e konieczne by³y pewne kompromisy w implementacji wzorca. W przeciwieñstwie do reszty logiki prezentacji napisanej w kodzie XAML, renderowanie zawarto¶ci tych kontrolek odbywa siê z pominiêciem Bindera w tzw. \textit{code-behind} (czyli w jêzyku nie-znacznikowym jakim jest C\#). Mimo wszystko zachowane zosta³y najwa¿niejsze postulaty wzorca i logika poszczególnych warstw pozosta³a maksymalnie odseparowana, a warstwa biznesowa nigdy nie odwo³uje siê do ¿adnych mechanizmów zwi±zanych z prezentacj± danych. 
+
+\subsection{Service Locator}
+
+W aplikacji wykorzystano równie¿ wzorzec Service Locator bêd±cy szczególn± wersj± paradygmatu \textit{Odwrócenie Sterowania} (Inversion of Control, IoC). Polega on na stworzeniu obiektu zarz±dzaj±cego i udostêpniaj±cego zarejestrowane wcze¶niej us³ugi, co pozwala na rozdzielenie klas od ich zale¿no¶ci.
+
+~\\Zastosowanie wzorca Service Locator (zamiast np. klasycznego \textit{Dependancy Injection}) podyktowane by³o charakterystyk± aplikacji, w której w du¿ym stopniu mamy do czynienia z pojedynczymi obiektami klas istniej±cymi przez ca³y cykl dzia³ania aplikacji (np. view-modele).
+
+\subsection{Mediator}
+
+Kolejnym u¿ytym wzorcem podczas pisania pracy dyplomowej jest wzorzec \textit{Mediator}. U³atwia on komunikacjê poprzez wprowadzenie po¶rednika dystrybuuj±cego wiadomo¶ci wysy³ane i odbierane przez obiekty ró¿nych klas. Komunikacja jest w ten sposób prowadzona niebezpo¶rednio, co zwiêksza poziom separacji zale¿no¶ci w programie i pozwala na obs³ugê interakcji miêdzy-obiektowej w sposób niezale¿ny.
+
+~\\Mediator to popularny sposób na omijanie pewnych ograniczeñ MVVM, jednak u¿ycie tego wzorca w systemie zosta³o sprowadzone do minimum.
+
+\section{Po³±czenie MonoGame i WPF}
+
+Technologia WPF domy¶lnie nie umo¿liwia osadzenia zewnêtrznego silnika graficznego, wiêc aby móc skorzystaæ z MonoGame w tym ¶rodowisku, konieczne by³o napisanie odpowiedniej kontrolki. Zosta³a ona zaimplementowana jako osobna biblioteka DLL, aby mo¿liwe by³o jej ewentualne wykorzystanie w innych projektach. Schemat kontrolki przedstawiono na diagramie poni¿ej.
+
+~\begin{center}
+	\includegraphics[scale=0.88]{MonoGameControl}\\
+	\textit{\textbf{Diagram x.x}. Klasa MonoGameControl}
+\end{center}
+
+~\\Kontrolka umo¿liwiaj±ca osadzenie MonoGame w WPF zosta³a zaimplementowana jako klasa abstrakcyjna \textit{MonoGameControl}, dziedzicz±ca po klasie \textit{Image}, która wchodzi w sk³ad technologii WPF. Aby mo¿liwe by³o jej u¿ycie, nale¿y dodatkowo utworzyæ w³asn± klasê dziedzicz±c± po \textit{MonoGameControl}, która implementuje nastêpuj±ce metody:
+\begin{itemize}
+	\item \textbf{Initialize()} - metoda wywo³ywana przy tworzeniu kontrolki,
+	\item \textbf{Uninitialize()} - metoda wywo³ywana przy destrukcji kontrolki,
+	\item \textbf{Render(TimeSpan time)} - wywo³ywana cyklicznie metoda, odpowiadaj±ca za renderowanie obrazu wy¶wietlanego w kontrolce.
+\end{itemize}
+
+\begin{np}
+Implementacja w³asnej kontrolki MonoGame
+\begin{verbatim}
+public class MyOwnControl : MonoGameControl
+{
+    private SpriteBatch spriteBatch;
+    
+    protected override void Initialize()
+    {
+        spriteBatch = new SpriteBatch(GraphicsDevice);
+    }
+
+    protected override void Unitialize()
+    {
+        spriteBatch.Dispose();
+    }
+
+    protected override void Render(TimeSpan time)
+    {
+        GraphicsDevice.Clear(Color.LightSkyBlue);
+        GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+        spriteBatch.BeginDraw();
+
+        // DRAW
+
+        spriteBatch.End();
+    }
+}
+\end{verbatim}
+\end{np}
+
+~\\Po zaimplementowaniu w³asnej klasy dziedzicz±cej po \textit{MonoGameControl}, kontrolka jest gotowa do u¿ycia. Poni¿ej przedstawiono fragment kodu w jêzyku XAML, który umo¿liwia osadzenie kontrolki w interfejsie aplikacji.
+
+\begin{np}
+Osadzenie kontrolki w pliku XAML
+\begin{verbatim}
+<local:MyOwnControl SnapsToDevicePixels="True"/>
+\end{verbatim}
+\end{np}
+
+~\\Zasada dzia³ania napisanej kontrolki jest do¶æ prosta - ³±czy ona w sobie pola bêd±ce czê¶ci± technologii WPF (typy \textit{D3DImage}, \textit{Stopwatch}) z polami, które wchodz± w sk³ad silnika MonoGame ( typy \textit{GraphicsDevice}, \textit{RenderTarget2D}). W momencie jej tworzenia wywo³ywana jest metoda \textit{OnLoaded}. Wewn±trz tej metody nastêpuje wykonanie nastêpuj±cych operacji:
+\begin{itemize}
+	\item inicjalizacja pola \textit{GraphicsDevice}
+	\item inicjalizacja pola \textit{d3DImage}
+	\item inicjalizacja pola \textit{renderTarget} - jako jeden z parametrów przekazywane jest pole \textit{GraphicsDevice}
+	\item inicjalizacja pola \textit{timer} i rozpoczêcie odliczania
+	\item ustawienie tylnego bufora dla obiektu \textit{d3DImage} na obiekt \textit{renderTarget}
+	\item wykonanie zaimplementowanej przez u¿ytkownika metody \textit{Initialize()}
+	\item przypisanie metody \textit{OnRendering()} do zdarzenia \textit{Render} dla obiektu \textit{CompositionTarget}. Obiekt ten jest dostêpny wewn±trz klasy \textit{MonoGameControl}, poniewa¿ dziedziczy ona po klasie \textit{Image}. Metoda \textit{OnRendering()} zawiera ustawienie pola \textit{RenderTarget} dla obiektu \textit{GraphicsDevice} na obiekt \textit{renderTarget} oraz wywo³anie zaimplementowanej przez u¿ytkownika metody \textit{Render(TimeSpan)}, do której jako TimeSpan przekazywana jest warto¶æ z pola \textit{timer.Elapsed}. 
+	\item ustawienie jako ¼ród³a (\textit{Source}) obrazu obiektu \textit{d3DImage}.
+\end{itemize}
+
+~\\Po wykonaniu powy¿szych operacji, kontrolka rozpoczyna wy¶wietlanie obrazu wygenerowanego przez silnik graficzny MonoGame. Przy koñczeniu pracy kontrolki wywo³ywana jest Metoda \textit{OnUnloaded}, w której nastêpuje usuniêcie obiektów utworzonych w metodzie \textit{OnLoaded} w kolejno¶ci odwrotnej do ich utworzenia. Wykonywana jest równie¿ metoda \textit{Uninitialize()}.
+
+\section{Modele}
+
+Podczas pisania aplikacji zosta³y utworzone nastêpuj±ce modele danych i interfejsy:
+\begin{itemize}
+	\item \textbf{interfejs \textit{IAlgorithm}} - interfejs, który musi implementowaæ klasa realizuj±ca funkcjonalno¶ci algorytmu wyznaczania ¶cie¿ki. Interfejs ten zawiera trzy nag³ówki metod:
+	\begin{itemize}
+		\item \textit{GetPath(...)} - nag³ówek metody wyznaczaj±cej ¶cie¿kê od punktu startowego do punktu koñcowego, dla danej mapy i pojazdu. Metoda zwraca listê obiektów typu \textit{Order}.
+		\item \textit{GetOptions()} - nag³ówek metody zwracaj±cej parametry dzia³ania algorytmu wyznaczania ¶cie¿ki. Metoda zwraca listê obiektów typu \textit{Option}.
+		\item \textit{SetOptions(...)} - nag³ówek metody umo¿liwiaj±cej ustawienie parametrów dzia³ania algorytmu wyznaczania ¶cie¿ki. Jako parametr metoda przyjmuje listê obiektów typu \textit{Option}.
+	\end{itemize}
+	\item \textbf{SvgSerializable} - klasa abstrakcyjna implementuj±ca interfejs \textit{IXmlSerializable}. Ka¿dy obiekt, który mo¿e byæ zapisany do pliku SVG dziedziczy po tej klasie. Zawiera ona nastêpuj±ce metody:
+	\begin{itemize}
+		\item \textit{Serialize<T>(...)} - metoda uogólniona umo¿liwiaj±ca serializacjê obiektu typu \textit{T}.
+		\item \textit{Deserialize<T>(...)} - metoda uogólniona umo¿liwiaj±ca deserializacjê pliku na obiekt typu \textit{T}.
+		\item \textit{CanDeserialize<T>(...)} - metoda uogólniona umo¿liwiaj±ca sprawdzenie poprawno¶ci pliku, podanego jako plik przeznaczony do deserializacji na obiekt typu \textit{T}. 
+	\end{itemize}
+	\item \textbf{Frame} - klasa reprezentuj±ca pojedyncz± klatkê animacji ruchu pojazdu po wyznaczonej trasie. Klasa \textit{Frame} zawiera nastêpuj±ce pola:
+	\begin{itemize}
+		\item \textit{Rotation} - pole typu \textit{double}, przechowuje informacjê o bezwzglêdnym obrocie pojazdu.
+		\item \textit{Position} - pole typu \textit{Point}, przechowuje informacje o aktualnej pozycji pojazdu.
+	\end{itemize}
+	\item \textbf{Map} - klasa reprezentuj±ca mapê. Klasa \textit{Map} dziedziczy po klasie \textit{SvgSerializable} oraz implementuje interfejs \textit{IEquatable}. Jedynym jej polem jest lista wielok±tów wchodz±cych w sk³ad mapy - \textit{Obstacles.}
+	\item \textbf{Option} - klasa reprezentuj±ca pojedynczy parametr algorytmu. Dziêki przekazywaniu do algorytmu parametrów za pomoc± listy obiektów typu \textit{Option} mo¿liwe jest ³atwe modyfikowanie liczby przekazywanych parametrów, oraz przekazywanie tylko tych parametrów, które faktycznie maj± zostaæ zmienione (pozosta³e parametry bêd± mieæ warto¶ci domy¶lne). Klasa \textit{Option} zawiera nastêpuj±ce pola:
+	\begin{itemize}
+		\item \textit{Type} - pole okre¶laj±ce typ przekazywanego parametru. Przyjmuje jedn± z trzech warto¶ci: \textit{Integer}, \textit{Double}, \textit{Boolean}.
+		\item \textit{Value} - pole okre¶laj±ce warto¶æ przekazywanego parametru.
+		\item \textit{MinValue} - pole okre¶laj±ce minimaln± warto¶æ przekazywanego parametru. Pole to mo¿e przyjmowaæ warto¶æ \textit{NULL}.
+		\item \textit{MaxValue} - pole okre¶laj±ce maksymaln± warto¶æ przekazywanego parametru. Pole to mo¿e przyjmowaæ warto¶æ \textit{NULL}.
+	\end{itemize}
+	\item \textbf{Order} - klasa reprezentuj±ca pojedynczy rozkaz wygenerowanej symulacji. Klasa \textit{Order} dziedziczy po klasie \textit{SvgSerializable}. Zawiera ona nastêpuj±ce pola:
+	\begin{itemize}
+		\item \textit{Rotation} - pole typu \textit{double}, okre¶la do jakiego k±ta powinien zostaæ obrócony pojazd przed przemieszczeniem do punktu \textit{Destination}. Dodatkowo k±t ujemny oznacza, ¿e obrót powinien zostaæ wykonany zgodnie z ruchem wskazówek zegara, natomiast k±t nieujemny determinuje obrót przeciwny do ruchu wskazówek zegara.
+		\item \textit{Destination} - pole typu \textit{Point}, okre¶la do jakiego po³o¿enia powinien przemie¶ciæ siê pojazd.
+	\end{itemize}
+	\item \textbf{Polygon} - klasa reprezentuj±ca wielok±t. Klasa \textit{Polygon} dziedziczy po klasie \textit{SvgSerializable} oraz implementuje interfejs \textit{IEquatable}. Jedynym jej polem jest lista punktów tworz±cych wielok±t - \textit{Vertices.}
+	\item \textbf{Simulation} - klasa reprezentuj±ca symulacjê. Klasa \textit{Polygon} dziedziczy po klasie \textit{SvgSerializable} oraz implementuje interfejs \textit{IEquatable}. Zawiera ona nastêpuj±ce pola:
+	\begin{itemize}
+		\item \textit{Map} - obiekt typu \textit{Map}, w którym przechowywana jest mapa.
+		\item \textit{Vehicle} - obiekt typu \textit{Vehicle}, w którym przechowywany jest pojazd.
+		\item \textit{VehicleSize} - pole typu \textit{double}, okre¶la rozmiar pojazdu.
+		\item \textit{InitialVehicleRotation} - pole typu \textit{double}, okre¶la pocz±tkowy obrót pojazdu.
+		\item \textit{StartPoint} - obiekt typu \textit{Point}, okre¶la punkt startowy dla algorytmu wyznaczania ¶cie¿ki.
+		\item \textit{EndPoint} - obiekt typu \textit{Point},okre¶la punkt koñcowy dla algorytmu wyznaczania ¶cie¿ki.
+		\item \textit{Orders} - lista rozkazów symulacji wygenerowanych przez algorytm wyznaczania ¶cie¿ki. Zawiera obiekty typu \textit{Order}.
+	\end{itemize}
+	\item \textbf{Vehicle} - klasa reprezentuj±ca pojazd.
+\end{itemize}
+
+~\\Zale¿no¶ci pomiêdzy opisanymi modelami zosta³y zaprezentowane na poni¿szym diagramie klas.
+
+~\begin{center}
+	\includegraphics[scale=0.94]{ModelsDiagramClass}\\
+	\textit{\textbf{Diagram x.x}. Diagram klas modeli}
+\end{center}
+
+\section{Reprezentacja mapy i pojazdu}
+
+TODO
+
+\section{Trasowanie plików graficznych}
+
+Do trasowania plików graficznych u¿yta zosta³a zewnêtrzna biblioteka D3DPotrace [patrz 2.5]. U¿ycie biblioteki odbywa siê za po¶rednictwem zaprojektowanej w tym celu klasy \textit{BitmapTracer}, widocznej na poni¿szym schemacie.
+
+~\begin{center}
+	\includegraphics[scale=1.0]{BitmapTracerClass}\\
+	\textit{\textbf{Diagram x.x}. Klasa BitmapTracer}
+\end{center}
+
+~\\Klasa \textit{BitmapTracer} posiada dwa konstruktory. Jeden z nich jako parametr przyjmuje bitmapê, drugi przyjmuje ¶cie¿kê do pliku, z którego nastêpnie tworzona jest nowa bitmapa. Najwa¿niejsz± metod± w tej klasie jest metoda \textit{Trace} s³u¿±ca do trasowania wczytanego pliku graficznego. Metoda ta przyjmuje dwa parametry typu \textit{double} [patrz 6.2]. Wynikiem dzia³ania metody \textit{Trace} jest lista obiektów typu \textit{Polygon}.
+
+~\\Dzia³anie samej biblioteki oparte jest na koncepcji hirarchizacji trasowanych obszarów. Przyk³adowo: umieszczona na bia³ym tle czarna, wype³niona w ¶rodku plama jest obszarem traktowanym jako (zamkniêty) wielok±t. Je¿eli na takiej czarnej plamie umie¶cimy ca³kowicie siê w niej zawieraj±c± plamê bia³± (tworz±c czarny obwarzanek), to zostanie ona uznana za potomka plamy czarnej. Jeszcze mniejsza plama czarna zawarta w bia³ej bêdzie potomkiem bia³ej i pra-potomkiem pierwszej czarnej plamy itd. 
+Poniewa¿ wielok±ty zawarte ca³kowicie w innych wielok±tach nie maj± ¿adnego znaczenia (pojazd omijaj±c przeszkodê i tak bierze pod uwagê tylko jej krawêd¼, a nie to co znajduje siê w jej wnêtrzu), dziêki takiej hierarchizacji danych mo¿emy w ³atwy sposób odrzucaæ wszystkie nieistotne dla obliczenia ¶cie¿ki kszta³ty.
+
+\chapter{Algorytmy}
+
+\section{Algorytmy graficzne}
+
+\subsection{Rysowanie linii bez antyaliasingu - algorytm Bresenhama}
+
+
+\subsection{Rysowanie linii z antyaliasingiem - algorytm Xiaolin Wu}
+
+
+
+\subsection{Algorytm mieszania kolorów}
+
+
+
+\section{Algorytmy geometryczne}
+
+W niniejszej pracy dyplomowej zosta³y zaimplementowane opisane poni¿ej algorytmy geometryczne.
+
+\subsection{Suma Minkowskiego}
+
+\begin{subdefinition}
+Suma Minkowskiego
+\\Sum± Minkowskiego nazywamy dzia³anie okre¶lone na rodzinie wszystkich podzbiorów danej przestrzeni liniowej $X$ wzorem:$$A+B=\{a+b:a \in A,b \in B\},$$gdzie $A$ i $B$ s± podzbiorami przestrzeni liniowej $X$.\\Powy¿sza definicja ma sens dla dowolnego zbioru $X$ z okre¶lonym dzia³aniem dodawania.
+\end{subdefinition}
+
+~\\Na poni¿szym obrazku zaprezentowano przyk³ad sumy Minkowskiego dla dwóch podzbiorów p³aszczyzny, bêd±cych wielok±tami wypuk³ymi.
+
+~\begin{center}
+	\includegraphics[scale=0.54]{MinkowskiSumExampleWiki}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Przyk³ad sumy Minkowskiego dwóch wielok±tów (¼ród³o: wikipedia.org)}
+\end{center}
+
+~\\W ogólno¶ci wyznaczenie sumy Minkowskiego dwóch dowolnych wielok±tów nie jest prostym zadaniem, dlatego dzia³anie opisywanego algorytmu zostanie zaprezentowane na prostym przyk³adzie. Obliczana bêdzie suma Minkowskiego wielok±tów A i B znajduj±cych siê na poni¿szym obrazku. 
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep0}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Wielok±ty A i B, dla których obliczana bêdzie suma Minkowskiego}
+\end{center}
+
+~\\Pierwszym krokiem dzia³ania algorytmu obliczaj±cego sumê Minkowskiego dwóch wielok±tów jest triangulacja obu wielok±tów, czyli podzia³ ich na trójk±ty. Efekty triangulacji zosta³y przedstawione na poni¿szym obrazku.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep1}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Wielok±ty A i B po triangulacji}
+\end{center}
+
+~\\W kolejnym kroku nale¿y wybraæ dowolny punkt znajduj±cy siê wewn±trz lub na krawêdzi jednego z wielok±tów. W szczególno¶ci mo¿e byæ to jeden z wierzcho³ków wielok±ta. Wybierzmy jeden z wierzcho³ków wielok±ta B.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep2}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Wybór punktu z wielok±ta B (czerwony kolor)}
+\end{center}
+
+~\\Rozpoczyna siê g³ówna faza algorytmu. Rozwa¿any teraz bêdzie trójk±t A1. W pierwszym kroku nale¿y wzi±æ trójk±t B1 i wybranym wcze¶niej punktem przy³o¿yæ go do ka¿dego wierzcho³ka trójk±ta A1. Operacja ta zosta³a zaprezentowana na obrazku poni¿ej.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep3}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Operacja przyk³adania trójk±ta B1 do wierzcho³ków trójk±ta A1}
+\end{center}
+
+~\\Nastêpnie nale¿y wyznaczyæ otoczkê wypuk³± zbioru wierzcho³ków, który zawiera wierzcho³ki trzech trójk±tów B1 przy³o¿onych wybranym punktem w wierzcho³kach trójk±ta A1. Efekt wyznaczania otoczki wypuk³ej zbioru tych wierzcho³ków prezentuje poni¿szy obrazek.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep4}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Otoczka wypuk³a (kolor zielony) trójk±ta A1 i przy³o¿onych w jego wierzcho³kach trójk±tów B1}
+\end{center}
+
+~\\Nastêpnie nale¿y wzi±æ trójk±t B2 i podobnie jak poprzednio, przy³o¿yæ go wybranym wcze¶niej punktem w ka¿dym z wierzcho³ków trójk±ta A1. Po przy³o¿eniu trójk±tów B2 w wierzcho³kach trójk±ta A1 nale¿y wyznaczyæ otoczkê wypuk³± powsta³ego po tym przy³o¿eniu zbioru wierzcho³ków.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep5}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Otoczka wypuk³a (kolor czerwony) trójk±ta A1 i przy³o¿onych w jego wierzcho³kach trójk±tów B2}
+\end{center}
+
+~\\Wielok±t B nie zawiera ju¿ wiêcej nieprzetworzonych trójk±tów, wiêc kolejnym krokiem jest z³±czenie powsta³ych w poprzednich krokach dwóch otoczek wypuk³ych w jeden wielok±t. Efekt z³±czenia wielok±tów bêd±cych wyznaczonymi otoczkami wypuk³ymi przedstawiono na poni¿szym obrazku.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep6}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Efekt z³±czenia wielok±tów za pomoc± funkcji Union (kolor pomarañczowy)}
+\end{center}
+
+~\\Po wykonaniu powy¿szych kroków powsta³ nowy wielok±t (kolor pomarañczowy) i przetwarzanie trójk±ta A1 zosta³o zakoñczone. Nastêpnie wszystkie opisane operacje nale¿y powtórzyæ dla trójk±ta numer 2 z wielok±ta A (A2). Po zakoñczeniu przetwarzania trójk±ta A2 przetwarzany jest trójk±t A3, itd. Operacja zakoñczy siê po przetworzeniu wszystkich trójk±tów wchodz±cych w sk³ad wielok±ta A. Efekt przetworzenia wszystkich trójk±tów zaprezentowano na poni¿szym obrazku.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep7}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Efekt przetworzenia wszystkich trójk±tów wielok±ta A}
+\end{center}
+
+~\\Ostatnim krokiem prowadz±cym do uzyskania sumy Minkowskiego jest wykonanie operacji \textit{Union} dla wszystkich nowo powsta³ych wielok±tów (kolory pomarañczowy czerwony, zielony i niebieski). Efektem tej operacji jest wyznaczona suma Minkowskiego wielok±tów A i B.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{MinkowskiSumExampleStep8}\\
+	\textit{\textbf{Obrazek 4.3.1.1}. Suma Minkowskiego wielok±tów A i B}
+\end{center}
+
+%dodac pseudokod?
+
+~\\Z³o¿ono¶æ algorytmu wyznaczania sumy Minkowskiego dwóch wielok±tów mo¿na oszacowaæ poprzez z³o¿ono¶æ operacji dominuj±cej w tym algorytmie. Operacj± dominuj±c± jest w tym wypadku operacja przyk³adania trójk±tów jednego wielok±ta do wierzcho³ków trójk±tów drugiego wielok±ta i wyznaczania odpowiednich otoczek wypuk³ych. Z³o¿ono¶æ operacji przyk³adania trójk±tów jednego wielok±ta do wierzcho³ków trójk±tów drugiego wielok±ta mo¿na opisaæ poni¿szym wzorem:$$(n - 2) \cdot (m - 2),$$gdzie:
+\\$n$ - liczba wierzcho³ków pierwszego wielok±ta
+\\$m$ - liczba wierzcho³ków drugiego wielok±ta
+
+~\\Z³o¿ono¶æ ¶rednia operacji wyznaczania otoczki wypuk³ej wynosi $O(nlog(n))$, gdzie $n$ jest liczb± punktów, dla których ta otoczka jest wyznaczana. Jednak w przypadku stosowania otoczki wypuk³ej podczas operacji przyk³adania trójk±tów, mo¿na uznaæ, ¿e z³o¿ono¶æ tej operacji jest sta³a, gdy¿ niezale¿nie od iteracji bêdzie ona zawsze wykonywana dla $n = 9$. Dodatkowo je¶li przyjmiemy, ¿e wielok±ty, dla których obliczana jest suma Minkowskiego maj± identyczn± liczbê wierzcho³ków, to pesymistyczn± z³o¿ono¶æ algorytmu wyznaczania sumy Minkowskiego mo¿na oszacowaæ jako $O(n^2)$, gdzie $n$ - liczba wierzcho³ków wielok±tów dla których wyznaczana jest suma Minkowskiego.
+
+\section{Algorytm wyznaczania ¶cie¿ki}
+
+Algorytm wyznaczania ¶cie¿ki ma za zadanie wyznaczenie ¶cie¿ki od punktu pocz±tkowego do punktu koñcowego z uwzglêdnieniem aktualnej mapy oraz pojazdu. Jego dzia³anie mo¿na podzieliæ na trzy podstawowe etapy:
+\begin{itemize}
+	\item powiêkszenie przeszkód i sprowadzenie pojazdu do punktu za pomoc± sumy Minkowskiego,
+	\item stworzenie odpowiedniego grafu,
+	\item wyznaczenie ¶cie¿ki w utworzonym grafie, od punktu startowego do punktu koñcowego przy pomocy algorytmu A*,
+	\item wygenerowanie listy rozkazów dla znalezionej ¶cie¿ki.
+\end{itemize}
+
+\subsection{Opis algorytmu}
+
+Jako parametry wej¶ciowe algorytm przyjmuje nastêpuj±ce dane:
+\begin{itemize}
+	\item mapê,
+	\item pojazd,
+	\item pocz±tkowy obrót pojazdu,
+	\item punkt startowy,
+	\item punkt koñcowy.
+\end{itemize}
+Oprócz danych wej¶ciowych, u¿ytkownik mo¿e przekazaæ do algorytmu tak¿e inne parametry, które maj± wp³yw miêdzy innymi na d³ugo¶æ obliczeñ oraz jako¶æ znalezionej ¶cie¿ki. Parametry te zosta³y opisane poni¿ej.
+\begin{itemize}
+	\item \textbf{Gêsto¶æ podzia³u k±ta pe³nego} - okre¶la na ile jednostek zostanie podzielony k±t pe³ny. Im wiêksza jest gêsto¶æ podzia³u, tym dok³adniejsze obroty bêdzie móg³ wykonywaæ pojazd, ale zwiêkszy siê czas obliczeñ. Zbyt ma³a warto¶æ tego parametru, mo¿e spowodowaæ, ¿e pojazd nie bêdzie porusza³ siê zgodnie z ustalonym dla niego kierunkiem ruchu, gdy¿ ruch w takim kierunku bêdzie po prostu niemo¿liwy. Stosowny przyk³ad zosta³ przedstawiony w dalszej czê¶ci opisu.
+    \item \textbf{Wielko¶æ punktu} - okre¶la maksymaln± odleg³o¶æ miêdzy punktami, dla której algorytm, traktuje te punkty jako identyczne (przyjmuje warto¶ci z przedzia³u $(0,1]$). Aby lepiej zrozumieæ warto¶ci przyjmowane przez ten parametr, nale¿y wzi±æ po uwagê fakt, i¿ zarówno wspó³rzêdne wielok±tów tworz±cych mapê, jak i wielok±ta tworz±cego pojazd, s± wspó³rzêdnymi w uk³adzie wspó³rzêdnych przedstawionym na poni¿szym obrazku i maj± warto¶ci z przedzia³u $[-1,1]$.
+    ~\begin{center}
+		\includegraphics[scale=0.8]{CoordinateSystem}\\
+		\textit{\textbf{Obrazek 4.3.1.1}. Uk³ad wspó³rzêdnych}
+	\end{center}
+    \item \textbf{Waga krawêdzi dla obrotu} - okre¶la wagê krawêdzi w grafie dla obrotu pojazdu o jedn± jednostkê - im wiêksza warto¶æ, tym mniej obrotów wykona pojazd, gdy¿ ¶cie¿ka d³u¿sza wizualnie mo¿e okazaæ siê mniej kosztowna z punktu widzenia algorytmu A*,
+    \item \textbf{mo¿liwo¶æ poruszania siê do ty³u},
+    \item \textbf{mo¿liwo¶æ poruszania siê w dowolnym kierunku}.
+\end{itemize}
+Dzia³anie algorytmu rozpoczyna siê od dodania do mapy czterech sztucznych przeszkód, które pos³u¿± jako ograniczenie obszaru mapy. Dodanie tych przeszkód nie zak³óci dzia³ania algorytmu, zapobiegnie natomiast mo¿liwo¶ci opuszczenia przez pojazd widocznego obszaru mapy.
+
+~\\W nastêpnym kroku, dla ka¿dego mo¿liwego obrotu pojazdu tworzona jest oddzielna kopia mapy, w której ka¿da przeszkoda jest sum± Minkowskiego odpowiadaj±cej jej przeszkody z mapy wej¶ciowej i obróconego pojazdu. Utworzenie kopii mapy dla ka¿dego mo¿liwego obrotu pojazdu powoduje powstanie tablicy, zawieraj±cej tyle kopii mapy wej¶ciowej ile wynosi gêsto¶æ podzia³u k±ta pe³nego. Obiekt tej tablicy o indeksie $angle$ reprezentuje mapê, dla której ka¿da przeszkoda jest sum± Minkowskiego przeszkody z mapy wej¶ciowej oraz pojazdu obróconego o $angle$ jednostek. Jedna jednostka odpowiada obrotowi o $360/angleDensity$ stopni, gdzie $angleDensity$ jest warto¶ci± odpowiadaj±c± gêsto¶ci podzia³u k±ta pe³nego.
+\begin{np}
+Utworzone kopie mapy dla wszystkich mo¿liwych obrotów pojazdu bêd±cego strza³k± (kolor niebieski) przy gêsto¶ci podzia³u k±ta pe³nego równej 4. Na czarno zaznaczona zosta³a przedstawiona przeszkoda z mapy wej¶ciowej, natomiast na pomarañczowo suma Minkowskiego tej przeszkody i pojazdu obróconego o odpowiedni± ilo¶æ jednostek.
+	~\begin{center}
+		\includegraphics[scale=0.8]{ObstacleMinkowski0} \includegraphics[scale=0.8]{ObstacleMinkowski90} \includegraphics[scale=0.8]{ObstacleMinkowski180} \includegraphics[scale=0.8]{ObstacleMinkowski270}\\
+		\textit{\textbf{Obrazek 4.3.1.2}. Kopie mapy dla wszystkich mo¿liwych obrotów pojazdu przy gêsto¶ci podzia³u k±ta równej 4}
+	\end{center}
+Obrazek znajduj±cy siê w lewym, górnym rogu na powy¿szym przyk³adzie przedstawia sumê Minkowskiego kwadratu i pojazdu w kszta³cie strza³ki, obróconego o 0 jednostek, czyli o k±t $0^\circ$. Obrazek w prawym, górnym rogu przedstawia sumê Minkowskiego dla pojazdu obróconego o 1 jednostkê, czyli o $90^\circ$, a obrazki na dole odpowiednio dla pojazdu obróconego o 2 i 3 jednostki, czyli o $180^\circ$ i $270^\circ$. Za ka¿dym razem punktem przy³o¿enia pojazdu do przeszkody podczas obliczania sumy Minkowskiego jest punkt bêd±cy osi± obrotu pojazdu (czerwony punkt).
+\end{np}
+
+~\\Dziêki zastosowaniu sumy Minkowskiego dla wszystkich przeszkód znajduj±cych siê na mapie, zostaj± one powiêkszone w taki sposób, ¿e od tej pory pojazd mo¿na traktowaæ jako punkt, a dok³adniej jako punkt bêd±cy jego osi± obrotu, gdy¿ wzglêdem tego punktu nastêpuje przyk³adanie w algorytmie obliczaj±cym sumê Minkowskiego. Z racji tego, i¿ sumy Minkowskiego zosta³y obliczone dla ka¿dej kopii mapy, a wiêc ka¿dego mo¿liwego obrotu pojazdu, to pojazd zosta³ sprowadzony do punktu dla ka¿dej mo¿liwej jego orientacji.
+
+~\\Nastêpnym krokiem dzia³ania algorytmu jest utworzenie serii grafów skierowanych. Ich liczba jest równa liczbie wszystkich mo¿liwych obrotów pojazdów. Ka¿dy graf odpowiada jednej kopii mapy, która powsta³a w poprzednim kroku. Wierzcho³kami ka¿dego grafu s± wierzcho³ki przeszkód znajduj±cych siê na odpowiadaj±cej mu kopii mapy oraz punkt startowy i koñcowy.
+
+~\\Maj±c utworzony graf dla ka¿dej z kopii mapy nale¿y dodaæ do niego odpowiednie krawêdzie, po których bêdzie móg³ poruszaæ siê pojazd, który zosta³ sprowadzony do punktu. Dla danej kopii mapy przegl±damy parami wszystkie wierzcho³ki odpowiadaj±cego jej grafu i dodajemy do niego krawêdzie wg nastêpuj±cych regu³:
+\begin{itemize}
+	\item je¶li dwa wybrane punkty maj± identyczne wspó³rzêdne, krawêd¼ nie zostanie dodana
+	\item je¶li jakakolwiek wspó³rzêdna, jednego z wybranych punktów wychodzi poza zakres $[-1,1]$, krawêd¼ nie zostanie dodana
+	\item je¶li jeden z wybranych wierzcho³ków to punkt startowy lub koñcowy i punkt ten znajduje siê wewn±trz którejkolwiek powiêkszonej przeszkody, krawêd¼ nie zostanie dodana
+	\item je¶li jeden z wybranych punktów jest zawarty w powiêkszonej przeszkodzie i nie jest jej wierzcho³kiem, krawêd¼ nie zostanie dodana
+	\item je¶li krawêd¼ powsta³a pomiêdzy wybranymi punktami przecina jak±kolwiek krawêd¼, którejkolwiek z przeszkód i nie jest to przecinanie polegaj±ce na wspólnym pocz±tku lub koñcu krawêdzi, krawêd¼ nie zostanie dodana
+	\item je¶li ¶rodkowy punkt krawêdzi powsta³ej pomiêdzy wybranymi punktami le¿y wewn±trz jakiejkolwiek powiêkszonej przeszkody i krawêd¼ ta, nie jest krawêdzi± tej przeszkody, krawêd¼ nie zostanie dodana
+	\item je¶li ¿aden z powy¿szych warunków nie jest spe³niony, to sprawdzane s± nastêpuj±ce warunki, zale¿ne od parametrów algorytmu:
+	\begin{itemize}
+		\item je¶li u¿ytkownik wyrazi³ zgodê na poruszanie siê we wszystkich kierunkach, krawêd¼ zostanie dodana z wag± równ± przeskalowanej odleg³o¶ci pomiêdzy wybranymi punktami
+		\item je¶li u¿ytkownik nie wyrazi³ zgody na poruszanie siê we wszystkich kierunkach, a prosta przechodz±ca przez wybrane punkty jest odchylona o nie wiêcej ni¿ $360/(2 \cdot angleDensity)$ stopni od prostej okre¶laj±cej kierunek ruchu pojazdu [patrz przyk³ad ni¿ej], krawêd¼ zostanie dodana z wag± równ± przeskalowanej odleg³o¶ci pomiêdzy wybranymi punktami
+		\begin{itemize}
+			\item ponadto, je¶li u¿ytkownik wyrazi³ zgodê na poruszanie siê do ty³u zostanie dodana krawêd¼ powrotna pomiêdzy wybranymi punktami o wadze równej przeskalowanej odleg³o¶ci pomiêdzy nimi
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+~\\Poni¿ej zaprezentowano przyk³ad pokazuj±cy w jaki sposób przebiega konstrukcja grafu dla jednej kopii mapy, czyli dla jednego obrotu pojazdu. Konstrukcja dla pozosta³ych kopii jest analogiczna.
+
+\begin{np}
+Konstrukcja grafu dla jednej kopii mapy
+\\Poni¿ej znajduje siê obrazek przedstawiaj±cy mapê (czarne wielok±ty), pojazd (niebieski wielok±t), punkt startowy (zielony) oraz punkt koñcowy (czerwony). Strza³ka wskazuje kierunek ruchu pojazdu.
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionMap} \\
+	\textit{\textbf{Obrazek 4.3.1.3}. Przyk³adowa mapa, pojazd, punkt startowy i koñcowy}
+\end{center}
+Po zastosowaniu sumy Minkowskiego w celu odpowiedniego powiêkszenia przeszkód, pojazd zostaje sprowadzony do punktu. Nastêpnie utworzony zostaje graf odpowiadaj±cy mapie. Poni¿ej przedstawiono wygl±d mapy po sprowadzeniu pojazdu do punktu wraz ze skojarzonymi numerami wierzcho³ków grafu.
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep0} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Przyk³adowa mapa po sprowadzeniu pojazdu do punktu Powiêkszone przeszkody zaznaczono kolorem pomarañczowym.}
+\end{center}
+Kolejnym krokiem jest dodanie do grafu odpowiednich krawêdzi. Przedstawiona zostanie konstrukcja grafu w trzech przypadkach: gdy pojazd mo¿e poruszaæ siê we wszystkich kierunkach, gdy pojazd mo¿e poruszaæ siê tylko do przodu oraz gdy dozwolone jest poruszanie siê do ty³u.
+
+~\\Dla uproszenia zapisu krawêdzie prowadz±ce od wierzcho³ka o numerze $i$ do wierzcho³ka o numerze $j$ bêd± oznaczane jako $i-j$.
+
+~\\\textbf{Przypadek 1. Pojazd mo¿e poruszaæ siê w dowolnym kierunku}\\Jest to najprostszy przypadek, gdy¿ nie ma potrzeby sprawdzania czy prosta przechodz±ca przez wybrane punkty nie jest zbyt mocno odchylona od prostej odpowiadaj±cej kierunkowi ruchu pojazdu. Na pocz±tek sprawdzane s± wszystkie krawêdzie wychodz±ce z wierzcho³ka numer 1. Dodane zostan± krawêdzie do wierzcho³ków o numerach 2, 7, 8.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep1} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Dodane krawêdzie 1-2, 1-7, 1-8}
+\end{center}
+
+~\\Krawêdzie do wierzcho³ków numer 3 i 13 nie zostan± dodane. W przypadku krawêdzi 1-3 zostanie wykryte jej przeciêcie z krawêdzi± 2-3. Co prawda nie jest to przeciêcie w dos³ownym tego s³owa znaczeniu, jednak czê¶ciowe nak³adanie siê krawêdzi jest traktowane w taki sam sposób. Taka sama sytuacja ma miejsce w przypadku krawêdzi 1-13 i 8-13.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep2} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Próba dodania krawêdzi 1-3 i 1-13}
+\end{center}
+
+~\\Nie zostan± dodane równie¿ krawêdzie prowadz±ce do wierzcho³ków o numerach 4, 5, 6, 9, 10, 11, 12, 14. W ka¿dym z tych przypadków, nowo dodana krawêd¼ przecina³aby jedn± z krawêdzi powiêkszonych przeszkód.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep3} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Próba dodania krawêdzi 1-5 - niedozwolone przeciêcie z krawêdzi± 2-7}
+\end{center}
+
+~\\Kiedy zakoñczone zostanie sprawdzanie krawêdzi wychodz±cych z wierzcho³ka numer 1 nastêpuje przej¶cie do wierzcho³ka o numerze 2 i sprawdzanie wszystkich krawêdzi wychodz±cych z tego wierzcho³ka. Nietrudno zauwa¿yæ, ¿e dodane zostan± krawêdzie do wierzcho³ków o numerach 1, 3, 7, 8. Co prawda na obrazku poni¿ej krawêd¼ 2-8 przecina siê z inn± krawêdzi± grafu, jednak jest to bez znaczenia. Niedozwolone jest jedynie przecinanie siê dodawanych krawêdzi z krawêdziami powiêkszonych przeszkód.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep4} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Dodane krawêdzie 2-1, 2-3, 2-7 i 2-8}
+\end{center}
+
+~\\Krawêdzie prowadz±ce do wierzcho³ków o numerach 4, 5, 6 nie zostan± dodane, gdy¿ ¶rodek ka¿dej z nim le¿y wewn±trz powiêkszonej przeszkody. Na poni¿szym obrazku nie narysowano ju¿ przeszkód przed powiêkszeniem (kolor czarny) w celu poprawy jego czytelno¶ci. Rysowanie tych przeszkód w poprzednich krokach mia³o na celu pokazanie efektów dzia³ania sumy Minkowskiego i faktu, ¿e pojazd mo¿na traktowaæ jako punkt.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep5} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Próba dodania krawêdzi 2-4, 2-5 i 2-6 - ¶rodki tych krawêdzi le¿± wewn±trz powiêkszonych przeszkód}
+\end{center}
+
+~\\Krawêdzie prowadz±ce do wierzcho³ków o numerach 9, 10, 11, 12, 13, 14 nie zostan± dodane, gdy¿ nowo dodana krawêd¼ przecina³aby jedn± z krawêdzi powiêkszonych przeszkód.
+
+~\\Analogiczne sprawdzanie, czy krawêd¼ mo¿na dodaæ przeprowadzane jest dla kolejnych par wierzcho³ków. Po zakoñczeniu tej operacji, graf odpowiadaj±cy jednemu obrotowi pojazdu jest gotowy. Zosta³ on przedstawiony na poni¿szym obrazku.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep6} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Gotowy graf dla jednego obrotu pojazdu (zgoda na poruszanie siê w dowolnym kierunku)}
+\end{center}
+
+~\\W powy¿szym grafie istnieje ¶cie¿ka od punktu pocz±tkowego do punktu koñcowego. Oznacza to, ¿e mo¿liwy jest przejazd pojazdu pomiêdzy tymi punktami, w aktualnej orientacji, bez wykonywania dodatkowych obrotów.
+
+~\\\textbf{Przypadek 2. Pojazd mo¿e poruszaæ siê tylko do przodu}\\Ten przypadek jest nieco trudniejszy od poprzedniego, gdy¿ przy próbie dodania krawêdzi pomiêdzy dwoma wierzcho³kami, nale¿y dodatkowo sprawdziæ, czy prosta poprowadzone przez te wierzcho³ki nie jest zbyt mocno odchylona od prostej odpowiadaj±cej kierunkowi ruchu pojazdu. Maksymalne odchylenie w stopniach okre¶lone jest nastêpuj±cym wzorem: $$\frac{360}{2 \cdot angleDensity},$$ gdzie $angleDensity$ jest gêsto¶ci± podzia³u k±ta pe³nego.\\Na potrzeby tego przyk³adu przyjêto, ¿e gêsto¶æ ta wynosi 4. Zatem maksymalne odchylenie prostej przechodz±cej przez dwa wierzcho³ki od prostej odpowiadaj±cej kierunkowi ruchu pojazdu wynosi $45^\circ$. Przez tak ma³± gêsto¶æ podzia³u k±ta pe³nego, mo¿liwa jest sytuacja, ¿e pojazd nie bêdzie porusza³ siê idealnie w kierunku swojego ruchu, jednak znacz±co upraszcza to przyk³ad.
+
+~\\Podobnie jak w poprzednim przypadku na pocz±tku sprawdzane s± wszystkie krawêdzie wychodz±ce z wierzcho³ka o numerze 1. Z poprzedniego przypadku wiadomo, ¿e jedynymi kandydatami na poprawne krawêdzie s± krawêdzie 1-2, 1-7, 1-8. Zanim jednak którakolwiek z nich zostanie dodana do grafu, nale¿y jeszcze sprawdziæ, czy nie jest ona zbyt mocno odchylona od prostej odpowiadaj±cej obrotowi pojazdu.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep0b} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Maksymalne odchylenie od prostej wyznaczaj±cej kierunek ruchu pojazdu}
+\end{center}
+
+~\\Na powy¿szym rysunku niebiesk± lini± zosta³a narysowana pó³prosta wyznaczaj±ca aktualny kierunek ruchu pojazdu, przy³o¿ona do punktu numer 1. Z obu stron dorysowane zosta³y pó³proste odchylone od niej o $45^\circ$, czyli maksymaln± mo¿liw± warto¶æ przy podziale k±ta pe³nego na 4 czê¶ci. Szarym polem zakre¶lono obszar, wewn±trz którego musz± znajdowaæ siê wierzcho³ki, do których bêdzie mo¿na poprowadziæ prawid³ow± krawêd¼ z wierzcho³ka numer 1. Spo¶ród trzech kandydatów, tylko dwa wierzcho³ki znajduj± siê wewn±trz szarego obszaru. S± to wierzcho³ki numer 7 i 8. Dodane wiêc zostan± krawêdzie 1-7 i 1-8.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep1b} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Dodane krawêdzie 1-7 i 1-8}
+\end{center}
+
+~\\Przyk³ad ten doskonale pokazuje problem, jaki mo¿e siê pojawiæ przy zbyt ma³ej gêsto¶ci podzia³u k±ta pe³nego. Dla rozwa¿anej kopii mapy i odpowiadaj±cego jej grafu, pojazd jest w po³o¿eniu, w którym mo¿e poruszaæ siê tylko po linii poziomej w praw± stronê. Nie bêdzie wiêc problemu dla krawêdzi 1-8 i przejazdu z pozycji wierzcho³ka numer 1 do pozycji wierzcho³ka numer 8. Natomiast w przypadku krawêdzi 1-7, przejazd z pozycji wierzcho³ka numer 1 do pozycji wierzcho³ka numer 7 bêdzie nienaturalny - pojazd pojedzie bokiem. Nie jest oczywi¶cie pewne, ¿e mimo takich krawêdzi, jak krawêd¼ 1-7 taka sytuacja wyst±pi. Wszystko zale¿y od tego w jaki sposób grafy odpowiadaj±ce kolejnym obrotom pojazdu zostan± ze sob± po³±czone i jaka ¶cie¿ka zostanie znaleziona przez algorytm A*. Je¶li jednak krawêd¼ 1-7 wejdzie w sk³ad wyznaczonej ¶cie¿ki, to przejazd pojazdu bêdzie wygl±da³ jak na obrazku poni¿ej.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep2b} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Przejazd pojazdu po krawêdzi 1-7}
+\end{center}
+
+~\\Kiedy zakoñczy siê sprawdzanie krawêdzi wychodz±cych z wierzcho³ka numer 1 nastêpuje sprawdzenie wszystkich krawêdzi wychodz±cych z wierzcho³ka o numerze 2. Podobnie jak dla wierzcho³ka numer 1 zakre¶lony zosta³ obszar pozwalaj±cy na ³atwe stwierdzenie, czy dan± krawêd¼ nale¿y dodaæ do grafu, czy odrzuciæ.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep3b} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Maksymalne odchylenie od prostej wyznaczaj±cej kierunek ruchu pojazdu}
+\end{center}
+
+~\\Z przypadku pierwszego wynika, ¿e jedynymi kandydatami na prawid³owe krawêdzie s± krawêdzie 2-1, 2-3, 2-7 i 2-8. Widaæ jednak, ¿e tylko wierzcho³ki numer 7 i 8 le¿± wewn±trz zakre¶lonego obszaru. Zostan± wiêc dodane tylko dwie krawêdzie.
+
+~\\Operacjê sprawdzania krawêdzi powtarzamy dla kolejnych wierzcho³ków par wierzcho³ków. Efekt koñcowy zosta³ przedstawiony na obrazku poni¿ej.
+
+~\begin{center}
+	\includegraphics[scale=0.6]{GraphConstructionStep4b} \\
+	\textit{\textbf{Obrazek 4.3.1.4}. Gotowy graf dla jednego obrotu pojazdu (zgoda na poruszanie siê tylko do przodu)}
+\end{center}
+
+~\\Jak widaæ w przypadku, gdy dozwolone jest poruszanie siê tylko do przodu, to graf odpowiadaj±cy jednemu obrotowi pojazdu ma znacznie mniej krawêdzi. W grafie zaprezentowanym na obrazku powy¿ej nie istnieje ¶cie¿ka od punktu pocz±tkowego do punktu koñcowego. Z tego wynika, ¿e nie jest mo¿liwy przejazd pojazdu w aktualnej orientacji, od punktu pocz±tkowego do punktu koñcowego bez wykonania ¿adnego dodatkowego obrotu.
+
+~\\\textbf{Przypadek 3. Pojazd mo¿e poruszaæ siê do przodu i do ty³u}\\Przypadek ten jest bardzo podobny do poprzedniego. Jedyna ró¿nica polega na tym, ¿e podczas dodawania krawêdzi w jedn± stronê pomiêdzy par± wierzcho³ków, dodawana jest równie¿ krawêd¼ powrotna. Dziêki tej dodatkowej krawêdzi pojazd mo¿e poruszaæ siê do ty³u.
+\end{np}
+
+~\\Po utworzeniu grafu dla ka¿dej kopii mapy konieczne jest odpowiednie po³±czenie tych grafów w jeden du¿y graf. Dla uproszczenia graf ten nazywany bêdzie \textit{grafem warstwowym}, a ka¿dy z grafów odpowiadaj±cych kolejnym kopiom mapy, \textit{warstw±} tworzonego grafu warstwowego. Krawêdzie mogê byæ dodawane tylko pomiêdzy s±siednimi warstwami. Dodatkowo nale¿y dodaæ odpowiednie krawêdzie pomiêdzy pierwsz± i ostatni± warstw± grafu. Krawêdzie pomiêdzy warstwami grafów odpowiadaj± obrotom pojazdu.
+
+~\\Dodawanie krawêdzi pomiêdzy warstwami rozpoczyna siê od warstwy pierwszej i drugiej. Dla ka¿dego wierzcho³ka z warstwy pierwszej, je¿eli nie le¿y on we wnêtrzu jakiejkolwiek powiêkszonej przeszkody, sprawdzana jest odleg³o¶æ do ka¿dego z wierzcho³ków drugiej warstwy. Je¶li odleg³o¶æ ta jest mniejsza ni¿ odleg³o¶æ okre¶lona w parametrze \textit{wielko¶æ punktu}, to sprawdzane jest po³o¿enie wierzcho³ka z drugiej warstwy. Je¶li, podobnie jak wierzcho³ek z pierwszej warstwy, nie le¿y on we wnêtrzu ¿adnej powiêkszonej przeszkody, to krawêd¼ pomiêdzy tymi wierzcho³kami jest dodawana (jest to krawêd¼ ³±cz±ca dwie warstwy), a jej waga jest równa warto¶ci parametru \textit{waga krawêdzi obrotu}. Nastêpnie sprawdzane s± mo¿liwo¶ci po³±czeñ pomiêdzy warstw± drug± i trzeci±, itd. Na koniec nale¿y jeszcze w odpowiedni sposób po³±czyæ pierwsz± i ostatni± warstwê (gdy¿ odpowiadaj± one s±siednim obrotom pojazdu). 
+
+~\\Po zakoñczeniu operacji dodawania krawêdzi pomiêdzy warstwami, graf warstwowy jest ju¿ prawie gotowy. Nale¿y do niego dodaæ jeszcze jeden wierzcho³ek, a nastêpnie dodaæ krawêdzie prowadz±ce od wierzcho³ka koñcowego ka¿dej warstwy do tego wierzcho³ka. Dodanie tego wierzcho³ka sprawia, ¿e mo¿liwe jest szukanie ¶cie¿ki pomiêdzy wierzcho³kiem startowym, z warstwy odpowiadaj±cej pocz±tkowemu obrotowi pojazdu, a tym dodanym wierzcho³kiem.
+
+~\\Po utworzeniu grafu warstwowego nale¿y wyznaczyæ ¶cie¿kê od wierzcho³ka startowego, z warstwy odpowiadaj±cej pocz±tkowemu obrotowi pojazdu, do wierzcho³ka koñcowego (ostatniego dodanego do grafu wierzcho³ka). ¦cie¿ka wyznaczana jest przy pomocy algorytmu A*, który de facto sprowadza siê do algorytmu Dijkstry. Dzieje siê tak, poniewa¿ dla grafu warstwowego, skonstruowanego w poprzednich krokach bardzo ciê¿ko zdefiniowaæ rozs±dn± heurystykê. Z tego powodu przyjête zosta³o, ¿e $\forall_{v}  h(v) = 0$, gdzie $h(v)$ - przewidywana przez heurystykê droga od wierzcho³ka $v$ do wierzcho³ka docelowego. Z³o¿ono¶æ czasow± algorytmu A* mo¿na oszacowaæ jako $O(|E|)$, gdzie $|E|$ - liczba wszystkich krawêdzi grafu warstwowego.
+
+~\\Ostatnim etapem dzia³ania algorytmu jest wygenerowanie listy rozkazów, które pos³u¿± do przygotowania wizualizacji ruchu pojazdu od punktu startowego do koñcowego. Mo¿na j± oczywi¶cie wygenerowaæ tylko wtedy, gdy algorytm A* znalaz³ odpowiedni± ¶cie¿kê w grafie warstwowym. Pojedynczy rozkaz zawiera nastêpuj±ce informacje:
+\begin{itemize}
+	\item punkt docelowy, do którego powinien przemie¶ciæ siê pojazd,
+	\item warto¶æ k±ta do jakiego powinien byæ obrócony pojazd przed rozpoczêciem ruchu w kierunku punktu docelowego. Je¿eli warto¶æ ta jest z przedzia³u $[-2\pi,0)$ to obrót nast±pi w kierunku zgodnym z ruchem wskazówek zegara, natomiast w przypadku, gdy warto¶æ tego k±ta jest z przedzia³u $[0,2\pi)$, to obrót bêdzie przeciwny do ruchu wskazówek zegara.
+\end{itemize}
+Konstrukcja listy rozkazów wymaga przejrzenia wszystkich wierzcho³ków wchodz±cych w sk³ad znalezionej ¶cie¿ki. Konstrukcja pojedynczego rozkazu przebiega w nastêpuj±cy sposób:
+\begin{itemize}
+	\item jako punkt docelowy przypisywana jest lokalizacja badanego wierzcho³ka,
+	\item odnajdywany jest numer warstwy grafu, do której nale¿y badany wierzcho³ek i na tej podstawie, znaj±c gêsto¶æ podzia³u k±ta pe³nego, mo¿liwe jest wyznaczenie warto¶ci bezwzglêdnej wymaganego obrotu, jest ona z przedzia³u $[0,2\pi)$,
+	\item wyznaczona warto¶æ obrotu jest modyfikowana w celu wykonania obrotu w odpowiedni± stronê - k±t ujemny oznacza obrót zgodnie z ruchem wskazówek zegara, natomiast k±t nieujemny, przeciwnie do ruchu wskazówek zegara. Znak k±ta wyznaczany jest na podstawie poni¿szych regu³:
+	\begin{itemize}
+		\item je¿eli bezwzglêdna warto¶æ k±ta obrotu dla konstruowanego rozkazu wynosi $0$, a warto¶æ k±ta obrotu dla poprzedniego rozkazu jest mniejsza od $-\pi$, to k±t $0$ zostanie zamieniony na $-2\pi$,
+		\item je¿eli warto¶æ k±ta obrotu dla poprzedniego rozkazu jest dodatnia i jest ona wiêksza od warto¶ci bezwzglêdnej k±ta obrotu dla konstruowanego rozkazu, to warto¶æ k±ta obrotu dla konstruowanego rozkazu zostanie zamieniona na ujemn± poprzez odjêcie $2\pi$,
+		\item je¿eli warto¶æ k±ta obrotu dla poprzedniego rozkazu jest równa 0 i warto¶æ bezwzglêdna k±ta obrotu dla konstruowanego rozkazu jest wiêksza od $\pi$, to warto¶æ k±ta obrotu dla konstruowanego rozkazu zostanie zamieniona na ujemn± poprzez odjêcie $2\pi$,
+		\item je¿eli warto¶æ k±ta obrotu dla poprzedniego rozkazu jest ujemna to sprawdzone zostaj± nastêpuj±ce warunki:
+		\begin{itemize}
+			\item je¿eli warto¶æ bezwzglêdna k±ta obrotu dla poprzedniego rozkazu jest wiêksza od warto¶ci bezwzglêdnej k±ta obrotu dla konstruowanego rozkazu, to warto¶æ k±ta obrotu dla konstruowanego rozkazu zostanie zamieniona na ujemn± poprzez odjêcie $2\pi$,
+			\item je¿eli warto¶æ k±ta obrotu dla poprzedniego rozkazu jest równa $-2\pi$ i warto¶æ bezwzglêdna k±ta obrotu dla konstruowanego rozkazu jest wiêksza od $\pi$, to warto¶æ k±ta obrotu dla konstruowanego rozkazu zostanie zamieniona na ujemn± poprzez odjêcie $2\pi$.
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+~\\Po wykonaniu wszystkich powy¿szych kroków algorytm koñczy dzia³anie i zwraca wygenerowan± listê rozkazów.
+
+\subsection{Pseudokod}
+
+W tej czê¶ci dokumentu zostanie przedstawiony pseudokod algorytmu wyznaczania ¶cie¿ki. Zosta³y z niego wyodrêbnione pewne funkcje w celu poprawy czytelno¶ci.
+
+\begin{pseudokod}
+Algorytm wyznaczania ¶cie¿ki
+\begin{verbatim}
+dodaj do mapy przeszkody znajduj±ce siê na krawêdziach mapy
+utwórz tyle kopii mapy, ile jest mo¿liwych obrotów pojazdu
+dla ka¿dego mo¿liwego obrotu pojazdu
+    dla ka¿dej przeszkody znajduj±cej siê na odpowiadaj±cej 
+    obrotowi kopii mapy
+        oblicz sumê Minkowskiego tej przeszkody i obróconego pojazdu
+dla ka¿dej kopii mapy
+    utwórz graf skierowany o liczbie wierzcho³ków równej liczbie 
+    wierzcho³ków wszystkich przeszkód + 2
+dla ka¿dej kopii mapy
+    dla ka¿dej pary wierzcho³ków
+        je¿eli mo¿na dodaæ krawêd¼ pomiêdzy wierzcho³kami
+            je¿eli dozwolony ruch w dowolnym kierunku
+                dodaj krawêd¼ pomiêdzy wierzcho³kami
+            w przeciwnym wypadku
+                je¿eli prosta przechodz±ca przez wybrane wierzcho³ki 
+                nie jest zbyt mocno odchylona od prostej wyznaczaj±cej 
+                kierunek ruchu pojazdu
+                    dodaj krawêd¼ pomiêdzy wierzcho³kami
+                    je¿eli dozwolony ruch do ty³u
+                        dodaj krawêd¼ powrotna pomiêdzy wierzcho³kami
+utwórz graf warstwowy z grafów odpowiadaj±cych kopiom map i 
+dodatkowy wierzcho³ek
+dla ka¿dej warstwy
+    dla ka¿dego wierzcho³ka z danej warstwy
+        je¿eli wierzcho³ek odpowiada punktowi koñcowemu
+            dodaj krawêd¼ do ostatniego wierzcho³ka grafu warstwowego
+        je¿eli wierzcho³ek nie le¿y wewn±trz ¿adnej powiêkszonej
+        przeszkody
+            dla ka¿dego wierzcho³ka z nastêpnej warstwy
+                je¿eli odleg³o¶æ pomiêdzy wybranymi wierzcho³kami jest 
+                mniejsza ni¿ okre¶lona przez parametr `wielko¶æ punktu'
+                i wierzcho³ek z drugiej warstwy nie le¿y wewn±trz ¿adnej
+                powiêkszonej przeszkody
+                    dodaj krawêd¼ pomiêdzy wierzcho³kami
+wybierz wierzcho³ek startowy z warstwy odpowiadaj±cej pocz±tkowemu
+obrotowi pojazdu
+wyznacz ¶cie¿kê od wierzcho³ka pocz±tkowego do ostatniego wierzcho³ka
+za pomoc± algorytmu A*
+je¿eli ¶cie¿ka zosta³a znaleziona
+    utwórz listê rozkazów
+zwróæ listê rozkazów
+\end{verbatim}
+\end{pseudokod}
+
+\begin{pseudokod}
+Algorytm sprawdzaj±cy czy mo¿na dodaæ krawêd¼ pomiêdzy $x$ i $y$
+\begin{verbatim}
+je¶li x jest wierzcho³kiem startowym lub koñcowym
+    dla ka¿dej powiêkszonej przeszkody mapy
+        je¿eli x jest zawarte w tej powiêkszonej przeszkodzie
+            return false
+je¶li y jest wierzcho³kiem startowym lub koñcowym
+    dla ka¿dej powiêkszonej przeszkody mapy
+        je¿eli y jest zawarte w tej powiêkszonej przeszkodzie
+            return false
+je¶li, która¶ wspó³rzêdna x lub y wykracza poza zakres mapy
+    return false
+dla ka¿dej powiêkszonej przeszkody mapy
+    je¶li krawêd¼ x-y przecina jak±kolwiek krawêd¼ przeszkody
+        je¿eli przecinanie nie polega na wspólnym pocz±tku lub koñcu
+            return false
+    je¿eli wierzcho³ek x lub y jest zawarty w przeszkodzie i nie
+    jest jej wierzcho³kiem
+        return false
+    je¿eli ¶rodkowy punkt krawêdzi x-y jest zawarty w przeszkodzie
+        je¿eli krawêd¼ x-y nie jest krawêdzi± przeszkody
+            return false
+return true
+\end{verbatim}
+\end{pseudokod}
+    
+\begin{pseudokod}
+Algorytm konstrukcji listy rozkazów
+\begin{verbatim}
+utwórz rozkaz z wierzcho³ka startowego:
+    - jako punkt docelowy przypisz lokalizacjê punktu startowego
+    - jako k±t obrotu przypisz pocz±tkowy obrót pojazdu
+dla ka¿dego wierzcho³ka zawartego w wyznaczonej ¶cie¿ce
+    utwórz rozkaz:
+        - ustaw punkt docelowy rozkazu na lokalizacjê wierzcho³ka
+        - ustaw k±t obrotu na k±t odpowiadaj±cy warstwie do której
+          nale¿y wierzcho³ek startowy
+    je¿eli k±t obrotu rozkazu == 0 
+     i k±t obrotu poprzedniego rozkazu <= -pi
+        k±t obrotu rozkazu -= 2*pi
+    je¿eli k±t obrotu poprzedniego rozkazu > 0
+        je¿eli k±t obrotu rozkazu < k±t obrotu poprzedniego rozkazu
+            k±t obrotu rozkazu -= 2*pi
+    je¿eli k±t obrotu poprzedniego rozkazu == 0
+        je¿eli k±t obrotu rozkazu > pi
+            k±t obrotu rozkazu -= 2*pi
+    je¿eli k±t obrotu poprzedniego rozkazu < 0
+        je¿eli warto¶æ bezwzglêdna k±ta obrotu rozkazu 
+         < warto¶æ bezwzglêdna k±ta obrotu poprzedniego rozkazu
+            k±t obrotu rozkazu -= 2*pi
+        je¿eli k±t obrotu poprzedniego rozkazu == -2*pi 
+         i k±t obrotu rozkazu > pi
+            k±t obrotu rozkazu -= 2*pi
+\end{verbatim}
+\end{pseudokod}
+
+\subsection{Z³o¿ono¶æ algorytmu}
+
+Z³o¿ono¶æ algorytmu wyznaczania ¶cie¿ki mo¿na oszacowaæ poprzez oszacowanie z³o¿ono¶ci jego operacji dominuj±cej, czyli operacji tworzenia kolejnych warstw grafu warstwowego. Z³o¿ono¶æ tej operacji mo¿na opisaæ przy pomocy nastêpuj±cego wzoru:$$angleDensity \cdot vertices \cdot (vertices - 1) \cdot canTwoPointsConnectCost,$$
+\\gdzie:
+\\- $angleDensity$ - gêsto¶æ podzia³u k±ta pe³nego
+\\- $vertices$ - liczba wierzcho³ków tworz±cych wszystkie powiêkszone przeszkody na mapie
+\\- $canTwoPointConnect$ - z³o¿ono¶æ funkcji s³u¿±cej do sprawdzania czy mo¿na dodaæ krawêd¼ pomiêdzy dwoma punktami
+
+~\\Pesymistyczn± z³o¿ono¶æ funkcji s³u¿±cej do sprawdzania czy mo¿na dodaæ krawêd¼ pomiêdzy dwoma punktami mo¿na oszacowaæ jako $O(n^2)$. Wynika to z faktu, i¿ w pêtli przegl±dane s± wszystkie powiêkszone przeszkody tworz±ce mapê, sprawdzane jest, czy ¿aden z punktów, pomiêdzy którymi ma zostaæ dodana krawêd¼ nie jest zawarty w jakiej¶ przeszkodzie (sprawdzenie zawierania ma z³o¿ono¶æ liniow±), a w przypadku gdy algorytm wykryje zawieranie, przegl±dane s± wszystkie wierzcho³ki danej przeszkody i sprawdzane jest, czy ¿aden z punktów pomiêdzy którymi ma byæ dodana krawêd¼ nie jest jednym z wierzcho³ków powiêkszonej przeszkody (tutaj ju¿ z³o¿ono¶æ robi siê kwadratowa). 
+
+~\\Dla oszacowania pesymistycznej z³o¿ono¶ci operacji tworzenia kolejnych warstw grafu warstwowego mo¿na przyj±æ, ¿e $angleDensity = vertices$. Wówczas oznaczaj±c jako $n$ liczbê wszystkich wierzcho³ków  tworz±cych powiêkszone przeszkody na mapie, z³o¿ono¶æ operacji tworzenia kolejnych warstw grafu mo¿na oszacowaæ jako $O(n^5)$.
+
+~\\Z powy¿szego oszacowania wynika, ¿e z³o¿ono¶æ ca³ego algorytmu wyznaczania ¶cie¿ki mo¿na szacowaæ jako $O(n^5)$, gdzie $n$ jest liczb± wierzcho³ków tworz±cych powiêkszone przeszkody na mapie.
+
+~\\Id±c jeszcze dalej, mo¿na przedstawiæ z³o¿ono¶æ algorytmu w zale¿no¶ci od liczby wierzcho³ków tworz±cych mapê wej¶ciow± oraz liczby wierzcho³ków tworz±cych kszta³t pojazdu. Zak³adaj±c, ¿e nie s± znane informacje na temat tego w jaki sposób funkcja \textit{Union} zredukuje liczbê wierzcho³ków podczas ³±czenia wielok±tów, mo¿na oszacowaæ, ¿e z³o¿ono¶æ ca³ego algorytmu wynosi $O((k \cdot \ell)^5)$, gdzie $k$ - liczba wierzcho³ków tworz±cych przeszkody na mapie, a $\ell$ - liczba wierzcho³ków tworz±cych kszta³t pojazdu.
+
+\chapter{Analiza porównawcza dla algorytmu wyznaczania ¶cie¿ki}
+
+
+
+
+
+\chapter{Instrukcja u¿ytkownika}
+
+Interfejs aplikacji zosta³ przedstawiony na obrazku 6.1.
+~\begin{center}
+	\includegraphics[scale=0.64]{HomeView}\\
+	\textit{\textbf{Obrazek 6.1}. Interfejs aplikacji}
+\end{center}
+W górnej czê¶ci interfejsu umieszczone zosta³o menu g³ówne. U¿ytkownik ma mo¿liwo¶æ przej¶cia do zak³adki ``Start'', ``Konfiguracja'', ``Symulacja'' oraz powrotu do poprzedniej zak³adki za pomoc± przycisku ``Wstecz''. Ponadto w prawym górnym rogu interfejsu znajduje siê przycisk ``Ustawienia'' pozwalaj±cy na przej¶cie do zak³adki z ustawieniami g³ównymi aplikacji.
+
+\section{Edytor map i pojazdów}
+
+Przej¶cie do edytora map lub pojazdów z ekranu startowego mo¿liwe jest poprzez wybranie zak³adki ``Konfiguracja'', a nastêpnie podzak³adki ``Edytor map'' lub ``Edytor pojazdów''.
+
+\subsection{Edytor map}
+
+Interfejs edytora map zosta³ przedstawiony na obrazku 6.1.1.1.
+~\begin{center}
+	\includegraphics[scale=0.64]{MapEditorView}\\
+	\textit{\textbf{Obrazek 6.1.1.1}. Interfejs edytora map}
+\end{center}
+U¿ytkownik ma do dyspozycji nastêpuj±ce przyciski:
+\begin{description}
+	\item[1] - \textbf{Wczytaj mapê} - umo¿liwia wczytanie i edycjê uprzednio zapisanej mapy z pliku SVG.
+	\item[2] - \textbf{Zapisz mapê} - umo¿liwia zapisanie mapy do pliku SVG.
+	\item[3] - \textbf{Cofnij} - umo¿liwia cofniêcie ostatnio wykonanej akcji (np. usuniêcie ostatniej krawêdzi).
+	\item[4] - \textbf{Wyczy¶æ} - czy¶ci obszar edytora.
+\end{description}
+Aby rozpocz±æ tworzenie nowej mapy nale¿y dodaæ do niej pierwszy punkt. Mo¿na to uczyniæ klikaj±c lewym przyciskiem myszy w obszarze edytora (b³êkitne okienko). Po dodaniu pierwszego punktu pojawi siê linia, która bêdzie pod±¿aæ za kursorem, a¿ do momentu zakoñczenia edycji wielok±ta. Kolor tej linii informuje u¿ytkownika, czy mo¿liwe jest dodanie nowego punktu w miejscu, w którym obecnie znajduje siê kursor. Kolor zielony oznacza, ¿e nowo dodana krawêd¼ bêdzie prawid³owa, natomiast kolor czerwony informuje u¿ytkownika ¿e nowa krawêd¼ przecina³aby jedn± z krawêdzi obecnie tworzonego wielok±ta. W tym przypadku dodanie punktu nie bêdzie mo¿liwe. 
+
+~\\Dodawanie kolejnych punktów do wielok±ta odbywa siê za pomoc± klikniêcia lewym przyciskiem myszy. Istnieje równie¿ mo¿liwo¶æ usuniêcia ostatnio dodanego punktu. Aby tego dokonaæ wystarczy klikn±æ prawym przyciskiem myszy lub klikn±æ przycisk ``Cofnij''. W celu zakoñczenia edycji wielok±ta nale¿y klikn±æ w pobli¿u jego pierwszego punktu. Edytor automatycznie zamknie wielok±t, a jego kolor zostanie zmieniony na kolor czarny, co oznacza ¿e nie jest on ju¿ aktywny.
+~\begin{center}
+	\includegraphics[scale=0.64]{MapEditorViewBadPoint}\\
+	\textit{\textbf{Obrazek 6.1.1.2}. Próba dodania niepoprawnego punktu}
+\end{center}
+Po dodaniu jednego wielok±ta u¿ytkownik ma mo¿liwo¶æ dodania kolejnych. Nowe wielok±ty mog± przecinaæ krawêdzie utworzonych wcze¶niej wielok±tów. Po zakoñczeniu tworzenia mapy nale¿y j± zapisaæ, aby mo¿liwe by³o jej u¿ycie podczas tworzenia symulacji.
+
+\subsection{Edytor pojazdów}
+
+Interfejs edytora pojazdów wygl±da identycznie jak interfejs edytora map. Tworzenie wielok±ta bêd±cego kszta³tem pojazdu równie¿ przebiega w taki sam sposób jak w edytorze map. W przypadku tworzenia pojazdu mo¿na jednak utworzyæ tylko jeden wielok±t. Nastêpnym krokiem jest wybranie punktu wewn±trz tego wielok±ta, który bêdzie jego osi± obrotu. Podczas dzia³ania algorytmu wyznaczania ¶cie¿ki, to w³a¶nie do tego punktu sprowadzany jest pojazd. Ostatnim krokiem jest wybranie kierunku jazdy pojazdu, czyli de facto jego przodu. Operacja ta zosta³a zaprezentowana na obrazku poni¿ej.
+~\begin{center}
+	\includegraphics[scale=0.64]{VehicleEditorViewInitialRotation}\\
+	\textit{\textbf{Obrazek 6.1.2.1}. Ustalanie kierunku jazdy pojazdu}
+\end{center}
+Po wykonaniu wymienionych wy¿ej operacji pojazd jest gotowy. Aby mo¿liwe by³o jego u¿ycie podczas tworzenia symulacji nale¿y go zapisaæ.
+
+\newpage
+
+\section{Traser plików graficznych}
+
+Przej¶cie do trasera plików graficznych z ekranu startowego mo¿liwe jest poprzez wybranie zak³adki ``Konfiguracja'', a nastêpnie podzak³adki ``Traser obrazków''. Interfejs trasera plików graficznych zosta³ przedstawiony na poni¿szym obrazku.
+~\begin{center}
+	\includegraphics[scale=0.64]{TracerView}\\
+	\textit{\textbf{Obrazek 6.2.1}. Interfejs trasera plików graficznych}
+\end{center}
+G³ówn± czê¶æ interfejsu stanowi± dwa okna oznaczone na obrazku numerami 5 i 6. Okno po lewej stronie bêdzie odpowiedzialne za wy¶wietlanie wczytanego pliku graficznego, natomiast okno po prawej stronie prezentowaæ bêdzie wyniki trasowania.
+
+~\\W interfejsie trasera plików graficznych u¿ytkownik ma do dyspozycji cztery przyciski:
+\begin{description}
+	\item[1] - \textbf{Wczytaj obrazek} - umo¿liwia wczytanie nowego pliku graficznego .
+	\item[2] - \textbf{Stwórz mapê} - przycisk jest aktywny zawsze, umo¿liwia stworzenie mapy z wybranych wielok±tów. Po klikniêciu u¿ytkownik zostaje przeniesiony do edytora map.
+	\item[3] - \textbf{Stwórz pojazd} - przycisk jest aktywny tylko wtedy, gdy wybrany jest jeden wielok±t, umo¿liwia stworzenie pojazdu. Po klikniêciu u¿ytkownik zostaje przeniesiony do edytora pojazdów.
+	\item[4] - \textbf{Trasuj obrazek} - rozpoczyna operacjê trasowania wczytanego pliku graficznego.
+\end{description}
+Poza wymienionymi przyciskami w sk³ad interfejsu wchodz± równie¿ dwa suwaki, pozwalaj±ce na dobór nastêpuj±cych parametrów trasowania:
+\begin{itemize}
+	\item \textit{Warto¶æ progowania obszaru} - procentowa (relatywnie do ca³ego obrazka) warto¶æ okre¶laj±ca maksymaln± powierzchniê odrzucanych wielok±tów. Niezerowa warto¶æ pozwala na usuniêcie kszta³tów wygenerowanych z artefaktów pliku graficznego lub po prostu odrzucenie ma³ych, niepo¿±danych przez u¿ytkownika elementów.
+	\item \textit{Warto¶æ progowania kolorów} - procentowy próg okre¶laj±cy czy grupy pikseli o danym kolorze powinny byæ traktowane jako kszta³ty, czy t³o. Im mniejsza warto¶æ tego parametru, tym ciemniejszy musi byæ kszta³t, aby algorytm zinterpretowa³ go jako wielok±t, a nie element t³a.
+\end{itemize}
+
+~\\Ca³y proces trasowania jest do¶æ prosty i rozpoczyna siê od wczytania pliku graficznego. Nastêpnie u¿ytkownik mo¿e odpowiednio dobraæ parametry trasowania i klikn±æ na przycisk ``Trasuj obrazek''. Po tych operacjach w oknie po prawej stronie pojawi± siê wyniki trasowania. 
+
+~\\Je¶li u¿ytkownik chce utworzyæ mapê, mo¿e wybraæ dowoln± liczbê wielok±tów, a nastêpnie klikn±æ przycisk ``Stwórz mapê''. Je¶li natomiast utworzony ma byæ pojazd, nale¿y wybraæ tylko jeden wielok±t i klikn±æ przycisk ``Stwórz pojazd''. Wyboru wielok±ta mo¿na dokonaæ za pomoc± klikniêcia lewym przyciskiem myszy. Wybrany wielok±t zostaje pod¶wietlony na niebiesko. Aby zrezygnowaæ z wyboru danego wielok±ta nale¿y na nim klikn±æ prawym przyciskiem myszy.
+\vfill
+
+\section{Modu³ symulacji}
+
+Przej¶cie do modu³u umo¿liwiaj±cego przygotowanie i przeprowadzenie symulacji mo¿liwe jest poprzez wybranie zak³adki ``Symulacja''. Interfejs modu³u symulacji zosta³ przedstawiony na poni¿szym obrazku.
+~\begin{center}
+	\includegraphics[scale=0.64]{SimulationView}\\
+	\textit{\textbf{Obrazek 6.3.1}. Interfejs modu³u symulacji}
+\end{center}
+W interfejsie modu³u symulacji u¿ytkownik ma do dyspozycji nastêpuj±ce przyciski:
+\begin{description}
+	\item[1] - \textbf{Wczytaj symulacjê} - umo¿liwia wczytanie i edycjê uprzednio zapisanej symulacji z pliku SVG.
+	\item[2] - \textbf{Zapisz symulacjê} - umo¿liwia zapisanie symulacji do pliku SVG.
+	\item[3] - \textbf{Wyczy¶æ} - resetuje wszystkie elementy symulacji. 
+	\item[4] - \textbf{Wczytaj mapê} - umo¿liwia wczytanie uprzednio zapisanej mapy z pliku SVG.
+	\item[5] - \textbf{Wczytaj pojazd} - umo¿liwia wczytanie uprzednio zapisanego pojazdu z pliku SVG.
+	\item[6] - \textbf{Wybierz punkt startowy} - umo¿liwia wybranie punktu w którym znajdzie siê o¶ obrotu pojazdu, a nastêpnie dostosowanie jego wielko¶ci i pocz±tkowego obrotu.
+	\item[7] - \textbf{Wybierz punkt koñcowy} - umo¿liwia wybranie punktu koñcowego, do którego bêdzie obliczana ¶cie¿ka, któr± ma pokonaæ pojazd.
+	\item[8] - \textbf{Oblicz ¶cie¿kê} - rozpoczyna dzia³anie algorytmu obliczania ¶cie¿ki.
+	\item[9] - \textbf{Odtwórz/Wstrzymaj} - przycisk jest aktywny, gdy znaleziona osta³a ¶cie¿ka od punktu startowego do punktu koñcowego. Umo¿liwia rozpoczêcie lub wstrzymanie animacji przejazdu.
+	\item[10] - \textbf{Zatrzymaj} - przycisk jest aktywny, gdy rozpoczêto odtwarzanie animacji. Umo¿liwia jej zatrzymanie i powrót pojazdu do punktu startowego.
+\end{description}
+Oprócz wymienionych wy¿ej przycisków, w dolnej czê¶ci interfejsu znajduje siê suwak umo¿liwiaj±cy rêczny podgl±d symulacji. Mo¿liwe jest tak¿e rozpoczêcie odtwarzania symulacji od wybranego miejsca.
+
+~\\Aby utworzyæ now± symulacjê nale¿y wykonaæ nastêpuj±ce operacje:
+\begin{itemize}
+	\item wczytaæ mapê
+	\item wczytaæ pojazd
+	\item wybraæ punkt startowy oraz dopasowaæ rozmiar i pocz±tkowy obrót pojazdu (wielok±t reprezentuj±cy pojazd nie mo¿e przecinaæ siê z ¿adn± przeszkod±)
+	\item wybraæ punkt koñcowy (nie mo¿e byæ zawarty w ¿adnym z wielok±tów reprezentuj±cych przeszkody)
+	\item klikn±æ przycisk ``Oblicz ¶cie¿kê'' oraz dobraæ nastêpuj±ce parametry dzia³ania algorytmu:
+	\begin{itemize}
+    	\item gêsto¶æ podzia³u k±ta pe³nego - okre¶la na ile jednostek zostanie podzielony k±t pe³ny (ma wp³yw na d³ugo¶æ obliczeñ algorytmu)
+    	\item wielko¶æ punktu - okre¶la maksymaln± odleg³o¶æ miêdzy punktami, dla której algorytm traktuje te punkty jako identyczne
+    	\item wagê krawêdzi dla obrotu - okre¶la wagê krawêdzi w grafie dla obrotu pojazdu o jedn± jednostkê - im wiêksza warto¶æ, tym mniej obrotów bêdzie chcia³ wykonaæ pojazd
+    	\item zgoda na poruszanie siê do ty³u
+    	\item zgoda na poruszanie siê w dowolnym kierunku 
+	\end{itemize}
+\end{itemize}
+Okno dialogowe umo¿liwiaj±ce dobór wymienionych parametrów zosta³o przedstawione na obrazku poni¿ej.
+~\begin{center}
+	\includegraphics[scale=0.68]{SimulationViewOptions}\\
+	\textit{\textbf{Obrazek 6.3.2}. Opcje algorytmu obliczania ¶cie¿ki}
+\end{center}
+Po wykonaniu powy¿szych kroków i zakoñczeniu obliczeñ, mo¿liwe bêdzie odtworzenie animacji ukazuj±cej przejazd pojazdu od punktu startowego do punktu koñcowego lub zostanie wy¶wietlony komunikat informuj±cy o tym, i¿ ¶cie¿ka pomiêdzy tymi punktami nie zosta³a znaleziona. Dodatkowo, je¶li w ustawieniach aplikacji w³±czono opcjê prezentowania znalezionej ¶cie¿ki, zostanie ona wy¶wietlona w obszarze symulacji. Wynik dzia³ania algorytmu z widoczn± ¶cie¿k± zosta³ zaprezentowany na poni¿szym obrazku.
+~\begin{center}
+	\includegraphics[scale=0.64]{SimulationViewPath}\\
+	\textit{\textbf{Obrazek 6.3.3}. Wynik dzia³ania algorytmu}
+\end{center}
+\newpage
+~\\Gotow± symulacjê mo¿na zapisaæ do pliku SVG, klikaj±c uprzednio przycisk ''Zapisz symulacjê''. Mo¿na równie¿ wczytaæ now± mapê, nowy pojazd, na nowo wyznaczyæ punkt startowy i koñcowy, lub jednym klikniêciem w przycisk ''Wyczy¶æ'' rozpocz±æ tworzenie symulacji od nowa. Zapisan± symulacjê mo¿na podejrzeæ za pomoc± przegl±darki internetowej wspieraj±cej format SVG.
+
+\section{Ustawienia aplikacji}
+
+Interfejs zak³adki z ustawieniami aplikacji zosta³ przedstawiony na poni¿szym obrazku.
+~\begin{center}
+	\includegraphics[scale=0.64]{SettingsView}\\
+	\textit{\textbf{Obrazek 6.4.1}. Ustawienia aplikacji}
+\end{center}
+W ustawieniach u¿ytkownik mo¿e wybraæ wersjê jêzykow± aplikacji (polsk± lub angielsk±), w³±czyæ lub wy³±czyæ rysowanie linii z antyaliasingiem oraz w³±czyæ lub wy³±czyæ podgl±d i przewijanie znalezionej ¶cie¿ki przy tworzeniu symulacji. Aby zmiany dotycz±ce jêzyka aplikacji by³y widoczne, konieczny jest restart ca³ej aplikacji.
+
+\chapter{Przebieg pracy}
+
+\section{Model wytwórczy}
+
+Praca dyplomowa zosta³a napisana w modelu przyrostowym (ang. \textit{incremental development}) i sk³ada³a siê z czterech etapów (ang. \textit{milestones}). Model ten zak³ada³ implementacjê kompletnego modu³u w ka¿dym z etapów prac. Ka¿dy etap koñczy³ siê dostarczeniem kodu ¼ród³owego ukoñczonego modu³u, testów jednostkowych oraz dokumentacji technicznej modu³u.
+
+~\\Preferencja modelu przyrostowego nad modelem kaskadowym wynika³a ze struktury naszej aplikacji. Mo¿na j± podzieliæ na wiele odrêbnych modu³ów, dzia³aj±cych (do pewnego stopnia) oddzielnie i niezale¿nie od siebie. Ponadto, ta metodologia zak³ada brak konieczno¶ci definiowania z góry szczegó³owych wymagañ dla poszczególnych czê¶ci systemu, dziêki czemu proces tworzenia jest bardziej elastyczny ni¿ w przypadku modelu kaskadowego.
+
+\section{Harmonogram i podzia³ prac}
+
+W tej czê¶ci pracy dyplomowej opisano szczegó³owo podzia³ prac w ka¿dym z etapów oraz terminy ich zakoñczenia.
+
+\subsection{Etap 1}
+
+Termin zakoñczenia etapu: \textbf{17.11.2015}.
+
+~\\Pierwszy etap prac nad projektem obejmowa³ przygotowanie architektury, odpowiednich modeli klas oraz rêcznego edytora map i pojazdów. Podzia³ zadañ w tym etapie wygl±da³ w nastêpuj±cy sposób:
+\begin{itemize}
+	\item zaprojektowanie architektury systemu (Mateusz Pielat)
+	\item zdefiniowanie reprezentacji pojazdu i mapy (Konrad Mi¶kiewicz)
+	\item przygotowanie kontrolki umo¿liwiaj±cej osadzenie MonoGame w WPF (Wojciech Kowalik)
+	\item przygotowanie rêcznego edytora map i pojazdów (wszyscy)
+\end{itemize}
+
+\subsection{Etap 2}
+
+Termin zakoñczenia etapu: \textbf{01.12.2015}.
+
+~\\G³ównym zadaniem drugiego etapu by³o przygotowanie modu³u umo¿liwiaj±cego trasowanie plików graficznych. Ponadto dodane zosta³y metody umo¿liwiaj±ce serializacjê i deserializacjê map oraz pojazdów. Podzia³ zadañ w tym etapie:
+\begin{itemize}
+	\item serializacja i deserializacja map oraz pojazdów (Wojciech Kowalik)
+	\item przygotowanie klasy opakowuj±cej bibliotekê D3DPotrace, umo¿liwiaj±cej trasowanie plików graficznych (Mateusz Pielat)
+	\item implementacja wielow±tkowego trasowania plików z u¿yciem klasy opakowuj±cej biblioteke D3DPotrace (Konrad Mi¶kieiwcz)
+\end{itemize}
+
+\subsection{Etap 3}
+
+Termin zakoñczenia etapu: \textbf{15.12.2015}.
+
+~\\Celem trzeciego etapu prac nad projektem by³o przygotowanie narzêdzia generuj±cego losowe listy rozkazów ruchu pojazdu oraz wizualizacji ruchu pojazdu na podstawie tych rozkazów. Podzia³ zadañ podczas realizacji trzeciego etapu:
+\begin{itemize}
+	\item zdefiniowanie reprezentacji rozkazów ruchu pojazdu (Mateusz Pielat)
+	\item przygotowanie narzêdzia generuj±cego losow± listê rozkazów ruchu pojazdu (Konrad Mi¶kiewicz)
+	\item implementacja obiektu symulacji, wczytywania mapy, pojazdu, ustawiania pozycji i obrotu pocz±tkowego pojazdu oraz punktu koñcowego (Wojciech Kowalik)
+	\item implementacja metody przekszta³caj±cej listê rozkazów ruchu pojazdu na animacjê ruchu pojazdu (Mateusz Pielat)
+	\item implementacja suwaka osi czasu wizualizacji (Wojciech Kowalik)
+\end{itemize}
+
+\subsection{Etap 4}
+
+Planowany termin zakoñczenia etapu: \textbf{12.01.2016}, ostateczna data: \textbf{19.01.2016}.
+
+~\\Ostatni etap prac nad projektem obejmowa³ implementacjê algorytmu wyszukiwania ¶cie¿ki. Do zadañ tego etapu nale¿a³a:
+\begin{itemize}
+	\item implementacja pomocniczych algorytmów geometrycznych (wszyscy)
+	\item implementacja algorytmu obliczaj±cego sumê Minkowskiego (Wojciech Kowalik)
+	\item implementacja algorytmu tworz±cego graf warstwowy i wyszukuj±cego ¶cie¿kê od punktu pocz±tkowego do punktu koñcowego (Konrad Mi¶kiewicz)
+	\item eksport i mapowanie wyników obliczeñ do listy rozkazów ruchu pojazdu
+\end{itemize}
+
+~\\Ostatni etap nie zosta³ w pe³ni zakoñczony w terminie. Problemem okaza³a siê implementacja algorytmu wyszukiwania ¶cie¿ki i wyst±pienie przypadków szczególnych, które nie zosta³y wcze¶niej przez nas przewidziane.
+
+%-----------Koniec czê¶ci zasadniczej-----------
 
 \begin{thebibliography}{11}
-\bibitem[1]{B} Stanis³aw Bia³as, \emph{Macierze. Wybrane problemy}, AGH Uczelniane Wydawnictwa Naukowo-Dydaktyczne, Kraków, 2006.
-\bibitem[2]{H} Nicholas J. Higham, \emph{Accuracy and stability of numerical algorithms}, SIAM, Philadelphia 1996.
-\bibitem[3]{H2} Nicholas J. Higham, \emph{Functions of Matrices. Theory and Computation}, SIAM, Philadelphia 2008.
-\bibitem[4]{DJ} Maksymilian Dryja, Janina i Micha³ Jankowscy, \emph{Przegl¹d metod i algorytmów numerycznych, czêœæ 2}, Wydawnictwa Naukowo-Techiczne, Warszawa 1982.
+\addcontentsline{toc}{chapter}{Bibliografia}
+\bibitem[1]{B} \emph{XAML Overview},
+https://msdn.microsoft.com/en-us/library/cc189036%28v=vs.95%29.aspx
+\bibitem[2]{B} \emph{Wprowadzenie do wzorca projektowego MVVM na przyk³adzie aplikacji WPF}, http://msdn.microsoft.com/pl-pl/library/wprowadzenie-do-wzorca-projektowego-model-view-viewmodel-na-przykladzie-aplikacji-wpf.aspx
+\bibitem[3] {B} \emph{MVVM Light Toolkit Documentation},
+http://www.mvvmlight.net/doc/
+\bibitem[4] {B} \emph{W3Schools SVG Tutorial},
+http://www.w3schools.com/svg/
+\bibitem[5] {B} \emph{MonoGame Documentation},
+http://www.monogame.net/documentation/
+\bibitem[6]{H} \emph{Clipper - an open source freeware library for clipping and offsetting lines and polygons.},
+http://www.angusj.com/delphi/clipper.php
+\bibitem[7]{B}dr Jan Bródka, \emph{Wyk³ady z przedmiotu ``Algorytmy i Struktury Danych 2''}
+\bibitem[8]{B}dr in¿. Pawe³ Kotowski, \emph{Wyk³ady z przedmiotu ``Grafika Komputerowa''}
 \end{thebibliography}
-\tableofcontents
 \clearpage
 \pagestyle{empty}
 \noindent Warszawa, dnia ...............
 \vspace{5cm}
 \begin{center}
-\LARGE{Oœwiadczenie}
+\LARGE{O¶wiadczenie}
 \end{center}
-Oœwiadczam, ¿e pracê magistersk¹ pod tytu³em: ,,Tytu³ pracy'', której promotorem jest prof. dr hab. Jan Wybitny, wykona³em/am samodzielnie, co poœwiadczam w³asnorêcznym podpisem.
+O¶wiadczam, ¿e pracê in¿yniersk± pod tytu³em: ,,Symulacja ruchu robota w labiryncie'', której promotorem jest dr Pawe³ Rz±¿ewski, wykona³em samodzielnie, co po¶wiadczam w³asnorêcznym podpisem.
 \vspace{2cm}
 \begin{flushright}
+\begin{tabular}[t]{c}
 ...........................................
+\\Wojciech Kowalik
+\\Konrad Mi¶kiewicz
+\\Mateusz Pielat
+\end{tabular}
 \end{flushright}
 
 \end{document}
