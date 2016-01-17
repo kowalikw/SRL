@@ -492,86 +492,97 @@ W niniejszej pracy dyplomowej zosta³y zaimplementowane opisane poni¿ej algorytmy
 
 \begin{subdefinition}
 Suma Minkowskiego
-\\Sum± Minkowskiego nazywamy dzia³anie okre¶lone na rodzinie wszystkich podzbiorów danej przestrzeni liniowej $X$ wzorem:$$A+B=\{a+b:a \in A,b \in B\},$$gdzie $A$ i $B$ s± podzbiorami przestrzeni liniowej $X$.\\Powy¿sza definicja ma sens dla dowolnego zbioru $X$ z okre¶lonym dzia³aniem dodawania.
+\\Sum± Minkowskiego nazywamy dzia³anie okre¶lone na rodzinie wszystkich podzbiorów danej przestrzeni liniowej $X$ wzorem:$$A+B=\{a+b:a \in A,b \in B\},$$gdzie $A$ i $B$ s± podzbiorami przestrzeni liniowej $X$.
 \end{subdefinition}
+~\\Powy¿sza definicja ma sens dla dowolnego zbioru $X$ z okre¶lonym dzia³aniem dodawania.
+~\\W przypadku zbiorów dwuwymiarowych $P, Q \in \mathbb{R}^2$, bêd±cych podzbiorami p³aszczyzny, sumê Minkowskiego tych zbiorów mo¿na interpretowaæ jako sumê wektorow± wektorów $p \in P$ i $q \in Q$, czyli gdy $p=(p_{x},p_{y})$ oraz $q=(q_{x},q_{y})$, to $p + q = (p_{x} + q_{x},p_{y} + q_{y})$.
 
-~\\Na poni¿szym obrazku zaprezentowano przyk³ad sumy Minkowskiego dla dwóch podzbiorów p³aszczyzny, bêd±cych wielok±tami wypuk³ymi.
+~\\Na poni¿szym obrazku zaprezentowano przyk³ad sumy Minkowskiego dla dwóch podzbiorów p³aszczyzny $P, Q \in \mathbb{R}^2$.\\$P = \{(1,0), (0,1), (0,-1)\}$\\$Q = \{(0,0), (1,1), (1,-1)\}$\\$P + Q = \{(1,0), (2,1), (2,-1), (0,1), (1,2), (0,-1), (1,-2)\}$.
 
 ~\begin{center}
 	\includegraphics[scale=0.54]{MinkowskiSumExampleWiki}\\
 	\textit{\textbf{Obrazek 4.3.1.1}. Przyk³ad sumy Minkowskiego dwóch wielok±tów (¼ród³o: wikipedia.org)}
 \end{center}
 
-~\\W ogólno¶ci wyznaczenie sumy Minkowskiego dwóch dowolnych wielok±tów nie jest prostym zadaniem, dlatego dzia³anie opisywanego algorytmu zostanie zaprezentowane na prostym przyk³adzie. Obliczana bêdzie suma Minkowskiego wielok±tów A i B znajduj±cych siê na poni¿szym obrazku. 
+~\\W ogólno¶ci wyznaczenie sumy Minkowskiego dwóch dowolnych wielok±tów nie jest prostym zadaniem, dlatego dzia³anie opisywanego algorytmu zostanie zaprezentowane na prostym przyk³adzie. Obliczana bêdzie suma Minkowskiego wielok±tów $A$ i $B$ znajduj±cych siê na poni¿szym obrazku. 
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep0}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Wielok±ty A i B, dla których obliczana bêdzie suma Minkowskiego}
+	\textit{\textbf{Obrazek 4.3.1.1}. Wielok±ty $A$ i $B$, dla których obliczana bêdzie suma Minkowskiego}
 \end{center}
 
 ~\\Pierwszym krokiem dzia³ania algorytmu obliczaj±cego sumê Minkowskiego dwóch wielok±tów jest triangulacja obu wielok±tów, czyli podzia³ ich na trójk±ty. Efekty triangulacji zosta³y przedstawione na poni¿szym obrazku.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep1}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Wielok±ty A i B po triangulacji}
+	\textit{\textbf{Obrazek 4.3.1.1}. Wielok±ty $A$ i $B$ po triangulacji}
 \end{center}
 
-~\\W kolejnym kroku nale¿y wybraæ dowolny punkt znajduj±cy siê wewn±trz lub na krawêdzi jednego z wielok±tów. W szczególno¶ci mo¿e byæ to jeden z wierzcho³ków wielok±ta. Wybierzmy jeden z wierzcho³ków wielok±ta B.
+~\\W kolejnym kroku nale¿y wybraæ dowolny punkt znajduj±cy siê wewn±trz lub na brzegu jednego z wielok±tów. W szczególno¶ci mo¿e byæ to jeden z wierzcho³ków wielok±ta. Wybierzmy jeden z wierzcho³ków wielok±ta $B$.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep2}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Wybór punktu z wielok±ta B (czerwony kolor)}
+	\textit{\textbf{Obrazek 4.3.1.1}. Wybór punktu z wielok±ta $B$ (czerwony kolor)}
 \end{center}
 
-~\\Rozpoczyna siê g³ówna faza algorytmu. Rozwa¿any teraz bêdzie trójk±t A1. W pierwszym kroku nale¿y wzi±æ trójk±t B1 i wybranym wcze¶niej punktem przy³o¿yæ go do ka¿dego wierzcho³ka trójk±ta A1. Operacja ta zosta³a zaprezentowana na obrazku poni¿ej.
+~\\Po dokonaniu wyboru punktu rozpoczyna siê g³ówna faza algorytmu. W pierwszym kroku rozwa¿ane bêd± trójk±ty $A1$ i $B1$. Na pocz±tek nastêpuje translacja wybranego w poprzednim kroku punktu do jednego z wierzcho³ków trójk±ta $A1$. Po wykonaniu tej operacji o taki sam wektor nale¿y przesun±æ wszystkie wierzcho³ki trójk±ta $B1$. Efekt tej operacji zaprezentowano na obrazku poni¿ej.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep3}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Operacja przyk³adania trójk±ta B1 do wierzcho³ków trójk±ta A1}
+	\textit{\textbf{Obrazek 4.3.1.1}. Translacja wybranego punktu i trójk±ta $B1$}
 \end{center}
 
-~\\Nastêpnie nale¿y wyznaczyæ otoczkê wypuk³± zbioru wierzcho³ków, który zawiera wierzcho³ki trzech trójk±tów B1 przy³o¿onych wybranym punktem w wierzcho³kach trójk±ta A1. Efekt wyznaczania otoczki wypuk³ej zbioru tych wierzcho³ków prezentuje poni¿szy obrazek.
+~\\Po wykonaniu opisanej wy¿ej translacji nale¿y zapisaæ (np. na li¶cie) wspó³rzêdne wierzcho³ków przesuniêtego trójk±ta $B1$, a nastêpnie przeprowadziæ translacjê wybranego wcze¶niej punktu do kolejnego wierzcho³ka trójk±ta $A1$ oraz przesun±æ o taki sam wektor wszystkie wierzcho³ki trójk±ta $B1$. Ponownie nale¿y zapisaæ nowe wspó³rzêdne wierzcho³ków trójk±ta $B1$ oraz powtórzyæ operacjê translacji dla ostatniego wierzcho³ka trójk±ta $A1$. Na koniec, po raz kolejny nale¿y zapisaæ wspó³rzêdne wierzcho³ków przesuniêtego trójk±ta $B1$.
+
+~\\W nastêpnym kroku nale¿y wyznaczyæ otoczkê wypuk³± zbioru punktów zapisanych w poprzednim kroku. Efekt wyznaczania otoczki wypuk³ej zbioru tych punktów oraz odpowiednio przesuniêty trójk±t $B1$ (do ka¿dego z wierzcho³ków trójk±ta $A1$) prezentuje poni¿szy obrazek.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep4}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Otoczka wypuk³a (kolor zielony) trójk±ta A1 i przy³o¿onych w jego wierzcho³kach trójk±tów B1}
+	\textit{\textbf{Obrazek 4.3.1.1}. Otoczka wypuk³a (kolor zielony) zapisanego zbioru punktów oraz przesuniêty (do ka¿dego z wierzcho³ków $A1$) trójk±t $B1$ (kolor niebieski)}
 \end{center}
 
-~\\Nastêpnie nale¿y wzi±æ trójk±t B2 i podobnie jak poprzednio, przy³o¿yæ go wybranym wcze¶niej punktem w ka¿dym z wierzcho³ków trójk±ta A1. Po przy³o¿eniu trójk±tów B2 w wierzcho³kach trójk±ta A1 nale¿y wyznaczyæ otoczkê wypuk³± powsta³ego po tym przy³o¿eniu zbioru wierzcho³ków.
+~\\W kolejnym kroku nale¿y powtórzyæ opisane wy¿ej operacje dla pary trójk±tów $A1$ i $B2$. Ponownie wyznaczony zostanie zbiór punktów, dla którego nale¿y wyznaczyæ otoczkê wypuk³±. Efekt zaprezentowano na obrazku poni¿ej.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep5}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Otoczka wypuk³a (kolor czerwony) trójk±ta A1 i przy³o¿onych w jego wierzcho³kach trójk±tów B2}
+	\textit{\textbf{Obrazek 4.3.1.1}. Otoczka wypuk³a (kolor zielony) zapisanego zbioru punktów dla trójk±tów $A1$ i $B2$}
 \end{center}
 
-~\\Wielok±t B nie zawiera ju¿ wiêcej nieprzetworzonych trójk±tów, wiêc kolejnym krokiem jest z³±czenie powsta³ych w poprzednich krokach dwóch otoczek wypuk³ych w jeden wielok±t. Efekt z³±czenia wielok±tów bêd±cych wyznaczonymi otoczkami wypuk³ymi przedstawiono na poni¿szym obrazku.
+~\\Wielok±t $B$ nie zawiera ju¿ wiêcej nieprzetworzonych trójk±tów, wiêc kolejnym krokiem jest z³±czenie powsta³ych w poprzednich krokach dwóch otoczek wypuk³ych w jeden wielok±t. Efekt z³±czenia wielok±tów bêd±cych wyznaczonymi otoczkami wypuk³ymi przedstawiono na poni¿szym obrazku.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep6}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Efekt z³±czenia wielok±tów za pomoc± funkcji Union (kolor pomarañczowy)}
+	\textit{\textbf{Obrazek 4.3.1.1}. Efekt z³±czenia wyznaczonych w poprzednich krokach otoczek wypuk³ych}
 \end{center}
 
-~\\Po wykonaniu powy¿szych kroków powsta³ nowy wielok±t (kolor pomarañczowy) i przetwarzanie trójk±ta A1 zosta³o zakoñczone. Nastêpnie wszystkie opisane operacje nale¿y powtórzyæ dla trójk±ta numer 2 z wielok±ta A (A2). Po zakoñczeniu przetwarzania trójk±ta A2 przetwarzany jest trójk±t A3, itd. Operacja zakoñczy siê po przetworzeniu wszystkich trójk±tów wchodz±cych w sk³ad wielok±ta A. Efekt przetworzenia wszystkich trójk±tów zaprezentowano na poni¿szym obrazku.
+~\\Po wykonaniu powy¿szych kroków powsta³ nowy wielok±t (kolor pomarañczowy) i przetwarzanie trójk±ta $A1$ zosta³o zakoñczone. Nastêpnie wszystkie operacje wykonane dla trójk±ta $A1$ nale¿y powtórzyæ dla trójk±ta $A2$. Po zakoñczeniu przetwarzania trójk±ta $A2$ przetwarzany jest trójk±t $A3$, itd. Operacja zakoñczy siê po przetworzeniu wszystkich trójk±tów wchodz±cych w sk³ad wielok±ta $A$. Efekt przetworzenia wszystkich trójk±tów zaprezentowano na poni¿szym obrazku.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep7}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Efekt przetworzenia wszystkich trójk±tów wielok±ta A}
+	\textit{\textbf{Obrazek 4.3.1.1}. Efekt przetworzenia wszystkich trójk±tów wielok±ta $A$}
 \end{center}
 
-~\\Ostatnim krokiem prowadz±cym do uzyskania sumy Minkowskiego jest wykonanie operacji \textit{Union} dla wszystkich nowo powsta³ych wielok±tów (kolory pomarañczowy czerwony, zielony i niebieski). Efektem tej operacji jest wyznaczona suma Minkowskiego wielok±tów A i B.
+~\\Ostatnim krokiem prowadz±cym do uzyskania sumy Minkowskiego jest z³±czenie wszystkich nowo powsta³ych wielok±tów (kolory pomarañczowy czerwony, zielony i niebieski). Efektem tej operacji jest wyznaczona suma Minkowskiego wielok±tów $A$ i $B$.
 
 ~\begin{center}
 	\includegraphics[scale=0.6]{MinkowskiSumExampleStep8}\\
-	\textit{\textbf{Obrazek 4.3.1.1}. Suma Minkowskiego wielok±tów A i B}
+	\textit{\textbf{Obrazek 4.3.1.1}. Suma Minkowskiego wielok±tów $A$ i $B$}
 \end{center}
 
 %dodac pseudokod?
 
-~\\Z³o¿ono¶æ algorytmu wyznaczania sumy Minkowskiego dwóch wielok±tów mo¿na oszacowaæ poprzez z³o¿ono¶æ operacji dominuj±cej w tym algorytmie. Operacj± dominuj±c± jest w tym wypadku operacja przyk³adania trójk±tów jednego wielok±ta do wierzcho³ków trójk±tów drugiego wielok±ta i wyznaczania odpowiednich otoczek wypuk³ych. Z³o¿ono¶æ operacji przyk³adania trójk±tów jednego wielok±ta do wierzcho³ków trójk±tów drugiego wielok±ta mo¿na opisaæ poni¿szym wzorem:$$(n - 2) \cdot (m - 2),$$gdzie:
-\\$n$ - liczba wierzcho³ków pierwszego wielok±ta
-\\$m$ - liczba wierzcho³ków drugiego wielok±ta
+~\\Aby wyznaczyæ z³o¿ono¶æ algorytmu obliczania sumy Minkowskiego dwóch wielok±tów przeanalizujmy z³o¿ono¶æ wystêpuj±cych w nim operacji. Przyjmijmy nastêpuj±ce oznaczenia:
+\\$n$ - liczba wierzcho³ków pierwszego wielok±ta,
+\\$m$ - liczba wierzcho³ków drugiego wielok±ta.
+\\Ka¿dy wielok±t jest reprezentowany w postaci listy punktów.
 
-~\\Z³o¿ono¶æ ¶rednia operacji wyznaczania otoczki wypuk³ej wynosi $O(nlog(n))$, gdzie $n$ jest liczb± punktów, dla których ta otoczka jest wyznaczana. Jednak w przypadku stosowania otoczki wypuk³ej podczas operacji przyk³adania trójk±tów, mo¿na uznaæ, ¿e z³o¿ono¶æ tej operacji jest sta³a, gdy¿ niezale¿nie od iteracji bêdzie ona zawsze wykonywana dla $n = 9$. Dodatkowo je¶li przyjmiemy, ¿e wielok±ty, dla których obliczana jest suma Minkowskiego maj± identyczn± liczbê wierzcho³ków, to pesymistyczn± z³o¿ono¶æ algorytmu wyznaczania sumy Minkowskiego mo¿na oszacowaæ jako $O(n^2)$, gdzie $n$ - liczba wierzcho³ków wielok±tów dla których wyznaczana jest suma Minkowskiego.
+~\\W pierwszym kroku dzia³ania algorytmu znajdowana jest triangulacja ka¿dego z wielok±tów w czasie $O(p^2)$, gdzie $p$ jest liczb± wierzcho³ków tworz±cych dany wielok±t. Nastêpnie nastêpuje przetwarzanie parami trójk±tów z pierwszego wielok±ta z trójk±tami drugiego wielok±ta. Dla ka¿dej pary trójk±tów trzykrotnie liczymy translacjê wszystkich wierzcho³ków jednego z trójk±tów. Przyjmijmy ¿e bêdzie to trójk±t nale¿±cy do drugiego wielok±ta. Operacja translacji wykonywana jest w czasie sta³ym - $O(1)$. Ponadto na koniec przetwarzania ka¿dej z par liczona jest otoczka wypuk³a wyznaczonych przez algorytm punktów.
+
+~\\Z³o¿ono¶æ ¶rednia operacji wyznaczania otoczki wypuk³ej wynosi $O(klog(k))$, gdzie $k$ jest liczb± punktów, dla których ta otoczka jest wyznaczana. Jednak w naszym przypadku mo¿na uznaæ, ¿e operacja ta jest wykonywana w czasie $O(1)$, gdy¿ niezale¿nie od liczby wierzcho³ków tworz±cych wielok±ty dla których liczona jest suma Minkowskiego, otoczka bêdzie zawsze liczona dla $k = 9$. 
+
+~\\Po zakoñczeniu przetwarzania jednego trójk±ta nale¿±cego do pierwszego wielok±ta z wszystkimi trójk±tami drugiego wielok±ta wykonywana jest operacja z³±czania powsta³ych w tym procesie otoczek wypuk³ych. Operacja ta wykonywana jest w czasie $O(\ell^2)$, gdzie $\ell$ jest ³±czn± liczb± wierzcho³ków wchodz±cych w sk³ad wyznaczonych otoczek wypuk³ych. Operacja z³±czania wielok±tów jest wykonywana tak¿e na koñcu dzia³ania algorytmu, po przetworzeniu wszystkich par.
+
+~\\Z³o¿ono¶æ ca³ego algorytmu mo¿na oszacowaæ poprzez oszacowanie z³o¿ono¶ci jego operacji dominuj±cej. W tym wypadku operacj± t± jest operacja, w której parami przetwarzane s± wszystkie trójk±ty pierwszego wielok±ta z trójk±tami drugiego wielok±ta. Jej z³o¿ono¶æ mo¿na oszacowaæ w nastêpuj±cy sposób:$$(n - 2) \cdot (m - 2) + (n - 2) \cdot (9 \cdot (m - 2))^2.$$\\Liczby $n - 2$ oraz $m - 2$ oznaczaj± liczbê trójk±tów na jakie zosta³ podzielony odpowiednio pierwszy i drugi wielok±t. Pierwszy sk³adnik powy¿szej sumy opisuje wiêc z³o¿ono¶æ przetworzenia parami wszystkich trójk±tów i wyznaczenia kolejnych otoczek wypuk³ych. Drugi sk³adnik opisuje z³o¿ono¶æ operacji z³±czania otoczek wypuk³ych, która jest wykonywana dla ka¿dego trójk±ta pierwszego wielok±ta. Sk³adnik ten ma tak± postaæ, gdy¿ $n - 2$ to oczywi¶cie liczba trójk±tów na jakie mo¿na podzieliæ pierwszy wielok±t, a $9 \cdot (m-2)$ to z góry oszacowana liczba wierzcho³ków wchodz±cych w sk³ad ka¿dej otoczki wypuk³ej - jedna otoczka mog³aby mieæ maksymalnie 9 wierzcho³ków, a dla jednego trójk±ta pierwszego wielok±ta powstanie $m - 2$ takich otoczek, gdy¿ na tyle trójk±tów mo¿na podzielic drugi wielok±t. Ogóln± z³o¿ono¶æ algorytmu obliczaj±cego sumê Minkowskiego mo¿na wiêc oszacowaæ jako $O(n \cdot m^2)$.
 
 \section{Algorytm wyznaczania ¶cie¿ki}
 
