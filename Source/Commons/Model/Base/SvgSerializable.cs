@@ -46,7 +46,7 @@ namespace SRL.Commons.Model.Base
             writer.WriteEndElement();
         }
 
-        
+
 
         public static void Serialize<R>(R model, string filename)
             where R : SvgSerializable
@@ -61,15 +61,16 @@ namespace SRL.Commons.Model.Base
         }
 
         public static bool CanDeserialize<R>(string filename)
+            where R : SvgSerializable
         {
             bool canDeserialize = true;
 
             XmlSchemaSet schemaSet = new XmlSchemaSet();
-            if(typeof(R) == typeof(Map))
+            if (typeof(R) == typeof(Map))
                 schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.MapSchema)));
-            else if(typeof(R) == typeof(Vehicle))
+            else if (typeof(R) == typeof(Vehicle))
                 schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.VehicleSchema)));
-            else if(typeof(R) == typeof(Simulation))
+            else if (typeof(R) == typeof(Simulation))
             {
                 schemaSet.Add("http://www.w3.org/1999/xlink", XmlReader.Create(new StringReader(Resources.SimulationSchemaXlink)));
                 schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.SimulationSchema)));
