@@ -14,28 +14,6 @@ namespace SRL.CommonsTests
     public class ModelTests
     {
         [TestMethod]
-        public void PolygonWriteXmlTest()
-        {
-            XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.PolygonSchema)));
-
-            var serializer = new XmlSerializer(typeof(Polygon));
-            var output = new XDocument();
-
-            Polygon polygon = new Polygon(new List<Point>
-            {
-                new Point(0.2, 0.3),
-                new Point(0.7, 0.4),
-                new Point(-0.2, 0.9)
-            });
-
-            using (XmlWriter writer = output.CreateWriter())
-                serializer.Serialize(writer, polygon);
-
-            output.Validate(schemaSet, (o, e) => Assert.Fail());
-        }
-
-        [TestMethod]
         public void PolygonReadXmlTest()
         {
             var serializer = new XmlSerializer(typeof(Polygon));
@@ -51,23 +29,6 @@ namespace SRL.CommonsTests
             Polygon actual = (Polygon)serializer.Deserialize(reader);
 
             Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void OrderWriteXmlTest()
-        {
-            XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.OrderSchema)));
-
-            var serializer = new XmlSerializer(typeof(Order));
-            var output = new XDocument();
-
-            Order order = new Order(0.5, new Point(-0.3, 0.7));
-
-            using (XmlWriter writer = output.CreateWriter())
-                serializer.Serialize(writer, order);
-
-            output.Validate(schemaSet, (o, e) => Assert.Fail());
         }
 
         [TestMethod]
@@ -87,7 +48,7 @@ namespace SRL.CommonsTests
         public void VehicleWriteXmlTest()
         {
             XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.VehicleSchema)));
+            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Commons.Resources.VehicleSchema)));
 
             var serializer = new XmlSerializer(typeof(Vehicle));
             var output = new XDocument();
@@ -135,7 +96,7 @@ namespace SRL.CommonsTests
         public void MapWriteXmlTest()
         {
             XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.MapSchema)));
+            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Commons.Resources.MapSchema)));
 
             var serializer = new XmlSerializer(typeof(Map));
             var output = new XDocument();
@@ -220,8 +181,8 @@ namespace SRL.CommonsTests
         public void SimulationWriteXmlTest()
         {
             XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.SimulationSchema)));
-            schemaSet.Add("http://www.w3.org/1999/xlink", XmlReader.Create(new StringReader(Resources.SimulationSchemaXlink)));
+            schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Commons.Resources.SimulationSchema)));
+            schemaSet.Add("http://www.w3.org/1999/xlink", XmlReader.Create(new StringReader(Commons.Resources.SimulationSchemaXlink)));
 
             var serializer = new XmlSerializer(typeof(Simulation));
             var output = new XDocument();

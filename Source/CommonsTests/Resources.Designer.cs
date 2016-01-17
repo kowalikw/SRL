@@ -8,15 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.CodeDom.Compiler;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Resources;
-using System.Runtime.CompilerServices;
-
 namespace SRL.CommonsTests {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -24,27 +19,27 @@ namespace SRL.CommonsTests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
-    [DebuggerNonUserCode()]
-    [CompilerGenerated()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
         
-        private static ResourceManager resourceMan;
+        private static global::System.Resources.ResourceManager resourceMan;
         
-        private static CultureInfo resourceCulture;
+        private static global::System.Globalization.CultureInfo resourceCulture;
         
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        internal static ResourceManager ResourceManager {
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
-                if (ReferenceEquals(resourceMan, null)) {
-                    ResourceManager temp = new ResourceManager("SRL.CommonsTests.Resources", typeof(Resources).Assembly);
+                if (object.ReferenceEquals(resourceMan, null)) {
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.CommonsTests.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -55,8 +50,8 @@ namespace SRL.CommonsTests {
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        internal static CultureInfo Culture {
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -80,24 +75,6 @@ namespace SRL.CommonsTests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/2000/svg&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;xs:element name=&quot;svg&quot;&gt;
-        ///    &lt;xs:complexType&gt;
-        ///      &lt;xs:sequence&gt;
-        ///        &lt;xs:element name=&quot;rect&quot;&gt;
-        ///          &lt;xs:complexType&gt;
-        ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
-        ///            &lt;xs:attribute name=&quot;height&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
-        ///        [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string MapSchema {
-            get {
-                return ResourceManager.GetString("MapSchema", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;order rotation=&quot;0.1&quot; destination=&quot;-0.41667,-0.2083&quot; /&gt;
         ///.
@@ -110,46 +87,12 @@ namespace SRL.CommonsTests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;xs:element name=&quot;order&quot;&gt;
-        ///    &lt;xs:complexType&gt;
-        ///      &lt;xs:attribute name=&quot;rotation&quot; type=&quot;xs:double&quot; use=&quot;required&quot; /&gt;
-        ///      &lt;xs:attribute name=&quot;destination&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
-        ///    &lt;/xs:complexType&gt;
-        ///  &lt;/xs:element&gt;
-        ///&lt;/xs:schema&gt;.
-        /// </summary>
-        internal static string OrderSchema {
-            get {
-                return ResourceManager.GetString("OrderSchema", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;polygon points=&quot;-0.54811715481171552,0.20920502092050208 0.7405857740585774,0.32217573221757323 0.55648535564853552,-0.606694560669456 &quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; fill=&quot;white&quot; /&gt;
         ///.
         /// </summary>
         internal static string Polygon {
             get {
                 return ResourceManager.GetString("Polygon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;xs:element name=&quot;polygon&quot;&gt;
-        ///    &lt;xs:complexType&gt;
-        ///      &lt;xs:attribute name=&quot;points&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
-        ///      &lt;xs:attribute name=&quot;stroke&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
-        ///      &lt;xs:attribute name=&quot;stroke-width&quot; type=&quot;xs:double&quot; use=&quot;required&quot; /&gt;
-        ///      &lt;xs:attribute name=&quot;fill&quot; type=&quot;xs:string&quot; use=&quot;required&quot; /&gt;
-        ///    &lt;/xs:com [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PolygonSchema {
-            get {
-                return ResourceManager.GetString("PolygonSchema", resourceCulture);
             }
         }
         
@@ -168,35 +111,6 @@ namespace SRL.CommonsTests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/2000/svg&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;xs:import namespace=&quot;http://www.w3.org/1999/xlink&quot; /&gt;
-        ///  &lt;xs:element name=&quot;svg&quot;&gt;
-        ///    &lt;xs:complexType&gt;
-        ///      &lt;xs:sequence&gt;
-        ///        &lt;xs:element name=&quot;rect&quot;&gt;
-        ///          &lt;xs:complexType&gt;
-        ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;req [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string SimulationSchema {
-            get {
-                return ResourceManager.GetString("SimulationSchema", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema xmlns:tns=&quot;http://www.w3.org/1999/xlink&quot; attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/1999/xlink&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;xs:attribute name=&quot;href&quot; type=&quot;xs:string&quot; /&gt;
-        ///&lt;/xs:schema&gt;.
-        /// </summary>
-        internal static string SimulationSchemaXlink {
-            get {
-                return ResourceManager.GetString("SimulationSchemaXlink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
         ///&lt;svg width=&quot;480&quot; height=&quot;480&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
         ///  &lt;rect width=&quot;480&quot; height=&quot;480&quot; fill=&quot;rgb(1, 47, 135)&quot; /&gt;
@@ -208,24 +122,6 @@ namespace SRL.CommonsTests {
         internal static string Vehicle {
             get {
                 return ResourceManager.GetString("Vehicle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;xs:schema attributeFormDefault=&quot;unqualified&quot; elementFormDefault=&quot;qualified&quot; targetNamespace=&quot;http://www.w3.org/2000/svg&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;xs:element name=&quot;svg&quot;&gt;
-        ///    &lt;xs:complexType&gt;
-        ///      &lt;xs:sequence&gt;
-        ///        &lt;xs:element name=&quot;rect&quot;&gt;
-        ///          &lt;xs:complexType&gt;
-        ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
-        ///            &lt;xs:attribute name=&quot;height&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
-        ///        [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string VehicleSchema {
-            get {
-                return ResourceManager.GetString("VehicleSchema", resourceCulture);
             }
         }
     }

@@ -22,7 +22,7 @@ namespace SRL.Commons {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SRL.Commons {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Commons.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SRL.Commons {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -72,7 +72,7 @@ namespace SRL.Commons {
         ///            &lt;xs:attribute name=&quot;height&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
         ///        [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string MapSchema {
+        public static string MapSchema {
             get {
                 return ResourceManager.GetString("MapSchema", resourceCulture);
             }
@@ -89,7 +89,7 @@ namespace SRL.Commons {
         ///          &lt;xs:complexType&gt;
         ///            &lt;xs:attribute name=&quot;width&quot; type=&quot;xs:unsignedShort&quot; use=&quot;req [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SimulationSchema {
+        public static string SimulationSchema {
             get {
                 return ResourceManager.GetString("SimulationSchema", resourceCulture);
             }
@@ -101,7 +101,7 @@ namespace SRL.Commons {
         ///  &lt;xs:attribute name=&quot;href&quot; type=&quot;xs:string&quot; /&gt;
         ///&lt;/xs:schema&gt;.
         /// </summary>
-        internal static string SimulationSchemaXlink {
+        public static string SimulationSchemaXlink {
             get {
                 return ResourceManager.GetString("SimulationSchemaXlink", resourceCulture);
             }
@@ -119,7 +119,7 @@ namespace SRL.Commons {
         ///            &lt;xs:attribute name=&quot;height&quot; type=&quot;xs:unsignedShort&quot; use=&quot;required&quot; /&gt;
         ///        [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string VehicleSchema {
+        public static string VehicleSchema {
             get {
                 return ResourceManager.GetString("VehicleSchema", resourceCulture);
             }

@@ -78,27 +78,8 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="XMLs\XmlSchema\MapSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\OrderSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\PolygonSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\SimulationSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\SimulationSchemaXlink.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XMLs\XmlSchema\VehicleSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Commons\Commons.csproj">

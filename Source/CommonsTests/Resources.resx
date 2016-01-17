@@ -121,34 +121,16 @@
   <data name="Map" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\map.svg;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
-  <data name="MapSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>xmls\xmlschema\mapschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="Order" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\order.svg;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="OrderSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>xmls\xmlschema\orderschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Polygon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\polygon.svg;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="PolygonSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>xmls\xmlschema\polygonschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="Simulation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\simulation.svg;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SimulationSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>xmls\xmlschema\simulationschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="SimulationSchemaXlink" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>xmls\xmlschema\simulationschemaxlink.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="Vehicle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>xmls\vehicle.svg;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
-  </data>
-  <data name="VehicleSchema" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>xmls\xmlschema\vehicleschema.xsd;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
