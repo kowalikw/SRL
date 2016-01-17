@@ -71,15 +71,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Language.cs" />
-    <Compile Include="Localization\ModelNames.pl.Designer.cs">
-      <DependentUpon>ModelNames.pl.resx</DependentUpon>
+    <Compile Include="Localization\Models.pl.Designer.cs">
+      <DependentUpon>Models.pl.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Localization\ModelNames.Designer.cs">
+    <Compile Include="Localization\Models.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelNames.resx</DependentUpon>
+      <DependentUpon>Models.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Localization\OptionErrors.pl.Designer.cs">
+      <DependentUpon>OptionErrors.pl.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Localization\OptionErrors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OptionErrors.resx</DependentUpon>
     </Compile>
     <Compile Include="Model\Option.cs" />
     <Compile Include="Model\Base\IAlgorithm.cs" />
@@ -120,13 +130,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Localization\ModelNames.pl.resx">
+    <EmbeddedResource Include="Localization\Models.pl.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModelNames.pl.Designer.cs</LastGenOutput>
+      <LastGenOutput>Models.pl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Localization\ModelNames.resx">
+    <EmbeddedResource Include="Localization\Models.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModelNames.Designer.cs</LastGenOutput>
+      <LastGenOutput>Models.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\OptionErrors.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OptionErrors.pl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\OptionErrors.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OptionErrors.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

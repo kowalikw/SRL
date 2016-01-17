@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
-using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,8 +12,8 @@ using SRL.Commons.Utilities;
 using SRL.Main.Messages;
 using SRL.Main.Tracing;
 using SRL.Main.Utilities;
-using SRL.Main.View.Dialogs;
 using SRL.Main.View.Localization;
+using SRL.Main.ViewModel.Services;
 using MapEditorView = SRL.Main.View.Pages.MapEditorView;
 using VehicleEditorView = SRL.Main.View.Pages.VehicleEditorView;
 
@@ -33,19 +31,18 @@ namespace SRL.Main.ViewModel
                 {
                     _loadBitmapCommand = new RelayCommand(() =>
                     {
-                        var args = new OpenFileDialogArgs();
-                        args.Filter = Dialogs.ResourceManager.GetString("rasterImageFilter");
-                        args.CloseCallback = (result, filename) =>
-                        {
-                            if (!result)
-                                return;
+                        SimpleIoc.Default.GetInstance<IDialogService>().ShowOpenFileDialog(
+                            Dialogs.ResourceManager.GetString("rasterImageFilter"),
+                            (result, filename) =>
+                            {
+                                if (!result)
+                                    return;
 
-                            Bitmap = new BitmapImage(new Uri(filename));
-                            _tracer = new BitmapTracer(filename);
-                            Polygons.Clear();
-                            SelectedPolygonIndices.Clear();
-                        };
-                        Messenger.Default.Send(new ShowDialogMessage(args));
+                                Bitmap = new BitmapImage(new Uri(filename));
+                                _tracer = new BitmapTracer(filename);
+                                Polygons.Clear();
+                                SelectedPolygonIndices.Clear();
+                            });
                     }, () =>
                     {
                         return !TracingOngoing;
@@ -66,10 +63,9 @@ namespace SRL.Main.ViewModel
                         argMsg.Model.Obstacles.AddRange(
                             Polygons.Where((polygon, i) => SelectedPolygonIndices.Contains(i)));
 
-                        var gotoMsg = new GoToPageMessage(typeof(MapEditorView));
-
                         Messenger.Default.Send(argMsg);
-                        Messenger.Default.Send(gotoMsg);
+
+                        SimpleIoc.Default.GetInstance<INavigationService>().GoToPage(nameof(MapEditorView));
                     }, () =>
                     {
                         return SelectedPolygonIndices.Count > 0 && !TracingOngoing;
@@ -89,10 +85,8 @@ namespace SRL.Main.ViewModel
                         var argMsg = new SetModelMessage<Vehicle>(new Vehicle());
                         argMsg.Model.Shape = Polygons[SelectedPolygonIndices.GetLast()];
 
-                        var gotoMsg = new GoToPageMessage(typeof(VehicleEditorView));
-
                         Messenger.Default.Send(argMsg);
-                        Messenger.Default.Send(gotoMsg);
+                        SimpleIoc.Default.GetInstance<INavigationService>().GoToPage(nameof(VehicleEditorView));
                     }, () =>
                     {
                         return SelectedPolygonIndices.Count == 1 && !TracingOngoing;
@@ -107,7 +101,7 @@ namespace SRL.Main.ViewModel
             {
                 if (_traceCommand == null)
                 {
-                    _traceCommand = new RelayCommand(StartNewTraceTask, 
+                    _traceCommand = new RelayCommand(StartNewTraceTask,
                         () => _tracer != null && !TracingOngoing);
                 }
                 return _traceCommand;
@@ -167,7 +161,7 @@ namespace SRL.Main.ViewModel
         private RelayCommand<Point> _deselectPolygonCommand;
 
         #endregion
-        
+
 
         public BitmapSource Bitmap
         {
@@ -209,7 +203,7 @@ namespace SRL.Main.ViewModel
         private CancellationTokenSource _cancellationTokenSource;
         private readonly object _cancellationLock = new object();
 
-        
+
         public TracingViewModel()
         {
             // Make sure that default instances of Map/Vehicle editors exist.
@@ -240,7 +234,7 @@ namespace SRL.Main.ViewModel
                     Monitor.Exit(_cancellationLock);
                 }
             }, token).Start();
-            
+
             Monitor.Exit(_cancellationLock);
         }
 

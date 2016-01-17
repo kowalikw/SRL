@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Windows.Controls;
-using Infralution.Localization.Wpf;
-using System.Windows;
+﻿using System.Windows.Controls;
 
 namespace SRL.Main.View.Pages
 {

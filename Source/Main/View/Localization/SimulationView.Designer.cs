@@ -70,6 +70,15 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel path calculation.
+        /// </summary>
+        internal static string CancelPathCalculationTooltip {
+            get {
+                return ResourceManager.GetString("CancelPathCalculationTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load map.
         /// </summary>
         internal static string LoadMapTooltip {
@@ -124,7 +133,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set target point.
+        ///   Looks up a localized string similar to Set path end.
         /// </summary>
         internal static string SetPathEndTooltip {
             get {
@@ -133,7 +142,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Put the vehicle on the map.
+        ///   Looks up a localized string similar to Set up vehicle.
         /// </summary>
         internal static string SetUpVehicleTooltip {
             get {

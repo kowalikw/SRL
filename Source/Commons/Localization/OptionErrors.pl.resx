@@ -117,22 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="areaThreshold" xml:space="preserve">
-    <value>Area threshold</value>
+  <data name="valueInvalid" xml:space="preserve">
+    <value>Niepoprawna wartość.</value>
   </data>
-  <data name="colorThreshold" xml:space="preserve">
-    <value>Color threshold</value>
+  <data name="valueTooBig" xml:space="preserve">
+    <value>Maksymalna wartość to {0}.</value>
   </data>
-  <data name="LoadBitmapTooltip" xml:space="preserve">
-    <value>Load raster image</value>
-  </data>
-  <data name="MakeMapTooltip" xml:space="preserve">
-    <value>Create map</value>
-  </data>
-  <data name="MakeVehicleTooltip" xml:space="preserve">
-    <value>Create vehicle</value>
-  </data>
-  <data name="TraceTooltip" xml:space="preserve">
-    <value>Trace</value>
+  <data name="valueTooSmall" xml:space="preserve">
+    <value>Minimalna wartość to {0}.</value>
   </data>
 </root>

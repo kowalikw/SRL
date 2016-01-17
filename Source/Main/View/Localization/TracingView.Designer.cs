@@ -79,7 +79,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Load image.
+        ///   Looks up a localized string similar to Load raster image.
         /// </summary>
         internal static string LoadBitmapTooltip {
             get {
@@ -88,7 +88,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make map.
+        ///   Looks up a localized string similar to Create map.
         /// </summary>
         internal static string MakeMapTooltip {
             get {
@@ -97,7 +97,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make vehicle.
+        ///   Looks up a localized string similar to Create vehicle.
         /// </summary>
         internal static string MakeVehicleTooltip {
             get {
@@ -106,7 +106,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trace image.
+        ///   Looks up a localized string similar to Trace.
         /// </summary>
         internal static string TraceTooltip {
             get {

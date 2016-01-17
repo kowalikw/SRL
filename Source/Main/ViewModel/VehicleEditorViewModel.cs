@@ -1,17 +1,10 @@
 ﻿using System.Windows;
-using FirstFloor.ModernUI.Presentation;
 using GalaSoft.MvvmLight.CommandWpf;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Utilities;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
-using Microsoft.Win32;
 using System;
-using System.Diagnostics;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Xml;
-using System.IO;
 using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel

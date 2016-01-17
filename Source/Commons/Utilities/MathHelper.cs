@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Windows;
 
 namespace SRL.Commons.Utilities
 {

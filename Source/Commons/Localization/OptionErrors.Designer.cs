@@ -22,24 +22,24 @@ namespace SRL.Commons.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ModelNames {
+    internal class OptionErrors {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ModelNames() {
+        internal OptionErrors() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Commons.Localization.ModelNames", typeof(ModelNames).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SRL.Commons.Localization.OptionErrors", typeof(OptionErrors).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace SRL.Commons.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,74 +61,29 @@ namespace SRL.Commons.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Frame.
+        ///   Looks up a localized string similar to Invalid value..
         /// </summary>
-        public static string Frame {
+        internal static string valueInvalid {
             get {
-                return ResourceManager.GetString("Frame", resourceCulture);
+                return ResourceManager.GetString("valueInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map.
+        ///   Looks up a localized string similar to The maximum value is {0}..
         /// </summary>
-        public static string Map {
+        internal static string valueTooBig {
             get {
-                return ResourceManager.GetString("Map", resourceCulture);
+                return ResourceManager.GetString("valueTooBig", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option.
+        ///   Looks up a localized string similar to The minimum value is {0}..
         /// </summary>
-        public static string Option {
+        internal static string valueTooSmall {
             get {
-                return ResourceManager.GetString("Option", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Order.
-        /// </summary>
-        public static string Order {
-            get {
-                return ResourceManager.GetString("Order", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Polygon.
-        /// </summary>
-        public static string Polygon {
-            get {
-                return ResourceManager.GetString("Polygon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Simulation.
-        /// </summary>
-        public static string Simulation {
-            get {
-                return ResourceManager.GetString("Simulation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vehicle.
-        /// </summary>
-        public static string Vehicle {
-            get {
-                return ResourceManager.GetString("Vehicle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vehicle setup.
-        /// </summary>
-        public static string VehicleSetup {
-            get {
-                return ResourceManager.GetString("VehicleSetup", resourceCulture);
+                return ResourceManager.GetString("valueTooSmall", resourceCulture);
             }
         }
     }

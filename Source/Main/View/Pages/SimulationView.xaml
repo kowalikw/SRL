@@ -8,7 +8,7 @@
              xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
              xmlns:sim="clr-namespace:SRL.Main.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="300"
+             d:DesignHeight="500" d:DesignWidth="400"
              DataContext="{Binding Source={StaticResource Locator}, Path=Simulation}">
     <Grid Style="{StaticResource ContentRoot}" VerticalAlignment="Top">
         <Grid.RowDefinitions>
@@ -26,7 +26,8 @@
                               ToolTip="{Resx Key=LoadSimulationTooltip}"/>
             <mui:ModernButton IconData="{StaticResource SaveIcon}" 
                               Command="{Binding SaveCommand}"
-                              ToolTip="{Resx Key=SaveSimulationTooltip}"/>
+                              ToolTip="{Resx Key=SaveSimulationTooltip}"
+                              IconHeight="18" IconWidth="18"/>
             <mui:ModernButton Margin="0,0,0,20"
                               IconData="{StaticResource ResetIcon}" 
                               Command="{Binding ResetCommand}"
@@ -38,16 +39,33 @@
             <mui:ModernButton IconData="{StaticResource LoadVehicleIcon}" 
                               Command="{Binding LoadVehicleCommand}"
                               ToolTip="{Resx Key=LoadVehicleTooltip}"/>
-
             <mui:ModernButton IconData="{StaticResource SetUpVehicleIcon}"
                               Command="{Binding EnterModeCommand}" CommandParameter="{x:Static sim:SimulationViewModel+Mode.StartPointSetup}"
-                              ToolTip="{Resx Key=SetUpVehicleTooltip}"/>
+                              ToolTip="{Resx Key=SetUpVehicleTooltip}"
+                              IconHeight="18" IconWidth="18"/>
             <mui:ModernButton IconData="{StaticResource SetPathEndIcon}"
                               Command="{Binding EnterModeCommand}" CommandParameter="{x:Static sim:SimulationViewModel+Mode.EndPointSetup}"
                               ToolTip="{Resx Key=SetPathEndTooltip}"/>
-            <mui:ModernButton IconData="{StaticResource CalculatePathIcon}"
-                              Command="{Binding CalculatePathCommand}"
-                              ToolTip="{Resx Key=CalculatePathTooltip}"/>
+            <mui:ModernButton>
+                <mui:ModernButton.Style >
+                    <Style BasedOn="{StaticResource {x:Type mui:ModernButton}}" TargetType="mui:ModernButton">
+                        <Setter Property="IconData" Value="{StaticResource CalculatePathIcon}"/>
+                        <Setter Property="Command" Value="{Binding StartPathCalculationCommand}"/>
+                        <Setter Property="ToolTip" Value="{Resx Key=CalculatePathTooltip}"/>
+                        <Setter Property="IconHeight" Value="18"/>
+                        <Setter Property="IconWidth" Value="18"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CalculatingPath}" Value="true">
+                                <Setter Property="IconData" Value="{StaticResource CancelPathCalculationIcon}"/>
+                                <Setter Property="Command" Value="{Binding CancelPathCalculationCommand}"/>
+                                <Setter Property="ToolTip" Value="{Resx Key=CancelPathCalculationTooltip}"/>
+                                <Setter Property="IconHeight" Value="16"/>
+                                <Setter Property="IconWidth" Value="16"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mui:ModernButton.Style>
+            </mui:ModernButton>
         </StackPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"

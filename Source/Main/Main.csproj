@@ -95,9 +95,8 @@
     <Compile Include="Drawing\DynamicDrawHelper.cs" />
     <Compile Include="Drawing\LockBitmap.cs" />
     <Compile Include="Drawing\StaticDrawHelper.cs" />
-    <Compile Include="Messages\GoToPageMessage.cs" />
+    <Compile Include="Messages\CleanUpMessage.cs" />
     <Compile Include="Messages\SetModelMessage.cs" />
-    <Compile Include="Messages\ShowDialogMessage.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -119,14 +118,15 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
     <Compile Include="ViewModel\OptionsDialogViewModel.cs" />
+    <Compile Include="ViewModel\Services\DialogService.cs" />
+    <Compile Include="ViewModel\Services\IDialogService.cs" />
+    <Compile Include="ViewModel\Services\INavigationService.cs" />
+    <Compile Include="ViewModel\Services\NavigationService.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\SimulationViewModel.cs" />
     <Compile Include="ViewModel\TracingViewModel.cs" />
     <Compile Include="ViewModel\VehicleEditorViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\Dialogs\DialogArgs.cs" />
-    <Compile Include="View\Dialogs\DialogService.cs" />
-    <Compile Include="View\Dialogs\IDialogService.cs" />
     <Compile Include="View\Localization\HomeView.pl.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -241,8 +241,8 @@
       <DependentUpon>VehicleEditorView.xaml</DependentUpon>
     </Compile>
     <Page Include="UriDictionary.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\OptionsDialogView.xaml">
       <SubType>Designer</SubType>

@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Ioc;
 using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
-using SRL.Main.Messages;
 using SRL.Main.View;
-using SRL.Main.View.Dialogs;
 using SRL.Main.View.Localization;
 using SRL.Main.ViewModel.Base;
+using SRL.Main.ViewModel.Services;
 using Frame = SRL.Commons.Model.Frame;
 
 namespace SRL.Main.ViewModel
@@ -195,14 +194,15 @@ namespace SRL.Main.ViewModel
                 return _setInitialVehicleSetupCommand;
             }
         }
-        public RelayCommand CalculatePathCommand
+        public RelayCommand StartPathCalculationCommand
         {
             get
             {
-                if (_calculatePathCommand == null)
+                if (_startPathCalculationCommand == null)
                 {
-                    _calculatePathCommand = new RelayCommand(() =>
+                    _startPathCalculationCommand = new RelayCommand(() =>
                     {
+                        StopPlaybackCommand.Execute(null);
                         EditorMode = Mode.Normal;
 
                         List<Option> options = _algorithm.GetOptions();
@@ -211,17 +211,26 @@ namespace SRL.Main.ViewModel
                             _algorithm.SetOptions(options);
                             StartNewPathCalculation();
                         }
-                    },
-                        () =>
-                        {
+                    }, () =>
+                    {
                             return !CalculatingPath && Map != null && Vehicle != null && VehicleSize != null &&
                                    InitialVehicleRotation != null && StartPoint != null && EndPoint != null;
-                        });
+                    });
                 }
-                return _calculatePathCommand;
+                return _startPathCalculationCommand;
             }
         }
-
+        public RelayCommand CancelPathCalculationCommand
+        {
+            get
+            {
+                if (_cancelPathCalculationCommand == null)
+                {
+                    _cancelPathCalculationCommand = new RelayCommand(CancelPathCalculation, () => CalculatingPath);
+                }
+                return _cancelPathCalculationCommand;
+            }
+        }
 
         private RelayCommand<Mode> _enterModeCommand;
         private RelayCommand _resetCommand;
@@ -230,7 +239,8 @@ namespace SRL.Main.ViewModel
         private RelayCommand<Point> _setStartPointCommand;
         private RelayCommand<Point> _setEndPointCommand;
         private RelayCommand<VehicleSetup> _setInitialVehicleSetupCommand;
-        private RelayCommand _calculatePathCommand;
+        private RelayCommand _startPathCalculationCommand;
+        private RelayCommand _cancelPathCalculationCommand;
 
         #endregion
 
@@ -248,7 +258,13 @@ namespace SRL.Main.ViewModel
                         if (CurrentFrameIdx == MaxFrameIdx)
                             CurrentFrameIdx = 0;
                         SimulationRunning = true;
-                    }, () => { return EditorMode == Mode.Normal && Orders != null; });
+                    }, () =>
+                    {
+                        return EditorMode == Mode.Normal && 
+                            !CalculatingPath && 
+                            !SimulationRunning && 
+                            _frames != null;
+                    });
                 }
                 return _startPlaybackCommand;
             }
@@ -746,10 +762,10 @@ namespace SRL.Main.ViewModel
                 {
                     var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
 
-                    var args = new MessageDialogArgs();
-                    args.Title = rm.GetString("pathNotFoundTitle");
-                    args.Description = rm.GetString("pathNotFoundMsg");
-                    Messenger.Default.Send(new ShowDialogMessage(args));
+                    SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                        rm.GetString("pathNotFoundTitle"),
+                        rm.GetString("pathNotFoundMsg"),
+                        null);
                 }
 
                 if (Monitor.TryEnter(_cancellationLock))

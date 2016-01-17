@@ -124,7 +124,7 @@
     <value>Wczytaj mapę</value>
   </data>
   <data name="ResetTooltip" xml:space="preserve">
-    <value>Wyczyść</value>
+    <value>Resetuj</value>
   </data>
   <data name="SaveTooltip" xml:space="preserve">
     <value>Zapisz mapę</value>

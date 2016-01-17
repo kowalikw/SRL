@@ -120,6 +120,9 @@
   <data name="CalculatePathTooltip" xml:space="preserve">
     <value>Oblicz ścieżkę</value>
   </data>
+  <data name="CancelPathCalculationTooltip" xml:space="preserve">
+    <value>Przerwij liczenie ścieżki</value>
+  </data>
   <data name="LoadMapTooltip" xml:space="preserve">
     <value>Wczytaj mapę</value>
   </data>
@@ -133,7 +136,7 @@
     <value>Wstrzymaj symulację</value>
   </data>
   <data name="ResetTooltip" xml:space="preserve">
-    <value>Wyczyść</value>
+    <value>Resetuj</value>
   </data>
   <data name="SaveSimulationTooltip" xml:space="preserve">
     <value>Zapisz symulację</value>
@@ -142,7 +145,7 @@
     <value>Wyznacz punkt docelowy</value>
   </data>
   <data name="SetUpVehicleTooltip" xml:space="preserve">
-    <value>Umieść pojazd na mapie</value>
+    <value>Umieść pojazd</value>
   </data>
   <data name="StartPlaybackTooltip" xml:space="preserve">
     <value>Rozpocznij/Wznów symulację</value>

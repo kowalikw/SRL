@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using GalaSoft.MvvmLight;
+using SRL.Commons.Localization;
 
 namespace SRL.Commons.Model
 {
@@ -68,23 +68,23 @@ namespace SRL.Commons.Model
                 if (columnName == nameof(Value))
                 {
                     if (Value == null)
-                        return $"A value must be entered.";
+                        return OptionErrors.ResourceManager.GetString("valueInvalid");
 
                     if (Type == ValueType.Integer)
                     {
                         if (MinValue != null && (int)Value < (int)MinValue)
-                            return $"The minimum value is {MinValue}."; //TODO localization
+                            return string.Format(OptionErrors.ResourceManager.GetString("valueTooSmall"), MinValue);
 
                         if (MaxValue != null && (int)Value > (int)MaxValue)
-                            return $"The maximum value is {MaxValue}."; //TODO localization
+                            return string.Format(OptionErrors.ResourceManager.GetString("valueTooBig"), MaxValue);
                     }
                     if (Type == ValueType.Double)
                     {
                         if (MinValue != null && (double)Value < (double)MinValue)
-                            return $"The minimum value is {MinValue}."; //TODO localization
+                            return string.Format(OptionErrors.ResourceManager.GetString("valueTooSmall"), MinValue);
 
                         if (MaxValue != null && (double)Value > (double)MaxValue)
-                            return $"The maximum value is {MaxValue}."; //TODO localization
+                            return string.Format(OptionErrors.ResourceManager.GetString("valueTooBig"), MaxValue);
                     }
                 }
                 return null;
@@ -96,7 +96,7 @@ namespace SRL.Commons.Model
             get
             {
                 if (this[nameof(Value)] != null)
-                    return "Invalid value."; //TODO localization
+                    return OptionErrors.ResourceManager.GetString("valueInvalid");
 
                 return null;
             }

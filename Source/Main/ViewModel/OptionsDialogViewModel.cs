@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
 using SRL.Commons.Model;
 
 namespace SRL.Main.ViewModel

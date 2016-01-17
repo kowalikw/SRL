@@ -1,12 +1,8 @@
-﻿using System.Globalization;
-using System.Reflection;
-using System.Resources;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Ioc;
 using Infralution.Localization.Wpf;
 using SRL.Commons;
-using SRL.Main.Messages;
-using SRL.Main.View.Dialogs;
 using SRL.Main.View.Localization;
+using SRL.Main.ViewModel.Services;
 
 namespace SRL.Main.ViewModel
 {
@@ -38,10 +34,10 @@ namespace SRL.Main.ViewModel
 
                 if (CultureManager.UICulture.GetLanguage() != value)
                 {
-                    var args = new MessageDialogArgs();
-                    args.Title = Dialogs.ResourceManager.GetString("langChangeRestartTitle");
-                    args.Description = Dialogs.ResourceManager.GetString("langChangeRestartMsg");
-                    Messenger.Default.Send(new ShowDialogMessage(args));
+                    SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                        Dialogs.ResourceManager.GetString("langChangeRestartTitle"),
+                        Dialogs.ResourceManager.GetString("langChangeRestartMsg"),
+                        null);
                 }
             }
         }

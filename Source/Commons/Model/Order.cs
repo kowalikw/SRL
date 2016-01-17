@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Xml.Serialization;
 
 namespace SRL.Commons.Model
 {

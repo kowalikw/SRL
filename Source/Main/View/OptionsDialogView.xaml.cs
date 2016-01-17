@@ -1,7 +1,6 @@
 ﻿using FirstFloor.ModernUI.Windows.Controls;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Data;
 using SRL.Commons.Model;
 using SRL.Main.ViewModel;
 

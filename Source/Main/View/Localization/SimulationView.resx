@@ -120,6 +120,9 @@
   <data name="CalculatePathTooltip" xml:space="preserve">
     <value>Calculate path</value>
   </data>
+  <data name="CancelPathCalculationTooltip" xml:space="preserve">
+    <value>Cancel path calculation</value>
+  </data>
   <data name="LoadMapTooltip" xml:space="preserve">
     <value>Load map</value>
   </data>
@@ -139,10 +142,10 @@
     <value>Save simulation</value>
   </data>
   <data name="SetPathEndTooltip" xml:space="preserve">
-    <value>Set target subject</value>
+    <value>Set path end</value>
   </data>
   <data name="SetUpVehicleTooltip" xml:space="preserve">
-    <value>Put the vehicle on the map</value>
+    <value>Set up vehicle</value>
   </data>
   <data name="StartPlaybackTooltip" xml:space="preserve">
     <value>Start/Resume simulation</value>

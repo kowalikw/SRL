@@ -44,7 +44,8 @@
                                   ToolTip="{Resx Key=MakeVehicleTooltip}"/>
                 <mui:ModernButton IconData="{StaticResource TraceIcon}" 
                                   Command="{Binding TraceCommand}"
-                                  ToolTip="{Resx Key=TraceTooltip}"/>
+                                  ToolTip="{Resx Key=TraceTooltip}"
+                                  IconHeight="18" IconWidth="18"/>
             </StackPanel>
 
             <Grid ColumnSpan="2">
