@@ -185,20 +185,21 @@ namespace SRL.Algorithm
 
                           if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle))
                           {
+                              int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point,maxDiff,moveEdgeWeight);
                               if (!allDirections)
                               {
                                   // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
                                   if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle))
                                   {
-                                      graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point)));
+                                      graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
                                       // if user enabled reverse in options, we add an edge back
                                       if (backwards)
-                                          graph.AddEdge(new Edge(indexPointAngleList[angle][j].Index, indexPointAngleList[angle][i].Index, GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point)));
+                                          graph.AddEdge(new Edge(indexPointAngleList[angle][j].Index, indexPointAngleList[angle][i].Index, weight));
                                   }
                               }
                               // if user enabled all directions, we add all edges that passed all previous tests
                               else
-                                  graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point)));
+                                  graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
                           }
                       }
                   }
@@ -543,9 +544,9 @@ namespace SRL.Algorithm
         }
 
 
-        private int GetEdgeWeight(Point p1, Point p2)
+        private int GetEdgeWeight(Point p1, Point p2, double pointSize, double edgeWeight)
         {
-            return (int)Math.Round(500 * GeometryHelper.GetDistance(p1,p2), 0);
+            return (int)Math.Round((edgeWeight * GeometryHelper.GetDistance(p1,p2)) / pointSize,0);
         }
 
         private bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
