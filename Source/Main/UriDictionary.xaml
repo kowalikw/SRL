@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SRL.Main"
+                    xmlns:sys="clr-namespace:System;assembly=System">
+    
+    <sys:Uri x:Key="HomeView">/View/Pages/HomeView.xaml</sys:Uri>
+    <sys:Uri x:Key="MapEditorView">/View/Pages/MapEditorView.xaml</sys:Uri>
+    <sys:Uri x:Key="SettingsView">/View/Pages/SettingsView.xaml</sys:Uri>
+    <sys:Uri x:Key="SimulationView">/View/Pages/SimulationView.xaml</sys:Uri>
+    <sys:Uri x:Key="TracingView">/View/Pages/TracingView.xaml</sys:Uri>
+    <sys:Uri x:Key="VehicleEditorView">/View/Pages/VehicleEditorView.xaml</sys:Uri>
+    <sys:Uri x:Key="MainView">/View/MainView.xaml</sys:Uri>
+
+</ResourceDictionary>

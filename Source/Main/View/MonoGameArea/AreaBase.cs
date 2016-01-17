@@ -1,0 +1,125 @@
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Windows;
+using System.Windows.Input;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using SRL.Commons.Utilities;
+using SRL.Main.Drawing;
+using SRL.Main.Utilities;
+using Color = Microsoft.Xna.Framework.Color;
+using Point = System.Windows.Point;
+
+namespace SRL.Main.View.MonoGameArea
+{
+    public abstract class AreaBase : MonoGameControl.MonoGameControl
+    {
+        protected const double VertexPullRadius = 8;
+
+        protected static readonly Color RegularColor = new Color(0, 0, 0);
+        protected static readonly Color ActiveColor = new Color(0, 0, 200);
+        protected static readonly Color InvalidColor = new Color(255, 0, 0);
+        protected static readonly Color ValidColor = new Color(0, 220, 0);
+
+        protected bool AntialiasingEnabled => Settings.Default.AntialiasingEnabled;
+
+        private MouseButtonEventHandler _mouseUpHandler;
+        private MouseButtonEventHandler _mouseDownHandler;
+        private MouseEventHandler _mouseMoveHandler;
+        private SizeChangedEventHandler _sizeChangedHandler;
+        private PropertyChangedEventHandler _propertyChangedHandler;
+
+        private SpriteBatch _spriteBatch;
+        private Bitmap _bitmapBuffer;
+        protected Texture2D StaticObjectsTexture;
+
+
+        /// <summary>
+        /// Non-normalized cursor position (that is, in pixel space) relative to the MonoGameControl control.
+        /// </summary>
+        protected Point MousePosition;
+        protected Color BackgroundColor = new Color(219, 240, 251);
+
+        protected override void Initialize()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _mouseUpHandler = (o, e) => OnMouseUp(e.ChangedButton);
+            _mouseDownHandler = (o, e) => OnMouseButtonDown(e.ChangedButton);
+            _mouseMoveHandler = (o, e) => MousePosition = e.GetPosition((UIElement)o);
+            _sizeChangedHandler = (o, e) => OnSizeChanged();
+            _propertyChangedHandler = (o, e) =>
+            {
+                if (e.PropertyName == nameof(Settings.Default.AntialiasingEnabled))
+                    RedrawStaticObjectsTexture();
+            };
+
+            MouseUp += _mouseUpHandler;
+            MouseDown += _mouseDownHandler;
+            MouseMove += _mouseMoveHandler;
+            SizeChanged += _sizeChangedHandler;
+            Settings.Default.PropertyChanged += _propertyChangedHandler;
+        }
+
+        protected override void Unitialize()
+        {
+            _spriteBatch.Dispose();
+
+            MouseUp -= _mouseUpHandler;
+            MouseDown -= _mouseDownHandler;
+            MouseMove -= _mouseMoveHandler;
+            SizeChanged -= _sizeChangedHandler;
+            Settings.Default.PropertyChanged -= _propertyChangedHandler;
+        }
+
+        protected sealed override void Render(TimeSpan time)
+        {
+            GraphicsDevice.Clear(BackgroundColor);
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            _spriteBatch.BeginDraw();
+            _spriteBatch.Draw(StaticObjectsTexture, new Vector2(0, 0), Color.White);
+            RenderDynamicObjects(_spriteBatch, time);
+            _spriteBatch.EndDraw();
+        }
+
+        /// <summary>
+        /// Sets StaticObjectsTexture pixel data based on StaticDrawables list.
+        /// </summary>
+        protected void RedrawStaticObjectsTexture()
+        {
+            _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height, PixelFormat.Format32bppArgb);
+            LockBitmap lockBitmap = new LockBitmap(_bitmapBuffer);
+            lockBitmap.LockBits();
+            RedrawStaticObjects(lockBitmap);
+            lockBitmap.UnlockBits();
+            StaticObjectsTexture.SetData(_bitmapBuffer.GetBytes());
+        }
+
+        /// <summary>
+        /// Says whether current cursor position is close enough to an arbitrary <paramref name="point"/> 
+        /// to trigger some secondary action.
+        /// </summary>
+        /// <param name="point">Non-normalized point.</param>
+        /// <returns>True if cursor is close; false otherwise.</returns>
+        protected bool IsMousePulledByPoint(Point point)
+        {
+            return GeometryHelper.GetDistance(MousePosition, point) <= VertexPullRadius;
+        }
+
+        protected abstract void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time);
+        protected abstract void RedrawStaticObjects(LockBitmap lockBitmap);
+
+        protected virtual void OnMouseUp(MouseButton button) { }
+        protected virtual void OnMouseButtonDown(MouseButton button) { }
+        protected virtual void OnSizeChanged()
+        {
+            _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height);
+            StaticObjectsTexture = new Texture2D(GraphicsDevice, (int)RenderSize.Width, (int)RenderSize.Height);
+
+            RedrawStaticObjectsTexture();
+        }
+    }
+}

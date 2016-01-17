@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="SRL.Main.View.Pages.TracingView"
+             ResxExtension.DefaultResxName="SRL.Main.View.Localization.TracingView" Language="{UICulture}"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:mga="clr-namespace:SRL.Main.View.MonoGameArea"
+             xmlns:util="clr-namespace:SRL.Main.Utilities"
+             xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="700"
+             DataContext="{Binding Source={StaticResource Locator}, Path=Tracing}">
+    
+    <UserControl.Resources>
+        <converters:BoolNegationConverter x:Key="BoolInverterConverter"/>
+    </UserControl.Resources>
+    
+    <Grid Style="{StaticResource ContentRoot}" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Row="0" Grid.Column="0" 
+                   Grid.ColumnSpan="2"
+                   Margin="0,0,0,5"
+                   LastChildFill="True">
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,10,0">
+                <mui:ModernButton IconData="{StaticResource LoadBitmapIcon}" 
+                                  Command="{Binding LoadBitmapCommand}"
+                                  ToolTip="{Resx Key=LoadBitmapTooltip}"/>
+                <mui:ModernButton IconData="{StaticResource SaveMapIcon}" 
+                                  Command="{Binding MakeMapCommand}"
+                                  ToolTip="{Resx Key=MakeMapTooltip}"/>
+                <mui:ModernButton IconData="{StaticResource SaveVehicleIcon}" 
+                                  Command="{Binding MakeVehicleCommand}"
+                                  ToolTip="{Resx Key=MakeVehicleTooltip}"/>
+                <mui:ModernButton IconData="{StaticResource TraceIcon}" 
+                                  Command="{Binding TraceCommand}"
+                                  ToolTip="{Resx Key=TraceTooltip}"
+                                  IconHeight="18" IconWidth="18"/>
+            </StackPanel>
+
+            <Grid ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/>
+                    <!-- spacing -->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Content="{Resx Key=areaThreshold}"/>
+                <Slider Grid.Row="0" Grid.Column="1"
+                        Minimum="0" Maximum="0.1"
+                        LargeChange="0.01"
+                        VerticalAlignment="Center"
+                        IsEnabled="{Binding TracingOngoing, Converter={StaticResource BoolInverterConverter}}"
+                        Value="{Binding AreaThreshold}"/>
+                <TextBlock Grid.Row="0" Grid.Column="2"
+                           Width="55"
+                           VerticalAlignment="Center" 
+                           TextAlignment="Center"
+                           Text="{Binding AreaThreshold, StringFormat={}{0:P2}}"/>
+
+                <Label Grid.Row="2" Grid.Column="0"
+                       Margin="0,0,5,0"
+                       VerticalAlignment="Center"
+                       Content="{Resx Key=colorThreshold}"/>
+                <Slider Grid.Row="2" Grid.Column="1"
+                        Minimum="0" Maximum="1" 
+                        LargeChange="0.1"
+                        VerticalAlignment="Center"
+                        IsEnabled="{Binding TracingOngoing, Converter={StaticResource BoolInverterConverter}}"
+                        Value="{Binding ColorThreshold}"/>
+                <TextBlock Grid.Row="2" Grid.Column="2"
+                           Width="55"
+                           VerticalAlignment="Center" 
+                           TextAlignment="Center"
+                           Text="{Binding ColorThreshold, StringFormat={}{0:P2}}"/>
+
+            </Grid>
+
+        </DockPanel>
+
+
+
+        <Viewbox Stretch="Uniform" Grid.Row="1" Grid.Column="0">
+            <Border Background="#FFF0F0F0" BorderBrush="#FFF0F0F0" BorderThickness="10" 
+                    Height="1000" Width="1000">
+                <Image Stretch="Uniform"
+                       Source="{Binding Bitmap}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+            </Border>
+        </Viewbox>
+
+        <mga:TraceArea Grid.Row="1" Grid.Column="1"
+                       SnapsToDevicePixels="True"
+                       Stretch="Uniform"/>
+
+        <mui:ModernProgressRing Grid.Row="1" Grid.Column="1"
+                                Width="80" Height="80"
+                                IsActive="{Binding TracingOngoing}" Foreground="Black"/>
+    </Grid>
+</UserControl>

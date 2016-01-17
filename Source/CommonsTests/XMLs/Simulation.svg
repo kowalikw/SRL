@@ -1,0 +1,38 @@
+﻿<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="480" height="480" xmlns="http://www.w3.org/2000/svg">
+  <rect width="480" height="480" fill="rgb(1, 47, 135)" />
+  <defs>
+    <g id="map">
+      <polygon points="-0.0188087774294671,0.899581589958159 -0.689655172413793,-0.878661087866109 0.247648902821317,-0.866108786610879 " stroke="black" stroke-width="0.01" fill="white" />
+      <polygon points="0.366771159874608,0.267782426778243 0.351097178683386,-0.121338912133891 0.821316614420063,-0.158995815899582 0.855799373040752,0.330543933054393 " stroke="black" stroke-width="0.01" fill="white" />
+    </g>
+    <g id="vehicle" transform="scale(0.5)">
+      <polygon points="-0.3,-0.4 0.2,0 0,0.2 -0.3,0 " stroke="black" stroke-width="0.01" fill="white" />
+    </g>
+    <g id="startEndPoint">
+      <ellipse id="startPoint" cx="-0.41667" cy="-0.2083" rx="0.02" ry="0.02" fill="darkgray" />
+      <ellipse id="endPoint" cx="0.1111" cy="-0.2083" rx="0.02" ry="0.02" fill="darkgray" />
+    </g>
+    <path id="path" d="M-0.41667 -0.2083 L0.2083 -0.8333 L-0.625 -0.833 L-0.833 0.25 L-0.1389 0.4583 L0.3889 0.6667 L0.1111 -0.2083 " stroke="darkgray" stroke-width="0.01" fill="none" />
+  </defs>
+  <g transform="translate(240,240) scale(240,-240)">
+    <use xlink:href="#map" />
+    <use xlink:href="#startEndPoint" />
+    <use xlink:href="#path" />
+    <use xlink:href="#vehicle">
+      <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
+        <mpath xlink:href="#path" />
+      </animateMotion>
+    </use>
+  </g>
+  <vehicleSize>0.5</vehicleSize>
+  <vehicleInitialRotation>0</vehicleInitialRotation>
+  <orders>
+    <order rotation="0.1" destination="-0.41667,-0.2083" />
+    <order rotation="0.84" destination="0.2083,-0.8333" />
+    <order rotation="2.34" destination="-0.625,-0.833" />
+    <order rotation="0.1" destination="-0.833,0.25" />
+    <order rotation="0.6" destination="-0.1389,0.4583" />
+    <order rotation="0.6" destination="0.3889,0.6667" />
+    <order rotation="3.14" destination="0.1111,-0.2083" />
+  </orders>
+</svg>
