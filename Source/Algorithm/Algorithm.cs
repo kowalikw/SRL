@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using SRL.Commons.Utilities;
@@ -17,55 +18,37 @@ namespace SRL.Algorithm
         //TODO fix `==` and Equals() comparisons for doubles throughout the class. Use double.EpsilonEquals() instead.
 
         //TODO throw OperationCanceledException in meaningful spots (before and after long calculations; MinkowskiSum?). Not just at the beginning of loop iterations.
-
-        private List<Option> _defaultOptions;
+        
         private List<Option> _currentOptions;
+        private readonly List<Option> _defaultOptions; 
 
-        private struct IndexPoint // structure used to unify different index with each point
+        public Algorithm()
         {
-            public Point Point;
-            public int Index;
-            public int Obstacle;
+            _defaultOptions = GetOptions();
         }
+
+        public List<Option> GetOptions()
+        {
+            return OptionsFactory();
+        }
+
+        public void SetOptions(List<Option> options)
+        {
+            _currentOptions = options;
+        }
+
         public List<Order> GetPath(Map inputMap, Vehicle inputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation, CancellationToken token)
         {
             if (_currentOptions == null)
                 _currentOptions = GetOptions();
 
-            // default values for user options
-            int turnEdgeWeight = 10;
-            int moveEdgeWeight = 10;
-            double maxDiff = 0.01;
-            int angleDensity = 360;
-            bool backwards = true;
-            bool allDirections = true;
-
-
-            // wczytanie opcji
-            foreach (Option option in _currentOptions)
-            {
-                switch (option.Names[Language.English])
-                {
-                    case "Angle density":
-                        angleDensity = (int)option.Value;
-                        break;
-                    case "Point size":
-                        maxDiff = (double)option.Value;
-                        break;
-                    case "Graph edge weight for turns":
-                        turnEdgeWeight = (int)option.Value;
-                        break;
-                    case "Graph edge weight for move":
-                        moveEdgeWeight = (int)option.Value;
-                        break;
-                    case "Allow reverse":
-                        backwards = (bool)option.Value;
-                        break;
-                    case "Allow vehicle to move in any direction":
-                        allDirections = (bool)option.Value;
-                        break;
-                }
-            }
+            // load user options
+            int turnEdgeWeight = (int)LoadOptionValue("turnWeight");
+            int moveEdgeWeight = (int)LoadOptionValue("moveWeight");
+            double maxDiff = (double)LoadOptionValue("pointPrecision");
+            int angleDensity = (int)LoadOptionValue("angleDensity");
+            bool backwards = (bool)LoadOptionValue("bidirectional");
+            bool allDirections = (bool)LoadOptionValue("multidirectional");
 
 
             double singleAngle = 2 * Math.PI / angleDensity;
@@ -85,7 +68,7 @@ namespace SRL.Algorithm
             map.Obstacles.Add(new Polygon(new[] { new Point(-1, -1), new Point(1, -1), new Point(0, -1.1) }));
             map.Obstacles.Add(new Polygon(new[] { new Point(1, 1), new Point(1, -1), new Point(1.1, 0) }));
             map.Obstacles.Add(new Polygon(new[] { new Point(1, 1), new Point(-1, 1), new Point(0, 1.1) }));
-            
+
             List<IndexPoint>[] indexPointAngleList = new List<IndexPoint>[angleDensity];
             for (int i = 0; i < inputMap.Obstacles.Count; i++)
                 map.Obstacles.Add(inputMap.Obstacles[i]);
@@ -185,7 +168,7 @@ namespace SRL.Algorithm
 
                           if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle))
                           {
-                              int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point,maxDiff,moveEdgeWeight);
+                              int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, maxDiff, moveEdgeWeight);
                               if (!allDirections)
                               {
                                   // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
@@ -275,7 +258,7 @@ namespace SRL.Algorithm
             // Creating Orders from A* results
             // TODO: still some angle troubles
             List<Order> orders = new List<Order>();
-            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start )); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
+            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start)); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
             for (int i = 0; i < path.Length - 1; i++)
             {
                 if (token.IsCancellationRequested)
@@ -346,98 +329,7 @@ namespace SRL.Algorithm
         }
 
 
-        public Algorithm()
-        {
-            // Generating default options on class create
-            GenerateOptions();
-        }
-
-
-        private void GenerateOptions()
-        {
-            _currentOptions = new List<Option>();
-            _defaultOptions = new List<Option>();
-
-            // ANGLEDENSITY
-            Option angleDensity = new Option(Option.ValueType.Integer)
-            {
-                Value = 360,
-                MinValue = 3,
-                MaxValue = null
-            };
-            angleDensity.Names.Add(Language.English, "Angle density");
-            angleDensity.Names.Add(Language.Polish, "Gęstość kątów");
-            angleDensity.Tooltips.Add(Language.English, "Describes, how many units will the full angle be devided into");
-            angleDensity.Tooltips.Add(Language.Polish, "Określa, na ile jednostek zostanie podzielony kąt pełny");
-            _defaultOptions.Add(angleDensity);
-
-            // MAXDIFF
-            Option maxDiff = new Option(Option.ValueType.Double)
-            {
-                Value = 0.01d,
-                MinValue = 0.001d,
-                MaxValue = 1d
-            };
-            maxDiff.Names.Add(Language.English, "Point size");
-            maxDiff.Names.Add(Language.Polish, "Wielkość punktu");
-            maxDiff.Tooltips.Add(Language.English, "Describes, what is the maximum distance between two points for algorithm to act like it is one point");
-            maxDiff.Tooltips.Add(Language.Polish, "Określa maksymalną odległość między punktami, żeby algorytm traktował te punkty jak jeden");
-            _defaultOptions.Add(maxDiff);
-
-            // TURNEDGEWEIGHT
-            Option turnEdgeWeight = new Option(Option.ValueType.Integer)
-            {
-                Value = 10,
-                MinValue = 1, //TODO ??
-                MaxValue = 100
-            };
-            turnEdgeWeight.Names.Add(Language.English, "Graph edge weight for turns");
-            turnEdgeWeight.Names.Add(Language.Polish, "Waga krawędzi grafu dla obrotu");
-            turnEdgeWeight.Tooltips.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
-            turnEdgeWeight.Tooltips.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
-            _defaultOptions.Add(turnEdgeWeight);
-
-            // MOVEEDGEWEIGHT
-            Option moveEdgeWeight = new Option(Option.ValueType.Integer)
-            {
-                Value = 10,
-                MinValue = 1, //TODO ??
-                MaxValue = 100
-            };
-            moveEdgeWeight.Names.Add(Language.English, "Graph edge weight for move");
-            moveEdgeWeight.Names.Add(Language.Polish, "Waga krawędzi grafu dla ruchu");
-            moveEdgeWeight.Tooltips.Add(Language.English, "Describes the value of graph edge weight for every unit turn - the bigger the value, the less turns will vehicle take");
-            moveEdgeWeight.Tooltips.Add(Language.Polish, "Określa wagę krawędzi w grafie dla obrotu pojazdu o jedną jednostę - im większa wartość, tym mniej obrotów pojazd wykona");
-            _defaultOptions.Add(moveEdgeWeight);
-
-            // MOVEBACKWARDS
-            Option moveBackwards = new Option(Option.ValueType.Boolean)
-            {
-                MaxValue = null,
-                MinValue = null,
-                Value = false
-            };
-            moveBackwards.Names.Add(Language.English, "Allow reverse");
-            moveBackwards.Names.Add(Language.Polish, "Zezwalaj na wsteczny");
-            moveBackwards.Tooltips.Add(Language.English, "If set, allows vehicle to move front and back");
-            moveBackwards.Tooltips.Add(Language.Polish, "Jeśli zaznaczony, zezwala pojazdowi na poruszanie się do przodu i do tyłu");
-            _defaultOptions.Add(moveBackwards);
-
-            // ANYDIRECTION
-            Option anyDirection = new Option(Option.ValueType.Boolean)
-            {
-                Value = false,
-                MinValue = null,
-                MaxValue = null
-            };
-            anyDirection.Names.Add(Language.English, "Allow vehicle to move in any direction");
-            anyDirection.Names.Add(Language.Polish, "Zezwalaj na poruszanie się we wszystkich kierunkach");
-            anyDirection.Tooltips.Add(Language.English, "If set, allows vehicle to move in any direction, ignores \"Allow reverse\" option");
-            anyDirection.Tooltips.Add(Language.Polish, "Jeśli zaznaczony, zezwala pojazdowi na poruszanie się we wszystkich kierunkach, ignoruje opcję \"Zezwalaj na wsteczny\"");
-            _defaultOptions.Add(anyDirection);
-        }
-
-        public List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
+        private List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
         {
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity];
             double singleAngle = 2 * Math.PI / angleDensity;
@@ -468,8 +360,8 @@ namespace SRL.Algorithm
                         }
                     }
                     List<Polygon> lst = GeometryHelper.Union(convexSubPolygons);
-                        foreach (Polygon poly in lst)
-                            tableOfObstacles[i].Add(poly);
+                    foreach (Polygon poly in lst)
+                        tableOfObstacles[i].Add(poly);
                 }
             }
             return tableOfObstacles;
@@ -546,7 +438,7 @@ namespace SRL.Algorithm
 
         private int GetEdgeWeight(Point p1, Point p2, double pointSize, double edgeWeight)
         {
-            return (int)Math.Round((edgeWeight * GeometryHelper.GetDistance(p1,p2)) / pointSize,0);
+            return (int)Math.Round((edgeWeight * GeometryHelper.GetDistance(p1, p2)) / pointSize, 0);
         }
 
         private bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
@@ -583,14 +475,154 @@ namespace SRL.Algorithm
             return true;
         }
 
-        public List<Option> GetOptions()
+        private static List<Option> OptionsFactory()
         {
-            return _defaultOptions.Select(o => (Option)o.Clone()).ToList();
+            var options = new List<Option>();
+            var rm = Localization.Algorithm.ResourceManager;
+
+            
+            Option pointPrecision = new Option(Option.ValueType.Double, nameof(pointPrecision))
+            {
+                Value = 0.01d,
+                MinValue = 0.001d,
+                MaxValue = 1d
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(pointPrecision.Key, culture);
+                string tooltip = rm.GetString(pointPrecision.Key + "Tooltip", culture);
+
+                pointPrecision.Names.Add(language, name);
+                pointPrecision.Tooltips.Add(language, tooltip);
+            }
+
+
+            Option angleDensity = new Option(Option.ValueType.Integer, nameof(angleDensity))
+            {
+                Value = 360,
+                MinValue = 3,
+                MaxValue = null
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(angleDensity.Key, culture);
+                string tooltip = rm.GetString(angleDensity.Key + "Tooltip", culture);
+
+                angleDensity.Names.Add(language, name);
+                angleDensity.Tooltips.Add(language, tooltip);
+            }
+
+
+            Option moveWeight = new Option(Option.ValueType.Integer, nameof(moveWeight))
+            {
+                Value = 100,
+                MinValue = 1,
+                MaxValue = 1000
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(moveWeight.Key, culture);
+                string tooltip = rm.GetString(moveWeight.Key + "Tooltip", culture);
+
+                moveWeight.Names.Add(language, name);
+                moveWeight.Tooltips.Add(language, string.Format(tooltip, pointPrecision.Names[language]));
+            }
+
+
+            Option turnWeight = new Option(Option.ValueType.Integer, nameof(turnWeight))
+            {
+                Value = 100,
+                MinValue = 1,
+                MaxValue = 1000
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(turnWeight.Key, culture);
+                string tooltip = rm.GetString(turnWeight.Key + "Tooltip", culture);
+
+                turnWeight.Names.Add(language, name);
+                turnWeight.Tooltips.Add(language, string.Format(tooltip, angleDensity.Names[language]));
+            }
+
+
+            Option bidirectional = new Option(Option.ValueType.Boolean, nameof(bidirectional))
+            {
+                MaxValue = null,
+                MinValue = null,
+                Value = false
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(bidirectional.Key, culture);
+                string tooltip = rm.GetString(bidirectional.Key + "Tooltip", culture);
+
+                bidirectional.Names.Add(language, name);
+                bidirectional.Tooltips.Add(language, tooltip);
+            }
+
+            
+            Option multidirectional = new Option(Option.ValueType.Boolean, nameof(multidirectional))
+            {
+                Value = false,
+                MinValue = null,
+                MaxValue = null
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(multidirectional.Key, culture);
+                string tooltip = rm.GetString(multidirectional.Key + "Tooltip", culture);
+
+                multidirectional.Names.Add(language, name);
+                multidirectional.Tooltips.Add(language, string.Format(tooltip, bidirectional.Names[language]));
+            }
+            
+
+            // The order in which the options appear to the user.
+            options.Add(pointPrecision);
+            options.Add(angleDensity);
+            options.Add(moveWeight);
+            options.Add(turnWeight);
+            options.Add(bidirectional);
+            options.Add(multidirectional);
+
+            return options;
         }
 
-        public void SetOptions(List<Option> options)
+        private object LoadOptionValue(string key)
         {
-            _currentOptions = options;
+            Option option = _currentOptions.First(o => o.Key == key);
+
+            if (option == null || !option.IsValid)
+            {
+                option = _defaultOptions.First(o => o.Key == key);
+            }
+
+            return option.Value;
+        }
+
+        private struct IndexPoint // structure used to unify different index with each point
+        {
+            public Point Point;
+            public int Index;
+            public int Obstacle;
         }
     }
 }

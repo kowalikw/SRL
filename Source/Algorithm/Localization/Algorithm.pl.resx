@@ -130,7 +130,7 @@
     <value>Pozwala poruszać się pojazdowi tyłem (z takim samym kosztem).</value>
   </data>
   <data name="moveWeight" xml:space="preserve">
-    <value>Move weight</value>
+    <value>Koszt ruchu</value>
   </data>
   <data name="moveWeightTooltip" xml:space="preserve">
     <value>Koszt ruchu pojazdu o odległość [{0}].</value>
@@ -148,7 +148,7 @@
     <value>Maksymalna odległość pomiędzy dwoma punktami, taka że algorytm potraktuje je jako ten sam punkt. Im mniejsza wartość, tym większa precyzja.</value>
   </data>
   <data name="turnWeight" xml:space="preserve">
-    <value>Turn weight</value>
+    <value>Koszt obrotu</value>
   </data>
   <data name="turnWeightTooltip" xml:space="preserve">
     <value>Koszt minimalnego skrętu jaki może zrobić pojazd (definiowany przez opcję [{0}]).</value>

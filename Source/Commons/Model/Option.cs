@@ -15,33 +15,23 @@ namespace SRL.Commons.Model
             Boolean
         }
 
-        public ValueType Type { get; }
+        public string Key { get; }
 
+        public ValueType Type { get; }
         public object Value
         {
             get { return _value; }
-            set
-            {
-                Set(ref _value, value);
-            }
+            set { Set(ref _value, value); }
         }
-
         public object MinValue
         {
             get { return _minValue; }
-            set
-            {
-                Set(ref _minValue, value);
-            }
+            set { Set(ref _minValue, value); }
         }
-
         public object MaxValue
         {
             get { return _maxValue; }
-            set
-            {
-                Set(ref _maxValue, value);
-            }
+            set { Set(ref _maxValue, value); }
         }
 
         public Dictionary<Language, string> Names { get; }
@@ -52,8 +42,9 @@ namespace SRL.Commons.Model
         private object _maxValue;
 
 
-        public Option(ValueType type)
+        public Option(ValueType type, string key)
         {
+            Key = key;
             Type = type;
 
             Names = new Dictionary<Language, string>();
