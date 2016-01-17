@@ -79,7 +79,7 @@ namespace SRL.Main.View.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} object (*.svg)|*.svg.
+        ///   Looks up a localized string similar to {0} (*.svg)|*.svg.
         /// </summary>
         internal static string modelFilter {
             get {

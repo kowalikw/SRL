@@ -485,7 +485,7 @@ namespace SRL.Algorithm
             {
                 Value = 0.01d,
                 MinValue = 0.001d,
-                MaxValue = 1d
+                MaxValue = 0.2d
             };
             foreach (var l in Enum.GetValues(typeof(Language)))
             {

@@ -114,7 +114,7 @@ namespace SRL.Main.ViewModel.Base
             {
                 SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
                     Dialogs.ResourceManager.GetString("modelNotFoundTitle"),
-                    Dialogs.ResourceManager.GetString("modelNotFoundMsg"),
+                    string.Format(Dialogs.ResourceManager.GetString("modelNotFoundMsg"), modelName),
                     null);
             }
 

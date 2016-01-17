@@ -124,11 +124,10 @@
     <value>Zmiana języka</value>
   </data>
   <data name="modelFilter" xml:space="preserve">
-    <value>Obiekt typu {0} (*.svg)|*.svg</value>
+    <value>{0} (*.svg)|*.svg</value>
   </data>
   <data name="modelNotFoundMsg" xml:space="preserve">
     <value>Obiekt typu {0} nie znajduje się w pliku.</value>
-    <comment>Pass model name as the argument.</comment>
   </data>
   <data name="modelNotFoundTitle" xml:space="preserve">
     <value>Niepoprawny plik</value>

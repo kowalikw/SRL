@@ -422,6 +422,7 @@ namespace SRL.Main.ViewModel
                         MaxFrameIdx = _frames.Count - 1;
                         StopPlaybackCommand.Execute(null);
                     }
+                    RaiseRequerySuggested();
                 }
             }
         }

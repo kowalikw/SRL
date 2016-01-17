@@ -110,6 +110,7 @@
     <Compile Include="Utilities\Converters\DoubleToStringConverter.cs" />
     <Compile Include="Utilities\Converters\EnumEqualityConverter.cs" />
     <Compile Include="Utilities\Converters\IntToStringConverter.cs" />
+    <Compile Include="Utilities\Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Utilities\Normalization.cs" />
     <Compile Include="Utilities\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\OptionControlTemplateSelector.cs" />
