@@ -121,6 +121,20 @@ namespace SRL.Algorithm
                 ip.Obstacle = -1;
                 indexPointAngleList[i].Add(ip);
             }
+            int insides = 0;
+            for(int angle = 0;angle<angleDensity;angle++)
+            {
+                foreach(Polygon obstacle in currentMap[angle])
+                    if(GeometryHelper.IsEnclosed(end,obstacle))
+                    {
+                        insides++;
+                        break;
+                    }
+                if (insides < angle)
+                    break;
+                if (angle == angleDensity - 1 && insides == angleDensity)
+                    throw new NonexistentPathException();
+            }
 
             // creating a graph with vertices count equal to number of all indexed points enlarged by one (the accepting state for A* algorithm)
             IGraph graph = new AdjacencyListsGraph<HashTableAdjacencyList>(true, index + 1);
