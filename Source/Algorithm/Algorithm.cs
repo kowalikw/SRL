@@ -15,8 +15,7 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-        //TODO fix `==` and Equals() comparisons for doubles throughout the class. Use double.EpsilonEquals() instead.
-
+        
         //TODO throw OperationCanceledException in meaningful spots (before and after long calculations; MinkowskiSum?). Not just at the beginning of loop iterations.
         
         private List<Option> _currentOptions;
@@ -251,7 +250,7 @@ namespace SRL.Algorithm
                 if (token.IsCancellationRequested)
                     throw new OperationCanceledException();
 
-                if (indexPointAngleList[i][indexPointAngleList[i].Count - 1].Obstacle == -1 && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point == end)
+                if (indexPointAngleList[i][indexPointAngleList[i].Count - 1].Obstacle == -1 && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point.X.EpsilonEquals(end.X) && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point.Y.EpsilonEquals(end.Y))
                     graph.AddEdge(indexPointAngleList[i][indexPointAngleList[i].Count - 1].Index, index, 0);
             }
 
@@ -279,17 +278,17 @@ namespace SRL.Algorithm
                     ind++;
                 Order o = new Order(angle * singleAngle, indexPointAngleList[angle][ind].Point);
 
-                if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) == (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
+                if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI)).EpsilonEquals((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
                 {
                     orders.Add(new Order(orders[orders.Count - 1].Rotation, o.Destination));
                     continue;
                 }
 
-                if (o.Rotation == 0 && orders[orders.Count - 1].Rotation <= -Math.PI)
+                if (o.Rotation.EpsilonEquals(0) && orders[orders.Count - 1].Rotation <= -Math.PI)
                 {
                     o = new Order(-2 * Math.PI, o.Destination);
                 }
-                else if (o.Rotation == 0 && orders[orders.Count - 1].Rotation > 0)
+                else if (o.Rotation.EpsilonEquals(0) && orders[orders.Count - 1].Rotation > 0)
                 {
                     // do nothing
                 }
@@ -303,11 +302,11 @@ namespace SRL.Algorithm
                 {
                     if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                    else if (orders[orders.Count - 1].Rotation == -2 * Math.PI && o.Rotation > Math.PI)
+                    else if (orders[orders.Count - 1].Rotation.EpsilonEquals(-2 * Math.PI) && o.Rotation > Math.PI)
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
                     // else do nothing
                 }
-                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation == 0)
+                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation.EpsilonEquals(0))
                 {
                     if (o.Rotation > Math.PI)
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
