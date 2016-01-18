@@ -63,7 +63,6 @@ namespace SRL.Algorithm
 
             // copy of the map with additional obstacles as map edges (commented at the moment) (size of those additional obstacles can be changed, it works fine for these ones), right now map is without bounds as we have trouble with vehicles moving by normal obstacles
             Map map = new Map();
-            List<List<IndexPoint>>[] iPointObstacles = new List<List<IndexPoint>>[angleDensity];
             map.Obstacles.Add(new Polygon(new[] { new Point(-1, -1), new Point(-1, 1), new Point(-1.1, 0) }));
             map.Obstacles.Add(new Polygon(new[] { new Point(-1, -1), new Point(1, -1), new Point(0, -1.1) }));
             map.Obstacles.Add(new Polygon(new[] { new Point(1, 1), new Point(1, -1), new Point(1.1, 0) }));
