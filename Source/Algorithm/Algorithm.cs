@@ -15,8 +15,7 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-        //TODO fix `==` and Equals() comparisons for doubles throughout the class. Use double.EpsilonEquals() instead.
-
+        
         //TODO throw OperationCanceledException in meaningful spots (before and after long calculations; MinkowskiSum?). Not just at the beginning of loop iterations.
         
         private List<Option> _currentOptions;
@@ -63,7 +62,6 @@ namespace SRL.Algorithm
 
             // copy of the map with additional obstacles as map edges (commented at the moment) (size of those additional obstacles can be changed, it works fine for these ones), right now map is without bounds as we have trouble with vehicles moving by normal obstacles
             Map map = new Map();
-            List<List<IndexPoint>>[] iPointObstacles = new List<List<IndexPoint>>[angleDensity];
             map.Obstacles.Add(new Polygon(new[] { new Point(-1, -1), new Point(-1, 1), new Point(-1.1, 0) }));
             map.Obstacles.Add(new Polygon(new[] { new Point(-1, -1), new Point(1, -1), new Point(0, -1.1) }));
             map.Obstacles.Add(new Polygon(new[] { new Point(1, 1), new Point(1, -1), new Point(1.1, 0) }));
@@ -121,6 +119,20 @@ namespace SRL.Algorithm
                 ip.Obstacle = -1;
                 indexPointAngleList[i].Add(ip);
             }
+            int insides = 0;
+            for(int angle = 0;angle<angleDensity;angle++)
+            {
+                foreach(Polygon obstacle in currentMap[angle])
+                    if(GeometryHelper.IsEnclosed(end,obstacle))
+                    {
+                        insides++;
+                        break;
+                    }
+                if (insides < angle)
+                    break;
+                if (angle == angleDensity - 1 && insides == angleDensity)
+                    throw new NonexistentPathException();
+            }
 
             // creating a graph with vertices count equal to number of all indexed points enlarged by one (the accepting state for A* algorithm)
             IGraph graph = new AdjacencyListsGraph<HashTableAdjacencyList>(true, index + 1);
@@ -136,7 +148,7 @@ namespace SRL.Algorithm
                           if (token.IsCancellationRequested)
                               return;
                           // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
-                          if (indexPointAngleList[angle][i].Obstacle == -1)
+                          /*if (indexPointAngleList[angle][i].Obstacle == -1)
                           {
                               bool cancel = false;
                               foreach (Polygon obstacle in currentMap[angle])
@@ -163,7 +175,7 @@ namespace SRL.Algorithm
                               }
                               if (cancel)
                                   continue;
-                          }
+                          }*/
                           if (i == j) continue; // We are not accepting edges in one point when not turning
 
                           if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle))
@@ -201,34 +213,28 @@ namespace SRL.Algorithm
                         if (token.IsCancellationRequested)
                             throw new OperationCanceledException();
                         // Again, checking if starting and ending point are not in any Minkowski's sum polygons
-                        if (indexPointAngleList[angle][i].Obstacle == -1)
+                        
+                        bool cancel = false;
+                        foreach (Polygon obstacle in currentMap[angle])
                         {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[angle])
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[angle][i].Point))
                             {
-                                if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
+                                cancel = true;
+                                break;
                             }
-                            if (cancel)
-                                continue;
                         }
-                        if (indexPointAngleList[(angle + 1) % angleDensity][j].Obstacle == -1)
+                        if (cancel)
+                            continue;
+                        foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
                         {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[(angle + 1) % angleDensity][j].Point))
                             {
-                                if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
+                                cancel = true;
+                                break;
                             }
-                            if (cancel)
-                                continue;
                         }
+                        if (cancel)
+                            continue;
                         if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= maxDiff)
                         {
                             graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnEdgeWeight);
@@ -244,7 +250,7 @@ namespace SRL.Algorithm
                 if (token.IsCancellationRequested)
                     throw new OperationCanceledException();
 
-                if (indexPointAngleList[i][indexPointAngleList[i].Count - 1].Obstacle == -1 && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point == end)
+                if (indexPointAngleList[i][indexPointAngleList[i].Count - 1].Obstacle == -1 && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point.X.EpsilonEquals(end.X) && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point.Y.EpsilonEquals(end.Y))
                     graph.AddEdge(indexPointAngleList[i][indexPointAngleList[i].Count - 1].Index, index, 0);
             }
 
@@ -272,17 +278,17 @@ namespace SRL.Algorithm
                     ind++;
                 Order o = new Order(angle * singleAngle, indexPointAngleList[angle][ind].Point);
 
-                if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) == (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
+                if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI)).EpsilonEquals((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
                 {
                     orders.Add(new Order(orders[orders.Count - 1].Rotation, o.Destination));
                     continue;
                 }
 
-                if (o.Rotation == 0 && orders[orders.Count - 1].Rotation <= -Math.PI)
+                if (o.Rotation.EpsilonEquals(0) && orders[orders.Count - 1].Rotation <= -Math.PI)
                 {
                     o = new Order(-2 * Math.PI, o.Destination);
                 }
-                else if (o.Rotation == 0 && orders[orders.Count - 1].Rotation > 0)
+                else if (o.Rotation.EpsilonEquals(0) && orders[orders.Count - 1].Rotation > 0)
                 {
                     // do nothing
                 }
@@ -296,11 +302,11 @@ namespace SRL.Algorithm
                 {
                     if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                    else if (orders[orders.Count - 1].Rotation == -2 * Math.PI && o.Rotation > Math.PI)
+                    else if (orders[orders.Count - 1].Rotation.EpsilonEquals(-2 * Math.PI) && o.Rotation > Math.PI)
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
                     // else do nothing
                 }
-                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation == 0)
+                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation.EpsilonEquals(0))
                 {
                     if (o.Rotation > Math.PI)
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
@@ -467,6 +473,7 @@ namespace SRL.Algorithm
             }
             return true;
         }
+
 
         private static List<Option> OptionsFactory()
         {
