@@ -423,16 +423,9 @@ namespace SRL.Algorithm
             return poly;
         }
 
-        private bool IsPointInTriangle(Point p1, Point p2, double angle, Polygon triangle)
+        private bool IsPointInTriangle(Point trianglePosition, Point point, double angle, Polygon triangle)
         {
-            List<Point> newTriangle = new List<Point>();
-            for (int i = 0; i < triangle.Vertices.Count; i++)
-            {
-                Point p = GeometryHelper.Rotate(triangle.Vertices[i], new Point(0, 0), angle);
-                newTriangle.Add(new Point(p1.X + p.X, p1.Y + p.Y));
-            }
-            Polygon poly = new Polygon(newTriangle);
-            return GeometryHelper.IsEnclosed(p2, poly);
+            return GeometryHelper.IsEnclosed(point, triangle.Transform(null, angle, trianglePosition));
         }
 
 
