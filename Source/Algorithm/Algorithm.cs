@@ -136,7 +136,7 @@ namespace SRL.Algorithm
                           if (token.IsCancellationRequested)
                               return;
                           // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
-                          if (indexPointAngleList[angle][i].Obstacle == -1)
+                          /*if (indexPointAngleList[angle][i].Obstacle == -1)
                           {
                               bool cancel = false;
                               foreach (Polygon obstacle in currentMap[angle])
@@ -163,7 +163,7 @@ namespace SRL.Algorithm
                               }
                               if (cancel)
                                   continue;
-                          }
+                          }*/
                           if (i == j) continue; // We are not accepting edges in one point when not turning
 
                           if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle))
@@ -201,34 +201,28 @@ namespace SRL.Algorithm
                         if (token.IsCancellationRequested)
                             throw new OperationCanceledException();
                         // Again, checking if starting and ending point are not in any Minkowski's sum polygons
-                        if (indexPointAngleList[angle][i].Obstacle == -1)
+                        
+                        bool cancel = false;
+                        foreach (Polygon obstacle in currentMap[angle])
                         {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[angle])
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[angle][i].Point))
                             {
-                                if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
+                                cancel = true;
+                                break;
                             }
-                            if (cancel)
-                                continue;
                         }
-                        if (indexPointAngleList[(angle + 1) % angleDensity][j].Obstacle == -1)
+                        if (cancel)
+                            continue;
+                        foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
                         {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[(angle + 1) % angleDensity][j].Point))
                             {
-                                if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
+                                cancel = true;
+                                break;
                             }
-                            if (cancel)
-                                continue;
                         }
+                        if (cancel)
+                            continue;
                         if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= maxDiff)
                         {
                             graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnEdgeWeight);
@@ -474,6 +468,7 @@ namespace SRL.Algorithm
             }
             return true;
         }
+
 
         private static List<Option> OptionsFactory()
         {
