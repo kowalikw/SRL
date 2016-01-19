@@ -204,7 +204,46 @@ namespace SRL.Algorithm
                 throw new OperationCanceledException();
 
             // Adding turning edges
-            for (int angle = 0; angle < angleDensity; angle++)
+            Parallel.For(0, angleDensity, angle => {
+                for (int i = 0; i < indexPointAngleList[angle].Count; i++)
+                {
+                    for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
+                    {
+                        if (token.IsCancellationRequested)
+                            throw new OperationCanceledException();
+                        // Again, checking if starting and ending point are not in any Minkowski's sum polygons
+
+                        bool cancel = false;
+                        foreach (Polygon obstacle in currentMap[angle])
+                        {
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[angle][i].Point))
+                            {
+                                cancel = true;
+                                break;
+                            }
+                        }
+                        if (cancel)
+                            continue;
+                        foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
+                        {
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[(angle + 1) % angleDensity][j].Point))
+                            {
+                                cancel = true;
+                                break;
+                            }
+                        }
+                        if (cancel)
+                            continue;
+                        if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= maxDiff)
+                        {
+                            graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnEdgeWeight);
+                            graph.AddEdge(indexPointAngleList[(angle + 1) % angleDensity][j].Index, indexPointAngleList[angle][i].Index, turnEdgeWeight);
+                        }
+                    }
+                }
+            });
+
+            /*for (int angle = 0; angle < angleDensity; angle++)
             {
                 for (int i = 0; i < indexPointAngleList[angle].Count; i++)
                 {
@@ -243,7 +282,7 @@ namespace SRL.Algorithm
                     }
                 }
             }
-
+            */
             // Adding edges to accepting state
             for (int i = 0; i < indexPointAngleList.Length; i++)
             {
