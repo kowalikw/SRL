@@ -149,6 +149,18 @@ namespace SRL.Commons.Model
                     Orders.Add(order);
                 }
                 reader.ReadEndElement();
+
+                if (Options == null) Options = new List<Option>();
+                reader.ReadToFollowing("options");
+                while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "option")
+                {
+                    Option option = reader.ReadContentAsOption();
+                    Options.Add(option);
+                }
+                reader.ReadEndElement();
+
+                reader.ReadToFollowing("algorithmKey");
+                AlgorithmKey = reader.ReadContentAsString();
             }
             else
                 throw new XmlException();
@@ -391,6 +403,11 @@ namespace SRL.Commons.Model
                 writer.WriteOption(option);
                 writer.WriteEndElement();
             }
+            writer.WriteEndElement();
+
+            // Algorithm key
+            writer.WriteStartElement("algorithmKey");
+            writer.WriteValue(AlgorithmKey);
             writer.WriteEndElement();
         }
 
