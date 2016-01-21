@@ -204,11 +204,10 @@ namespace SRL.Main.ViewModel
                     {
                         StopPlaybackCommand.Execute(null);
                         EditorMode = Mode.Normal;
-
-                        List<Option> options = _algorithm.GetOptions();
-                        if (GetAlgorithmOptions(options))
+                        
+                        if (GetAlgorithmOptions())
                         {
-                            _algorithm.SetOptions(options);
+                            _algorithm.SetOptions(_options);
                             StartNewPathCalculation();
                         }
                     }, () =>
@@ -523,7 +522,9 @@ namespace SRL.Main.ViewModel
         }
 
         private readonly DispatcherTimer _simulationTimer;
+
         private IAlgorithm _algorithm;
+        private List<Option> _options;
 
 
         private bool _simulationRunning;
@@ -551,7 +552,7 @@ namespace SRL.Main.ViewModel
             if (!IsEditedModelValid)
                 return null;
 
-            Simulation simulation = new Simulation()
+            Simulation simulation = new Simulation
             {
                 Map = Map,
                 Vehicle = Vehicle,
@@ -559,7 +560,8 @@ namespace SRL.Main.ViewModel
                 EndPoint = EndPoint.Value,
                 VehicleSize = VehicleSize.Value,
                 InitialVehicleRotation = InitialVehicleRotation.Value,
-                Orders = Orders
+                Orders = Orders,
+                Options = _options
             };
             return simulation;
         }
@@ -575,7 +577,14 @@ namespace SRL.Main.ViewModel
             Orders = model.Orders;
 
             if (Orders != null)
+            {
                 CalculateFrames(Orders);
+
+                if (model.Options != null)
+                {
+                    _options = model.Options;
+                }
+            }
         }
 
         private void CalculateFrames(List<Order> orders)
@@ -792,14 +801,17 @@ namespace SRL.Main.ViewModel
             Monitor.Exit(_cancellationLock);
         }
 
-        private bool GetAlgorithmOptions(List<Option> options)
+        private bool GetAlgorithmOptions()
         {
-            OptionsDialogView dialog = new OptionsDialogView(options);
+            if (_options == null)
+                _options = _algorithm.GetOptions();
+
+            OptionsDialogView dialog = new OptionsDialogView(_options);
 
             if (dialog.ShowDialog() == true)
             {
-                options.Clear();
-                options.AddRange(dialog.Result);
+                _options.Clear();
+                _options.AddRange(dialog.Result);
                 return true;
             }
 
