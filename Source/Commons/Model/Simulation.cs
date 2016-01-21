@@ -157,10 +157,9 @@ namespace SRL.Commons.Model
                     Option option = reader.ReadContentAsOption();
                     Options.Add(option);
                 }
-                reader.ReadEndElement();
 
                 reader.ReadToFollowing("algorithmKey");
-                AlgorithmKey = reader.ReadContentAsString();
+                AlgorithmKey = reader.ReadElementContentAsString();
             }
             else
                 throw new XmlException();

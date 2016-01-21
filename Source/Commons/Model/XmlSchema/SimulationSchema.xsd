@@ -94,6 +94,19 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="options">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="option">
+                <xs:complexType>
+                  <xs:attribute name="key" type="xs:string" use="required" />
+                  <xs:attribute name="value" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="algorithmKey" />
       </xs:sequence>
       <xs:attribute name="width" type="xs:unsignedShort" use="required" />
       <xs:attribute name="height" type="xs:unsignedShort" use="required" />
