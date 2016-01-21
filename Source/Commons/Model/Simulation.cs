@@ -161,6 +161,7 @@ namespace SRL.Commons.Model
                 else
                     ; //TODO
                 reader.ReadToFollowing("options");
+                reader.ReadToDescendant("option");
                 while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "option")
                 {
                     string optionKey;
