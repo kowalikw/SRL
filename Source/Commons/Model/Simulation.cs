@@ -18,6 +18,7 @@ namespace SRL.Commons.Model
         public Point StartPoint { get; set; }
         public Point EndPoint { get; set; }
         public List<Order> Orders { get; set; }
+        public List<Option> Options { get; set; }
 
 
         public bool Equals(Simulation other)
@@ -377,6 +378,16 @@ namespace SRL.Commons.Model
             {
                 writer.WriteStartElement("order");
                 writer.WriteOrder(order);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+
+            //Option list
+            writer.WriteStartElement("options");
+            foreach (Option option in Options)
+            {
+                writer.WriteStartElement("option");
+                writer.WriteOption(option);
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();
