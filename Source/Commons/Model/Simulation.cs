@@ -19,6 +19,7 @@ namespace SRL.Commons.Model
         public Point EndPoint { get; set; }
         public List<Order> Orders { get; set; }
         public List<Option> Options { get; set; }
+        public string AlgorithmKey { get; set; }
 
 
         public bool Equals(Simulation other)
