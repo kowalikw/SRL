@@ -184,7 +184,7 @@ namespace SRL.Algorithm
                               if (!allDirections)
                               {
                                   // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                  if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle))
+                                  if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle, maxDiff))
                                   {
                                       graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
                                       // if user enabled reverse in options, we add an edge back
@@ -468,7 +468,7 @@ namespace SRL.Algorithm
             return poly;
         }
 
-        private bool IsPointInTriangle(Point p1, Point p2, double angle, Polygon triangle)
+        private bool IsPointInTriangle(Point p1, Point p2, double angle, Polygon triangle, double pointPrecision)
         {
             List<Point> newTriangle = new List<Point>();
             for (int i = 0; i < triangle.Vertices.Count; i++)
@@ -477,7 +477,22 @@ namespace SRL.Algorithm
                 newTriangle.Add(new Point(p1.X + p.X, p1.Y + p.Y));
             }
             Polygon poly = new Polygon(newTriangle);
-            return GeometryHelper.IsEnclosed(p2, poly);
+            return GeometryHelper.IsEnclosed(p2, poly) ? true : IsPointNearLine(newTriangle[0],newTriangle[1],p2, pointPrecision) ? true : IsPointNearLine(newTriangle[0], newTriangle[2], p2, pointPrecision);
+        }
+
+        private bool IsPointNearLine(Point LineA, Point LineB, Point C, double PointPrecision)
+        {
+            double Base = Math.Sqrt(Math.Pow(LineA.X-LineB.X,2) + Math.Pow(LineA.Y-LineB.Y,2));
+            Point AB = new Point(LineB.X - LineA.X, LineB.Y - LineA.Y);
+            Point AC = new Point(C.X - LineA.X, C.Y - LineA.Y);
+            bool isClose = Math.Abs(AB.X * AC.Y - AB.Y * AC.X) / Base <= PointPrecision;
+            if (!isClose)
+                return false;
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(AB, AC))) > Math.PI)
+                return false;
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(new Point(-AB.X, -AB.Y), AC))) > Math.PI)
+                return false;
+            return true;
         }
 
 
