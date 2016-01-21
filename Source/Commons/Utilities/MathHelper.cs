@@ -5,7 +5,7 @@ namespace SRL.Commons.Utilities
 {
     public static class MathHelper
     {
-        public const double DoubleComparisonEpsilon = 1e-15;
+        public const double DoubleComparisonEpsilon = 1e-14;
 
         public static void Swap<T>(ref T a, ref T b)
         {

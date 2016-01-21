@@ -51,6 +51,15 @@ namespace SRL.Commons.Model
             Tooltips = new Dictionary<Language, string>();
         }
 
+        public Option(string key, object value)
+        {
+            Key = key;
+            Value = value;
+
+            Names = new Dictionary<Language, string>();
+            Tooltips = new Dictionary<Language, string>();
+        }
+
 
         public string this[string columnName]
         {

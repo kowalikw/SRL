@@ -104,5 +104,37 @@ namespace SRL.Commons.Utilities
             writer.WriteValue(order.Destination.Y);
             writer.WriteEndAttribute();
         }
+
+        public static Option ReadContentAsOption(this XmlReader reader)
+        {
+            string key;
+            object value;
+
+            if (reader.MoveToContent() == XmlNodeType.Element)
+            {
+                reader.MoveToAttribute("key");
+                key = reader.ReadContentAsString();
+
+                reader.MoveToAttribute("value");
+                value = reader.ReadContentAsObject();
+
+                reader.Skip();
+            }
+            else
+                throw new XmlException();
+
+            return new Option(key, value);
+        }
+
+        public static void WriteOption(this XmlWriter writer, Option option)
+        {
+            writer.WriteStartAttribute("key");
+            writer.WriteValue(option.Key);
+            writer.WriteEndAttribute();
+
+            writer.WriteStartAttribute("value");
+            writer.WriteValue(option.Value);
+            writer.WriteEndAttribute();
+        }
     }
 }

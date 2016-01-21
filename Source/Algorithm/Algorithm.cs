@@ -20,11 +20,13 @@ namespace SRL.Algorithm
         
         private List<Option> _currentOptions;
         private readonly List<Option> _defaultOptions; 
-
+        
         public Algorithm()
         {
             _defaultOptions = GetOptions();
         }
+
+        public string GetKey => "Algorithm";
 
         public List<Option> GetOptions()
         {
@@ -470,6 +472,7 @@ namespace SRL.Algorithm
 
         private bool IsPointInTriangle(Point p1, Point p2, double angle, Polygon triangle, double pointPrecision)
         {
+           // return GeometryHelper.IsEnclosed(point, triangle.Transform(null, angle, trianglePosition)); //TODO
             List<Point> newTriangle = new List<Point>();
             for (int i = 0; i < triangle.Vertices.Count; i++)
             {
