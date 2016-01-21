@@ -20,11 +20,13 @@ namespace SRL.Algorithm
         
         private List<Option> _currentOptions;
         private readonly List<Option> _defaultOptions; 
-
+        
         public Algorithm()
         {
             _defaultOptions = GetOptions();
         }
+
+        public string GetKey => "Algorithm";
 
         public List<Option> GetOptions()
         {
@@ -184,7 +186,7 @@ namespace SRL.Algorithm
                               if (!allDirections)
                               {
                                   // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                  if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle))
+                                  if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle, maxDiff))
                                   {
                                       graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
                                       // if user enabled reverse in options, we add an edge back
@@ -204,7 +206,46 @@ namespace SRL.Algorithm
                 throw new OperationCanceledException();
 
             // Adding turning edges
-            for (int angle = 0; angle < angleDensity; angle++)
+            Parallel.For(0, angleDensity, angle => {
+                for (int i = 0; i < indexPointAngleList[angle].Count; i++)
+                {
+                    for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
+                    {
+                        if (token.IsCancellationRequested)
+                            throw new OperationCanceledException();
+                        // Again, checking if starting and ending point are not in any Minkowski's sum polygons
+
+                        bool cancel = false;
+                        foreach (Polygon obstacle in currentMap[angle])
+                        {
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[angle][i].Point))
+                            {
+                                cancel = true;
+                                break;
+                            }
+                        }
+                        if (cancel)
+                            continue;
+                        foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
+                        {
+                            if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[(angle + 1) % angleDensity][j].Point))
+                            {
+                                cancel = true;
+                                break;
+                            }
+                        }
+                        if (cancel)
+                            continue;
+                        if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= maxDiff)
+                        {
+                            graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnEdgeWeight);
+                            graph.AddEdge(indexPointAngleList[(angle + 1) % angleDensity][j].Index, indexPointAngleList[angle][i].Index, turnEdgeWeight);
+                        }
+                    }
+                }
+            });
+
+            /*for (int angle = 0; angle < angleDensity; angle++)
             {
                 for (int i = 0; i < indexPointAngleList[angle].Count; i++)
                 {
@@ -243,7 +284,7 @@ namespace SRL.Algorithm
                     }
                 }
             }
-
+            */
             // Adding edges to accepting state
             for (int i = 0; i < indexPointAngleList.Length; i++)
             {
@@ -429,9 +470,32 @@ namespace SRL.Algorithm
             return poly;
         }
 
-        private bool IsPointInTriangle(Point trianglePosition, Point point, double angle, Polygon triangle)
+        private bool IsPointInTriangle(Point p1, Point p2, double angle, Polygon triangle, double pointPrecision)
         {
-            return GeometryHelper.IsEnclosed(point, triangle.Transform(null, angle, trianglePosition));
+           // return GeometryHelper.IsEnclosed(point, triangle.Transform(null, angle, trianglePosition)); //TODO
+            List<Point> newTriangle = new List<Point>();
+            for (int i = 0; i < triangle.Vertices.Count; i++)
+            {
+                Point p = GeometryHelper.Rotate(triangle.Vertices[i], new Point(0, 0), angle);
+                newTriangle.Add(new Point(p1.X + p.X, p1.Y + p.Y));
+            }
+            Polygon poly = new Polygon(newTriangle);
+            return GeometryHelper.IsEnclosed(p2, poly) ? true : IsPointNearLine(newTriangle[0],newTriangle[1],p2, pointPrecision) ? true : IsPointNearLine(newTriangle[0], newTriangle[2], p2, pointPrecision);
+        }
+
+        private bool IsPointNearLine(Point LineA, Point LineB, Point C, double PointPrecision)
+        {
+            double Base = Math.Sqrt(Math.Pow(LineA.X-LineB.X,2) + Math.Pow(LineA.Y-LineB.Y,2));
+            Point AB = new Point(LineB.X - LineA.X, LineB.Y - LineA.Y);
+            Point AC = new Point(C.X - LineA.X, C.Y - LineA.Y);
+            bool isClose = Math.Abs(AB.X * AC.Y - AB.Y * AC.X) / Base <= PointPrecision;
+            if (!isClose)
+                return false;
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(AB, AC))) > Math.PI)
+                return false;
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(new Point(-AB.X, -AB.Y), AC))) > Math.PI)
+                return false;
+            return true;
         }
 
 
