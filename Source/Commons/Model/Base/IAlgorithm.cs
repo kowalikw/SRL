@@ -6,7 +6,7 @@ namespace SRL.Commons.Model.Base
 {
     public interface IAlgorithm
     {
-        string GetKey { get; }
+        string Key { get; }
 
         List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation, CancellationToken token);
 

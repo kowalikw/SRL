@@ -561,6 +561,7 @@ namespace SRL.Main.ViewModel
                 VehicleSize = VehicleSize.Value,
                 InitialVehicleRotation = InitialVehicleRotation.Value,
                 Orders = Orders,
+                AlgorithmKey = _algorithm.Key,
                 Options = _options
             };
             return simulation;
@@ -580,7 +581,7 @@ namespace SRL.Main.ViewModel
             {
                 CalculateFrames(Orders);
 
-                if (model.Options != null)
+                if (model.Options != null && _algorithm.Key == model.AlgorithmKey)
                 {
                     _options = model.Options;
                 }

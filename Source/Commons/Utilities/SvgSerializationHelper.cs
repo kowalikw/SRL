@@ -105,11 +105,8 @@ namespace SRL.Commons.Utilities
             writer.WriteEndAttribute();
         }
 
-        public static Option ReadContentAsOption(this XmlReader reader)
+        public static void GetOptionValue(this XmlReader reader, out string key, out object value)
         {
-            string key;
-            object value;
-
             if (reader.MoveToContent() == XmlNodeType.Element)
             {
                 reader.MoveToAttribute("key");
@@ -122,8 +119,6 @@ namespace SRL.Commons.Utilities
             }
             else
                 throw new XmlException();
-
-            return new Option(key, value);
         }
 
         public static void WriteOption(this XmlWriter writer, Option option)

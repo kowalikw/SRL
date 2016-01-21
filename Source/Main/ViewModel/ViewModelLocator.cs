@@ -3,6 +3,7 @@ using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
+using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
 using SRL.Main.View.Pages;
 using SRL.Main.ViewModel.Services;
@@ -31,6 +32,9 @@ namespace SRL.Main.ViewModel
 
             SimpleIoc.Default.Register<INavigationService>(NavigationServiceFactory);
             SimpleIoc.Default.Register<IDialogService>(DialogServiceFactory);
+
+            var algorithm = new Algorithm.Algorithm();
+            SimpleIoc.Default.Register<IAlgorithm>(() => algorithm, algorithm.Key);
         }
 
         public MainViewModel Main

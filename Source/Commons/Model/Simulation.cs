@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.Practices.ServiceLocation;
 using SRL.Commons.Model.Base;
 using SRL.Commons.Utilities;
 
@@ -150,16 +152,22 @@ namespace SRL.Commons.Model
                 }
                 reader.ReadEndElement();
 
-                if (Options == null) Options = new List<Option>();
+                reader.ReadToFollowing("algorithmKey");
+                AlgorithmKey = reader.ReadElementContentAsString();
+
+                var algorithm = ServiceLocator.Current.GetInstance<IAlgorithm>(AlgorithmKey);
+                if (algorithm != null)
+                    Options = algorithm.GetOptions();
+                else
+                    ; //TODO
                 reader.ReadToFollowing("options");
                 while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "option")
                 {
-                    Option option = reader.ReadContentAsOption();
-                    Options.Add(option);
+                    string optionKey;
+                    object optionValue;
+                    reader.GetOptionValue(out optionKey, out optionValue);
+                    Options.First(option => option.Key == optionKey).Value = optionValue;
                 }
-
-                reader.ReadToFollowing("algorithmKey");
-                AlgorithmKey = reader.ReadElementContentAsString();
             }
             else
                 throw new XmlException();
@@ -394,6 +402,11 @@ namespace SRL.Commons.Model
             }
             writer.WriteEndElement();
 
+            // Algorithm key
+            writer.WriteStartElement("algorithmKey");
+            writer.WriteValue(AlgorithmKey);
+            writer.WriteEndElement();
+
             //Option list
             writer.WriteStartElement("options");
             foreach (Option option in Options)
@@ -402,11 +415,6 @@ namespace SRL.Commons.Model
                 writer.WriteOption(option);
                 writer.WriteEndElement();
             }
-            writer.WriteEndElement();
-
-            // Algorithm key
-            writer.WriteStartElement("algorithmKey");
-            writer.WriteValue(AlgorithmKey);
             writer.WriteEndElement();
         }
 

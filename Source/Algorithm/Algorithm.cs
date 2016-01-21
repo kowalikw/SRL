@@ -26,7 +26,7 @@ namespace SRL.Algorithm
             _defaultOptions = GetOptions();
         }
 
-        public string GetKey => "Algorithm";
+        public string Key => "Algorithm";
 
         public List<Option> GetOptions()
         {
