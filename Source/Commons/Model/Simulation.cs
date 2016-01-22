@@ -155,19 +155,28 @@ namespace SRL.Commons.Model
                 reader.ReadToFollowing("algorithmKey");
                 AlgorithmKey = reader.ReadElementContentAsString();
 
-                var algorithm = ServiceLocator.Current.GetInstance<IAlgorithm>(AlgorithmKey);
-                if (algorithm != null)
-                    Options = algorithm.GetOptions();
-                else
-                    ; //TODO
-                reader.ReadToFollowing("options");
-                reader.ReadToDescendant("option");
-                while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "option")
+
+                IAlgorithm algorithm;
+                try
                 {
-                    string optionKey;
-                    object optionValue;
-                    reader.GetOptionValue(out optionKey, out optionValue);
-                    Options.First(option => option.Key == optionKey).Value = optionValue;
+                    algorithm = ServiceLocator.Current.GetInstance<IAlgorithm>(AlgorithmKey);
+                    
+                    Options = algorithm.GetOptions();
+
+                    reader.ReadToFollowing("options");
+                    reader.ReadToDescendant("option");
+                    while (reader.MoveToContent() == XmlNodeType.Element && reader.LocalName == "option")
+                    {
+                        string optionKey;
+                        object optionValue;
+                        reader.GetOptionValue(out optionKey, out optionValue);
+                        Options.First(option => option.Key == optionKey).Value = optionValue;
+                    }
+                }
+                catch (ActivationException) // No implementation found; get the default one.
+                {
+                    algorithm = ServiceLocator.Current.GetInstance<IAlgorithm>();
+                    Options = algorithm.GetOptions();
                 }
             }
             else
@@ -420,6 +429,6 @@ namespace SRL.Commons.Model
         }
 
         #endregion
-        
+
     }
 }

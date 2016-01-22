@@ -35,6 +35,7 @@ namespace SRL.Main.ViewModel
 
             var algorithm = new Algorithm.Algorithm();
             SimpleIoc.Default.Register<IAlgorithm>(() => algorithm, algorithm.Key);
+            SimpleIoc.Default.Register<IAlgorithm>(() => algorithm); // default algorithm
         }
 
         public MainViewModel Main
