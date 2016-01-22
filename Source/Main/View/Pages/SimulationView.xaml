@@ -57,14 +57,14 @@
                     <Style BasedOn="{StaticResource {x:Type mui:ModernButton}}" TargetType="mui:ModernButton">
                         <Setter Property="IconData" Value="{StaticResource CalculatePathIcon}"/>
                         <Setter Property="Command" Value="{Binding StartPathCalculationCommand}"/>
-                        <Setter Property="ToolTip" Value="{Resx Key=CalculatePathTooltip}"/>
+                        <Setter Property="ToolTip" Value="{Resx ResxName=SRL.Main.View.Localization.SimulationView, Key=CalculatePathTooltip}"/>
                         <Setter Property="IconHeight" Value="18"/>
                         <Setter Property="IconWidth" Value="18"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CalculatingPath}" Value="true">
                                 <Setter Property="IconData" Value="{StaticResource CancelPathCalculationIcon}"/>
                                 <Setter Property="Command" Value="{Binding CancelPathCalculationCommand}"/>
-                                <Setter Property="ToolTip" Value="{Resx Key=CancelPathCalculationTooltip}"/>
+                                <Setter Property="ToolTip" Value="{Resx ResxName=SRL.Main.View.Localization.SimulationView, Key=CancelPathCalculationTooltip}"/>
                                 <Setter Property="IconHeight" Value="16"/>
                                 <Setter Property="IconWidth" Value="16"/>
                             </DataTrigger>
@@ -82,12 +82,12 @@
                     <Style BasedOn="{StaticResource {x:Type mui:ModernButton}}" TargetType="mui:ModernButton">
                         <Setter Property="IconData" Value="{StaticResource PlaybackStartIcon}"/>
                         <Setter Property="Command" Value="{Binding StartPlaybackCommand}"/>
-                        <Setter Property="ToolTip" Value="{Resx Key=StartPlaybackTooltip}"/>
+                        <Setter Property="ToolTip" Value="{Resx ResxName=SRL.Main.View.Localization.SimulationView, Key=StartPlaybackTooltip}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SimulationRunning}" Value="true">
                                 <Setter Property="IconData" Value="{StaticResource PlaybackPauseIcon}"/>
                                 <Setter Property="Command" Value="{Binding PausePlaybackCommand}"/>
-                                <Setter Property="ToolTip" Value="{Resx Key=PausePlaybackTooltip}"/>
+                                <Setter Property="ToolTip" Value="{Resx ResxName=SRL.Main.View.Localization.SimulationView, Key=PausePlaybackTooltip}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
