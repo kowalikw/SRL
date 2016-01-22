@@ -1,4 +1,5 @@
-﻿ using System.Collections.Generic;
+﻿ using System;
+ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Xml;
@@ -110,18 +111,27 @@ namespace SRL.Commons.Utilities
             if (reader.MoveToContent() == XmlNodeType.Element)
             {
                 reader.MoveToAttribute("type");
-                var type = reader.ReadContentAsString();
+                Option.ValueType type;
+                Enum.TryParse(reader.ReadContentAsString(), out type);
 
                 reader.MoveToAttribute("key");
                 key = reader.ReadContentAsString();
 
                 reader.MoveToAttribute("value");
-                value = reader.ReadContentAsString();
-
-                if (type == "Integer")
-                    value = int.Parse(value.ToString());
-                else if (type == "Double")
-                    value = double.Parse(value.ToString(), CultureInfo.InvariantCulture);
+                switch (type)
+                {
+                    case Option.ValueType.Integer:
+                        value = reader.ReadContentAsInt();
+                        break;
+                    case Option.ValueType.Double:
+                        value = reader.ReadContentAsDouble();
+                        break;
+                    case Option.ValueType.Boolean:
+                        value = reader.ReadContentAsBoolean();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
 
                 reader.Skip();
             }
@@ -140,7 +150,20 @@ namespace SRL.Commons.Utilities
             writer.WriteEndAttribute();
 
             writer.WriteStartAttribute("value");
-            writer.WriteValue(option.Value);
+            switch (option.Type)
+            {
+                case Option.ValueType.Integer:
+                    writer.WriteValue((int)option.Value);
+                    break;
+                case Option.ValueType.Double:
+                    writer.WriteValue((double)option.Value);
+                    break;
+                case Option.ValueType.Boolean:
+                    writer.WriteValue((bool)option.Value);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             writer.WriteEndAttribute();
         }
     }
