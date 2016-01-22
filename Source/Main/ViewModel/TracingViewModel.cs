@@ -69,7 +69,7 @@ namespace SRL.Main.ViewModel
                         ServiceLocator.Current.GetInstance<INavigationService>().GoToPage(nameof(MapEditorView));
                     }, () =>
                     {
-                        return SelectedPolygonIndices.Count > 0 && !TracingOngoing;
+                        return !TracingOngoing;
                     });
                 }
                 return _makeMapCommand;
