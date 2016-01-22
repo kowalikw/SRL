@@ -10,8 +10,13 @@ namespace SRL.Commons.Model
     {
         public enum ValueType
         {
+            [Description("Integer")]
             Integer,
+
+            [Description("Double")]
             Double,
+
+            [Description("Boolean")]
             Boolean
         }
 

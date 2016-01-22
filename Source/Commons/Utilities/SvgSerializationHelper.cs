@@ -109,11 +109,19 @@ namespace SRL.Commons.Utilities
         {
             if (reader.MoveToContent() == XmlNodeType.Element)
             {
+                reader.MoveToAttribute("type");
+                var type = reader.ReadContentAsString();
+
                 reader.MoveToAttribute("key");
                 key = reader.ReadContentAsString();
 
                 reader.MoveToAttribute("value");
-                value = reader.ReadContentAsObject();
+                value = reader.ReadContentAsString();
+
+                if (type == "Integer")
+                    value = int.Parse(value.ToString());
+                else if (type == "Double")
+                    value = double.Parse(value.ToString(), CultureInfo.InvariantCulture);
 
                 reader.Skip();
             }
@@ -123,6 +131,10 @@ namespace SRL.Commons.Utilities
 
         public static void WriteOption(this XmlWriter writer, Option option)
         {
+            writer.WriteStartAttribute("type");
+            writer.WriteValue(option.Type.ToString());
+            writer.WriteEndAttribute();
+
             writer.WriteStartAttribute("key");
             writer.WriteValue(option.Key);
             writer.WriteEndAttribute();
