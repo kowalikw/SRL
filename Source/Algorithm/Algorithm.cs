@@ -15,12 +15,12 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-        
+
         //TODO throw OperationCanceledException in meaningful spots (before and after long calculations; MinkowskiSum?). Not just at the beginning of loop iterations.
-        
+
         private List<Option> _currentOptions;
-        private readonly List<Option> _defaultOptions; 
-        
+        private readonly List<Option> _defaultOptions;
+
         public Algorithm()
         {
             _defaultOptions = GetOptions();
@@ -77,11 +77,12 @@ namespace SRL.Algorithm
             List<Polygon>[] currentMap = MinkowskiSum(map, vehicle, angleDensity);
 
             // creating triangle to verify, if points are linear later on
-            List<Point> triangleTemplate = new List<Point>();
-            triangleTemplate.Add(new Point(0, 0));
-            triangleTemplate.Add(new Point(4, 4 * Math.Tan(singleAngle / 2)));
-            triangleTemplate.Add(new Point(4, -4 * Math.Tan(singleAngle / 2)));
-            Polygon triangle = new Polygon(triangleTemplate);
+            Polygon triangle = new Polygon(new List<Point>
+            {
+                new Point(0, 0),
+                new Point(4, 4*Math.Tan(singleAngle/2)),
+                new Point(4, -4*Math.Tan(singleAngle/2))
+            });
 
             // Getting angle for starting set up of the vehicle
             int startingIndex = (int)((vehicleRotation + 2 * Math.PI) % (2 * Math.PI) / singleAngle);
@@ -122,10 +123,10 @@ namespace SRL.Algorithm
                 indexPointAngleList[i].Add(ip);
             }
             int insides = 0;
-            for(int angle = 0;angle<angleDensity;angle++)
+            for (int angle = 0; angle < angleDensity; angle++)
             {
-                foreach(Polygon obstacle in currentMap[angle])
-                    if(GeometryHelper.IsEnclosed(end,obstacle))
+                foreach (Polygon obstacle in currentMap[angle])
+                    if (GeometryHelper.IsEnclosed(end, obstacle))
                     {
                         insides++;
                         break;
@@ -206,7 +207,8 @@ namespace SRL.Algorithm
                 throw new OperationCanceledException();
 
             // Adding turning edges
-            Parallel.For(0, angleDensity, angle => {
+            Parallel.For(0, angleDensity, angle =>
+            {
                 for (int i = 0; i < indexPointAngleList[angle].Count; i++)
                 {
                     for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
@@ -427,7 +429,7 @@ namespace SRL.Algorithm
 
         private List<List<Point>> Triangulate(List<Point> shape)
         {
-            Polygon poly = new Polygon(shape.ToArray());
+            Polygon poly = new Polygon(shape);
             List<Point[]> triangles = Triangulation2D.Triangulate(ref poly);
             List<List<Point>> list = new List<List<Point>>();
             for (int i = 0; i < triangles.Count; i++)
@@ -470,37 +472,34 @@ namespace SRL.Algorithm
             return poly;
         }
 
-        private bool IsPointInTriangle(Point p1, Point p2, double angle, Polygon triangle, double pointPrecision)
+        private bool IsPointInTriangle(Point trianglePosition, Point point, double angle, Polygon triangle, double pointPrecision)
         {
-           // return GeometryHelper.IsEnclosed(point, triangle.Transform(null, angle, trianglePosition)); //TODO
-            List<Point> newTriangle = new List<Point>();
-            for (int i = 0; i < triangle.Vertices.Count; i++)
-            {
-                Point p = GeometryHelper.Rotate(triangle.Vertices[i], new Point(0, 0), angle);
-                newTriangle.Add(new Point(p1.X + p.X, p1.Y + p.Y));
-            }
-            Polygon poly = new Polygon(newTriangle);
-            return GeometryHelper.IsEnclosed(p2, poly) ? true : IsPointNearLine(newTriangle[0],newTriangle[1],p2, pointPrecision) ? true : IsPointNearLine(newTriangle[0], newTriangle[2], p2, pointPrecision);
+            triangle = triangle.Transform(null, angle, trianglePosition);
+            return GeometryHelper.IsEnclosed(point, triangle) ||
+                IsPointNearLine(triangle.Vertices[0], triangle.Vertices[1], point, pointPrecision) ||
+                IsPointNearLine(triangle.Vertices[0], triangle.Vertices[2], point, pointPrecision);
         }
 
-        private bool IsPointNearLine(Point LineA, Point LineB, Point C, double PointPrecision)
+        private bool IsPointNearLine(Point endpointA, Point endpointB, Point point, double precision)
         {
-            double Base = Math.Sqrt(Math.Pow(LineA.X-LineB.X,2) + Math.Pow(LineA.Y-LineB.Y,2));
-            Point AB = new Point(LineB.X - LineA.X, LineB.Y - LineA.Y);
-            Point AC = new Point(C.X - LineA.X, C.Y - LineA.Y);
-            Point BC = new Point(C.X - LineB.X, C.Y - LineB.Y);
-            bool isClose = Math.Abs(AB.X * AC.Y - AB.Y * AC.X) / Base <= PointPrecision;
+            double length = GeometryHelper.GetDistance(endpointA, endpointB);
+            Point ab = new Point(endpointB.X - endpointA.X, endpointB.Y - endpointA.Y);
+            Point ac = new Point(point.X - endpointA.X, point.Y - endpointA.Y);
+            Point bc = new Point(point.X - endpointB.X, point.Y - endpointB.Y);
+
+            bool isClose = Math.Abs(GeometryHelper.CrossProduct(ab, ac)) / length <= precision;
             if (!isClose)
                 return false;
-            Base = Math.Sqrt(Math.Pow(AB.X, 2) + Math.Pow(AB.Y, 2));
-            AB = new Point(AB.X / Base, AB.Y / Base);
-            Base = Math.Sqrt(Math.Pow(AC.X, 2) + Math.Pow(AC.Y, 2));
-            AC = new Point(AC.X / Base, AC.Y / Base);
-            Base = Math.Sqrt(Math.Pow(BC.X, 2) + Math.Pow(BC.Y, 2));
-            BC = new Point(BC.X / Base, BC.Y / Base);
-            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(AB, AC))) > Math.PI/2)
+
+            length = GeometryHelper.GetDistance(ab, new Point(0, 0));
+            ab = new Point(ab.X / length, ab.Y / length);
+            length = GeometryHelper.GetDistance(ac, new Point(0, 0));
+            ac = new Point(ac.X / length, ac.Y / length);
+            length = GeometryHelper.GetDistance(bc, new Point(0, 0));
+            bc = new Point(bc.X / length, bc.Y / length);
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(ab, ac))) > Math.PI / 2)
                 return false;
-            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(new Point(-AB.X, -AB.Y), BC))) > Math.PI/2)
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(new Point(-ab.X, -ab.Y), bc))) > Math.PI / 2)
                 return false;
             return true;
         }
@@ -508,7 +507,7 @@ namespace SRL.Algorithm
 
         private int GetEdgeWeight(Point p1, Point p2, double pointSize, double edgeWeight)
         {
-            return (int)Math.Round((edgeWeight * GeometryHelper.GetDistance(p1, p2)) / pointSize, 0);
+            return (int)Math.Round(edgeWeight * GeometryHelper.GetDistance(p1, p2) / pointSize, 0);
         }
 
         private bool CanTwoPointsConnect(Point p1, Point p2, List<Polygon> obstacles, double angle)
@@ -551,7 +550,7 @@ namespace SRL.Algorithm
             var options = new List<Option>();
             var rm = Localization.Algorithm.ResourceManager;
 
-            
+
             Option pointPrecision = new Option(Option.ValueType.Double, nameof(pointPrecision))
             {
                 Value = 0.01d,
@@ -646,7 +645,7 @@ namespace SRL.Algorithm
                 bidirectional.Tooltips.Add(language, tooltip);
             }
 
-            
+
             Option multidirectional = new Option(Option.ValueType.Boolean, nameof(multidirectional))
             {
                 Value = false,
@@ -664,7 +663,7 @@ namespace SRL.Algorithm
                 multidirectional.Names.Add(language, name);
                 multidirectional.Tooltips.Add(language, string.Format(tooltip, bidirectional.Names[language]));
             }
-            
+
 
             // The order in which the options appear to the user.
             options.Add(pointPrecision);
