@@ -488,12 +488,19 @@ namespace SRL.Algorithm
             double Base = Math.Sqrt(Math.Pow(LineA.X-LineB.X,2) + Math.Pow(LineA.Y-LineB.Y,2));
             Point AB = new Point(LineB.X - LineA.X, LineB.Y - LineA.Y);
             Point AC = new Point(C.X - LineA.X, C.Y - LineA.Y);
+            Point BC = new Point(C.X - LineB.X, C.Y - LineB.Y);
             bool isClose = Math.Abs(AB.X * AC.Y - AB.Y * AC.X) / Base <= PointPrecision;
             if (!isClose)
                 return false;
-            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(AB, AC))) > Math.PI)
+            Base = Math.Sqrt(Math.Pow(AB.X, 2) + Math.Pow(AB.Y, 2));
+            AB = new Point(AB.X / Base, AB.Y / Base);
+            Base = Math.Sqrt(Math.Pow(AC.X, 2) + Math.Pow(AC.Y, 2));
+            AC = new Point(AC.X / Base, AC.Y / Base);
+            Base = Math.Sqrt(Math.Pow(BC.X, 2) + Math.Pow(BC.Y, 2));
+            BC = new Point(BC.X / Base, BC.Y / Base);
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(AB, AC))) > Math.PI/2)
                 return false;
-            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(new Point(-AB.X, -AB.Y), AC))) > Math.PI)
+            if (Math.Abs(Math.Acos(GeometryHelper.DotProduct(new Point(-AB.X, -AB.Y), BC))) > Math.PI/2)
                 return false;
             return true;
         }
