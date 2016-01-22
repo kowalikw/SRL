@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
@@ -21,7 +22,7 @@ namespace SRL.Main.View.MonoGameArea
         protected static readonly Color PathColor = new Color(174, 221, 247);
         protected static readonly Color VehicleColor = ActiveColor;
 
-        private readonly SimulationViewModel _context = SimpleIoc.Default.GetInstance<SimulationViewModel>();
+        private readonly SimulationViewModel _context = ServiceLocator.Current.GetInstance<SimulationViewModel>();
 
         protected bool ShowPath => Settings.Default.ShowPath;
 

@@ -3,6 +3,7 @@ using System.Resources;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Practices.ServiceLocation;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
 using SRL.Main.View.Localization;
@@ -27,7 +28,7 @@ namespace SRL.Main.ViewModel.Base
                         var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
                         string modelName = rm.GetString(typeof(T).Name);
 
-                        SimpleIoc.Default.GetInstance<IDialogService>().ShowSaveFileDialog(
+                        ServiceLocator.Current.GetInstance<IDialogService>().ShowSaveFileDialog(
                             string.Format(rm.GetString("modelFilter"), modelName),
                             (r, f) => { if (r) SvgSerializable.Serialize(GetEditedModel(), f); });
                     },
@@ -63,7 +64,7 @@ namespace SRL.Main.ViewModel.Base
 
         protected EditorViewModel()
         {
-            Messenger.Default.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
+            MessengerInstance.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
 
             _modelName = Models.ResourceManager.GetString(typeof (T).Name);
         }
@@ -95,7 +96,7 @@ namespace SRL.Main.ViewModel.Base
             bool invalidFile = false;
             R output = null;
 
-            SimpleIoc.Default.GetInstance<IDialogService>().ShowOpenFileDialog(
+            ServiceLocator.Current.GetInstance<IDialogService>().ShowOpenFileDialog(
                 string.Format(filter, modelName),
                 (result, filename) =>
                 {
@@ -110,7 +111,7 @@ namespace SRL.Main.ViewModel.Base
 
             if (invalidFile)
             {
-                SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                ServiceLocator.Current.GetInstance<IDialogService>().ShowMessageDialog(
                     Dialogs.ResourceManager.GetString("modelNotFoundTitle"),
                     string.Format(Dialogs.ResourceManager.GetString("modelNotFoundMsg"), modelName),
                     null);

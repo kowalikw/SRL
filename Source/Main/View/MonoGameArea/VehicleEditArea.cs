@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Commons.Model;
@@ -18,7 +19,7 @@ namespace SRL.Main.View.MonoGameArea
     {
         private const double ArrowLength = 0.2;
 
-        private readonly VehicleEditorViewModel _context = SimpleIoc.Default.GetInstance<VehicleEditorViewModel>();
+        private readonly VehicleEditorViewModel _context = ServiceLocator.Current.GetInstance<VehicleEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _vehicleShapeChangedHandler;
         private PropertyChangedEventHandler _propertyChangedHandler;

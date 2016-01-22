@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Main.Drawing;
@@ -13,7 +14,7 @@ namespace SRL.Main.View.MonoGameArea
 {
     internal class MapEditArea : AreaBase
     {
-        private readonly MapEditorViewModel _context = SimpleIoc.Default.GetInstance<MapEditorViewModel>();
+        private readonly MapEditorViewModel _context = ServiceLocator.Current.GetInstance<MapEditorViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
 

@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Practices.ServiceLocation;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
 using SRL.Main.Messages;
@@ -31,7 +32,7 @@ namespace SRL.Main.ViewModel
                 {
                     _loadBitmapCommand = new RelayCommand(() =>
                     {
-                        SimpleIoc.Default.GetInstance<IDialogService>().ShowOpenFileDialog(
+                        ServiceLocator.Current.GetInstance<IDialogService>().ShowOpenFileDialog(
                             Dialogs.ResourceManager.GetString("rasterImageFilter"),
                             (result, filename) =>
                             {
@@ -63,9 +64,9 @@ namespace SRL.Main.ViewModel
                         argMsg.Model.Obstacles.AddRange(
                             Polygons.Where((polygon, i) => SelectedPolygonIndices.Contains(i)));
 
-                        Messenger.Default.Send(argMsg);
+                        MessengerInstance.Send(argMsg);
 
-                        SimpleIoc.Default.GetInstance<INavigationService>().GoToPage(nameof(MapEditorView));
+                        ServiceLocator.Current.GetInstance<INavigationService>().GoToPage(nameof(MapEditorView));
                     }, () =>
                     {
                         return SelectedPolygonIndices.Count > 0 && !TracingOngoing;
@@ -85,8 +86,8 @@ namespace SRL.Main.ViewModel
                         var argMsg = new SetModelMessage<Vehicle>(new Vehicle());
                         argMsg.Model.Shape = Polygons[SelectedPolygonIndices.GetLast()];
 
-                        Messenger.Default.Send(argMsg);
-                        SimpleIoc.Default.GetInstance<INavigationService>().GoToPage(nameof(VehicleEditorView));
+                        MessengerInstance.Send(argMsg);
+                        ServiceLocator.Current.GetInstance<INavigationService>().GoToPage(nameof(VehicleEditorView));
                     }, () =>
                     {
                         return SelectedPolygonIndices.Count == 1 && !TracingOngoing;
@@ -207,8 +208,8 @@ namespace SRL.Main.ViewModel
         public TracingViewModel()
         {
             // Make sure that default instances of Map/Vehicle editors exist.
-            SimpleIoc.Default.GetInstance<MapEditorViewModel>();
-            SimpleIoc.Default.GetInstance<VehicleEditorViewModel>();
+            ServiceLocator.Current.GetInstance<MapEditorViewModel>();
+            ServiceLocator.Current.GetInstance<VehicleEditorViewModel>();
 
             Polygons = new ObservableCollectionEx<Polygon>();
             SelectedPolygonIndices = new ObservableCollectionEx<int>();

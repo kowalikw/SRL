@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using SRL.Commons;
 using SRL.Commons.Model;
 using SRL.Commons.Model.Base;
@@ -773,7 +774,7 @@ namespace SRL.Main.ViewModel
                 {
                     var rm = new ResourceManager(typeof(Dialogs).FullName, Assembly.GetExecutingAssembly());
 
-                    SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                    ServiceLocator.Current.GetInstance<IDialogService>().ShowMessageDialog(
                         rm.GetString("pathNotFoundTitle"),
                         rm.GetString("pathNotFoundMsg"),
                         null);

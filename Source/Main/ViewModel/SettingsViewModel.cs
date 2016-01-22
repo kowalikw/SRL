@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
 using Infralution.Localization.Wpf;
+using Microsoft.Practices.ServiceLocation;
 using SRL.Commons;
 using SRL.Main.View.Localization;
 using SRL.Main.ViewModel.Services;
@@ -34,7 +35,7 @@ namespace SRL.Main.ViewModel
 
                 if (CultureManager.UICulture.GetLanguage() != value)
                 {
-                    SimpleIoc.Default.GetInstance<IDialogService>().ShowMessageDialog(
+                    ServiceLocator.Current.GetInstance<IDialogService>().ShowMessageDialog(
                         Dialogs.ResourceManager.GetString("langChangeRestartTitle"),
                         Dialogs.ResourceManager.GetString("langChangeRestartMsg"),
                         null);

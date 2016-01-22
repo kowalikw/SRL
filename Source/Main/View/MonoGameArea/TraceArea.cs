@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Xna.Framework.Graphics;
 using SRL.Main.Drawing;
 using SRL.Main.Utilities;
@@ -11,7 +12,7 @@ namespace SRL.Main.View.MonoGameArea
 {
     internal class TraceArea : AreaBase
     {
-        private readonly TracingViewModel _context = SimpleIoc.Default.GetInstance<TracingViewModel>();
+        private readonly TracingViewModel _context = ServiceLocator.Current.GetInstance<TracingViewModel>();
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
 

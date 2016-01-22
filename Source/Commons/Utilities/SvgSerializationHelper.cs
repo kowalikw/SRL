@@ -43,7 +43,7 @@ namespace SRL.Commons.Utilities
             return new Polygon(vertices);
         }
 
-        public static void WritePolygon(this XmlWriter writer, Polygon polygon) //TODO stroke, fill, stroke-width
+        public static void WritePolygon(this XmlWriter writer, Polygon polygon)
         {
             writer.WriteStartAttribute("points");
             foreach (var point in polygon.Vertices)
