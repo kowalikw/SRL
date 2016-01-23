@@ -44,16 +44,13 @@ namespace SRL.Algorithm
                 _currentOptions = GetOptions();
 
             // load user options
-            int turnEdgeWeight = (int)LoadOptionValue("turnWeight");
-            int moveEdgeWeight = (int)LoadOptionValue("moveWeight");
-            double maxDiff = (double)LoadOptionValue("pointPrecision");
+            int turnWeight = (int)LoadOptionValue("turnWeight");
+            int moveWeight = (int)LoadOptionValue("moveWeight");
+            double pointPrecision = (double)LoadOptionValue("pointPrecision");
             int angleDensity = (int)LoadOptionValue("angleDensity");
-            bool backwards = (bool)LoadOptionValue("bidirectional");
-            bool allDirections = (bool)LoadOptionValue("multidirectional");
-
-            // TODO - opcje
-            int verticalNet, horisontalNet;
-            verticalNet = horisontalNet = 5; // dokladnie tyle prostych bedzie przeprowadzonych wewnatrz mapy - w tym wypadku dodaje 25 pkt. w rownych odleglosciach
+            int netDensity = (int)LoadOptionValue("netDensity");
+            bool bidirectional = (bool)LoadOptionValue("bidirectional");
+            bool multidirectional = (bool)LoadOptionValue("multidirectional");
 
 
             double singleAngle = 2 * Math.PI / angleDensity;
@@ -109,11 +106,11 @@ namespace SRL.Algorithm
                 indexPointAngleList[i].Add(ip);
                 int k = 0;
 
-                for (int v = 1; v <= verticalNet; v++)
-                    for (int h = 1; h <= horisontalNet; h++)
+                for (int v = 1; v <= netDensity; v++)
+                    for (int h = 1; h <= netDensity; h++)
                     {
                         ip.Index = index++;
-                        ip.Point = new Point(h * (2.0 / (horisontalNet + 1)) - 1.0, v * (2.0 / (verticalNet + 1)) - 1.0);
+                        ip.Point = new Point(h * (2.0 / (netDensity + 1)) - 1.0, v * (2.0 / (netDensity + 1)) - 1.0);
                         ip.Obstacle = -1;
                         indexPointAngleList[i].Add(ip);
                     }
@@ -197,15 +194,15 @@ namespace SRL.Algorithm
 
                         if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle))
                         {
-                            int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, maxDiff, moveEdgeWeight);
-                            if (!allDirections)
+                            int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, pointPrecision, moveWeight);
+                            if (!multidirectional)
                             {
                                 // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle, maxDiff))
+                                if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle, pointPrecision))
                                 {
                                     graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
                                     // if user enabled reverse in options, we add an edge back
-                                    if (backwards)
+                                    if (bidirectional)
                                         graph.AddEdge(new Edge(indexPointAngleList[angle][j].Index, indexPointAngleList[angle][i].Index, weight));
                                 }
                             }
@@ -252,10 +249,10 @@ namespace SRL.Algorithm
                         }
                         if (cancel)
                             continue;
-                        if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= maxDiff)
+                        if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= pointPrecision)
                         {
-                            graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnEdgeWeight);
-                            graph.AddEdge(indexPointAngleList[(angle + 1) % angleDensity][j].Index, indexPointAngleList[angle][i].Index, turnEdgeWeight);
+                            graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnWeight);
+                            graph.AddEdge(indexPointAngleList[(angle + 1) % angleDensity][j].Index, indexPointAngleList[angle][i].Index, turnWeight);
                         }
                     }
                 }
@@ -641,6 +638,25 @@ namespace SRL.Algorithm
             }
 
 
+            Option netDensity = new Option(Option.ValueType.Integer, nameof(netDensity))
+            {
+                Value = 5,
+                MinValue = 0,
+                MaxValue = 100,
+            };
+            foreach (var l in Enum.GetValues(typeof(Language)))
+            {
+                Language language = (Language)l;
+                CultureInfo culture = language.GetCultureInfo();
+
+                string name = rm.GetString(netDensity.Key, culture);
+                string tooltip = rm.GetString(netDensity.Key + "Tooltip", culture);
+
+                netDensity.Names.Add(language, name);
+                netDensity.Tooltips.Add(language, string.Format(tooltip, name));
+            }
+
+
             Option bidirectional = new Option(Option.ValueType.Boolean, nameof(bidirectional))
             {
                 MaxValue = null,
@@ -684,6 +700,7 @@ namespace SRL.Algorithm
             options.Add(angleDensity);
             options.Add(moveWeight);
             options.Add(turnWeight);
+            options.Add(netDensity);
             options.Add(bidirectional);
             options.Add(multidirectional);
 

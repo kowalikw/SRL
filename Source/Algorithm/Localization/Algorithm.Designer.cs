@@ -133,6 +133,24 @@ namespace SRL.Algorithm.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Net density.
+        /// </summary>
+        internal static string netDensity {
+            get {
+                return ResourceManager.GetString("netDensity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Divides the intermediate point net into ({0} x {0}) equidistant points..
+        /// </summary>
+        internal static string netDensityTooltip {
+            get {
+                return ResourceManager.GetString("netDensityTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Point precision.
         /// </summary>
         internal static string pointPrecision {

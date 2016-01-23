@@ -141,6 +141,12 @@
   <data name="multidirectionalTooltip" xml:space="preserve">
     <value>Pozwala poruszać się pojazdowi w dowolną stronę bez potrzeby ustawiania przodu pojazdu w kierunku ruchu. Nadpisuje opcję [{0}].</value>
   </data>
+  <data name="netDensity" xml:space="preserve">
+    <value>Gęstość siatki</value>
+  </data>
+  <data name="netDensityTooltip" xml:space="preserve">
+    <value>Dzieli siatkę punktów pośrednich na ({0} x {0}) równoodległych punktów.</value>
+  </data>
   <data name="pointPrecision" xml:space="preserve">
     <value>Precyzja punktowa</value>
   </data>

@@ -141,6 +141,12 @@
   <data name="multidirectionalTooltip" xml:space="preserve">
     <value>Allows the vehicle to move in any direction without having to point its front towards it. Overrides [{0}] setting.</value>
   </data>
+  <data name="netDensity" xml:space="preserve">
+    <value>Net density</value>
+  </data>
+  <data name="netDensityTooltip" xml:space="preserve">
+    <value>Divides the intermediate point net into ({0} x {0}) equidistant points.</value>
+  </data>
   <data name="pointPrecision" xml:space="preserve">
     <value>Point precision</value>
   </data>
