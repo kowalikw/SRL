@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,7 +46,8 @@ namespace SRL.Algorithm
 
             ParallelOptions po = new ParallelOptions();
             po.CancellationToken = token;
-            po.MaxDegreeOfParallelism = Environment.ProcessorCount - 1;
+            if (Environment.ProcessorCount > 4)
+                po.MaxDegreeOfParallelism = Environment.ProcessorCount - 1;
 
             // load user options
             int turnWeight = (int)LoadOptionValue("turnWeight");
