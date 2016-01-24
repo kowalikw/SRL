@@ -75,7 +75,7 @@ namespace SRL.Algorithm
                 map.Obstacles.Add(inputMap.Obstacles[i]);
 
             // Minkowski's sum calculation for each angle
-            List<Polygon>[] currentMap = MinkowskiSum(map, vehicle, angleDensity);
+            List<Polygon>[] currentMap = MinkowskiSum(map, vehicle, angleDensity, token);
 
             // creating triangle to verify, if points are linear later on
             Polygon triangle = new Polygon(new List<Point>
@@ -225,7 +225,7 @@ namespace SRL.Algorithm
                     for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
                     {
                         if (token.IsCancellationRequested)
-                            throw new OperationCanceledException();
+                            return;
                         // Again, checking if starting and ending point are not in any Minkowski's sum polygons
 
                         bool cancel = false;
@@ -316,9 +316,8 @@ namespace SRL.Algorithm
                 throw new NonexistentPathException();
 
             // Creating Orders from A* results
-            // TODO: still some angle troubles
             List<Order> orders = new List<Order>();
-            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start)); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
+            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start)); 
             for (int i = 0; i < path.Length - 1; i++)
             {
                 if (token.IsCancellationRequested)
@@ -389,7 +388,7 @@ namespace SRL.Algorithm
         }
 
 
-        private List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity)
+        private List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity, CancellationToken token)
         {
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity];
             double singleAngle = 2 * Math.PI / angleDensity;
@@ -411,6 +410,8 @@ namespace SRL.Algorithm
 
                 foreach (List<List<Point>> obstacle in triangularObstacles)
                 {
+                    if (token.IsCancellationRequested)
+                        throw new OperationCanceledException();
                     List<Polygon> convexSubPolygons = new List<Polygon>();
                     foreach (List<Point> VehicleTriangle in triangularVehicle)
                     {
