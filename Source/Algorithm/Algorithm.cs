@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,11 @@ namespace SRL.Algorithm
             if (_currentOptions == null)
                 _currentOptions = GetOptions();
 
+            ParallelOptions po = new ParallelOptions();
+            po.CancellationToken = token;
+            if (Environment.ProcessorCount > 4)
+                po.MaxDegreeOfParallelism = Environment.ProcessorCount - 1;
+
             // load user options
             int turnWeight = (int)LoadOptionValue("turnWeight");
             int moveWeight = (int)LoadOptionValue("moveWeight");
@@ -76,6 +82,7 @@ namespace SRL.Algorithm
 
             Vehicle veh = new Vehicle();
             veh.Shape = GeometryHelper.Rotate(vehicle.Shape, vehicleRotation);
+
             // Minkowski's sum calculation for each angle
             List<Polygon>[] currentMap = MinkowskiSum(map, veh, angleDensity, token);
 
@@ -119,8 +126,7 @@ namespace SRL.Algorithm
                 {
                     foreach (Point p in poly.Vertices)
                     {
-                        if (token.IsCancellationRequested)
-                            throw new OperationCanceledException();
+                        token.ThrowIfCancellationRequested();
                         ip.Point = p;
                         ip.Index = index++;
                         ip.Obstacle = k;
@@ -153,16 +159,18 @@ namespace SRL.Algorithm
 
             // creating graph edges for each angle (all done in one graph from the very beginning)
             object locker = new object();
-            Parallel.For(0, angleDensity, angle =>
+
+            Parallel.For(0, angleDensity, po, angle =>
             {
                 for (int i = 0; i < indexPointAngleList[angle].Count; i++)
                 {
                     for (int j = 0; j < indexPointAngleList[angle].Count; j++)
                     {
-                        if (token.IsCancellationRequested)
+                        if (po.CancellationToken.IsCancellationRequested)
                             return;
-                        // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
-                        /*if (indexPointAngleList[angle][i].Obstacle == -1)
+
+                            // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
+                            /*if (indexPointAngleList[angle][i].Obstacle == -1)
                         {
                             bool cancel = false;
                             foreach (Polygon obstacle in currentMap[angle])
@@ -192,42 +200,46 @@ namespace SRL.Algorithm
                         }*/
                         if (i == j) continue; // We are not accepting edges in one point when not turning
 
-                        if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle + vehicleRotation))
+                            if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point,
+                            indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle + vehicleRotation))
                         {
-                            int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, pointPrecision, moveWeight);
+                            int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point,
+                                indexPointAngleList[angle][j].Point, pointPrecision, moveWeight);
                             if (!multidirectional)
                             {
-                                // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle + vehicleRotation, triangle, pointPrecision))
+                                    // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
+                                    if (IsPointInTriangle(indexPointAngleList[angle][i].Point,
+                                    indexPointAngleList[angle][j].Point, angle * singleAngle + vehicleRotation,
+                                    triangle, pointPrecision))
                                 {
-                                    graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
-                                    // if user enabled reverse in options, we add an edge back
-                                    if (bidirectional)
-                                        graph.AddEdge(new Edge(indexPointAngleList[angle][j].Index, indexPointAngleList[angle][i].Index, weight));
+                                    graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index,
+                                        indexPointAngleList[angle][j].Index, weight));
+                                        // if user enabled reverse in options, we add an edge back
+                                        if (bidirectional)
+                                        graph.AddEdge(new Edge(indexPointAngleList[angle][j].Index,
+                                            indexPointAngleList[angle][i].Index, weight));
                                 }
                             }
-                            // if user enabled all directions, we add all edges that passed all previous tests
-                            else
-                                graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
+                                // if user enabled all directions, we add all edges that passed all previous tests
+                                else
+                                graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index,
+                                    indexPointAngleList[angle][j].Index, weight));
                         }
                     }
                 }
             });
 
-            if (token.IsCancellationRequested)
-                throw new OperationCanceledException();
-
             // Adding turning edges
-            Parallel.For(0, angleDensity, angle =>
+            Parallel.For(0, angleDensity, po, angle =>
             {
                 for (int i = 0; i < indexPointAngleList[angle].Count; i++)
                 {
                     for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
                     {
-                        if (token.IsCancellationRequested)
+                        if (po.CancellationToken.IsCancellationRequested)
                             return;
-                        // Again, checking if starting and ending point are not in any Minkowski's sum polygons
 
+                        // Again, checking if starting and ending point are not in any Minkowski's sum polygons
                         bool cancel = false;
                         foreach (Polygon obstacle in currentMap[angle])
                         {
@@ -264,8 +276,7 @@ namespace SRL.Algorithm
                 {
                     for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
                     {
-                        if (token.IsCancellationRequested)
-                            throw new OperationCanceledException();
+                        token.ThrowIfCancellationRequested();
                         // Again, checking if starting and ending point are not in any Minkowski's sum polygons
                         
                         bool cancel = false;
@@ -301,8 +312,7 @@ namespace SRL.Algorithm
             // Adding edges to accepting state
             for (int i = 0; i < indexPointAngleList.Length; i++)
             {
-                if (token.IsCancellationRequested)
-                    throw new OperationCanceledException();
+                token.ThrowIfCancellationRequested();
 
                 if (indexPointAngleList[i][indexPointAngleList[i].Count - 1].Obstacle == -1 && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point.X.EpsilonEquals(end.X) && indexPointAngleList[i][indexPointAngleList[i].Count - 1].Point.Y.EpsilonEquals(end.Y))
                     graph.AddEdge(indexPointAngleList[i][indexPointAngleList[i].Count - 1].Index, index, 0);
@@ -316,12 +326,12 @@ namespace SRL.Algorithm
                 throw new NonexistentPathException();
 
             // Creating Orders from A* results
+            // TODO: still some angle troubles
             List<Order> orders = new List<Order>();
-            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start));
+            orders.Add(new Order((vehicleRotation + 2 * Math.PI) % (2 * Math.PI), start)); //TODO a friendly reminder that 0 deg rotation DOES NOT equal -360 deg (the former is CCW)
             for (int i = 0; i < path.Length - 1; i++)
             {
-                if (token.IsCancellationRequested)
-                    throw new OperationCanceledException();
+                token.ThrowIfCancellationRequested();
 
                 int angle = 0;
                 while (path[i].To > indexPointAngleList[angle][indexPointAngleList[angle].Count - 1].Index)
@@ -410,8 +420,7 @@ namespace SRL.Algorithm
 
                 foreach (List<List<Point>> obstacle in triangularObstacles)
                 {
-                    if (token.IsCancellationRequested)
-                        throw new OperationCanceledException();
+                    token.ThrowIfCancellationRequested();
                     List<Polygon> convexSubPolygons = new List<Polygon>();
                     foreach (List<Point> VehicleTriangle in triangularVehicle)
                     {
