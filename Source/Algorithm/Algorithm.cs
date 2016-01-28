@@ -74,8 +74,10 @@ namespace SRL.Algorithm
             for (int i = 0; i < inputMap.Obstacles.Count; i++)
                 map.Obstacles.Add(inputMap.Obstacles[i]);
 
+            Vehicle veh = new Vehicle();
+            veh.Shape = GeometryHelper.Rotate(vehicle.Shape, vehicleRotation);
             // Minkowski's sum calculation for each angle
-            List<Polygon>[] currentMap = MinkowskiSum(map, vehicle, angleDensity, token);
+            List<Polygon>[] currentMap = MinkowskiSum(map, veh, angleDensity, token);
 
             // creating triangle to verify, if points are linear later on
             Polygon triangle = new Polygon(new List<Point>
@@ -86,15 +88,13 @@ namespace SRL.Algorithm
             });
 
             // Getting angle for starting set up of the vehicle
-            int startingIndex = (int)((vehicleRotation + 2 * Math.PI) % (2 * Math.PI) / singleAngle);
+            int startingIndex = 0;
 
 
             // setting index for each Minkowski's sum point of each angle
             int index = 0;
             for (int i = 0; i < angleDensity; i++)
             {
-                if (i == startingIndex)
-                    startingIndex = index; // setting the index of starting point
                 indexPointAngleList[i] = new List<IndexPoint>();
                 int vertices = 2;
                 for (int j = 0; j < currentMap[i].Count; j++)
@@ -192,13 +192,13 @@ namespace SRL.Algorithm
                         }*/
                         if (i == j) continue; // We are not accepting edges in one point when not turning
 
-                        if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle))
+                        if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, currentMap[angle], angle * singleAngle + vehicleRotation))
                         {
                             int weight = GetEdgeWeight(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, pointPrecision, moveWeight);
                             if (!multidirectional)
                             {
                                 // if the Point that we are going to moce to is inside the triangle turned by the current angle, we can add an edge
-                                if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle, triangle, pointPrecision))
+                                if (IsPointInTriangle(indexPointAngleList[angle][i].Point, indexPointAngleList[angle][j].Point, angle * singleAngle + vehicleRotation, triangle, pointPrecision))
                                 {
                                     graph.AddEdge(new Edge(indexPointAngleList[angle][i].Index, indexPointAngleList[angle][j].Index, weight));
                                     // if user enabled reverse in options, we add an edge back
@@ -329,7 +329,7 @@ namespace SRL.Algorithm
                 int ind = 0;
                 while (indexPointAngleList[angle][ind].Index != path[i].To)
                     ind++;
-                Order o = new Order(angle * singleAngle, indexPointAngleList[angle][ind].Point);
+                Order o = new Order((angle * singleAngle + vehicleRotation) % (Math.PI * 2), indexPointAngleList[angle][ind].Point);
 
                 if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI)).EpsilonEquals((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
                 {
