@@ -341,7 +341,7 @@ namespace SRL.Algorithm
                     ind++;
                 Order o = new Order((angle * singleAngle + vehicleRotation) % (Math.PI * 2), indexPointAngleList[angle][ind].Point);
 
-                if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI)).EpsilonEquals((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
+                /*if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI)).EpsilonEquals((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
                 {
                     orders.Add(new Order(orders[orders.Count - 1].Rotation, o.Destination));
                     continue;
@@ -373,7 +373,13 @@ namespace SRL.Algorithm
                 {
                     if (o.Rotation > Math.PI)
                         o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                }
+                }*/
+                if(((orders[orders.Count - 1].Rotation + 2* Math.PI)%(Math.PI * 2))>o.Rotation)
+                    if(((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (Math.PI * 2)) - o.Rotation < Math.PI)
+                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
+                if(((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (Math.PI * 2))<singleAngle/2)
+                    if(o.Rotation > Math.PI)
+                        o = new Order((angle * singleAngle + vehicleRotation) % (Math.PI * 2) - 2 * Math.PI, o.Destination);
 
                 orders.Add(o);
             }
