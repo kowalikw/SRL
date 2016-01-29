@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct3D9;
 using Texture = SharpDX.Direct3D9.Texture;
 
-
 namespace SRL.MonoGameControl
 {
     /// <summary>
@@ -13,58 +12,35 @@ namespace SRL.MonoGameControl
     /// </summary>
     /// <remarks>
     /// The <see cref="D3D11"/> should be disposed if no longer needed!
+    /// Code source: https://github.com/CartBlanche/MonoGame-Samples/tree/master/WpfInteropSample
     /// </remarks>
     internal class D3D11 : D3DImage, IDisposable
     {
-        #region Fields
-        // Use a Direct3D 9 device for interoperability. The device is shared by 
-        // all D3D11Images.
         private D3D9 _d3D9;
         private int _referenceCount;
         private readonly object _d3D9Lock = new object();
 
         private bool _disposed;
         private Texture _backBuffer;
-        #endregion
 
-
-        #region Creation & Cleanup
-        /// <summary>
-        /// Initializes a new instance of the <see cref="D3D11"/> class.
-        /// </summary>
         public D3D11()
         {
             InitializeD3D9();
         }
 
-
-        /// <summary>
-        /// Releases unmanaged resources before an instance of the <see cref="D3D11"/> class is 
-        /// reclaimed by garbage collection.
-        /// </summary>
-        /// <remarks>
-        /// This method releases unmanaged resources by calling the virtual <see cref="Dispose(bool)"/> 
-        /// method, passing in <see langword="false"/>.
-        /// </remarks>
         ~D3D11()
         {
             Dispose(false);
         }
 
-
         /// <summary>
         /// Releases all resources used by an instance of the <see cref="D3D11"/> class.
         /// </summary>
-        /// <remarks>
-        /// This method calls the virtual <see cref="Dispose(bool)"/> method, passing in 
-        /// <see langword="true"/>, and then suppresses finalization of the instance.
-        /// </remarks>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
 
         /// <summary>
         /// Releases the unmanaged resources used by an instance of the <see cref="D3D11"/> class 
@@ -80,7 +56,6 @@ namespace SRL.MonoGameControl
             {
                 if (disposing)
                 {
-                    // Dispose managed resources.
                     SetBackBuffer(null);
                     if (_backBuffer != null)
                     {
@@ -89,18 +64,11 @@ namespace SRL.MonoGameControl
                     }
                 }
 
-                // Release unmanaged resources.
                 UninitializeD3D9();
                 _disposed = true;
             }
         }
-        #endregion
 
-
-        #region Methods
-        /// <summary>
-        /// Initializes the Direct3D 9 device.
-        /// </summary>
         private void InitializeD3D9()
         {
             lock (_d3D9Lock)
@@ -111,10 +79,6 @@ namespace SRL.MonoGameControl
             }
         }
 
-
-        /// <summary>
-        /// Un-initializes the Direct3D 9 device, if no longer needed.
-        /// </summary>
         private void UninitializeD3D9()
         {
             lock (_d3D9Lock)
@@ -128,16 +92,14 @@ namespace SRL.MonoGameControl
             }
         }
 
-
         private void ThrowIfDisposed()
         {
             if (_disposed)
                 throw new ObjectDisposedException(GetType().FullName);
         }
 
-
         /// <summary>
-        /// Invalidates the front buffer. (Needs to be called when the back buffer has changed.)
+        /// Invalidates the front buffer.
         /// </summary>
         public void Invalidate()
         {
@@ -151,7 +113,6 @@ namespace SRL.MonoGameControl
             }
         }
 
-
         /// <summary>
         /// Sets the back buffer of the <see cref="D3D11"/>.
         /// </summary>
@@ -162,11 +123,9 @@ namespace SRL.MonoGameControl
 
             var previousBackBuffer = _backBuffer;
 
-            // Create shared texture on Direct3D 9 device.
             _backBuffer = _d3D9.GetSharedTexture(texture);
             if (_backBuffer != null)
             {
-                // Set texture as new back buffer.
                 using (Surface surface = _backBuffer.GetSurfaceLevel(0))
                 {
                     Lock();
@@ -176,7 +135,6 @@ namespace SRL.MonoGameControl
             }
             else
             {
-                // Reset back buffer.
                 Lock();
                 SetBackBuffer(D3DResourceType.IDirect3DSurface9, IntPtr.Zero);
                 Unlock();
@@ -185,6 +143,5 @@ namespace SRL.MonoGameControl
             if (previousBackBuffer != null)
                 previousBackBuffer.Dispose();
         }
-        #endregion
     }
 }
