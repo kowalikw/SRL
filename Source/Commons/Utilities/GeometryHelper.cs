@@ -70,10 +70,10 @@ namespace SRL.Commons.Utilities
             double cosTheta = Math.Cos(angle);
             double sinTheta = Math.Sin(angle);
             return new Point(
-                    (cosTheta * (point.X - pivot.X) -
-                    sinTheta * (point.Y - pivot.Y) + pivot.X),
-                    (sinTheta * (point.X - pivot.X) +
-                    cosTheta * (point.Y - pivot.Y) + pivot.Y));
+                    cosTheta * (point.X - pivot.X) -
+                    sinTheta * (point.Y - pivot.Y) + pivot.X,
+                    sinTheta * (point.X - pivot.X) +
+                    cosTheta * (point.Y - pivot.Y) + pivot.Y);
         }
 
         public static Polygon Rotate(Polygon polygon, Point pivot, double angle)
@@ -103,11 +103,11 @@ namespace SRL.Commons.Utilities
         public static Polygon Transform(this Polygon polygon, double? size = null, double? rotation = null, Point? position = null)
         {
             if (size != null)
-                polygon = GeometryHelper.Resize(polygon, size.Value);
+                polygon = Resize(polygon, size.Value);
             if (rotation != null)
-                polygon = GeometryHelper.Rotate(polygon, rotation.Value);
+                polygon = Rotate(polygon, rotation.Value);
             if (position != null)
-                polygon = GeometryHelper.Move(polygon, position.Value);
+                polygon = Move(polygon, position.Value);
             return polygon;
         }
 

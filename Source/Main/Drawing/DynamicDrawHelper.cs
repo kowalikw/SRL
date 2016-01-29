@@ -55,7 +55,6 @@ namespace SRL.Main.Drawing
         /// <param name="x">The X coordinate of the pixel.</param>
         /// <param name="y">The Y coordinate of the pixel.</param>
         /// <param name="color">The color of the pixel.</param>
-        /// <param name="intensity">The intensity of the color.</param>
         private static void SetPixel(this SpriteBatch spriteBatch, float x, float y, Color color)
         {
             spriteBatch.Draw(_pixel, new Vector2(x, y), color);
@@ -92,7 +91,7 @@ namespace SRL.Main.Drawing
             float dy = Math.Abs(bY - aY);
 
             float error = dx / 2.0f;
-            float yStep = (aY < bY) ? 1 : -1;
+            float yStep = aY < bY ? 1 : -1;
             float y = aY;
 
             float maxX = bX;

@@ -9,35 +9,35 @@ namespace SRL.Algorithm
 {
     public class Triangulation2D
     {
-        public static bool PointInPolygon(float X, float Y, Point[] polygon)
+        public static bool PointInPolygon(float x, float y, Point[] polygon)
         {
             // Get the angle between the point and the
             // first and last vertices.
-            int max_point = polygon.Length - 1;
-            float total_angle = GetAngle(
-                (float)polygon[max_point].X, (float)polygon[max_point].Y,
-                X, Y,
+            int maxPoint = polygon.Length - 1;
+            float totalAngle = GetAngle(
+                (float)polygon[maxPoint].X, (float)polygon[maxPoint].Y,
+                x, y,
                 (float)polygon[0].X, (float)polygon[0].Y);
 
             // Add the angles from the point
             // to each other pair of vertices.
-            for (int i = 0; i < max_point; i++)
+            for (int i = 0; i < maxPoint; i++)
             {
-                total_angle += GetAngle(
+                totalAngle += GetAngle(
                     (float)polygon[i].X, (float)polygon[i].Y,
-                    X, Y,
+                    x, y,
                     (float)polygon[i + 1].X, (float)polygon[i + 1].Y);
             }
 
             // The total angle should be 2 * PI or -2 * PI if
             // the point is in the polygon and close to zero
             // if the point is outside the polygon.
-            return (Math.Abs(total_angle) > 0.000001);
+            return Math.Abs(totalAngle) > 0.000001;
         }
 
         public static bool PolygonIsOrientedClockwise(ref Polygon polygon)
         {
-            return (SignedPolygonArea(ref polygon) < 0);
+            return SignedPolygonArea(ref polygon) < 0;
         }
 
         // If the polygon is oriented counterclockwise,
@@ -79,14 +79,14 @@ namespace SRL.Algorithm
         private static float SignedPolygonArea(ref Polygon polygon)
         {
             // Add the first point to the end.
-            int num_points = polygon.Vertices.Count;
-            Point[] pts = new Point[num_points + 1];
+            int numPoints = polygon.Vertices.Count;
+            Point[] pts = new Point[numPoints + 1];
             polygon.Vertices.CopyTo(pts, 0);
-            pts[num_points] = polygon.Vertices[0];
+            pts[numPoints] = polygon.Vertices[0];
 
             // Get the areas.
             float area = 0;
-            for (int i = 0; i < num_points; i++)
+            for (int i = 0; i < numPoints; i++)
             {
                 area +=
                     (float)(pts[i + 1].X - pts[i].X) *
@@ -97,56 +97,56 @@ namespace SRL.Algorithm
             return area;
         }
 
-        public static float CrossProductLength(float Ax, float Ay,
-            float Bx, float By, float Cx, float Cy)
+        public static float CrossProductLength(float ax, float ay,
+            float bx, float @by, float cx, float cy)
         {
             // Get the vectors' coordinates.
-            float BAx = Ax - Bx;
-            float BAy = Ay - By;
-            float BCx = Cx - Bx;
-            float BCy = Cy - By;
+            float bAx = ax - bx;
+            float bAy = ay - @by;
+            float bCx = cx - bx;
+            float bCy = cy - @by;
 
             // Calculate the Z coordinate of the cross product.
-            return (BAx * BCy - BAy * BCx);
+            return bAx * bCy - bAy * bCx;
         }
 
         // Return the dot product AB · BC.
         // Note that AB · BC = |AB| * |BC| * Cos(theta).
-        private static float DotProduct(float Ax, float Ay,
-            float Bx, float By, float Cx, float Cy)
+        private static float DotProduct(float ax, float ay,
+            float bx, float @by, float cx, float cy)
         {
             // Get the vectors' coordinates.
-            float BAx = Ax - Bx;
-            float BAy = Ay - By;
-            float BCx = Cx - Bx;
-            float BCy = Cy - By;
+            float bAx = ax - bx;
+            float bAy = ay - @by;
+            float bCx = cx - bx;
+            float bCy = cy - @by;
 
             // Calculate the dot product.
-            return (BAx * BCx + BAy * BCy);
+            return bAx * bCx + bAy * bCy;
         }
 
-        public static float GetAngle(float Ax, float Ay, float Bx, float By, float Cx, float Cy)
+        public static float GetAngle(float ax, float ay, float bx, float @by, float cx, float cy)
         {
             // Get the dot product.
-            float dot_product = DotProduct(Ax, Ay, Bx, By, Cx, Cy);
+            float dotProduct = DotProduct(ax, ay, bx, @by, cx, cy);
 
             // Get the cross product.
-            float cross_product = CrossProductLength(Ax, Ay, Bx, By, Cx, Cy);
+            float crossProduct = CrossProductLength(ax, ay, bx, @by, cx, cy);
 
             // Calculate the angle.
-            return (float)Math.Atan2(cross_product, dot_product);
+            return (float)Math.Atan2(crossProduct, dotProduct);
         }
 
-        private static void FindEar(ref int A, ref int B, ref int C, ref Polygon polygon)
+        private static void FindEar(ref int a, ref int b, ref int c, ref Polygon polygon)
         {
-            int num_points = polygon.Vertices.Count;
+            int numPoints = polygon.Vertices.Count;
 
-            for (A = 0; A < num_points; A++)
+            for (a = 0; a < numPoints; a++)
             {
-                B = (A + 1) % num_points;
-                C = (B + 1) % num_points;
+                b = (a + 1) % numPoints;
+                c = (b + 1) % numPoints;
 
-                if (FormsEar(polygon.Vertices.ToArray(), A, B, C, ref polygon)) return;
+                if (FormsEar(polygon.Vertices.ToArray(), a, b, c, ref polygon)) return;
             }
 
             // We should never get here because there should
@@ -155,13 +155,13 @@ namespace SRL.Algorithm
         }
 
         // Return true if the three points form an ear.
-        private static bool FormsEar(Point[] points, int A, int B, int C, ref Polygon polygon)
+        private static bool FormsEar(Point[] points, int a, int b, int c, ref Polygon polygon)
         {
             // See if the angle ABC is concave.
             if (GetAngle(
-                (float)points[A].X, (float)points[A].Y,
-                (float)points[B].X, (float)points[B].Y,
-                (float)points[C].X, (float)points[C].Y) > 0)
+                (float)points[a].X, (float)points[a].Y,
+                (float)points[b].X, (float)points[b].Y,
+                (float)points[c].X, (float)points[c].Y) > 0)
             {
                 // This is a concave corner so the triangle
                 // cannot be an ear.
@@ -170,13 +170,13 @@ namespace SRL.Algorithm
 
             // Make the triangle A, B, C.
             Point[] triangle = new Point[] {
-                points[A], points[B], points[C] };
+                points[a], points[b], points[c] };
 
             // Check the other points to see 
             // if they lie in triangle A, B, C.
             for (int i = 0; i < points.Length; i++)
             {
-                if ((i != A) && (i != B) && (i != C))
+                if ((i != a) && (i != b) && (i != c))
                 {
                     if (PointInPolygon((float)points[i].X, (float)points[i].Y, triangle))
                     {
@@ -196,14 +196,14 @@ namespace SRL.Algorithm
         private static void RemoveEar(List<Point[]> triangles, ref Polygon polygon)
         {
             // Find an ear.
-            int A = 0, B = 0, C = 0;
-            FindEar(ref A, ref B, ref C, ref polygon);
+            int a = 0, b = 0, c = 0;
+            FindEar(ref a, ref b, ref c, ref polygon);
 
             // Create a new triangle for the ear.
-            triangles.Add(new Point[] { polygon.Vertices[A], polygon.Vertices[B], polygon.Vertices[C] });
+            triangles.Add(new Point[] { polygon.Vertices[a], polygon.Vertices[b], polygon.Vertices[c] });
 
             // Remove the ear from the polygon.
-            RemovePointFromArray(B, ref polygon);
+            RemovePointFromArray(b, ref polygon);
         }
 
         private static void RemovePointFromArray(int target, ref Polygon polygon)

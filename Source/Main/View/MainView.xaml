@@ -5,7 +5,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-        xmlns:local="clr-namespace:SRL.Main"
         mc:Ignorable="d"
         Title="{Resx ResxName=SRL.Main.View.Localization.MainView, Key=windowTitle}" IsTitleVisible="True"
         MinHeight="600" MinWidth="800"

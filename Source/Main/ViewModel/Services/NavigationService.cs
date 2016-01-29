@@ -6,7 +6,7 @@ namespace SRL.Main.ViewModel.Services
 {
     internal class NavigationService : INavigationService
     {
-        private ConcurrentDictionary<string, Uri> _uris = new ConcurrentDictionary<string, Uri>();
+        private readonly ConcurrentDictionary<string, Uri> _uris = new ConcurrentDictionary<string, Uri>();
 
         public void Configure(string pageKey, Uri pageUri)
         {

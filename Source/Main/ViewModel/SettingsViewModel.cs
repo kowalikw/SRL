@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Ioc;
-using Infralution.Localization.Wpf;
+﻿using Infralution.Localization.Wpf;
 using Microsoft.Practices.ServiceLocation;
 using SRL.Commons;
 using SRL.Main.View.Localization;

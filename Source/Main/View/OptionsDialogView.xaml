@@ -8,7 +8,6 @@
                   xmlns:util="clr-namespace:SRL.Main.Utilities"
                   xmlns:converters="clr-namespace:SRL.Main.Utilities.Converters"
                   xmlns:settings="clr-namespace:SRL.Main"
-                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                   mc:Ignorable="d" 
                   d:DesignWidth="400" d:DesignHeight="300"
                   Title="{Resx Key=optionsTitle}">

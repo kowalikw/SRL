@@ -39,7 +39,7 @@ namespace SRL.Main.Drawing
             int dy = Math.Abs(bY - aY);
 
             int error = dx / 2;
-            int yStep = (aY < bY) ? 1 : -1;
+            int yStep = aY < bY ? 1 : -1;
             int y = aY;
 
             int maxX = bX;

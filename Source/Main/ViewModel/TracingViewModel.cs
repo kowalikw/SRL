@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Ioc;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
 using SRL.Commons.Model;
 using SRL.Commons.Utilities;
@@ -150,7 +148,7 @@ namespace SRL.Main.ViewModel
                         }
                     });
                 }
-                return _deselectPolygonCommand; ;
+                return _deselectPolygonCommand;
             }
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,9 +15,6 @@ namespace SRL.Algorithm
 {
     public class Algorithm : IAlgorithm
     {
-
-        //TODO throw OperationCanceledException in meaningful spots (before and after long calculations; MinkowskiSum?). Not just at the beginning of loop iterations.
-
         private List<Option> _currentOptions;
         private readonly List<Option> _defaultOptions;
 
@@ -404,11 +400,11 @@ namespace SRL.Algorithm
                 {
                     token.ThrowIfCancellationRequested();
                     List<Polygon> convexSubPolygons = new List<Polygon>();
-                    foreach (List<Point> VehicleTriangle in triangularVehicle)
+                    foreach (List<Point> vehicleTriangle in triangularVehicle)
                     {
                         foreach (List<Point> obstacleTriangle in obstacle)
                         {
-                            convexSubPolygons.Add(ConvexHull(ConvexMinkowski(VehicleTriangle, obstacleTriangle)));
+                            convexSubPolygons.Add(ConvexHull(ConvexMinkowski(vehicleTriangle, obstacleTriangle)));
                         }
                     }
                     List<Polygon> lst = GeometryHelper.Union(convexSubPolygons);
@@ -449,9 +445,7 @@ namespace SRL.Algorithm
 
         private Polygon ConvexHull(List<Point> points)
         {
-            Polygon poly;
-            points.Sort((a, b) =>
-                a.X == b.X ? a.Y.CompareTo(b.Y) : a.X.CompareTo(b.X));
+            points.Sort((a, b) => a.X == b.X ? a.Y.CompareTo(b.Y) : a.X.CompareTo(b.X));
             List<Point> u = new List<Point>(), l = new List<Point>();
             for (int i = 0; i < points.Count; i++)
             {
@@ -471,8 +465,7 @@ namespace SRL.Algorithm
             {
                 u.Add(l[i]);
             }
-            poly = new Polygon(u);
-            return poly;
+            return new Polygon(u);
         }
 
         private bool IsPointInTriangle(Point trianglePosition, Point point, double angle, Polygon triangle, double pointPrecision)

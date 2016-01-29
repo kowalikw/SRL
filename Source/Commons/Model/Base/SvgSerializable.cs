@@ -48,10 +48,10 @@ namespace SRL.Commons.Model.Base
 
 
 
-        public static void Serialize<R>(R model, string filename)
-            where R : SvgSerializable
+        public static void Serialize<TR>(TR model, string filename)
+            where TR : SvgSerializable
         {
-            var serializer = new XmlSerializer(typeof(R));
+            var serializer = new XmlSerializer(typeof(TR));
             var output = new XDocument();
 
             using (XmlWriter writer = output.CreateWriter())
@@ -60,17 +60,17 @@ namespace SRL.Commons.Model.Base
             output.Save(filename);
         }
 
-        public static bool CanDeserialize<R>(string filename)
-            where R : SvgSerializable
+        public static bool CanDeserialize<TR>(string filename)
+            where TR : SvgSerializable
         {
             bool canDeserialize = true;
 
             XmlSchemaSet schemaSet = new XmlSchemaSet();
-            if (typeof(R) == typeof(Map))
+            if (typeof(TR) == typeof(Map))
                 schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.MapSchema)));
-            else if (typeof(R) == typeof(Vehicle))
+            else if (typeof(TR) == typeof(Vehicle))
                 schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.VehicleSchema)));
-            else if (typeof(R) == typeof(Simulation))
+            else if (typeof(TR) == typeof(Simulation))
             {
                 schemaSet.Add("http://www.w3.org/1999/xlink", XmlReader.Create(new StringReader(Resources.SimulationSchemaXlink)));
                 schemaSet.Add("http://www.w3.org/2000/svg", XmlReader.Create(new StringReader(Resources.SimulationSchema)));
@@ -78,21 +78,21 @@ namespace SRL.Commons.Model.Base
 
             XDocument.Load(filename).Validate(schemaSet, (o, e) => { canDeserialize = false; });
 
-            var serializer = new XmlSerializer(typeof(R));
+            var serializer = new XmlSerializer(typeof(TR));
 
             using (var reader = XmlReader.Create(filename))
                 return canDeserialize && serializer.CanDeserialize(reader);
         }
 
-        public static R Deserialize<R>(string filename)
-            where R : SvgSerializable
+        public static TR Deserialize<TR>(string filename)
+            where TR : SvgSerializable
         {
-            var serializer = new XmlSerializer(typeof(R));
+            var serializer = new XmlSerializer(typeof(TR));
 
             using (var reader = XmlReader.Create(filename))
             {
                 if (serializer.CanDeserialize(reader))
-                    return (R)serializer.Deserialize(reader);
+                    return (TR)serializer.Deserialize(reader);
             }
             throw new InvalidOperationException($"Can't deserialize {filename}.");
         }

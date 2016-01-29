@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Resources;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Ioc;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
 using SRL.Commons.Model.Base;
 using SRL.Main.Messages;
@@ -15,7 +13,7 @@ namespace SRL.Main.ViewModel.Base
     public abstract class EditorViewModel<T> : ViewModel
         where T : SvgSerializable
     {
-        protected readonly string _modelName;
+        protected readonly string ModelName;
 
         public RelayCommand SaveCommand
         {
@@ -66,7 +64,7 @@ namespace SRL.Main.ViewModel.Base
         {
             MessengerInstance.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
 
-            _modelName = Models.ResourceManager.GetString(typeof (T).Name);
+            ModelName = Models.ResourceManager.GetString(typeof (T).Name);
         }
 
         /// <summary>
@@ -85,16 +83,16 @@ namespace SRL.Main.ViewModel.Base
         /// <summary>
         /// Loads <see cref="SvgSerializable"/> model via dialog shown to the user.
         /// </summary>
-        /// <typeparam name="R">Model type.</typeparam>
+        /// <typeparam name="TR">Model type.</typeparam>
         /// <returns>Deserialized model instance.</returns>
-        protected static R LoadModelViaDialog<R>()
-            where R : SvgSerializable
+        protected static TR LoadModelViaDialog<TR>()
+            where TR : SvgSerializable
         {
-            string modelName = Models.ResourceManager.GetString(typeof(R).Name);
+            string modelName = Models.ResourceManager.GetString(typeof(TR).Name);
             string filter = Dialogs.ResourceManager.GetString("modelFilter");
 
             bool invalidFile = false;
-            R output = null;
+            TR output = null;
 
             ServiceLocator.Current.GetInstance<IDialogService>().ShowOpenFileDialog(
                 string.Format(filter, modelName),
@@ -103,8 +101,8 @@ namespace SRL.Main.ViewModel.Base
                     if (!result)
                         return;
 
-                    if (SvgSerializable.CanDeserialize<R>(filename))
-                        output = SvgSerializable.Deserialize<R>(filename);
+                    if (SvgSerializable.CanDeserialize<TR>(filename))
+                        output = SvgSerializable.Deserialize<TR>(filename);
                     else
                         invalidFile = true;
                 });

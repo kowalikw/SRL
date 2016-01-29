@@ -21,7 +21,7 @@ namespace SRL.MonoGameControl
         // all D3D11Images.
         private D3D9 _d3D9;
         private int _referenceCount;
-        private readonly object _d3d9Lock = new object();
+        private readonly object _d3D9Lock = new object();
 
         private bool _disposed;
         private Texture _backBuffer;
@@ -103,7 +103,7 @@ namespace SRL.MonoGameControl
         /// </summary>
         private void InitializeD3D9()
         {
-            lock (_d3d9Lock)
+            lock (_d3D9Lock)
             {
                 _referenceCount++;
                 if (_referenceCount == 1)
@@ -117,7 +117,7 @@ namespace SRL.MonoGameControl
         /// </summary>
         private void UninitializeD3D9()
         {
-            lock (_d3d9Lock)
+            lock (_d3D9Lock)
             {
                 _referenceCount--;
                 if (_referenceCount == 0)

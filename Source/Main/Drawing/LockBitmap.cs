@@ -74,8 +74,6 @@ namespace SRL.Main.Drawing
 
         public Color GetPixel(int x, int y)
         {
-            Color clr = Color.Transparent;
-
             // Get color components count.
             int cCount = Depth / 8;
 

@@ -77,7 +77,7 @@ namespace SRL.Commons.Model
             writer.WriteStartElement("g");
 
             writer.WriteStartAttribute("transform");
-            writer.WriteValue("translate(" + Width / 2 + "," + Height / 2 + ") scale(" + Width / 2 + "," + (-Height / 2) + ")");
+            writer.WriteValue("translate(" + Width / 2 + "," + Height / 2 + ") scale(" + Width / 2 + "," + -Height / 2 + ")");
             writer.WriteEndAttribute();
 
             foreach (Polygon polygon in Obstacles)

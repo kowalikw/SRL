@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using SRL.Commons;
 using SRL.Commons.Model;
@@ -603,7 +602,6 @@ namespace SRL.Main.ViewModel
             for (int o = 0; o < orders.Count; o++)
             {
                 // Rotation frames.
-                double relativeRotation;
                 Point originPosition = frames.Peek().Position;
 
                 double originAngle = frames.Peek().Rotation;
@@ -622,6 +620,7 @@ namespace SRL.Main.ViewModel
 
                 if (originAngle != targetAngle) // Purposeful comparison of floating point numbers without epsilon.
                 {
+                    double relativeRotation;
                     if (orders[o].Rotation >= 0) // CCW turn
                     {
                         if (targetAngle > originAngle)

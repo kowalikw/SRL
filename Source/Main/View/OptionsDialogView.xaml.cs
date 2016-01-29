@@ -16,7 +16,7 @@ namespace SRL.Main.View
 
         public List<Option> Result => new List<Option>(_viewModel.Options);
 
-        private OptionsDialogViewModel _viewModel;
+        private readonly OptionsDialogViewModel _viewModel;
 
 
 
