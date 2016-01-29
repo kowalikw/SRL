@@ -96,7 +96,7 @@ namespace SRL.Algorithm
 
             // Getting angle for starting set up of the vehicle
             int startingIndex = 0;
-
+            vehicleRotation = (vehicleRotation + 2 * Math.PI) % (2 * Math.PI);
 
             // setting index for each Minkowski's sum point of each angle
             int index = 0;
@@ -341,66 +341,17 @@ namespace SRL.Algorithm
                     ind++;
                 Order o = new Order((angle * singleAngle + vehicleRotation) % (Math.PI * 2), indexPointAngleList[angle][ind].Point);
 
-                /*if (((o.Rotation + 2 * Math.PI) % (2 * Math.PI)).EpsilonEquals((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI)))
-                {
-                    orders.Add(new Order(orders[orders.Count - 1].Rotation, o.Destination));
-                    continue;
-                }
-
-                if (o.Rotation.EpsilonEquals(0) && orders[orders.Count - 1].Rotation <= -Math.PI)
-                {
-                    o = new Order(-2 * Math.PI, o.Destination);
-                }
-                else if (o.Rotation.EpsilonEquals(0) && orders[orders.Count - 1].Rotation > 0)
-                {
-                    // do nothing
-                }
-                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation > 0)
-                {
-                    if (o.Rotation < orders[orders.Count - 1].Rotation)
-                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                    // else do nothing
-                }
-                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation < 0)
-                {
-                    if ((o.Rotation + 2 * Math.PI) % (2 * Math.PI) < (orders[orders.Count - 1].Rotation + 2 * Math.PI) % (2 * Math.PI))
-                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                    else if (orders[orders.Count - 1].Rotation.EpsilonEquals(-2 * Math.PI) && o.Rotation > Math.PI)
-                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                    // else do nothing
-                }
-                else if (o.Rotation > 0 && orders[orders.Count - 1].Rotation.EpsilonEquals(0))
-                {
-                    if (o.Rotation > Math.PI)
-                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                }*/
-                if(((orders[orders.Count - 1].Rotation + 2* Math.PI)%(Math.PI * 2))>o.Rotation)
-                    if(((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (Math.PI * 2)) - o.Rotation < Math.PI)
-                        o = new Order(o.Rotation - 2 * Math.PI, o.Destination);
-                if(((orders[orders.Count - 1].Rotation + 2 * Math.PI) % (Math.PI * 2))<singleAngle/2)
-                    if(o.Rotation > Math.PI)
-                        o = new Order((angle * singleAngle + vehicleRotation) % (Math.PI * 2) - 2 * Math.PI, o.Destination);
-
                 orders.Add(o);
             }
 
-            // Checking for doubled points previous orders list
-            List<Order> os = new List<Order>();
-            os.Add(orders[0]);
-            orders.RemoveAt(0);
-            while (orders.Count > 0)
+            for(int i=orders.Count-1;i>0;i--)
             {
-                while (orders[0].Destination == os[os.Count - 1].Destination)
+                if (((orders[i - 1].Rotation - singleAngle + Math.PI * 2) % (Math.PI * 2)).EpsilonEquals(orders[i].Rotation))
                 {
-                    //os[os.Count - 1].Rotation = orders[0].Rotation;
-                    orders.RemoveAt(0);
+                    orders[i] = new Order(orders[i].Rotation - 2 * Math.PI, orders[i].Destination);
                 }
-                os.Add(orders[0]);
-                orders.RemoveAt(0);
-
             }
-            os.RemoveAt(0);
-            return os;
+            return orders;
         }
 
 
