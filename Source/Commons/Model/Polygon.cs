@@ -4,10 +4,20 @@ using System.Windows;
 
 namespace SRL.Commons.Model
 {
+    /// <summary>
+    /// Model class that represents a polygon in [-1,1]x[-1,1] space.
+    /// </summary>
     public struct Polygon : IEquatable<Polygon>
     {
+        /// <summary>
+        /// Ordered vertices that make up the polygon.
+        /// </summary>
         public List<Point> Vertices { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Polygon"/> class.
+        /// </summary>
+        /// <param name="vertices">Ordered polygon's vertices.</param>
         public Polygon(IEnumerable<Point> vertices)
         {
             Vertices = new List<Point>(vertices);

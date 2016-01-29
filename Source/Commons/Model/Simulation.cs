@@ -10,17 +10,47 @@ using SRL.Commons.Utilities;
 
 namespace SRL.Commons.Model
 {
+    /// <summary>
+    /// Model class that represents a valid simulation calculated by a <see cref="IAlgorithm"/>.
+    /// </summary>
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
     public class Simulation : SvgSerializable, IEquatable<Simulation>
     {
+        /// <summary>
+        /// Map with obstacles to avoid.
+        /// </summary>
         public Map Map { get; set; }
+        /// <summary>
+        /// Vehicle definition.
+        /// </summary>
         public Vehicle Vehicle { get; set; }
+        /// <summary>
+        /// Vehicle resize factor.
+        /// </summary>
         public double VehicleSize { get; set; }
+        /// <summary>
+        /// Initial vehicle orientation.
+        /// </summary>
         public double InitialVehicleRotation { get; set; }
+        /// <summary>
+        /// Path starting point.
+        /// </summary>
         public Point StartPoint { get; set; }
+        /// <summary>
+        /// Path ending point.
+        /// </summary>
         public Point EndPoint { get; set; }
+        /// <summary>
+        /// List of orders calculated by a <see cref="IAlgorithm"/> implementation.
+        /// </summary>
         public List<Order> Orders { get; set; }
+        /// <summary>
+        /// List of options for which the orders have been generated.
+        /// </summary>
         public List<Option> Options { get; set; }
+        /// <summary>
+        /// Key of the <see cref="IAlgorithm"/> implementation.
+        /// </summary>
         public string AlgorithmKey { get; set; }
 
 

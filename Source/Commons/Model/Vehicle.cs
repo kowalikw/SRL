@@ -6,9 +6,15 @@ using SRL.Commons.Utilities;
 
 namespace SRL.Commons.Model
 {
+    /// <summary>
+    /// Model class that represents a moving robot.
+    /// </summary>
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
     public class Vehicle : SvgSerializable, IEquatable<Vehicle>
     {
+        /// <summary>
+        /// Polygon that make up the vehicle hull.
+        /// </summary>
         public Polygon Shape { get; set; }
 
 

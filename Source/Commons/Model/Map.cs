@@ -7,9 +7,15 @@ using SRL.Commons.Utilities;
 
 namespace SRL.Commons.Model
 {
+    /// <summary>
+    /// Model class that represents a collection of <see cref="Polygon"/> obstacles that must avoided by the <see cref="Vehicle"/>.
+    /// </summary>
     [XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
     public class Map : SvgSerializable, IEquatable<Map>
     {
+        /// <summary>
+        /// List of contained obstacles.
+        /// </summary>
         public List<Polygon> Obstacles { get; }
 
         public Map()
@@ -30,8 +36,6 @@ namespace SRL.Commons.Model
         }
 
         #region IXmlSerializable members
-
-
 
         public override void ReadXml(XmlReader reader)
         {

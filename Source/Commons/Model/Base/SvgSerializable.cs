@@ -8,6 +8,9 @@ using System.Xml.Serialization;
 
 namespace SRL.Commons.Model.Base
 {
+    /// <summary>
+    /// Base class for models that can be serialized to a SVG file.
+    /// </summary>
     public abstract class SvgSerializable : IXmlSerializable
     {
         protected static readonly int Width = 480;
@@ -23,10 +26,21 @@ namespace SRL.Commons.Model.Base
             return null;
         }
 
+        /// <summary>
+        /// Generates an object from its XML (SVG) representation.
+        /// </summary>
+        /// <param name="reader">Stream from which the object is deserialized.</param>
         public abstract void ReadXml(XmlReader reader);
+        /// <summary>
+        /// Converts an object into its XML (SVG) representation.
+        /// </summary>
+        /// <param name="writer">Stream to which the object is serialized.</param>
         public abstract void WriteXml(XmlWriter writer);
 
-
+        /// <summary>
+        /// Writes SVG rectangle to the stream to act as image background.
+        /// </summary>
+        /// <param name="writer">Stream to which background definition is added.</param>
         protected void WriteBackground(XmlWriter writer)
         {
             writer.WriteStartElement("rect");
@@ -46,8 +60,12 @@ namespace SRL.Commons.Model.Base
             writer.WriteEndElement();
         }
 
-
-
+        /// <summary>
+        /// Serializes model object to SVG file.
+        /// </summary>
+        /// <typeparam name="TR">Serializable model type.</typeparam>
+        /// <param name="model">Model instance.</param>
+        /// <param name="filename">Filename of the SVG file.</param>
         public static void Serialize<TR>(TR model, string filename)
             where TR : SvgSerializable
         {
@@ -60,6 +78,12 @@ namespace SRL.Commons.Model.Base
             output.Save(filename);
         }
 
+        /// <summary>
+        /// Gets a value that indicates whether the file can be deserialized to the model type.
+        /// </summary>
+        /// <typeparam name="TR">Type of the model.</typeparam>
+        /// <param name="filename">Serialized object's filename.</param>
+        /// <returns>True if the file contains a valid model object's definition; false otherwise.</returns>
         public static bool CanDeserialize<TR>(string filename)
             where TR : SvgSerializable
         {
@@ -84,6 +108,12 @@ namespace SRL.Commons.Model.Base
                 return canDeserialize && serializer.CanDeserialize(reader);
         }
 
+        /// <summary>
+        /// Deserializes SVG file into a model instance.
+        /// </summary>
+        /// <typeparam name="TR">Type of the model.</typeparam>
+        /// <param name="filename">Serialized object's filename.</param>
+        /// <returns>Deserialized model instance.</returns>
         public static TR Deserialize<TR>(string filename)
             where TR : SvgSerializable
         {
