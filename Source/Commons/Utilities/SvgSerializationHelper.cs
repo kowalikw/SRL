@@ -7,8 +7,18 @@ using SRL.Commons.Model;
 
 namespace SRL.Commons.Utilities
 {
+    /// <summary>
+    /// <see cref="SvgSerializationHelper"/> class contains helper methods
+    /// to read Xml content as certain type object and write objects to Xml.
+    /// </summary>
     public static class SvgSerializationHelper
     {
+        /// <summary>
+        /// Reads the XML content as a <see cref="Polygon"/> object.
+        /// </summary>
+        /// <param name="reader"><see cref="XmlReader"/> object.</param>
+        /// <returns><see cref="Polygon"/> object.</returns>
+        /// <exception cref="XmlException">Thrown if the object is not properly <see cref="Polygon"/>.</exception>
         public static Polygon ReadContentAsPolygon(this XmlReader reader)
         {
             var vertices = new List<Point>();
@@ -43,6 +53,11 @@ namespace SRL.Commons.Utilities
             return new Polygon(vertices);
         }
 
+        /// <summary>
+        /// Writes <see cref="Polygon"/> object to XML.
+        /// </summary>
+        /// <param name="writer"><see cref="XmlWriter"/> object.</param>
+        /// <param name="polygon"><see cref="Polygon"/> object.</param>
         public static void WritePolygon(this XmlWriter writer, Polygon polygon)
         {
             writer.WriteStartAttribute("points");
@@ -68,6 +83,12 @@ namespace SRL.Commons.Utilities
             writer.WriteEndAttribute();
         }
 
+        /// <summary>
+        /// Reads the XML content as a <see cref="Order"/> object.
+        /// </summary>
+        /// <param name="reader"><see cref="XmlReader"/> object.</param>
+        /// <returns><see cref="Order"/> object.</returns>
+        /// <exception cref="XmlException">Thrown if the object is not properly <see cref="Order"/>.</exception>
         public static Order ReadContentAsOrder(this XmlReader reader)
         {
             double rotation;
@@ -93,6 +114,11 @@ namespace SRL.Commons.Utilities
             return new Order(rotation, destination);
         }
 
+        /// <summary>
+        /// Writes <see cref="Order"/> object to XML.
+        /// </summary>
+        /// <param name="writer"><see cref="XmlWriter"/> object.</param>
+        /// <param name="order"><see cref="Order"/> object.</param>
         public static void WriteOrder(this XmlWriter writer, Order order)
         {
             writer.WriteStartAttribute("rotation");
@@ -106,6 +132,14 @@ namespace SRL.Commons.Utilities
             writer.WriteEndAttribute();
         }
 
+        /// <summary>
+        /// Gets <see cref="Option"/> values from XML content.
+        /// </summary>
+        /// <param name="reader"><see cref="XmlReader"/> object.</param>
+        /// <param name="key">Option key out parameter.</param>
+        /// <param name="value">Option value out parameter.</param>
+        /// <exception cref="XmlException">Thrown if the object is not properly <see cref="Polygon"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if value type is incorrect.</exception>
         public static void GetOptionValue(this XmlReader reader, out string key, out object value)
         {
             if (reader.MoveToContent() == XmlNodeType.Element)
@@ -139,6 +173,11 @@ namespace SRL.Commons.Utilities
                 throw new XmlException();
         }
 
+        /// <summary>
+        /// Writes <see cref="Option"/> to XML.
+        /// </summary>
+        /// <param name="writer"><see cref="XmlWriter"/> object.</param>
+        /// <param name="option"><see cref="Option"/> object.</param>
         public static void WriteOption(this XmlWriter writer, Option option)
         {
             writer.WriteStartAttribute("type");
