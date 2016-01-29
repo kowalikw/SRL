@@ -96,7 +96,7 @@ namespace SRL.Algorithm
 
             // Getting angle for starting set up of the vehicle
             int startingIndex = 0;
-            vehicleRotation = (vehicleRotation + 2 * Math.PI) % (2 * Math.PI);
+            vehicleRotation = (vehicleRotation + 2 * Math.PI)%(2 * Math.PI);
 
             // setting index for each Minkowski's sum point of each angle
             int index = 0;
@@ -340,7 +340,7 @@ namespace SRL.Algorithm
                 while (indexPointAngleList[angle][ind].Index != path[i].To)
                     ind++;
                 Order o = new Order((angle * singleAngle + vehicleRotation) % (Math.PI * 2), indexPointAngleList[angle][ind].Point);
-
+                
                 orders.Add(o);
             }
 
@@ -351,7 +351,32 @@ namespace SRL.Algorithm
                     orders[i] = new Order(orders[i].Rotation - 2 * Math.PI, orders[i].Destination);
                 }
             }
-            return orders;
+
+            for (int i = 0; i < orders.Count - 1; i++)
+            {
+                if (((orders[i + 1].Rotation + 2 * Math.PI)%(Math.PI * 2)).EpsilonEquals((orders[i].Rotation + 2 * Math.PI) % (Math.PI * 2)))
+                {
+                    orders[i + 1] = new Order(orders[i].Rotation, orders[i + 1].Destination);
+                }
+            }
+
+            // Checking for doubled points previous orders list
+            List<Order> os = new List<Order>();
+            os.Add(orders[0]);
+            orders.RemoveAt(0);
+            while (orders.Count > 0)
+            {
+                while (orders[0].Destination == os[os.Count - 1].Destination)
+                {
+                    orders.RemoveAt(0);
+                }
+                os.Add(orders[0]);
+                orders.RemoveAt(0);
+
+            }
+            os.RemoveAt(0);
+            return os;
+            
         }
 
 
