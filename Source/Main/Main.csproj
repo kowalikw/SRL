@@ -104,7 +104,6 @@
     </Compile>
     <Compile Include="Tracing\BitmapTracer.cs" />
     <Compile Include="Utilities\BitmapExtensions.cs" />
-    <Compile Include="Utilities\Converters\FontSizeConverter.cs" />
     <Compile Include="Utilities\Converters\BoolNegationConverter.cs" />
     <Compile Include="Utilities\Converters\DictionaryValueConverter.cs" />
     <Compile Include="Utilities\Converters\DoubleToStringConverter.cs" />

@@ -12,49 +12,41 @@ namespace SRL.Commons.Utilities
     /// </summary>
     public static class GeometryHelper
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pX"></param>
-        /// <param name="pY"></param>
-        /// <param name="qX"></param>
-        /// <param name="qY"></param>
-        /// <returns></returns>
         private static double CrossProduct(double pX, double pY, double qX, double qY)
         {
             return pX * qY - qX * pY;
         }
 
         /// <summary>
-        /// 
+        /// Calculates cross product of two vectors.
         /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <returns></returns>
+        /// <param name="p1">End <see cref="Point"/> of first vector.</param>
+        /// <param name="p2">End <see cref="Point"/> of second vector.</param>
+        /// <returns>Cross product of two vectors.</returns>
         public static double CrossProduct(Point p1, Point p2)
         {
             return p1.X * p2.Y - p2.X * p1.Y;
         }
 
         /// <summary>
-        /// 
+        /// Calculates dot product of two vectors.
         /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <returns></returns>
+        /// <param name="p1">End <see cref="Point"/> of first vector.</param>
+        /// <param name="p2">End <see cref="Point"/> of second vector.</param>
+        /// <returns>Dot product of two vectors.</returns>
         public static double DotProduct(Point p1, Point p2)
         {
             return p1.X * p2.X + p1.Y * p2.Y;
         }
 
         /// <summary>
-        /// 
+        /// Determines whether two segments intersect each other.
         /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="q1"></param>
-        /// <param name="q2"></param>
-        /// <returns></returns>
+        /// <param name="p1">Start <see cref="Point"/> of first segment.</param>
+        /// <param name="p2">End <see cref="Point"/> of first segment.</param>
+        /// <param name="q1">Start <see cref="Point"/> of second segment.</param>
+        /// <param name="q2">End <see cref="Point"/> of second segment.</param>
+        /// <returns>True if two segments intersect each other, false otherwise.</returns>
         public static bool DoSegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
         {
             double d1 = CrossProduct(q2.X - q1.X, q2.Y - q1.Y, p1.X - q1.X, p1.Y - q1.Y);
@@ -77,23 +69,23 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Gets distance between two points.
         /// </summary>
-        /// <param name="p"></param>
-        /// <param name="q"></param>
-        /// <returns></returns>
+        /// <param name="p">First <see cref="Point"/>.</param>
+        /// <param name="q">Second <see cref="Point"/>.</param>
+        /// <returns>Distance between two points.</returns>
         public static double GetDistance(Point p, Point q)
         {
             return Math.Sqrt(Math.Pow(p.X - q.X, 2) + Math.Pow(p.Y - q.Y, 2));
         }
 
         /// <summary>
-        /// 
+        /// Gets angle in radians between segment and OX axis.
         /// </summary>
-        /// <param name="pivot"></param>
-        /// <param name="source"></param>
-        /// <param name="dest"></param>
-        /// <returns></returns>
+        /// <param name="pivot">Pivot <see cref="Point"/>.</param>
+        /// <param name="source">Source <see cref="Point"/>.</param>
+        /// <param name="dest">Destination <see cref="Point"/>.</param>
+        /// <returns>Angle (in radians) between segment and axis.</returns>
         public static double GetAngle(Point pivot, Point source, Point dest)
         {
             Point s = new Point(source.X - pivot.X, source.Y - pivot.Y);
@@ -105,23 +97,24 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Gets angle in radians between segment and OX axis.
+        /// Source point of segment is (0,0).
         /// </summary>
-        /// <param name="pivot"></param>
-        /// <param name="dest"></param>
-        /// <returns></returns>
+        /// <param name="pivot">Pivot <see cref="Point"/>.</param>
+        /// <param name="dest">Destination <see cref="Point"/>.</param>
+        /// <returns>Angle (in radians) between segment and axis.</returns>
         public static double GetAngle(Point pivot, Point dest)
         {
             return GetAngle(pivot, new Point(pivot.X + 1, pivot.Y), dest);
         }
 
         /// <summary>
-        /// 
+        /// Rotates <see cref="Point"/>.
         /// </summary>
-        /// <param name="point"></param>
-        /// <param name="pivot"></param>
-        /// <param name="angle"></param>
-        /// <returns></returns>
+        /// <param name="point"><see cref="Point"/> to rotate.</param>
+        /// <param name="pivot">Pivot <see cref="Point"/> of rotation.</param>
+        /// <param name="angle">Angle of rotation.</param>
+        /// <returns>Rotated <see cref="Point"/>.</returns>
         public static Point Rotate(Point point, Point pivot, double angle)
         {
             double cosTheta = Math.Cos(angle);
@@ -134,34 +127,35 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Rotate <see cref="Polygon"/>.
         /// </summary>
-        /// <param name="polygon"></param>
-        /// <param name="pivot"></param>
-        /// <param name="angle"></param>
-        /// <returns></returns>
+        /// <param name="polygon"><see cref="Polygon"/> to rotate.</param>
+        /// <param name="pivot">Pivot <see cref="Point"/> of rotation.</param>
+        /// <param name="angle">Angle of rotation.</param>
+        /// <returns>Rotated <see cref="Polygon"/>.</returns>
         public static Polygon Rotate(Polygon polygon, Point pivot, double angle)
         {
             return new Polygon(polygon.Vertices.Select(vertex => Rotate(vertex, pivot, angle)));
         }
 
         /// <summary>
-        /// 
+        /// Rotate <see cref="Polygon"/>.
+        /// Pivot of rotation is point (0,0).
         /// </summary>
-        /// <param name="polygon"></param>
-        /// <param name="angle"></param>
-        /// <returns></returns>
+        /// <param name="polygon"><see cref="Polygon"/> to rotate.</param>
+        /// <param name="angle">Angle of rotation.</param>
+        /// <returns>Rotated <see cref="Polygon"/>.</returns>
         public static Polygon Rotate(Polygon polygon, double angle)
         {
             return Rotate(polygon, new Point(0, 0), angle);
         }
 
         /// <summary>
-        /// 
+        /// Translate <see cref="Polygon"/>.
         /// </summary>
-        /// <param name="polygon"></param>
-        /// <param name="position"></param>
-        /// <returns></returns>
+        /// <param name="polygon"><see cref="Polygon"/> to translate.</param>
+        /// <param name="position">Vector of translation.</param>
+        /// <returns>Translated <see cref="Polygon"/>.</returns>
         public static Polygon Move(Polygon polygon, Point position)
         {
             return new Polygon(polygon.Vertices.Select(vertex => new Point(
@@ -170,11 +164,11 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Resizes <see cref="Polygon"/>.
         /// </summary>
-        /// <param name="polygon"></param>
-        /// <param name="factor"></param>
-        /// <returns></returns>
+        /// <param name="polygon"><see cref="Polygon"/> to resize.</param>
+        /// <param name="factor">Fctor of resizing.</param>
+        /// <returns>Resized <see cref="Polygon"/>.</returns>
         public static Polygon Resize(Polygon polygon, double factor)
         {
             return new Polygon(polygon.Vertices.Select(vertex => new Point(
@@ -183,13 +177,13 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Transforms <see cref="Polygon"/>.
         /// </summary>
-        /// <param name="polygon"></param>
-        /// <param name="size"></param>
-        /// <param name="rotation"></param>
-        /// <param name="position"></param>
-        /// <returns></returns>
+        /// <param name="polygon"><see cref="Polygon"/> to transform.</param>
+        /// <param name="size">Factor of resizing.</param>
+        /// <param name="rotation">Angle of rotation.</param>
+        /// <param name="position">Vector of translation.</param>
+        /// <returns>Transformed <see cref="Polygon"/>.</returns>
         public static Polygon Transform(this Polygon polygon, double? size = null, double? rotation = null, Point? position = null)
         {
             if (size != null)
@@ -204,9 +198,9 @@ namespace SRL.Commons.Utilities
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="pivot"></param>
-        /// <param name="source"></param>
-        /// <param name="dest"></param>
+        /// <param name="pivot">Pivot <see cref="Point"/>.</param>
+        /// <param name="source">Source <see cref="Point"/>.</param>
+        /// <param name="dest">Destination <see cref="Point"/>.</param>
         /// <returns></returns>
         public static bool IsCounterClockwiseTurn(Point pivot, Point source, Point dest)
         {
@@ -214,11 +208,11 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Determines whether subject polygon intersects at least one of the polygons from the list.
         /// </summary>
-        /// <param name="subject"></param>
-        /// <param name="polygons"></param>
-        /// <returns></returns>
+        /// <param name="subject">Subject <see cref="Polygon"/>.</param>
+        /// <param name="polygons">List of <see cref="Polygon"/> objects.</param>
+        /// <returns>True if subject polygon intersects at least one of the polygons form the list, false otherwise.</returns>
         public static bool IsIntersected(Polygon subject, IEnumerable<Polygon> polygons)
         {
             foreach (Polygon polygon in polygons)
@@ -235,11 +229,11 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Determines whether subject point is enclosed by polygon.
         /// </summary>
-        /// <param name="subject"></param>
-        /// <param name="polygon"></param>
-        /// <returns></returns>
+        /// <param name="subject">Subject <see cref="Point"/>.</param>
+        /// <param name="polygon">Enclosure <see cref="Polygon"/>.</param>
+        /// <returns>True if subject point is enclosed by polygon, false otherwise.</returns>
         public static bool IsEnclosed(Point subject, Polygon polygon)
         {
             // If subject it's on polygon edge, it's inside of polygon.
@@ -306,7 +300,7 @@ namespace SRL.Commons.Utilities
         /// Clipper source: http://www.angusj.com/delphi/clipper.php
         /// </summary>
         /// <param name="polygons">List of <see cref="Polygon"/> objects.</param>
-        /// <returns>List of <see cref="Polygon"/> objects.</returns>
+        /// <returns>List of polygons.</returns>
         public static List<Polygon> Union(List<Polygon> polygons)
         {
             const long multiply = long.MaxValue / 8;

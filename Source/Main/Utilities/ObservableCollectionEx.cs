@@ -60,11 +60,18 @@ namespace SRL.Main.Utilities
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
+        /// <summary>
+        /// Removes last element from current collection.
+        /// </summary>
         public void RemoveLast()
         {
             RemoveAt(Count - 1);
         }
 
+        /// <summary>
+        /// Gets last element of current collection.
+        /// </summary>
+        /// <returns>Object of type <see cref="T"/>.</returns>
         public T GetLast()
         {
             return this[Count - 1];
