@@ -10,11 +10,18 @@ using SRL.Main.View;
 
 namespace SRL.Main.ViewModel.Services
 {
+    /// <summary>
+    /// Simple implementation of <see cref="IDialogService"/> interface.
+    /// </summary>
     internal class DialogService : IDialogService
     {
         private CultureInfo _culture;
         private Window _owner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DialogService"/> class.
+        /// </summary>
+        /// <param name="window">Dialog owner.</param>
         public DialogService(Window window)
         {
             _owner = window;
