@@ -3,8 +3,16 @@ using System.Runtime.InteropServices;
 
 namespace SRL.Main.Utilities
 {
+    /// <summary>
+    /// <see cref="BitmapExtensions"/> class contains extension methods to <see cref="Bitmap"/> object.
+    /// </summary>
     internal static class BitmapExtensions
     {
+        /// <summary>
+        /// Converts bitmap to array of bytes.
+        /// </summary>
+        /// <param name="bitmap"><see cref="Bitmap"/> object.</param>
+        /// <returns>Array of bytes.</returns>
         public static byte[] GetBytes(this Bitmap bitmap)
         {
             var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
@@ -23,7 +31,6 @@ namespace SRL.Main.Utilities
             bitmap.UnlockBits(data);
 
             return bytes;
-
         }
     }
 }
