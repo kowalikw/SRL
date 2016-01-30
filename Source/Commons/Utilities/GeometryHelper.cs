@@ -7,23 +7,54 @@ using SRL.Commons.Model;
 
 namespace SRL.Commons.Utilities
 {
+    /// <summary>
+    /// <see cref="GeometryHelper"/> class contains helper geometry methods.
+    /// </summary>
     public static class GeometryHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pX"></param>
+        /// <param name="pY"></param>
+        /// <param name="qX"></param>
+        /// <param name="qY"></param>
+        /// <returns></returns>
         private static double CrossProduct(double pX, double pY, double qX, double qY)
         {
             return pX * qY - qX * pY;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
         public static double CrossProduct(Point p1, Point p2)
         {
             return p1.X * p2.Y - p2.X * p1.Y;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
         public static double DotProduct(Point p1, Point p2)
         {
             return p1.X * p2.X + p1.Y * p2.Y;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="q1"></param>
+        /// <param name="q2"></param>
+        /// <returns></returns>
         public static bool DoSegmentsIntersect(Point p1, Point p2, Point q1, Point q2)
         {
             double d1 = CrossProduct(q2.X - q1.X, q2.Y - q1.Y, p1.X - q1.X, p1.Y - q1.Y);
@@ -45,11 +76,24 @@ namespace SRL.Commons.Utilities
                 || IsEnclosedByRect(q2, p1, p2);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
         public static double GetDistance(Point p, Point q)
         {
             return Math.Sqrt(Math.Pow(p.X - q.X, 2) + Math.Pow(p.Y - q.Y, 2));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pivot"></param>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
+        /// <returns></returns>
         public static double GetAngle(Point pivot, Point source, Point dest)
         {
             Point s = new Point(source.X - pivot.X, source.Y - pivot.Y);
@@ -60,11 +104,24 @@ namespace SRL.Commons.Utilities
                 DotProduct(s, d));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pivot"></param>
+        /// <param name="dest"></param>
+        /// <returns></returns>
         public static double GetAngle(Point pivot, Point dest)
         {
             return GetAngle(pivot, new Point(pivot.X + 1, pivot.Y), dest);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
         public static Point Rotate(Point point, Point pivot, double angle)
         {
             double cosTheta = Math.Cos(angle);
@@ -76,16 +133,35 @@ namespace SRL.Commons.Utilities
                     cosTheta * (point.Y - pivot.Y) + pivot.Y);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
         public static Polygon Rotate(Polygon polygon, Point pivot, double angle)
         {
             return new Polygon(polygon.Vertices.Select(vertex => Rotate(vertex, pivot, angle)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
         public static Polygon Rotate(Polygon polygon, double angle)
         {
             return Rotate(polygon, new Point(0, 0), angle);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public static Polygon Move(Polygon polygon, Point position)
         {
             return new Polygon(polygon.Vertices.Select(vertex => new Point(
@@ -93,6 +169,12 @@ namespace SRL.Commons.Utilities
                     vertex.Y + position.Y)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
         public static Polygon Resize(Polygon polygon, double factor)
         {
             return new Polygon(polygon.Vertices.Select(vertex => new Point(
@@ -100,6 +182,14 @@ namespace SRL.Commons.Utilities
                     vertex.Y * factor)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="size"></param>
+        /// <param name="rotation"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public static Polygon Transform(this Polygon polygon, double? size = null, double? rotation = null, Point? position = null)
         {
             if (size != null)
@@ -111,11 +201,24 @@ namespace SRL.Commons.Utilities
             return polygon;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pivot"></param>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
+        /// <returns></returns>
         public static bool IsCounterClockwiseTurn(Point pivot, Point source, Point dest)
         {
             return CrossProduct(source.X - pivot.X, source.Y - pivot.Y, dest.X - pivot.X, dest.Y - pivot.Y) > 0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="polygons"></param>
+        /// <returns></returns>
         public static bool IsIntersected(Polygon subject, IEnumerable<Polygon> polygons)
         {
             foreach (Polygon polygon in polygons)
@@ -131,6 +234,12 @@ namespace SRL.Commons.Utilities
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="polygon"></param>
+        /// <returns></returns>
         public static bool IsEnclosed(Point subject, Polygon polygon)
         {
             // If subject it's on polygon edge, it's inside of polygon.
@@ -143,6 +252,12 @@ namespace SRL.Commons.Utilities
             return !totalAngle.EpsilonEquals(0);
         }
 
+        /// <summary>
+        /// Determines whether subject polygon is enclosed by one fo the polygon form the list.
+        /// </summary>
+        /// <param name="subject">Subject <see cref="Polygon"/>.</param>
+        /// <param name="polygons">List of <see cref="Polygon"/> objects.</param>
+        /// <returns>True if subject polygon is enclosed by one of the polygon from list, false otherwise.</returns>
         public static bool IsEnclosed(Point subject, IEnumerable<Polygon> polygons)
         {
             foreach (var polygon in polygons)
@@ -153,6 +268,12 @@ namespace SRL.Commons.Utilities
             return false;
         }
 
+        /// <summary>
+        /// Determines whether subject polygon is enclosed by enclosure polygon.
+        /// </summary>
+        /// <param name="subject">Subject <see cref="Polygon"/>.</param>
+        /// <param name="enclosure">Enclosure <see cref="Polygon"/>.</param>
+        /// <returns>True if subject polygon is enclosed by enclosure polygon, false otherwise.</returns>
         public static bool IsEnclosed(Polygon subject, Polygon enclosure)
         {
             foreach (var vertex in subject.Vertices)
@@ -165,6 +286,13 @@ namespace SRL.Commons.Utilities
             return true;
         }
 
+        /// <summary>
+        /// Determines whether point is enclosed by rectangle.
+        /// </summary>
+        /// <param name="point"><see cref="Point"/> object.</param>
+        /// <param name="cornerA"><see cref="Point"/> object, rectangle corner.</param>
+        /// <param name="cornerB"><see cref="Point"/> object, rectangle corner.</param>
+        /// <returns>True if point is enclosed by rectangle, false otherwise.</returns>
         public static bool IsEnclosedByRect(Point point, Point cornerA, Point cornerB)
         {
             return Math.Min(cornerA.X, cornerB.X) <= point.X
@@ -173,6 +301,12 @@ namespace SRL.Commons.Utilities
                 && point.Y <= Math.Max(cornerA.Y, cornerB.Y);
         }
 
+        /// <summary>
+        /// Merges polygons from list into new list of polygons.
+        /// Clipper source: http://www.angusj.com/delphi/clipper.php
+        /// </summary>
+        /// <param name="polygons">List of <see cref="Polygon"/> objects.</param>
+        /// <returns>List of <see cref="Polygon"/> objects.</returns>
         public static List<Polygon> Union(List<Polygon> polygons)
         {
             const long multiply = long.MaxValue / 8;
@@ -199,6 +333,11 @@ namespace SRL.Commons.Utilities
             return result;
         }
 
+        /// <summary>
+        /// Determines whether point is out of bounds.
+        /// </summary>
+        /// <param name="p"><see cref="Point"/> object.</param>
+        /// <returns>True if point is out of bounds, false otherwise.</returns>
         public static bool IsOutOfBounds(Point p)
         {
             return p.X > 1 || p.X < -1 || p.Y > 1 || p.Y < -1;

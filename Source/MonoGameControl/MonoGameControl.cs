@@ -6,102 +6,54 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace SRL.MonoGameControl
 {
     /// <summary>
-    /// Host a MonoGame control.
+    /// <see cref="MonoGameControl"/> class. It allows to host MonoGame in WPF.
     /// </summary>
     public abstract class MonoGameControl : Image
     {
-        #region Fields
-
-        // The Direct3D 11 device (shared by all D3D11Host elements):
         private GraphicsDevice _graphicsDevice;
         private int _referenceCount;
         private readonly object _graphicsDeviceLock = new object();
 
-        // Image source:
         private RenderTarget2D _renderTarget;
         private D3D11 _d3D11Image;
         private bool _resetBackBuffer;
 
-        // Render timing:
         private readonly Stopwatch _timer;
         private TimeSpan _lastRenderingTime;
-
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets a value indicating whether the controls runs in the context of a designer (e.g.
-        /// Visual Studio Designer or Expression Blend).
-        /// </summary>
-        /// <value>
-        /// <see langword="true" /> if controls run in design mode; otherwise, 
-        /// <see langword="false" />.
-        /// </value>
-        public bool IsInDesignMode
-        {
-            get
-            {
-                if (!_isInDesignMode.HasValue)
-                    _isInDesignMode = (bool)DependencyPropertyDescriptor.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement)).Metadata.DefaultValue;
-
-                return _isInDesignMode.Value;
-            }
-        }
-        private bool? _isInDesignMode;
-
 
         /// <summary>
         /// Gets the graphics device.
         /// </summary>
-        /// <value>The graphics device.</value>
         public GraphicsDevice GraphicsDevice
         {
             get { return _graphicsDevice; }
         }
-        #endregion
 
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MonoGameControl"/> class.
-        /// </summary>
         public MonoGameControl()
         {
             _timer = new Stopwatch();
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
-        #endregion
 
-
-        #region Methods
         private void OnLoaded(object sender, RoutedEventArgs eventArgs)
         {
-            if (IsInDesignMode)
-                return;
-
             InitializeGraphicsDevice();
             InitializeImageSource();
             Initialize();
             StartRendering();
         }
 
-
         private void OnUnloaded(object sender, RoutedEventArgs eventArgs)
         {
-            if (IsInDesignMode)
-                return;
-
             StopRendering();
             Unitialize();
             UnitializeImageSource();
             UninitializeGraphicsDevice();
         }
-
 
         private void InitializeGraphicsDevice()
         {
@@ -110,17 +62,14 @@ namespace SRL.MonoGameControl
                 _referenceCount++;
                 if (_referenceCount == 1)
                 {
-                    // Create Direct3D 11 device.
                     var presentationParameters = new PresentationParameters
                     {
-                        // Do not associate graphics device with window.
                         DeviceWindowHandle = IntPtr.Zero,
                     };
                     _graphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, presentationParameters);
                 }
             }
         }
-
 
         private void UninitializeGraphicsDevice()
         {
@@ -135,7 +84,6 @@ namespace SRL.MonoGameControl
             }
         }
 
-
         private void InitializeImageSource()
         {
             _d3D11Image = new D3D11();
@@ -143,7 +91,6 @@ namespace SRL.MonoGameControl
             CreateBackBuffer();
             Source = _d3D11Image;
         }
-
 
         private void UnitializeImageSource()
         {
@@ -162,7 +109,6 @@ namespace SRL.MonoGameControl
             }
         }
 
-
         private void CreateBackBuffer()
         {
             _d3D11Image.SetBackBuffer(null);
@@ -178,7 +124,6 @@ namespace SRL.MonoGameControl
             _d3D11Image.SetBackBuffer(_renderTarget);
         }
 
-
         private void StartRendering()
         {
             if (_timer.IsRunning)
@@ -187,7 +132,6 @@ namespace SRL.MonoGameControl
             CompositionTarget.Rendering += OnRendering;
             _timer.Start();
         }
-
 
         private void StopRendering()
         {
@@ -198,18 +142,14 @@ namespace SRL.MonoGameControl
             _timer.Stop();
         }
 
-
         private void OnRendering(object sender, EventArgs eventArgs)
         {
             if (!_timer.IsRunning)
                 return;
 
-            // Recreate back buffer if necessary.
             if (_resetBackBuffer)
                 CreateBackBuffer();
 
-            // CompositionTarget.Rendering event may be raised multiple times per frame
-            // (e.g. during window resizing).
             var renderingEventArgs = (RenderingEventArgs)eventArgs;
             if (_lastRenderingTime != renderingEventArgs.RenderingTime || _resetBackBuffer)
             {
@@ -220,24 +160,10 @@ namespace SRL.MonoGameControl
                 GraphicsDevice.Flush();
             }
 
-            _d3D11Image.Invalidate(); // Always invalidate D3DImage to reduce flickering
-            // during window resizing.
+            _d3D11Image.Invalidate(); 
 
             _resetBackBuffer = false;
         }
-
-
-        /// <summary>
-        /// Raises the <see cref="FrameworkElement.SizeChanged" /> event, using the specified 
-        /// information as part of the eventual event data.
-        /// </summary>
-        /// <param name="sizeInfo">Details of the old and new size involved in the change.</param>
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            _resetBackBuffer = true;
-            base.OnRenderSizeChanged(sizeInfo);
-        }
-
 
         private void OnIsFrontBufferAvailableChanged(object sender, DependencyPropertyChangedEventArgs eventArgs)
         {
@@ -252,14 +178,35 @@ namespace SRL.MonoGameControl
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="FrameworkElement.SizeChanged" /> event, using the specified 
+        /// information as part of the eventual event data.
+        /// </summary>
+        /// <param name="sizeInfo">Details of the old and new size involved in the change.</param>
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            _resetBackBuffer = true;
+            base.OnRenderSizeChanged(sizeInfo);
+        }
+
+        #region Abstract methods to override.
+
+        /// <summary>
+        /// Invoked on <see cref="MonoGameControl"/> initialization.
+        /// </summary>
         protected abstract void Initialize();
 
+        /// <summary>
+        /// Invoked on <see cref="MonoGameControl"/> uninitialization.
+        /// </summary>
         protected abstract void Unitialize();
 
+        /// <summary>
+        /// Renders frames inside <see cref="MonoGameControl"/>.
+        /// </summary>
+        /// <param name="time">Elapsed time.</param>
         protected abstract void Render(TimeSpan time);
 
         #endregion
-
-        
     }
 }
