@@ -7,7 +7,6 @@ namespace SRL.Main.Utilities.Converters
     /// <summary>
     /// Converter converts type of value from <see cref="int"/> to <see cref="string"/> if value is not null.
     /// Otherwise it returns empty string.
-    /// <see cref="IntToStringConverter"/> implements <see cref="IValueConverter"/>.
     /// </summary>
     internal class IntToStringConverter : IValueConverter
     {

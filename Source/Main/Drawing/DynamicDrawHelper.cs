@@ -11,6 +11,9 @@ using Point = System.Windows.Point;
 
 namespace SRL.Main.Drawing
 {
+    /// <summary>
+    /// Helper class used to draw shapes on a <see cref="SpriteBatch"/>.
+    /// </summary>
     internal static class DynamicDrawHelper
     {
         private const float ArrowTipLength = 15;
@@ -183,6 +186,15 @@ namespace SRL.Main.Drawing
 
         #region Line
 
+        /// <summary>
+        /// Draws a line using Bresenham or Wu algorithm.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch to draw on.</param>
+        /// <param name="endpointA">Line endpoint.</param>
+        /// <param name="endpointB">Line endpoint.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawLine(this SpriteBatch spriteBatch, Point endpointA, Point endpointB, Size renderSize, Color color, bool antialiasing)
         {
             Point a = endpointA.Denormalize(renderSize);
@@ -195,9 +207,19 @@ namespace SRL.Main.Drawing
         }
 
         #endregion
-        
+
         #region Arrow
 
+        /// <summary>
+        /// Draws an arrow using Bresenham or Wu algorithm.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch to draw on.</param>
+        /// <param name="origin">Arrow origin point.</param>
+        /// <param name="length">Main line length.</param>
+        /// <param name="angle">Arrow slope.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, double length, double angle, Size renderSize, Color color, bool antialiasing)
         {
             double cosA = Math.Cos(angle);
@@ -231,6 +253,15 @@ namespace SRL.Main.Drawing
             }
         }
 
+        /// <summary>
+        /// Draws an arrow using Bresenham or Wu algorithm.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch to draw on.</param>
+        /// <param name="origin">Arrow origin point.</param>
+        /// <param name="tip">Arrowhead position.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawArrow(this SpriteBatch spriteBatch, Point origin, Point tip, Size renderSize, Color color, bool antialiasing)
         {
             double angle = GeometryHelper.GetAngle(origin, tip);
@@ -265,6 +296,14 @@ namespace SRL.Main.Drawing
 
         #region Path
 
+        /// <summary>
+        /// Draws a path passing through vertices.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch to draw on.</param>
+        /// <param name="path">Path vertices.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawPath(this SpriteBatch spriteBatch, IList<Point> path, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < path.Count; i++)
@@ -275,6 +314,14 @@ namespace SRL.Main.Drawing
 
         #region Polygon
 
+        /// <summary>
+        /// Draws a polygon.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch to draw on.</param>
+        /// <param name="polygon">Polygon to draw.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawPolygon(this SpriteBatch spriteBatch, Polygon polygon, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
@@ -286,6 +333,14 @@ namespace SRL.Main.Drawing
 
         #region Vertex
 
+        /// <summary>
+        /// Draws a dot with diameter of 7 pixels.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch to draw on.</param>
+        /// <param name="vertex">Vertex position.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawVertex(this SpriteBatch spriteBatch, Point vertex, Size renderSize, Color color, bool antialiasing)
         {
             // Draw 7x7 dot

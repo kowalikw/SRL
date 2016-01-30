@@ -5,9 +5,7 @@ using System.Windows.Data;
 namespace SRL.Main.Utilities.Converters
 {
     /// <summary>
-    /// Converter <see cref="BoolNegationConverter"/> converts value to its negation
-    /// if value type is <see cref="bool"/>. Otherwise converter returns value.
-    /// <see cref="BoolNegationConverter"/> implements <see cref="IValueConverter"/>.
+    /// Converter <see cref="BoolNegationConverter"/> converts value to its negation if value type is <see cref="bool"/>. Otherwise converter returns value.
     /// </summary>
     internal class BoolNegationConverter : IValueConverter
     {

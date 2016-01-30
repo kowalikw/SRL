@@ -9,6 +9,9 @@ using Point = System.Windows.Point;
 
 namespace SRL.Main.Drawing
 {
+    /// <summary>
+    /// Helper class used to draw shapes on a <see cref="LockBitmap"/>.
+    /// </summary>
     internal static class StaticDrawHelper
     {
         private static void SetBigPixel(this LockBitmap bitmap, int x, int y, Color color)
@@ -130,6 +133,15 @@ namespace SRL.Main.Drawing
 
         #region Line
 
+        /// <summary>
+        /// Draws a line using Bresenham or Wu algorithm.
+        /// </summary>
+        /// <param name="lockBitmap">Bitmap to draw on.</param>
+        /// <param name="endpointA">Line endpoint.</param>
+        /// <param name="endpointB">Line endpoint.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawLine(this LockBitmap lockBitmap, Point endpointA, Point endpointB, Size renderSize, Color color, bool antialiasing)
         {
             Point a = endpointA.Denormalize(renderSize);
@@ -145,6 +157,14 @@ namespace SRL.Main.Drawing
 
         #region Path
 
+        /// <summary>
+        /// Draws a path passing through vertices.
+        /// </summary>
+        /// <param name="lockBitmap">Bitmap to draw on.</param>
+        /// <param name="path">Path vertices.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawPath(this LockBitmap lockBitmap, IList<Point> path, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < path.Count; i++)
@@ -155,6 +175,14 @@ namespace SRL.Main.Drawing
 
         #region Polygon
 
+        /// <summary>
+        /// Draws a polygon.
+        /// </summary>
+        /// <param name="lockBitmap">Bitmap to draw on.</param>
+        /// <param name="polygon">Polygon to draw.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawPolygon(this LockBitmap lockBitmap, Polygon polygon, Size renderSize, Color color, bool antialiasing)
         {
             for (int i = 1; i < polygon.Vertices.Count; i++)
@@ -166,6 +194,14 @@ namespace SRL.Main.Drawing
 
         #region Map
 
+        /// <summary>
+        /// Draws obstacles of a <see cref="Map"/> object.
+        /// </summary>
+        /// <param name="lockBitmap">Bitmap to draw on.</param>
+        /// <param name="map">Map to draw.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawMap(this LockBitmap lockBitmap, Map map, Size renderSize, Color color, bool antialiasing)
         {
             foreach (var obstacle in map.Obstacles)
@@ -176,6 +212,14 @@ namespace SRL.Main.Drawing
 
         #region Vertex
 
+        /// <summary>
+        /// Draws a dot with diameter of 7 pixels.
+        /// </summary>
+        /// <param name="lockBitmap">Bitmap to draw on.</param>
+        /// <param name="vertex">Vertex position.</param>
+        /// <param name="renderSize">Size of the render area.</param>
+        /// <param name="color">Draw color.</param>
+        /// <param name="antialiasing">Pixel smoothing.</param>
         public static void DrawVertex(this LockBitmap lockBitmap, Point vertex, Size renderSize, Color color, bool antialiasing)
         {
             // Draw 7x7 dot

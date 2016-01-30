@@ -8,10 +8,24 @@ namespace SRL.Main.Drawing
 {
     public class LockBitmap
     {
+        /// <summary>
+        /// Number of bytes per pixel.
+        /// </summary>
         public const int Depth = 32;
 
+        /// <summary>
+        /// Pixel data.
+        /// </summary>
         public byte[] Pixels { get; set; }
+
+        /// <summary>
+        /// Pixelwise width.
+        /// </summary>
         public int Width { get; private set; }
+
+        /// <summary>
+        /// Pixelwise height.
+        /// </summary>
         public int Height { get; private set; }
 
 
@@ -19,6 +33,10 @@ namespace SRL.Main.Drawing
         private IntPtr _iptr = IntPtr.Zero;
         private BitmapData _bitmapData;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Bitmap"/> class.
+        /// </summary>
+        /// <param name="source">32bpp ARGB bitmap.</param>
         public LockBitmap(Bitmap source)
         {
             if (source.PixelFormat != PixelFormat.Format32bppArgb)
@@ -28,7 +46,7 @@ namespace SRL.Main.Drawing
         }
 
         /// <summary>
-        /// Lock bitmap data
+        /// Lock bitmap data.
         /// </summary>
         public void LockBits()
         {
@@ -72,6 +90,12 @@ namespace SRL.Main.Drawing
             return (byte)((src * byte.MaxValue + dest * (byte.MaxValue - srcAlpha)) / byte.MaxValue);
         }
 
+        /// <summary>
+        /// Gets <see cref="Color"/> of a pixel specified by its x/y coordinates.
+        /// </summary>
+        /// <param name="x">Column position.</param>
+        /// <param name="y">Row position.</param>
+        /// <returns>Color of the pixel.</returns>
         public Color GetPixel(int x, int y)
         {
             // Get color components count.
@@ -91,6 +115,12 @@ namespace SRL.Main.Drawing
             return new Color(b, g, r, a);
         }
 
+        /// <summary>
+        /// Sets pixel in a position specified by x/y coordinates.
+        /// </summary>
+        /// <param name="x">Column position.</param>
+        /// <param name="y">Row position.</param>
+        /// <param name="color">Color of the pixel.</param>
         public void SetPixel(int x, int y, Color color)
         {
             if (x < 0 || x >= Width)

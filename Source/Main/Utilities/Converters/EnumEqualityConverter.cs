@@ -7,7 +7,6 @@ namespace SRL.Main.Utilities.Converters
     /// <summary>
     /// Converter converts two enum values to <see cref="bool"/> value.
     /// It returns true if enums are equal, false otherwise.
-    /// <see cref="EnumEqualityConverter"/> implements <see cref="IValueConverter"/>.
     /// </summary>
     internal class EnumEqualityConverter : IValueConverter
     {

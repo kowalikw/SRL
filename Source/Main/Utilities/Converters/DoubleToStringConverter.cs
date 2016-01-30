@@ -7,7 +7,6 @@ namespace SRL.Main.Utilities.Converters
     /// <summary>
     /// Converter converts <see cref="double"/> value to <see cref="string"/> if value is not null.
     /// Otherwise it returns empty string.
-    /// <see cref="DoubleToStringConverter"/> implements <see cref="IValueConverter"/>.
     /// </summary>
     internal class DoubleToStringConverter : IValueConverter
     {

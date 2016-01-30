@@ -11,19 +11,36 @@ using Size = System.Windows.Size;
 
 namespace SRL.Main.Tracing
 {
+    /// <summary>
+    /// Trace library helper/wrapper class.
+    /// </summary>
     public class BitmapTracer
     {
         private readonly Bitmap _bitmap;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitmapTracer"/> class.
+        /// </summary>
+        /// <param name="path">Bitmap file path.</param>
         public BitmapTracer(string path) :
             this(new Bitmap(path))
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitmapTracer"/> class.
+        /// </summary>
+        /// <param name="bitmap">Bitmap to trace.</param>
         public BitmapTracer(Bitmap bitmap)
         {
             _bitmap = bitmap;
         }
 
+        /// <summary>
+        /// Converts loaded <see cref="Bitmap"/> contents to vectors.
+        /// </summary>
+        /// <param name="areaThreshold">Minimum polygon area (see the documentation).</param>
+        /// <param name="colorThreshold">Color threshold (see the documentation).</param>
+        /// <returns>List of vectorized objects.</returns>
         public List<Polygon> Trace(double areaThreshold, double colorThreshold)
         {
             int pixelThreshold = (int)(_bitmap.Height * _bitmap.Width * areaThreshold);

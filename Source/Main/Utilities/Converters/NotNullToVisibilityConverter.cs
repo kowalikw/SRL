@@ -8,7 +8,6 @@ namespace SRL.Main.Utilities.Converters
     /// <summary>
     /// Converter converts value to <see cref="Visibility.Visible"/> if value is not null.
     /// Otherwise it returns <see cref="Visibility.Hidden"/>.
-    /// <see cref="NotNullToVisibilityConverter"/> implements <see cref="IValueConverter"/>.
     /// </summary>
     internal class NotNullToVisibilityConverter : IValueConverter
     {
