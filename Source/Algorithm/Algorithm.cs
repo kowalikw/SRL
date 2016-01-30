@@ -13,6 +13,9 @@ using ASD.Graph;
 
 namespace SRL.Algorithm
 {
+    /// <summary>
+    /// Basic pathfinding algorithm implementation based on calculating Minkowski's Sum of the vehicle and triangulated obstacles.
+    /// </summary>
     public class Algorithm : IAlgorithm
     {
         private List<Option> _currentOptions;
@@ -165,35 +168,6 @@ namespace SRL.Algorithm
                         if (po.CancellationToken.IsCancellationRequested)
                             return;
 
-                            // Chcecking if starting and ending points for certain angle are not in that Minkowski's sum obstacles
-                            /*if (indexPointAngleList[angle][i].Obstacle == -1)
-                        {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[angle])
-                            {
-                                if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
-                            }
-                            if (cancel)
-                                continue;
-                        }
-                        if (indexPointAngleList[angle][j].Obstacle == -1)
-                        {
-                            bool cancel = false;
-                            foreach (Polygon obstacle in currentMap[angle])
-                            {
-                                if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][j].Point, obstacle))
-                                {
-                                    cancel = true;
-                                    break;
-                                }
-                            }
-                            if (cancel)
-                                continue;
-                        }*/
                         if (i == j) continue; // We are not accepting edges in one point when not turning
 
                             if (CanTwoPointsConnect(indexPointAngleList[angle][i].Point,
@@ -266,45 +240,6 @@ namespace SRL.Algorithm
                 }
             });
 
-            /*for (int angle = 0; angle < angleDensity; angle++)
-            {
-                for (int i = 0; i < indexPointAngleList[angle].Count; i++)
-                {
-                    for (int j = 0; j < indexPointAngleList[(angle + 1) % angleDensity].Count; j++)
-                    {
-                        token.ThrowIfCancellationRequested();
-                        // Again, checking if starting and ending point are not in any Minkowski's sum polygons
-                        
-                        bool cancel = false;
-                        foreach (Polygon obstacle in currentMap[angle])
-                        {
-                            if (GeometryHelper.IsEnclosed(indexPointAngleList[angle][i].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[angle][i].Point))
-                            {
-                                cancel = true;
-                                break;
-                            }
-                        }
-                        if (cancel)
-                            continue;
-                        foreach (Polygon obstacle in currentMap[(angle + 1) % angleDensity])
-                        {
-                            if (GeometryHelper.IsEnclosed(indexPointAngleList[(angle + 1) % angleDensity][j].Point, obstacle) && !obstacle.Vertices.Contains(indexPointAngleList[(angle + 1) % angleDensity][j].Point))
-                            {
-                                cancel = true;
-                                break;
-                            }
-                        }
-                        if (cancel)
-                            continue;
-                        if (GeometryHelper.GetDistance(indexPointAngleList[angle][i].Point, indexPointAngleList[(angle + 1) % angleDensity][j].Point) <= maxDiff)
-                        {
-                            graph.AddEdge(indexPointAngleList[angle][i].Index, indexPointAngleList[(angle + 1) % angleDensity][j].Index, turnEdgeWeight);
-                            graph.AddEdge(indexPointAngleList[(angle + 1) % angleDensity][j].Index, indexPointAngleList[angle][i].Index, turnEdgeWeight);
-                        }
-                    }
-                }
-            }
-            */
             // Adding edges to accepting state
             for (int i = 0; i < indexPointAngleList.Length; i++)
             {

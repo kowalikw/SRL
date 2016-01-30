@@ -7,9 +7,12 @@ using SRL.Commons.Model;
 
 namespace SRL.Algorithm
 {
+    /// <summary>
+    /// Helper class that slices polygons into triangles.
+    /// </summary>
     public class Triangulation2D
     {
-        public static bool PointInPolygon(float x, float y, Point[] polygon)
+        private static bool PointInPolygon(float x, float y, Point[] polygon)
         {
             // Get the angle between the point and the
             // first and last vertices.
@@ -35,7 +38,7 @@ namespace SRL.Algorithm
             return Math.Abs(totalAngle) > 0.000001;
         }
 
-        public static bool PolygonIsOrientedClockwise(ref Polygon polygon)
+        private static bool PolygonIsOrientedClockwise(ref Polygon polygon)
         {
             return SignedPolygonArea(ref polygon) < 0;
         }
@@ -57,7 +60,7 @@ namespace SRL.Algorithm
         // between the polygon and the axis is subtracted,
         // leaving the polygon's area. This method gives odd
         // results for non-simple polygons.
-        public static float PolygonArea(ref Polygon polygon)
+        private static float PolygonArea(ref Polygon polygon)
         {
             // Return the absolute value of the signed area.
             // The signed area is negative if the polygon is
@@ -97,7 +100,7 @@ namespace SRL.Algorithm
             return area;
         }
 
-        public static float CrossProductLength(float ax, float ay,
+        private static float CrossProductLength(float ax, float ay,
             float bx, float @by, float cx, float cy)
         {
             // Get the vectors' coordinates.
@@ -125,7 +128,7 @@ namespace SRL.Algorithm
             return bAx * bCx + bAy * bCy;
         }
 
-        public static float GetAngle(float ax, float ay, float bx, float @by, float cx, float cy)
+        private static float GetAngle(float ax, float ay, float bx, float @by, float cx, float cy)
         {
             // Get the dot product.
             float dotProduct = DotProduct(ax, ay, bx, @by, cx, cy);
@@ -214,11 +217,15 @@ namespace SRL.Algorithm
             polygon = new Polygon(pts.ToList());
         }
 
-        // Triangulate the polygon.
-        //
-        // For a nice, detailed explanation of this method,
-        // see Ian Garton's Web page:
-        // http://www-cgrl.cs.mcgill.ca/~godfried/teaching/cg-projects/97/Ian/cutting_ears.html
+        /// <summary>
+        /// Triangulates the polygon.
+        /// </summary>
+        /// <param name="polygon">Polygon to triangulate.</param>
+        /// <returns>Triangle parts of the polygon.</returns>
+        /// <remarks>
+        /// For a nice, detailed explanation of this method, see Ian Garton's Web page:
+        /// http://www-cgrl.cs.mcgill.ca/~godfried/teaching/cg-projects/97/Ian/cutting_ears.html
+        /// </remarks>
         public static List<Point[]> Triangulate(ref Polygon polygon)
         {
             // Copy the points into a scratch array.
@@ -248,110 +255,5 @@ namespace SRL.Algorithm
 
             return triangles;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // From Wikipedia:
-        // One way to triangulate a simple polygon is by using the assertion that any simple polygon
-        // without holes has at least two so called 'ears'. An ear is a triangle with two sides on the edge
-        // of the polygon and the other one completely inside it. The algorithm then consists of finding
-        // such an ear, removing it from the polygon (which results in a new polygon that still meets
-        // the conditions) and repeating until there is only one triangle left.
-
-        // the algorithm here aims for simplicity over performance. there are other, more performant
-        // algorithms that are much more complex.
-
-        // convert a triangle to a list of triangles. each triangle is represented by a PointF array of length 3.
-        /*public static List<Point[]> Triangulate(Polygon poly)
-        {
-            List<Point> fullVertices = new List<Point>(poly.Vertices);
-            fullVertices.Add(poly.Vertices[poly.VertexCount - 1]);
-            List<Point[]> triangles = new List<Point[]>();  // accumulate the triangles here
-            // keep clipping ears off of poly until only one triangle remains
-            while (poly.Vertices.Count > 3)  // if only 3 points are left, we have the final triangle
-            {
-                int midvertex = FindEar(poly);  // find the middle vertex of the next "ear"
-                triangles.Add(new Point[] { fullVertices[midvertex - 1], fullVertices[midvertex], fullVertices[midvertex + 1] });
-                // create a new polygon that clips off the ear; i.e., all vertices but midvertex
-                List<Point> newPts = new List<Point>(poly.Vertices);
-                newPts.RemoveAt(midvertex);  // clip off the ear
-                poly = new Polygon(newPts);  // poly now has one less point
-            }
-            // only a single triangle remains, so add it to the triangle list
-            triangles.Add(poly.Vertices.ToArray());
-            return triangles;
-        }
-        // find an ear (always a triangle) of the polygon and return the index of the middle (second) vertex in the ear
-        public static int FindEar(Polygon poly)
-        {
-            List<Point> fullVertices = new List<Point>(poly.Vertices);
-            fullVertices.Add(poly.Vertices[0]);
-            Polygon newPoly = new Polygon(fullVertices);
-            for (int i = 0; i < newPoly.Vertices.Count - 2; i++)
-            {
-                if (GeometryHelper.VertexType(newPoly, i + 1) == PolygonType.Convex)
-                {
-                    // get the three points of the triangle we are about to test
-                    Point a = newPoly.Vertices[i];
-                    Point b = newPoly.Vertices[i + 1];
-                    Point c = newPoly.Vertices[i + 2];
-                    bool foundAPointInTheTriangle = false;  // see if any of the other points in the polygon are in this triangle
-                    for (int j = 0; j < poly.Vertices.Count; j++)  // don't check the last point, which is a duplicate of the first
-                    {
-                        if (j != i && j != i + 1 && j != i + 2)
-                            if(PointInTriangle(newPoly.Vertices[j], a, b, c))
-                                foundAPointInTheTriangle = true;
-                    }
-                    if (!foundAPointInTheTriangle)  // the middle point of this triangle is convex and none of the other points in the polygon are in this triangle, so it is an ear
-                        return i + 1;  // EXITING HERE!
-                }
-            }
-            //return 0;
-            throw new ApplicationException("Improperly formed polygon");
-        }
-        
-        // return true if point p is inside the triangle a,b,c
-        public static bool PointInTriangle(Point p, Point a, Point b, Point c)
-        {
-            // three tests are required.
-            // if p and c are both on the same side of the line a,b
-            // and p and b are both on the same side of the line a,c
-            // and p and a are both on the same side of the line b,c
-            // then p is inside the triangle, o.w., not
-            return PointsOnSameSide(p, a, b, c) && PointsOnSameSide(p, b, a, c) && PointsOnSameSide(p, c, a, b);
-        }
-        // if the two points p1 and p2 are both on the same side of the line a,b, return true
-        private static bool PointsOnSameSide(Point p1, Point p2, Point a, Point b)
-        {
-            // these are probably the most interesting three lines of code in the algorithm (probably because I don't fully understand them)
-            // the concept is nicely described at http://www.blackpawn.com/texts/pointinpoly/default.html
-            float cp1 = CrossProduct(VSub(b, a), VSub(p1, a));
-            float cp2 = CrossProduct(VSub(b, a), VSub(p2, a));
-            return (cp1 * cp2) >= 0;  // they have the same sign if on the same side of the line
-        }
-        // subtract the vector (point) b from the vector (point) a
-        private static Point VSub(Point a, Point b)
-        {
-            return new Point(a.X - b.X, a.Y - b.Y);
-        }
-        // find the cross product of two x,y vectors, which is always a single value, z, representing the three dimensional vector (0,0,z)
-        private static float CrossProduct(Point p1, Point p2)
-        {
-            return (float)((p1.X * p2.Y) - (p1.Y * p2.X));
-        }*/
     }
 }
