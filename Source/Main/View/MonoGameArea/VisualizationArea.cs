@@ -14,15 +14,33 @@ using Mode = SRL.Main.ViewModel.SimulationViewModel.Mode;
 
 namespace SRL.Main.View.MonoGameArea
 {
+    /// <summary>
+    /// View class that contains UI logic for the MonoGame control that visualizes simulation.
+    /// </summary>
     internal class VisualizationArea : AreaBase
     {
+        /// <summary>
+        /// Path starting point color.
+        /// </summary>
         protected static readonly Color StartPointColor = new Color(200, 0, 200);
+        /// <summary>
+        /// Path ending point color.
+        /// </summary>
         protected static readonly Color EndPointColor = StartPointColor;
+        /// <summary>
+        /// Path color.
+        /// </summary>
         protected static readonly Color PathColor = new Color(174, 221, 247);
+        /// <summary>
+        /// Vehicle shape color.
+        /// </summary>
         protected static readonly Color VehicleColor = ActiveColor;
 
         private readonly SimulationViewModel _context = ServiceLocator.Current.GetInstance<SimulationViewModel>();
 
+        /// <summary>
+        /// Gets the value that indicates whether calculated path should be rendered.
+        /// </summary>
         protected bool ShowPath => Settings.Default.ShowPath;
 
 

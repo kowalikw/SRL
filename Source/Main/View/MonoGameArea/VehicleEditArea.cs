@@ -14,6 +14,9 @@ using Point = System.Windows.Point;
 
 namespace SRL.Main.View.MonoGameArea
 {
+    /// <summary>
+    /// View class that contains UI logic for the MonoGame control that displays vehicle edit area.
+    /// </summary>
     internal class VehicleEditArea : AreaBase
     {
         private const double ArrowLength = 0.2;

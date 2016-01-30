@@ -14,15 +14,36 @@ using Point = System.Windows.Point;
 
 namespace SRL.Main.View.MonoGameArea
 {
+    /// <summary>
+    /// Common class for all MonoGame controls embedded in the application.
+    /// </summary>
     public abstract class AreaBase : MonoGameControl.MonoGameControl
     {
+        /// <summary>
+        /// Maximum distance to an object that triggers its special behavior if an action is performed close enough.
+        /// </summary>
         protected const double VertexPullRadius = 8;
 
+        /// <summary>
+        /// Color of idle or "normal" objects (whatever that means in a given context).
+        /// </summary>
         protected static readonly Color RegularColor = new Color(0, 0, 0);
+        /// <summary>
+        /// Color of objects that are currently manipulated in some way.
+        /// </summary>
         protected static readonly Color ActiveColor = new Color(0, 0, 200);
+        /// <summary>
+        /// Color of invalid objects.
+        /// </summary>
         protected static readonly Color InvalidColor = new Color(255, 0, 0);
+        /// <summary>
+        /// Color of valid objects.
+        /// </summary>
         protected static readonly Color ValidColor = new Color(0, 220, 0);
 
+        /// <summary>
+        /// Gets the value that indicates whether objects are rendered with anti-aliasing.
+        /// </summary>
         protected bool AntialiasingEnabled => Settings.Default.AntialiasingEnabled;
 
         private MouseButtonEventHandler _mouseUpHandler;
@@ -33,6 +54,9 @@ namespace SRL.Main.View.MonoGameArea
 
         private SpriteBatch _spriteBatch;
         private Bitmap _bitmapBuffer;
+        /// <summary>
+        /// Texture that holds all non-moving and long-lasting elements and objects.
+        /// </summary>
         protected Texture2D StaticObjectsTexture;
 
 
@@ -86,7 +110,7 @@ namespace SRL.Main.View.MonoGameArea
         }
 
         /// <summary>
-        /// Sets StaticObjectsTexture pixel data based on StaticDrawables list.
+        /// Sets StaticObjectsTexture pixel data.
         /// </summary>
         protected void RedrawStaticObjectsTexture()
         {
@@ -99,8 +123,7 @@ namespace SRL.Main.View.MonoGameArea
         }
 
         /// <summary>
-        /// Says whether current cursor position is close enough to an arbitrary <paramref name="point"/> 
-        /// to trigger some secondary action.
+        /// Says whether current cursor position is close enough to an arbitrary <paramref name="point"/>  to trigger some special action.
         /// </summary>
         /// <param name="point">Non-normalized point.</param>
         /// <returns>True if cursor is close; false otherwise.</returns>
@@ -109,11 +132,31 @@ namespace SRL.Main.View.MonoGameArea
             return GeometryHelper.GetDistance(MousePosition, point) <= VertexPullRadius;
         }
 
+        /// <summary>
+        /// Renders objects that often change or move and should be redrawn from scratch every time.
+        /// </summary>
+        /// <param name="spriteBatch"><see cref="SpriteBatch"/> used in object rendering.</param>
+        /// <param name="time">Time elapsed from the previous invocation.</param>
         protected abstract void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time);
+        /// <summary>
+        /// Renders objects that change relatively rarely.
+        /// </summary>
+        /// <param name="lockBitmap"><see cref="LockBitmap"/> used in object rendering.</param>
         protected abstract void RedrawStaticObjects(LockBitmap lockBitmap);
 
+        /// <summary>
+        /// Handles mouse button release.
+        /// </summary>
+        /// <param name="button">Released mouse button.</param>
         protected virtual void OnMouseUp(MouseButton button) { }
+        /// <summary>
+        /// Handles mouse button press.
+        /// </summary>
+        /// <param name="button">Pressed mouse button.</param>
         protected virtual void OnMouseButtonDown(MouseButton button) { }
+        /// <summary>
+        /// Handles screen resize.
+        /// </summary>
         protected virtual void OnSizeChanged()
         {
             _bitmapBuffer = new Bitmap((int)RenderSize.Width, (int)RenderSize.Height);

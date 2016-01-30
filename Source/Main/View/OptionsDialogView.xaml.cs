@@ -11,15 +11,18 @@ namespace SRL.Main.View
     /// </summary>
     public partial class OptionsDialogView : ModernDialog
     {
-
-
-
+        /// <summary>
+        /// Options modified by the user.
+        /// </summary>
         public List<Option> Result => new List<Option>(_viewModel.Options);
 
         private readonly OptionsDialogViewModel _viewModel;
 
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionsDialogView"/> class.
+        /// </summary>
+        /// <param name="options"></param>
         public OptionsDialogView(List<Option> options)
         {
             InitializeComponent();

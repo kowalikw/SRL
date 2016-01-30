@@ -9,6 +9,9 @@ using SRL.Main.ViewModel;
 
 namespace SRL.Main.View.MonoGameArea
 {
+    /// <summary>
+    /// View class that contains UI logic for the MonoGame control that displays tracing result.
+    /// </summary>
     internal class TraceArea : AreaBase
     {
         private readonly TracingViewModel _context = ServiceLocator.Current.GetInstance<TracingViewModel>();
