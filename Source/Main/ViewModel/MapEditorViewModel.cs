@@ -9,8 +9,14 @@ using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel
 {
+    /// <summary>
+    /// View-model class that contains non-UI logic for the map editor.
+    /// </summary>
     public class MapEditorViewModel : EditorViewModel<Map>
     {
+        /// <summary>
+        /// Adds new vertex to the map which may be part of an existing <see cref="Polygon"/> or start of a new one.
+        /// </summary>
         public RelayCommand<Point> AddVertexCommand
         {
             get
@@ -43,6 +49,9 @@ namespace SRL.Main.ViewModel
                 return _addVertexCommand;
             }
         }
+        /// <summary>
+        /// Creates <see cref="Polygon"/> from placed vertices.
+        /// </summary>
         public RelayCommand FinishPolygonCommand
         {
             get
@@ -79,6 +88,9 @@ namespace SRL.Main.ViewModel
                 return _resetCommand;
             }
         }
+        /// <summary>
+        /// Deletes the last-placed vertex.
+        /// </summary>
         public RelayCommand BackCommand
         {
             get
@@ -108,8 +120,13 @@ namespace SRL.Main.ViewModel
         private RelayCommand _resetCommand;
         private RelayCommand _backCommand;
 
-
+        /// <summary>
+        /// Collection of all finished and valid polygons in the editor.
+        /// </summary>
         public ObservableCollectionEx<Polygon> FinishedPolygons { get; }
+        /// <summary>
+        /// Collection of vertices of the currently edited and not-yet-closed <see cref="Polygon"/>.
+        /// </summary>
         public ObservableCollectionEx<Point> UnfinishedPolygon { get; }
 
 
@@ -140,6 +157,10 @@ namespace SRL.Main.ViewModel
             FinishedPolygons.ReplaceRange(obstacles);
         }
 
+        /// <summary>
+        /// Removes polygons wholly enclosed by another polygons.
+        /// </summary>
+        /// <param name="polygons">List of polygons that might contain enclosed enclosed shapes.</param>
         private void RemoveEnclosedPolygons(List<Polygon> polygons)
         {
             bool[] enclosed = new bool[polygons.Count];

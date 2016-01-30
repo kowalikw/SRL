@@ -38,26 +38,44 @@ namespace SRL.Main.ViewModel
             SimpleIoc.Default.Register<IAlgorithm>(() => algorithm); // default algorithm
         }
 
+        /// <summary>
+        /// Gets the registered <see cref="MainViewModel"/> instance.
+        /// </summary>
         public MainViewModel Main
         {
             get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
         }
+        /// <summary>
+        /// Gets the registered <see cref="SettingsViewModel"/> instance.
+        /// </summary>
         public SettingsViewModel Settings
         {
             get { return ServiceLocator.Current.GetInstance<SettingsViewModel>(); }
         }
+        /// <summary>
+        /// Gets the registered <see cref="MapEditorViewModel"/> instance.
+        /// </summary>
         public MapEditorViewModel MapEditor
         {
             get { return ServiceLocator.Current.GetInstance<MapEditorViewModel>(); }
         }
+        /// <summary>
+        /// Gets the registered <see cref="VehicleEditorViewModel"/> instance.
+        /// </summary>
         public VehicleEditorViewModel VehicleEditor
         {
             get { return ServiceLocator.Current.GetInstance<VehicleEditorViewModel>(); }
         }
+        /// <summary>
+        /// Gets the registered <see cref="TracingViewModel"/> instance.
+        /// </summary>
         public TracingViewModel Tracing
         {
             get { return ServiceLocator.Current.GetInstance<TracingViewModel>(); }
         }
+        /// <summary>
+        /// Gets the registered <see cref="SimulationViewModel"/> instance.
+        /// </summary>
         public SimulationViewModel Simulation
         {
             get { return ServiceLocator.Current.GetInstance<SimulationViewModel>(); }
@@ -85,6 +103,9 @@ namespace SRL.Main.ViewModel
             return srv;
         }
 
+        /// <summary>
+        /// Cleans up registered view-models and resets the service container.
+        /// </summary>
         public static void Cleanup()
         {
             Messenger.Default.Send(new CleanupMessage());

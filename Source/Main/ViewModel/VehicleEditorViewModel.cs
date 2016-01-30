@@ -34,6 +34,10 @@ namespace SRL.Main.ViewModel
                 return _resetCommand;
             }
         }
+
+        /// <summary>
+        /// Reverts last edit action.
+        /// </summary>
         public RelayCommand BackCommand
         {
             get
@@ -61,6 +65,10 @@ namespace SRL.Main.ViewModel
                 return _backCommand;
             }
         }
+
+        /// <summary>
+        /// Adds new vertex to the vehicle shape polygon.
+        /// </summary>
         public RelayCommand<Point> AddShapeVertexCommand
         {
             get
@@ -94,6 +102,9 @@ namespace SRL.Main.ViewModel
                 return _addShapeVertexCommand;
             }
         }
+        /// <summary>
+        /// Closes the polygon that makes up the vehicle. 
+        /// </summary>
         public RelayCommand FinishShapeCommand
         {
             get
@@ -107,6 +118,9 @@ namespace SRL.Main.ViewModel
                 return _finishShapeCommand;
             }
         }
+        /// <summary>
+        /// Sets vehicle turning point.
+        /// </summary>
         public RelayCommand<Point> SetPivotCommand
         {
             get
@@ -120,6 +134,9 @@ namespace SRL.Main.ViewModel
                 return _setPivotCommand;
             }
         }
+        /// <summary>
+        /// Sets the direction in which the vehicle moves forward.
+        /// </summary>
         public RelayCommand<double> SetDirectionCommand
         {
             get
@@ -141,7 +158,9 @@ namespace SRL.Main.ViewModel
         private RelayCommand<Point> _setPivotCommand;
         private RelayCommand<double> _setDirectionCommand;
 
-
+        /// <summary>
+        /// Points that make up the vehicle's shape.
+        /// </summary>
         public ObservableCollectionEx<Point> VehicleShape { get; }
 
         public bool ShapeDone
@@ -156,6 +175,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+
+        /// <summary>
+        /// Turning point of the vehicle.
+        /// </summary>
         public Point? Pivot
         {
             get { return _pivot; }
@@ -168,6 +191,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+
+        /// <summary>
+        /// Direction in which the vehicle moves forward.
+        /// </summary>
         public double? Direction
         {
             get { return _direction; }

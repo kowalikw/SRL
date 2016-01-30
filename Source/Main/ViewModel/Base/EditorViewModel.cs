@@ -10,11 +10,16 @@ using SRL.Main.ViewModel.Services;
 
 namespace SRL.Main.ViewModel.Base
 {
+    /// <summary>
+    /// Base class for view-models of the model editors.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class EditorViewModel<T> : ViewModel
         where T : SvgSerializable
     {
-        protected readonly string ModelName;
-
+        /// <summary>
+        /// Opens up a dialog and saved the edited model to SVG format.
+        /// </summary>
         public RelayCommand SaveCommand
         {
             get
@@ -35,6 +40,9 @@ namespace SRL.Main.ViewModel.Base
                 return _saveCommand;
             }
         }
+        /// <summary>
+        /// Opens up a dialog and loads model from the specified file.
+        /// </summary>
         public RelayCommand LoadCommand
         {
             get
@@ -52,19 +60,22 @@ namespace SRL.Main.ViewModel.Base
             }
         }
 
+        /// <summary>
+        /// Resets the edited model.
+        /// </summary>
         public abstract RelayCommand ResetCommand { get; }
 
         private RelayCommand _saveCommand;
         private RelayCommand _loadCommand;
 
-
+        /// <summary>
+        /// Returns a value that indicates whether the edited model is valid.
+        /// </summary>
         protected abstract bool IsEditedModelValid { get; }
 
         protected EditorViewModel()
         {
             MessengerInstance.Register<SetModelMessage<T>>(this, HandleSetModelMsg);
-
-            ModelName = Models.ResourceManager.GetString(typeof (T).Name);
         }
 
         /// <summary>

@@ -21,6 +21,9 @@ using Frame = SRL.Commons.Model.Frame;
 
 namespace SRL.Main.ViewModel
 {
+    /// <summary>
+    /// View-model class that contains non-UI logic for the simulation module.
+    /// </summary>
     public class SimulationViewModel : EditorViewModel<Simulation>
     {
         private const int FrameChangeInterval = 3;
@@ -30,6 +33,9 @@ namespace SRL.Main.ViewModel
 
         #region LeftMenuCommands 
 
+        /// <summary>
+        /// Changes the current <see cref="EditorMode"/> if possible.
+        /// </summary>
         public RelayCommand<Mode> EnterModeCommand
         {
             get
@@ -82,6 +88,9 @@ namespace SRL.Main.ViewModel
                 return _resetCommand;
             }
         }
+        /// <summary>
+        /// Opens up a dialog to load a serialized <see cref="Map"/> object.
+        /// </summary>
         public RelayCommand LoadMapCommand
         {
             get
@@ -100,6 +109,9 @@ namespace SRL.Main.ViewModel
                 return _loadMapCommand;
             }
         }
+        /// <summary>
+        /// Opens up a dialog to load a serialized <see cref="Vehicle"/> object.
+        /// </summary>
         public RelayCommand LoadVehicleCommand
         {
             get
@@ -118,6 +130,9 @@ namespace SRL.Main.ViewModel
                 return _loadVehicleCommand;
             }
         }
+        /// <summary>
+        /// Sets path starting point.
+        /// </summary>
         public RelayCommand<Point> SetStartPointCommand
         {
             get
@@ -140,6 +155,9 @@ namespace SRL.Main.ViewModel
                 return _setStartPointCommand;
             }
         }
+        /// <summary>
+        /// Sets path ending point.
+        /// </summary>
         public RelayCommand<Point> SetEndPointCommand
         {
             get
@@ -161,6 +179,9 @@ namespace SRL.Main.ViewModel
                 return _setEndPointCommand;
             }
         }
+        /// <summary>
+        /// Sets size and initial rotation of the vehicle. <seealso cref="VehicleSetup"/>.
+        /// </summary>
         public RelayCommand<VehicleSetup> SetInitialVehicleSetupCommandCommand
         {
             get
@@ -194,6 +215,9 @@ namespace SRL.Main.ViewModel
                 return _setInitialVehicleSetupCommand;
             }
         }
+        /// <summary>
+        /// Starts path calculation for the current map and vehicle setting and algorithm options.
+        /// </summary>
         public RelayCommand StartPathCalculationCommand
         {
             get
@@ -219,6 +243,9 @@ namespace SRL.Main.ViewModel
                 return _startPathCalculationCommand;
             }
         }
+        /// <summary>
+        /// Stops ongoing path calculation.
+        /// </summary>
         public RelayCommand CancelPathCalculationCommand
         {
             get
@@ -246,6 +273,9 @@ namespace SRL.Main.ViewModel
 
         #region Playback control commands
 
+        /// <summary>
+        /// Starts (or resumes) robot move animation.
+        /// </summary>
         public RelayCommand StartPlaybackCommand
         {
             get
@@ -268,6 +298,9 @@ namespace SRL.Main.ViewModel
                 return _startPlaybackCommand;
             }
         }
+        /// <summary>
+        /// Stops ongoing robot animation and resets it.
+        /// </summary>
         public RelayCommand StopPlaybackCommand
         {
             get
@@ -287,6 +320,9 @@ namespace SRL.Main.ViewModel
                 return _stopPlaybackCommand;
             }
         }
+        /// <summary>
+        /// Pauses ongoing robot animation.
+        /// </summary>
         public RelayCommand PausePlaybackCommand
         {
             get
@@ -312,6 +348,10 @@ namespace SRL.Main.ViewModel
 
         #region Map & vehicle properties
 
+        /// <summary>
+        /// Map with obstacles to avoid.
+        /// </summary>
+        /// <remarks>Null if it hasn't been set yet.</remarks>
         public Map Map
         {
             get { return _map; }
@@ -324,6 +364,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        /// <summary>
+        /// Path starting point. 
+        /// </summary>
+        /// <remarks>Null if it hasn't been set yet.</remarks>
         public Point? StartPoint
         {
             get { return _startPoint; }
@@ -337,6 +381,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        /// <summary>
+        /// Path ending point. 
+        /// </summary>
+        /// <remarks>Null if it hasn't been set yet.</remarks>
         public Point? EndPoint
         {
             get { return _endPoint; }
@@ -348,6 +396,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        /// <summary>
+        /// Vehicle definition.
+        /// </summary>
+        /// <remarks>Null if it hasn't been set yet.</remarks>
         public Vehicle Vehicle
         {
             get { return _vehicle; }
@@ -360,6 +412,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        /// <summary>
+        /// Vehicle resize factor.
+        /// </summary>
+        /// <remarks>Null if it hasn't been set yet.</remarks>
         public double? VehicleSize
         {
             get { return _vehicleSize; }
@@ -371,6 +427,10 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        /// <summary>
+        /// Initial vehicle orientation.
+        /// </summary>
+        /// <remarks>Null if it hasn't been set yet.</remarks>
         public double? InitialVehicleRotation
         {
             get { return _initialVehicleRotation; }
@@ -395,6 +455,10 @@ namespace SRL.Main.ViewModel
 
         #region Orders & frames properties
 
+        /// <summary>
+        /// Calculted orders for the vehicle.
+        /// </summary>
+        /// <remarks>Null if the orders haven't been generated yet.</remarks>
         public List<Order> Orders
         {
             get { return _orders; }
@@ -425,17 +489,29 @@ namespace SRL.Main.ViewModel
                 }
             }
         }
+        /// <summary>
+        /// References the current frame of the visualization (animation).
+        /// </summary>
         public Frame CurrentFrame => _frames?[CurrentFrameIdx];
+        /// <summary>
+        /// Gets current frame's index.
+        /// </summary>
         public int CurrentFrameIdx
         {
             get { return _currentFrameIdx; }
             set { Set(ref _currentFrameIdx, value); }
         }
+        /// <summary>
+        /// Index of the last frame.
+        /// </summary>
         public int MaxFrameIdx
         {
             get { return _maxFrameIdx; }
             set { Set(ref _maxFrameIdx, value); }
         }
+        /// <summary>
+        /// Vertex representation of the calculated path.
+        /// </summary>
         public List<Point> Path
         {
             get { return _path; }
@@ -453,6 +529,9 @@ namespace SRL.Main.ViewModel
 
         #region Path calculation properties
 
+        /// <summary>
+        /// Gets boolean value indicating whether there's ongoing path calculation.
+        /// </summary>
         public bool CalculatingPath
         {
             get { return _calculatingPath; }
@@ -469,7 +548,9 @@ namespace SRL.Main.ViewModel
 
         #endregion
 
-
+        /// <summary>
+        /// Current edit mode.
+        /// </summary>
         public Mode EditorMode
         {
             get { return _editorMode; }
@@ -492,6 +573,9 @@ namespace SRL.Main.ViewModel
 
         private Mode _editorMode;
 
+        /// <summary>
+        /// Gets boolean value indicating whether there's ongoing visualization.
+        /// </summary>
         public bool SimulationRunning
         {
             get { return _simulationRunning; }
@@ -588,6 +672,10 @@ namespace SRL.Main.ViewModel
             }
         }
 
+        /// <summary>
+        /// Converts list of orders to frames used in the visualization.
+        /// </summary>
+        /// <param name="orders">Orders calculated by the algorithm.</param>
         private void CalculateFrames(List<Order> orders)
         {
             double radiansPerPart = 1 / (double)FramesPerRadian;
@@ -819,6 +907,9 @@ namespace SRL.Main.ViewModel
             return false;
         }
 
+        /// <summary>
+        /// Possible editor modes.
+        /// </summary>
         public enum Mode
         {
             Normal,

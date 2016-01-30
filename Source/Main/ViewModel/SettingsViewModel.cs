@@ -6,8 +6,14 @@ using SRL.Main.ViewModel.Services;
 
 namespace SRL.Main.ViewModel
 {
+    /// <summary>
+    /// View-model class that contains non-UI logic for the settings tab.
+    /// </summary>
     public class SettingsViewModel : Base.ViewModel
     {
+        /// <summary>
+        /// Enables and disables anti-aliasing in MonoGame controls.
+        /// </summary>
         public bool AntialiasingEnabled
         {
             get
@@ -21,6 +27,10 @@ namespace SRL.Main.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets and sets UI language.
+        /// </summary>
+        /// <remarks>Value change applies after application restart.</remarks>
         public Language Language
         {
             get
@@ -42,6 +52,9 @@ namespace SRL.Main.ViewModel
             }
         }
 
+        /// <summary>
+        /// Enables and disables vehicle path drawing during simulation.
+        /// </summary>
         public bool ShowPath
         {
             get

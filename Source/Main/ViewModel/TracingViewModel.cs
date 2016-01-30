@@ -18,10 +18,16 @@ using VehicleEditorView = SRL.Main.View.Pages.VehicleEditorView;
 
 namespace SRL.Main.ViewModel
 {
+    /// <summary>
+    /// View-model class that contains non-UI logic for the tracing module.
+    /// </summary>
     public class TracingViewModel : Base.ViewModel
     {
         #region Commands
 
+        /// <summary>
+        /// Opens up a dialog and loads selected bitmap.
+        /// </summary>
         public RelayCommand LoadBitmapCommand
         {
             get
@@ -50,6 +56,9 @@ namespace SRL.Main.ViewModel
                 return _loadBitmapCommand;
             }
         }
+        /// <summary>
+        /// Creates a <see cref="Map"/> out of selected polygons and passes it to the map editor.
+        /// </summary>
         public RelayCommand MakeMapCommand
         {
             get
@@ -73,6 +82,9 @@ namespace SRL.Main.ViewModel
                 return _makeMapCommand;
             }
         }
+        /// <summary>
+        /// Creates a <see cref="Vehicle"/> out of selected polygon and passes it to the vehicle editor.
+        /// </summary>
         public RelayCommand MakeVehicleCommand
         {
             get
@@ -94,6 +106,9 @@ namespace SRL.Main.ViewModel
                 return _makeVehicleCommand;
             }
         }
+        /// <summary>
+        /// Starts trace task.
+        /// </summary>
         public RelayCommand TraceCommand
         {
             get
@@ -106,7 +121,9 @@ namespace SRL.Main.ViewModel
                 return _traceCommand;
             }
         }
-
+        /// <summary>
+        /// Marks polygon that encloses passed <see cref="Point"/>.
+        /// </summary>
         public RelayCommand<Point> SelectPolygonCommand
         {
             get
@@ -129,6 +146,9 @@ namespace SRL.Main.ViewModel
                 return _selectPolygonCommand;
             }
         }
+        /// <summary>
+        /// Unmarks polygon that encloses passed <see cref="Point"/>.
+        /// </summary>
         public RelayCommand<Point> DeselectPolygonCommand
         {
             get
@@ -161,24 +181,36 @@ namespace SRL.Main.ViewModel
 
         #endregion
 
-
+        /// <summary>
+        /// Currently loaded raster image.
+        /// </summary>
         public BitmapSource Bitmap
         {
             get { return _bitmap; }
             private set { Set(ref _bitmap, value); }
         }
 
+        /// <summary>
+        /// Current area threshold setting (see the documentation).
+        /// </summary>
         public double AreaThreshold
         {
             get { return _areaThreshold; }
             set { Set(ref _areaThreshold, value); }
         }
 
+        /// <summary>
+        /// Current color threshold setting (see the documentation).
+        /// </summary>
         public double ColorThreshold
         {
             get { return _colorThreshold; }
             set { Set(ref _colorThreshold, value); }
         }
+
+        /// <summary>
+        /// Boolean value that indicates whether the bitmap is being traced.
+        /// </summary>
         public bool TracingOngoing
         {
             get { return _tracingOngoing; }
@@ -189,7 +221,13 @@ namespace SRL.Main.ViewModel
             }
         }
 
+        /// <summary>
+        /// All traced polygons.
+        /// </summary>
         public ObservableCollectionEx<Polygon> Polygons { get; }
+        /// <summary>
+        /// Subset of <see cref="Polygons"/> whose elements were marked with <see cref="SelectPolygonCommand"/> command.
+        /// </summary>
         public ObservableCollectionEx<int> SelectedPolygonIndices { get; }
 
 
