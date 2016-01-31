@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithm", "Source\Algorit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonsTests", "Source\CommonsTests\CommonsTests.csproj", "{4AAE10BE-3E18-4F7F-A008-FDE99B98A09B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmTests", "AlgorithmTests\AlgorithmTests.csproj", "{A91992F6-6B0B-4D6F-AA7E-65846A11323F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmTests", "Source\AlgorithmTests\AlgorithmTests.csproj", "{A91992F6-6B0B-4D6F-AA7E-65846A11323F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
