@@ -46,7 +46,7 @@ namespace SRL.Main.View.MonoGameArea
 
         private PropertyChangedEventHandler _propertyChangedHandler;
 
-
+        /// <inheritdoc />
         protected override void Initialize()
         {
             base.Initialize();
@@ -57,6 +57,7 @@ namespace SRL.Main.View.MonoGameArea
             Settings.Default.PropertyChanged += _propertyChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void Unitialize()
         {
             base.Unitialize();
@@ -65,6 +66,7 @@ namespace SRL.Main.View.MonoGameArea
             Settings.Default.PropertyChanged -= _propertyChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
             if (_context.CurrentFrame != null)
@@ -147,6 +149,7 @@ namespace SRL.Main.View.MonoGameArea
             spriteBatch.DrawPolygon(shape, RenderSize, VehicleColor, AntialiasingEnabled);
         }
 
+        /// <inheritdoc />
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
             if (_context.Map != null)
@@ -159,6 +162,7 @@ namespace SRL.Main.View.MonoGameArea
                 lockBitmap.DrawVertex(_context.EndPoint.Value, RenderSize, EndPointColor, AntialiasingEnabled);
         }
 
+        /// <inheritdoc />
         protected override void OnMouseUp(MouseButton button)
         {
             Point normalizedMousePos = MousePosition.Normalize(RenderSize);

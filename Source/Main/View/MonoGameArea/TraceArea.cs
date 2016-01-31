@@ -18,6 +18,7 @@ namespace SRL.Main.View.MonoGameArea
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
 
+        /// <inheritdoc />
         protected override void Initialize()
         {
             base.Initialize();
@@ -28,6 +29,7 @@ namespace SRL.Main.View.MonoGameArea
             _context.SelectedPolygonIndices.CollectionChanged += _collectionChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void Unitialize()
         {
             base.Unitialize();
@@ -37,11 +39,13 @@ namespace SRL.Main.View.MonoGameArea
         }
 
 
+        /// <inheritdoc />
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
             // *crickets*
         }
 
+        /// <inheritdoc />
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
             for (int i = 0; i < _context.Polygons.Count; i++)
@@ -53,6 +57,7 @@ namespace SRL.Main.View.MonoGameArea
             }
         }
 
+        /// <inheritdoc />
         protected override void OnMouseUp(MouseButton button)
         {
             var normalizedMousePosition = MousePosition.Normalize(RenderSize);

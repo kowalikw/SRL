@@ -24,6 +24,7 @@ namespace SRL.Main.ViewModel.Services
                 _uris.TryAdd(pageKey, pageUri);
         }
 
+        /// <inheritdoc />
         public void GoToPage(string pageKey)
         {
             NavigationCommands.GoToPage.Execute(_uris[pageKey], null);

@@ -36,11 +36,11 @@ namespace SRL.Main.Utilities.Converters
         /// <summary>
         /// Not implemented.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetTypes"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
+        /// <param name="value">n/a</param>
+        /// <param name="targetTypes">n/a</param>
+        /// <param name="parameter">n/a</param>
+        /// <param name="culture">n/a</param>
+        /// <returns>n/a</returns>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

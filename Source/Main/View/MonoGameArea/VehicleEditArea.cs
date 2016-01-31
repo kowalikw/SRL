@@ -26,6 +26,7 @@ namespace SRL.Main.View.MonoGameArea
         private NotifyCollectionChangedEventHandler _vehicleShapeChangedHandler;
         private PropertyChangedEventHandler _propertyChangedHandler;
 
+        /// <inheritdoc />
         protected override void Initialize()
         {
             base.Initialize();
@@ -42,6 +43,7 @@ namespace SRL.Main.View.MonoGameArea
             _context.PropertyChanged += _propertyChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void Unitialize()
         {
             base.Unitialize();
@@ -50,6 +52,7 @@ namespace SRL.Main.View.MonoGameArea
             _context.PropertyChanged -= _propertyChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
             Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
@@ -100,7 +103,7 @@ namespace SRL.Main.View.MonoGameArea
                 spriteBatch.DrawArrow(_context.Pivot.Value, ArrowLength, _context.Direction.Value, RenderSize, RegularColor, AntialiasingEnabled);
             }
         }
-
+        /// <inheritdoc />
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
             if (!_context.ShapeDone)
@@ -121,7 +124,7 @@ namespace SRL.Main.View.MonoGameArea
 
             // Arrow is drawn dynamically only.
         }
-
+        /// <inheritdoc />
         protected override void OnMouseUp(MouseButton button)
         {
             var normalizedMousePosition = MousePosition.Normalize(RenderSize);

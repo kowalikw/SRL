@@ -28,6 +28,7 @@ namespace SRL.Main.ViewModel.Services
             _culture = CultureManager.UICulture;
         }
 
+        /// <inheritdoc />
         public void ShowOpenFileDialog(string filter, Action<bool, string> closeCallback)
         {
             var dialog = new OpenFileDialog();
@@ -40,6 +41,7 @@ namespace SRL.Main.ViewModel.Services
             closeCallback?.Invoke(dialogResult == true, filename);
         }
 
+        /// <inheritdoc />
         public void ShowSaveFileDialog(string filter, Action<bool, string> closeCallback)
         {
             var dialog = new SaveFileDialog();
@@ -52,12 +54,14 @@ namespace SRL.Main.ViewModel.Services
             closeCallback?.Invoke(dialogResult == true, filename);
         }
 
+        /// <inheritdoc />
         public void ShowMessageDialog(string title, string message, Action closeCallback)
         {
             _owner.Dispatcher.Invoke(() => ModernDialog.ShowMessage(message, title, MessageBoxButton.OK, _owner));
             closeCallback?.Invoke();
         }
 
+        /// <inheritdoc />
         public void ShowOptionsDialog(List<Option> options, Action<bool> closeCallback)
         {
             var dialog = new OptionsDialogView(options);

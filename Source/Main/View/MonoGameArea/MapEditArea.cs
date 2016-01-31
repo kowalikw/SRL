@@ -20,6 +20,7 @@ namespace SRL.Main.View.MonoGameArea
 
         private NotifyCollectionChangedEventHandler _collectionChangedHandler;
 
+        /// <inheritdoc />
         protected override void Initialize()
         {
             base.Initialize();
@@ -30,6 +31,7 @@ namespace SRL.Main.View.MonoGameArea
             _context.UnfinishedPolygon.CollectionChanged += _collectionChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void Unitialize()
         {
             base.Unitialize();
@@ -38,6 +40,7 @@ namespace SRL.Main.View.MonoGameArea
             _context.UnfinishedPolygon.CollectionChanged -= _collectionChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void RenderDynamicObjects(SpriteBatch spriteBatch, TimeSpan time)
         {
             Point normalizedMousePosition = MousePosition.Normalize(RenderSize);
@@ -58,6 +61,7 @@ namespace SRL.Main.View.MonoGameArea
             }
         }
 
+        /// <inheritdoc />
         protected override void RedrawStaticObjects(LockBitmap lockBitmap)
         {
             foreach (var obstacle in _context.FinishedPolygons)
@@ -65,6 +69,7 @@ namespace SRL.Main.View.MonoGameArea
             lockBitmap.DrawPath(_context.UnfinishedPolygon, RenderSize, ActiveColor, AntialiasingEnabled);
         }
 
+        /// <inheritdoc />
         protected override void OnMouseUp(MouseButton button)
         {
             if (button == MouseButton.Left)
