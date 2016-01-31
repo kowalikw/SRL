@@ -29,7 +29,15 @@ namespace SRL.Main.Utilities.Converters
             else
                 return Visibility.Visible;
         }
-        
+
+        /// <summary>
+        /// Back conversion not supported.
+        /// </summary>
+        /// <param name="value">Not supported.</param>
+        /// <param name="targetType">Not supported.</param>
+        /// <param name="parameter">Not supported.</param>
+        /// <param name="culture">Not supported.</param>
+        /// <returns><see cref="NotSupportedException"/></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotSupportedException();

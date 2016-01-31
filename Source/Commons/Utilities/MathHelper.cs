@@ -81,9 +81,9 @@ namespace SRL.Commons.Utilities
         /// <summary>
         /// Determines whether two double numbers are equal with an accuracy of epsilon.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">Number one.</param>
+        /// <param name="b">Number two.</param>
+        /// <returns>True if two numbers are equal with an accuracy of epsilon.</returns>
         public static bool EpsilonEquals(this double a, double b)
         {
             return Math.Abs(a - b) <= DoubleComparisonEpsilon;

@@ -17,6 +17,7 @@ namespace SRL.Main.Utilities
         /// <summary> 
         /// Adds the elements of the specified collection to the end of the ObservableCollection(Of T). 
         /// </summary> 
+        /// <param name="collection">collection: The collection from which the elements are added.</param> 
         public void AddRange(IEnumerable<T> collection)
         {
             if (collection == null)
@@ -30,6 +31,7 @@ namespace SRL.Main.Utilities
         /// <summary> 
         /// Removes the first occurence of each item in the specified collection from ObservableCollection(Of T). 
         /// </summary> 
+        /// <param name="collection">collection: The collection from which the elements are removed.</param> 
         public void RemoveRange(IEnumerable<T> collection)
         {
             if (collection == null)
@@ -42,6 +44,7 @@ namespace SRL.Main.Utilities
         /// <summary> 
         /// Clears the current collection and replaces it with the specified item. 
         /// </summary> 
+        /// <param name="item">Item to replace collection.</param>
         public void Replace(T item)
         {
             ReplaceRange(new T[] { item });
@@ -50,6 +53,7 @@ namespace SRL.Main.Utilities
         /// <summary> 
         /// Clears the current collection and replaces it with the specified collection. 
         /// </summary> 
+        /// <param name="collection">collection: The collection from which the elements are replaced.</param> 
         public void ReplaceRange(IEnumerable<T> collection)
         {
             if (collection == null)
