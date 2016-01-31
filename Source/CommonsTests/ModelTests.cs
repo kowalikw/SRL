@@ -14,37 +14,6 @@ namespace SRL.CommonsTests
     public class ModelTests
     {
         [TestMethod]
-        public void PolygonReadXmlTest()
-        {
-            var serializer = new XmlSerializer(typeof(Polygon));
-
-            Polygon expected = new Polygon(new List<Point>
-            {
-                new Point(-0.54811715481171552,0.20920502092050208),
-                new Point(0.7405857740585774,0.32217573221757323),
-                new Point(0.55648535564853552,-0.606694560669456)
-            });
-
-            TextReader reader = new StringReader(Resources.Polygon);
-            Polygon actual = (Polygon)serializer.Deserialize(reader);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void OrderReadXmlTest()
-        {
-            var serializer = new XmlSerializer(typeof(Order));
-
-            Order expected = new Order(0.1, new Point(-0.41667, -0.2083));
-
-            TextReader reader = new StringReader(Resources.Order);
-            Order actual = (Order)serializer.Deserialize(reader);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
         public void VehicleWriteXmlTest()
         {
             XmlSchemaSet schemaSet = new XmlSchemaSet();
@@ -211,6 +180,7 @@ namespace SRL.CommonsTests
             simulation.Map = map;
             simulation.Vehicle = vehicle;
             simulation.Orders = orders;
+            simulation.Options = new List<Option>();
 
             using (XmlWriter writer = output.CreateWriter())
                 serializer.Serialize(writer, simulation);

@@ -182,7 +182,9 @@ namespace SRL.Commons.Model
                 }
                 reader.ReadEndElement();
 
-                reader.ReadToFollowing("algorithmKey");
+                if(reader.Name != "algorithmKey")
+                    reader.ReadToFollowing("algorithmKey");
+
                 AlgorithmKey = reader.ReadElementContentAsString();
 
 

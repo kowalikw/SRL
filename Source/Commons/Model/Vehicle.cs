@@ -18,6 +18,14 @@ namespace SRL.Commons.Model
         public Polygon Shape { get; set; }
 
         /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (obj is Vehicle)
+                return Equals((Vehicle)obj);
+            return false;
+        }
+
+        /// <inheritdoc />
         public bool Equals(Vehicle other)
         {
             return Shape.Equals(other.Shape);

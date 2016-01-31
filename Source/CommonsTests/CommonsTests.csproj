@@ -59,26 +59,24 @@
   <ItemGroup>
     <Compile Include="ModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GeometryHelperTests.cs" />
+    <Compile Include="MathHelperTests.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GeometryHelperTests.cs" />
-    <Compile Include="MathHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="XMLs\Map.svg" />
-    <Content Include="XMLs\Order.svg" />
-    <Content Include="XMLs\Polygon.svg" />
     <Content Include="XMLs\Simulation.svg" />
     <Content Include="XMLs\Vehicle.svg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

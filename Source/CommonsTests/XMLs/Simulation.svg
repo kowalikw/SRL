@@ -35,4 +35,14 @@
     <order rotation="0.6" destination="0.3889,0.6667" />
     <order rotation="3.14" destination="0.1111,-0.2083" />
   </orders>
+  <algorithmKey>Algorithm</algorithmKey>
+  <options>
+    <option type="Double" key="pointPrecision" value="0.01" />
+    <option type="Integer" key="angleDensity" value="360" />
+    <option type="Integer" key="moveWeight" value="100" />
+    <option type="Integer" key="turnWeight" value="100" />
+    <option type="Integer" key="netDensity" value="0" />
+    <option type="Boolean" key="bidirectional" value="true" />
+    <option type="Boolean" key="multidirectional" value="false" />
+  </options>
 </svg>

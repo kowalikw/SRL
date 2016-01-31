@@ -75,28 +75,6 @@ namespace SRL.CommonsTests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;order rotation=&quot;0.1&quot; destination=&quot;-0.41667,-0.2083&quot; /&gt;
-        ///.
-        /// </summary>
-        internal static string Order {
-            get {
-                return ResourceManager.GetString("Order", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;polygon points=&quot;-0.54811715481171552,0.20920502092050208 0.7405857740585774,0.32217573221757323 0.55648535564853552,-0.606694560669456 &quot; stroke=&quot;black&quot; stroke-width=&quot;0.01&quot; fill=&quot;white&quot; /&gt;
-        ///.
-        /// </summary>
-        internal static string Polygon {
-            get {
-                return ResourceManager.GetString("Polygon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;svg xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; width=&quot;480&quot; height=&quot;480&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
         ///  &lt;rect width=&quot;480&quot; height=&quot;480&quot; fill=&quot;rgb(1, 47, 135)&quot; /&gt;
         ///  &lt;defs&gt;

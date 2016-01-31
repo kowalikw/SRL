@@ -24,6 +24,14 @@ namespace SRL.Commons.Model
         }
 
         /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (obj is Map)
+                return Equals((Map)obj);
+            return false;
+        }
+
+        /// <inheritdoc />
         public bool Equals(Map other)
         {
             if (Obstacles.Count == other.Obstacles.Count)
