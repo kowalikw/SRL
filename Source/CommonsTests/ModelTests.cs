@@ -187,42 +187,6 @@ namespace SRL.CommonsTests
 
             output.Validate(schemaSet, (o, e) => Assert.Fail());
         }
-
-        [TestMethod]
-        public void SimulationReadXmlTest()
-        {
-            var serializer = new XmlSerializer(typeof(Simulation));
-
-            Simulation expected = new Simulation();
-
-            Map map = new Map();
-            map.Obstacles.Add(new Polygon(new List<Point> { new Point(-0.0188087774294671, 0.899581589958159), new Point(-0.689655172413793, -0.878661087866109), new Point(0.247648902821317, -0.866108786610879) }));
-            map.Obstacles.Add(new Polygon(new List<Point> { new Point(0.366771159874608, 0.267782426778243), new Point(0.351097178683386, -0.121338912133891), new Point(0.821316614420063, -0.158995815899582), new Point(0.855799373040752, 0.330543933054393) }));
-
-            Vehicle vehicle = new Vehicle();
-            vehicle.Shape = new Polygon(new List<Point> { new Point(-0.3, -0.4), new Point(0.2, 0.0), new Point(0.0, 0.2), new Point(-0.3, 0.0) });
-
-            List<Order> orders = new List<Order>();
-            orders.Add(new Order(0.1, new Point(-0.41667, -0.2083)));
-            orders.Add(new Order(0.84, new Point(0.2083, -0.8333)));
-            orders.Add(new Order(2.34, new Point(-0.625, -0.833)));
-            orders.Add(new Order(0.1, new Point(-0.833, 0.25)));
-            orders.Add(new Order(0.6, new Point(-0.1389, 0.4583)));
-            orders.Add(new Order(0.6, new Point(0.3889, 0.6667)));
-            orders.Add(new Order(3.14, new Point(0.1111, -0.2083)));
-
-            expected.StartPoint = new Point(-0.41667, -0.2083);
-            expected.EndPoint = new Point(0.1111, -0.2083);
-            expected.VehicleSize = 0.5;
-            expected.InitialVehicleRotation = 0;
-            expected.Map = map;
-            expected.Vehicle = vehicle;
-            expected.Orders = orders;
-
-            TextReader reader = new StringReader(Resources.Simulation);
-            Simulation actual = (Simulation)serializer.Deserialize(reader);
-
-            Assert.AreEqual(expected, actual);
-        }
+        
     }
 }
