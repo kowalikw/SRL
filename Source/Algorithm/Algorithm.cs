@@ -314,8 +314,15 @@ namespace SRL.Algorithm
             
         }
 
-
-        private List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity, CancellationToken token)
+        /// <summary>
+        /// Calculates Minkowski's Sum for every <paramref name="map"/> obstacle and <paramref name="vehicle"/>.
+        /// </summary>
+        /// <param name="map">Map containing obstacles.</param>
+        /// <param name="vehicle">Vehicle definition.</param>
+        /// <param name="angleDensity">Angle density option value.</param>
+        /// <param name="token">Task cancellation token.</param>
+        /// <returns>List of processed obstacles.</returns>
+        public List<Polygon>[] MinkowskiSum(Map map, Vehicle vehicle, int angleDensity, CancellationToken token)
         {
             List<Polygon>[] tableOfObstacles = new List<Polygon>[angleDensity];
             double singleAngle = 2 * Math.PI / angleDensity;

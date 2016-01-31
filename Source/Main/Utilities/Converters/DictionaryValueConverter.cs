@@ -17,7 +17,7 @@ namespace SRL.Main.Utilities.Converters
         /// <param name="targetType">Target type.</param>
         /// <param name="parameter">Parameter. Not used.</param>
         /// <param name="culture">Conversion culture. Not used.</param>
-        /// <returns></returns>
+        /// <returns>Boxed value.</returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values != null && values.Length >= 2)
