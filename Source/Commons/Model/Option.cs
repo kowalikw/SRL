@@ -94,6 +94,7 @@ namespace SRL.Commons.Model
             Tooltips = new Dictionary<Language, string>();
         }
 
+        /// <inheritdoc />
         public string this[string columnName]
         {
             get
@@ -124,6 +125,7 @@ namespace SRL.Commons.Model
             }
         }
 
+        /// <inheritdoc />
         public string Error
         {
             get
@@ -140,6 +142,7 @@ namespace SRL.Commons.Model
         /// </summary>
         public bool IsValid => Error == null;
 
+        /// <inheritdoc />
         public object Clone()
         {
             return MemberwiseClone();

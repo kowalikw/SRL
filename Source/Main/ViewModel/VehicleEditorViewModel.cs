@@ -9,8 +9,12 @@ using SRL.Main.ViewModel.Base;
 
 namespace SRL.Main.ViewModel
 {
+    /// <summary>
+    /// View-model class that contains non-UI logic for the vehicle editor.
+    /// </summary>
     public class VehicleEditorViewModel : EditorViewModel<Vehicle>
     {
+        /// <inheritdoc />
         public override RelayCommand ResetCommand
         {
             get
@@ -163,6 +167,9 @@ namespace SRL.Main.ViewModel
         /// </summary>
         public ObservableCollectionEx<Point> VehicleShape { get; }
 
+        /// <summary>
+        /// Indicates whether the vehicle polygon has been closed.
+        /// </summary>
         public bool ShapeDone
         {
             get { return _shapeDone; }
@@ -212,6 +219,7 @@ namespace SRL.Main.ViewModel
         private bool _shapeDone;
         private double? _direction;
 
+        /// <inheritdoc />
         protected override bool IsEditedModelValid
         {
             get
@@ -228,6 +236,7 @@ namespace SRL.Main.ViewModel
             VehicleShape = new ObservableCollectionEx<Point>();
         }
 
+        /// <inheritdoc />
         public override Vehicle GetEditedModel()
         {
             if (!IsEditedModelValid)
@@ -276,6 +285,7 @@ namespace SRL.Main.ViewModel
             vehicle.Shape = rotatedShape;
             return vehicle;
         }
+        /// <inheritdoc />
         public override void SetEditedModel(Vehicle model)
         {
             VehicleShape.ReplaceRange(model.Shape.Vertices);

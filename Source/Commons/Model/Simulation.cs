@@ -53,7 +53,7 @@ namespace SRL.Commons.Model
         /// </summary>
         public string AlgorithmKey { get; set; }
 
-
+        /// <inheritdoc />
         public bool Equals(Simulation other)
         {
             for (int i = 0; i < Orders.Count; i++)
@@ -71,7 +71,7 @@ namespace SRL.Commons.Model
         #region IXmlSerializable
 
 
-
+        /// <inheritdoc />
         public override void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
@@ -213,6 +213,7 @@ namespace SRL.Commons.Model
                 throw new XmlException();
         }
 
+        /// <inheritdoc />
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartAttribute("xmlns", "xlink", "");

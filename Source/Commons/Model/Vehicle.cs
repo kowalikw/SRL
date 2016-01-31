@@ -17,7 +17,7 @@ namespace SRL.Commons.Model
         /// </summary>
         public Polygon Shape { get; set; }
 
-
+        /// <inheritdoc />
         public bool Equals(Vehicle other)
         {
             return Shape.Equals(other.Shape);
@@ -25,6 +25,7 @@ namespace SRL.Commons.Model
 
         #region IXmlSerializable members
 
+        /// <inheritdoc />
         public override void ReadXml(XmlReader reader)
         {
             Shape = new Polygon();
@@ -48,7 +49,7 @@ namespace SRL.Commons.Model
             else
                 throw new XmlException();
         }
-
+        /// <inheritdoc />
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartAttribute("width");

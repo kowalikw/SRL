@@ -23,6 +23,7 @@ namespace SRL.Commons.Model
             Obstacles = new List<Polygon>();
         }
 
+        /// <inheritdoc />
         public bool Equals(Map other)
         {
             if (Obstacles.Count == other.Obstacles.Count)
@@ -37,6 +38,7 @@ namespace SRL.Commons.Model
 
         #region IXmlSerializable members
 
+        /// <inheritdoc />
         public override void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
@@ -64,6 +66,7 @@ namespace SRL.Commons.Model
                 throw new XmlException();
         }
 
+        /// <inheritdoc />
         public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartAttribute("width");

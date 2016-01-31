@@ -29,6 +29,7 @@ namespace SRL.Commons.Model
             Destination = destination;
         }
 
+        /// <inheritdoc />
         public bool Equals(Order other)
         {
             return Rotation == other.Rotation &&

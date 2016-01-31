@@ -6,6 +6,9 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace SRL.Main.Drawing
 {
+    /// <summary>
+    /// Helper class that allows quick pixel drawing on a <see cref="Bitmap"/>.
+    /// </summary>
     public class LockBitmap
     {
         /// <summary>

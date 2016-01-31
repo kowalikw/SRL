@@ -70,6 +70,7 @@ namespace SRL.Main.ViewModel
                 return _finishPolygonCommand;
             }
         }
+        /// <inheritdoc />
         public override RelayCommand ResetCommand
         {
             get
@@ -129,7 +130,7 @@ namespace SRL.Main.ViewModel
         /// </summary>
         public ObservableCollectionEx<Point> UnfinishedPolygon { get; }
 
-
+        /// <inheritdoc />
         protected override bool IsEditedModelValid => UnfinishedPolygon.Count == 0;
 
         public MapEditorViewModel()
@@ -138,6 +139,7 @@ namespace SRL.Main.ViewModel
             UnfinishedPolygon = new ObservableCollectionEx<Point>();
         }
 
+        /// <inheritdoc />
         public override Map GetEditedModel()
         {
             if (!IsEditedModelValid)
@@ -148,6 +150,7 @@ namespace SRL.Main.ViewModel
             return map;
         }
 
+        /// <inheritdoc />
         public override void SetEditedModel(Map model)
         {
             var obstacles = model.Obstacles;

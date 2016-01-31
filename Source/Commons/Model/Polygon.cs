@@ -23,6 +23,7 @@ namespace SRL.Commons.Model
             Vertices = new List<Point>(vertices);
         }
 
+        /// <inheritdoc />
         public bool Equals(Polygon other)
         {
             if (Vertices.Count == other.Vertices.Count)
@@ -44,12 +45,14 @@ namespace SRL.Commons.Model
             return false;
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             var polygon = obj as Polygon?;
             return polygon != null && Equals(polygon.Value);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             return Vertices.GetHashCode();

@@ -13,14 +13,27 @@ namespace SRL.Commons.Model.Base
     /// </summary>
     public abstract class SvgSerializable : IXmlSerializable
     {
+        /// <summary>
+        /// Output image width.
+        /// </summary>
         protected static readonly int Width = 480;
+        /// <summary>
+        /// Output image height.
+        /// </summary>
         protected static readonly int Height = 480;
+        /// <summary>
+        /// Background color.
+        /// </summary>
         protected static readonly Color BackgroundFill = Color.FromArgb(1, 47, 135);
+        /// <summary>
+        /// Shape stroke width.
+        /// </summary>
         protected static readonly double StrokeWidth = 3; // only height of scale transform affects stroke.
 
-        /// <remarks>
-        /// Must always return null (as specified by MSDN).
-        /// </remarks>
+        /// <summary>
+        /// Always returns null (as specified by MSDN).
+        /// </summary>
+        /// <returns>Null.</returns>
         public XmlSchema GetSchema()
         {
             return null;

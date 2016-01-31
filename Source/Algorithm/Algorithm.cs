@@ -26,19 +26,23 @@ namespace SRL.Algorithm
             _defaultOptions = GetOptions();
         }
 
+        /// <inheritdoc />
         public string Key => "Algorithm";
 
+        /// <inheritdoc />
         public List<Option> GetOptions()
         {
             return OptionsFactory();
         }
 
+        /// <inheritdoc />
         public void SetOptions(List<Option> options)
         {
             _currentOptions = options;
         }
 
-        public List<Order> GetPath(Map inputMap, Vehicle inputVehicle, Point start, Point end, double vehicleSize, double vehicleRotation, CancellationToken token)
+        /// <inheritdoc />
+        public List<Order> GetPath(Map map, Vehicle vehicle, Point start, Point end, double vehicleSize, double vehicleRotation, CancellationToken token)
         {
             if (_currentOptions == null)
                 _currentOptions = GetOptions();
@@ -61,29 +65,29 @@ namespace SRL.Algorithm
             double singleAngle = 2 * Math.PI / angleDensity;
             // changing size of the vehicle to current one
             List<Point> lst = new List<Point>();
-            for (int i = 0; i < inputVehicle.Shape.Vertices.Count; i++)
+            for (int i = 0; i < vehicle.Shape.Vertices.Count; i++)
             {
-                lst.Add(new Point(inputVehicle.Shape.Vertices[i].X * vehicleSize, inputVehicle.Shape.Vertices[i].Y * vehicleSize));
+                lst.Add(new Point(vehicle.Shape.Vertices[i].X * vehicleSize, vehicle.Shape.Vertices[i].Y * vehicleSize));
             }
-            Vehicle vehicle = new Vehicle();
-            vehicle.Shape = new Polygon(lst);
+            Vehicle tVehicle = new Vehicle();
+            tVehicle.Shape = new Polygon(lst);
 
             // copy of the map with additional obstacles as map edges (commented at the moment) (size of those additional obstacles can be changed, it works fine for these ones), right now map is without bounds as we have trouble with vehicles moving by normal obstacles
-            Map map = new Map();
-            map.Obstacles.Add(new Polygon(new[] { new Point(-1, -2), new Point(-1, 2), new Point(-1.1, 0) }));
-            map.Obstacles.Add(new Polygon(new[] { new Point(-2, -1), new Point(2, -1), new Point(0, -1.1) }));
-            map.Obstacles.Add(new Polygon(new[] { new Point(1, 2), new Point(1, -2), new Point(1.1, 0) }));
-            map.Obstacles.Add(new Polygon(new[] { new Point(2, 1), new Point(-2, 1), new Point(0, 1.1) }));
+            Map tMap = new Map();
+            tMap.Obstacles.Add(new Polygon(new[] { new Point(-1, -2), new Point(-1, 2), new Point(-1.1, 0) }));
+            tMap.Obstacles.Add(new Polygon(new[] { new Point(-2, -1), new Point(2, -1), new Point(0, -1.1) }));
+            tMap.Obstacles.Add(new Polygon(new[] { new Point(1, 2), new Point(1, -2), new Point(1.1, 0) }));
+            tMap.Obstacles.Add(new Polygon(new[] { new Point(2, 1), new Point(-2, 1), new Point(0, 1.1) }));
 
             List<IndexPoint>[] indexPointAngleList = new List<IndexPoint>[angleDensity];
-            for (int i = 0; i < inputMap.Obstacles.Count; i++)
-                map.Obstacles.Add(inputMap.Obstacles[i]);
+            for (int i = 0; i < map.Obstacles.Count; i++)
+                tMap.Obstacles.Add(map.Obstacles[i]);
 
             Vehicle veh = new Vehicle();
-            veh.Shape = GeometryHelper.Rotate(vehicle.Shape, vehicleRotation);
+            veh.Shape = GeometryHelper.Rotate(tVehicle.Shape, vehicleRotation);
 
             // Minkowski's sum calculation for each angle
-            List<Polygon>[] currentMap = MinkowskiSum(map, veh, angleDensity, token);
+            List<Polygon>[] currentMap = MinkowskiSum(tMap, veh, angleDensity, token);
 
             // creating triangle to verify, if points are linear later on
             Polygon triangle = new Polygon(new List<Point>

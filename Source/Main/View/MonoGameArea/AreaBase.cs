@@ -64,8 +64,12 @@ namespace SRL.Main.View.MonoGameArea
         /// Non-normalized cursor position (that is, in pixel space) relative to the MonoGameControl control.
         /// </summary>
         protected Point MousePosition;
+        /// <summary>
+        /// Color of the canvas background.
+        /// </summary>
         protected Color BackgroundColor = new Color(219, 240, 251);
 
+        /// <inheritdoc />
         protected override void Initialize()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -87,6 +91,7 @@ namespace SRL.Main.View.MonoGameArea
             Settings.Default.PropertyChanged += _propertyChangedHandler;
         }
 
+        /// <inheritdoc />
         protected override void Unitialize()
         {
             _spriteBatch.Dispose();
@@ -98,6 +103,7 @@ namespace SRL.Main.View.MonoGameArea
             Settings.Default.PropertyChanged -= _propertyChangedHandler;
         }
 
+        /// <inheritdoc />
         protected sealed override void Render(TimeSpan time)
         {
             GraphicsDevice.Clear(BackgroundColor);

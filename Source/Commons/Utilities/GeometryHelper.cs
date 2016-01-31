@@ -196,12 +196,12 @@ namespace SRL.Commons.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Determines whether a point that moved from <paramref name="source"/> to <paramref name="dest"/> turned counter-clockwise in relation to <paramref name="pivot"/>.
         /// </summary>
         /// <param name="pivot">Pivot <see cref="Point"/>.</param>
         /// <param name="source">Source <see cref="Point"/>.</param>
         /// <param name="dest">Destination <see cref="Point"/>.</param>
-        /// <returns></returns>
+        /// <returns>True for CCW turn; false otherwise.</returns>
         public static bool IsCounterClockwiseTurn(Point pivot, Point source, Point dest)
         {
             return CrossProduct(source.X - pivot.X, source.Y - pivot.Y, dest.X - pivot.X, dest.Y - pivot.Y) > 0;

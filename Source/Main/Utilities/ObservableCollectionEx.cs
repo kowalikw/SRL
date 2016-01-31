@@ -71,7 +71,7 @@ namespace SRL.Main.Utilities
         /// <summary>
         /// Gets last element of current collection.
         /// </summary>
-        /// <returns>Object of type <see cref="T"/>.</returns>
+        /// <returns>Last element.</returns>
         public T GetLast()
         {
             return this[Count - 1];

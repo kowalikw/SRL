@@ -67,6 +67,7 @@ namespace SRL.Main.ViewModel
                 return _enterModeCommand;
             }
         }
+        /// <inheritdoc />
         public override RelayCommand ResetCommand
         {
             get
@@ -590,7 +591,7 @@ namespace SRL.Main.ViewModel
             }
         }
 
-
+        /// <inheritdoc />
         protected override bool IsEditedModelValid
         {
             get
@@ -631,6 +632,7 @@ namespace SRL.Main.ViewModel
             };
         }
 
+        /// <inheritdoc />
         public override Simulation GetEditedModel()
         {
             if (!IsEditedModelValid)
@@ -651,6 +653,7 @@ namespace SRL.Main.ViewModel
             return simulation;
         }
 
+        /// <inheritdoc />
         public override void SetEditedModel(Simulation model)
         {
             Map = model.Map;
